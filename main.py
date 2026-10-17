@@ -11,6 +11,7 @@ import multiprocessing as mp
 
 import pprint
 import yaml
+import torch.distributed as dist
 
 from src.utils.distributed import init_distributed
 from src.train import main as app_main
@@ -49,7 +50,11 @@ def process_main(rank, fname, world_size, devices):
 
     world_size, rank = init_distributed(rank_and_world_size=(rank, world_size))
     logger.info(f'Running... (rank: {rank}/{world_size})')
-    app_main(args=params)
+    try:
+        app_main(args=params)
+    finally:
+        if dist.is_available() and dist.is_initialized():
+            dist.destroy_process_group()
 
 
 if __name__ == '__main__':
@@ -58,8 +63,19 @@ if __name__ == '__main__':
     num_gpus = len(args.devices)
     mp.set_start_method('spawn')
 
+    processes = []
     for rank in range(num_gpus):
-        mp.Process(
+        process = mp.Process(
             target=process_main,
             args=(rank, args.fname, num_gpus, args.devices)
-        ).start()
+        )
+        process.start()
+        processes.append(process)
+
+    exit_code = 0
+    for process in processes:
+        process.join()
+        if process.exitcode not in (0, None):
+            exit_code = process.exitcode
+    if exit_code:
+        raise SystemExit(exit_code)

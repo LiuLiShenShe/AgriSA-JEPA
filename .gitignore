@@ -1,3 +1,9 @@
 *.swp
 *.swo
 __pycache__
+.venv/
+.wheelhouse/
+.pytest_cache/
+*.pyc
+runs/
+artifacts/

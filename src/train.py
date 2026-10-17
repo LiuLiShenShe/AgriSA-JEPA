@@ -18,7 +18,9 @@ except Exception:
     pass
 
 import copy
+import hashlib
 import logging
+import random
 import sys
 import yaml
 
@@ -42,6 +44,7 @@ from src.utils.logging import (
     AverageMeter)
 from src.utils.tensors import repeat_interleave_batch
 from src.datasets.imagenet1k import make_imagenet1k
+from src.datasets.agri_dataset import make_agrifield40k
 
 from src.helper import (
     load_checkpoint,
@@ -97,6 +100,16 @@ def main(args, resume_preempt=False):
     image_folder = args['data']['image_folder']
     crop_size = args['data']['crop_size']
     crop_scale = args['data']['crop_scale']
+    dataset_name = args['data'].get('dataset', 'imagenet1k')
+    manifest_path = args['data'].get('manifest')
+    data_split = args['data'].get('split', 'train')
+    data_seed = int(args['data'].get('seed', _GLOBAL_SEED))
+    max_samples = args['data'].get('max_samples')
+    random.seed(data_seed)
+    np.random.seed(data_seed)
+    torch.manual_seed(data_seed)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed_all(data_seed)
     # --
 
     # -- MASK
@@ -116,6 +129,7 @@ def main(args, resume_preempt=False):
     wd = float(args['optimization']['weight_decay'])
     final_wd = float(args['optimization']['final_weight_decay'])
     num_epochs = args['optimization']['epochs']
+    stop_after_epoch = args['optimization'].get('stop_after_epoch')
     warmup = args['optimization']['warmup']
     start_lr = args['optimization']['start_lr']
     lr = args['optimization']['lr']
@@ -125,6 +139,7 @@ def main(args, resume_preempt=False):
     folder = args['logging']['folder']
     tag = args['logging']['write_tag']
 
+    os.makedirs(folder, exist_ok=True)
     dump = os.path.join(folder, 'params-ijepa.yaml')
     with open(dump, 'w') as f:
         yaml.dump(args, f)
@@ -189,7 +204,25 @@ def main(args, resume_preempt=False):
         color_jitter=color_jitter)
 
     # -- init data-loaders/samplers
-    _, unsupervised_loader, unsupervised_sampler = make_imagenet1k(
+    if dataset_name == 'agrifield40k':
+        if not manifest_path:
+            raise ValueError('data.manifest is required for dataset=agrifield40k')
+        _, unsupervised_loader, unsupervised_sampler = make_agrifield40k(
+            transform=transform,
+            batch_size=batch_size,
+            collator=mask_collator,
+            pin_mem=pin_mem,
+            num_workers=num_workers,
+            world_size=world_size,
+            rank=rank,
+            manifest_path=manifest_path,
+            root_path=root_path,
+            split=data_split,
+            drop_last=True,
+            seed=data_seed,
+            max_samples=max_samples)
+    elif dataset_name == 'imagenet1k':
+        _, unsupervised_loader, unsupervised_sampler = make_imagenet1k(
             transform=transform,
             batch_size=batch_size,
             collator=mask_collator,
@@ -202,7 +235,13 @@ def main(args, resume_preempt=False):
             image_folder=image_folder,
             copy_data=copy_data,
             drop_last=True)
+    else:
+        raise ValueError(f'Unknown dataset: {dataset_name}')
     ipe = len(unsupervised_loader)
+    manifest_sha256 = None
+    if dataset_name == 'agrifield40k':
+        with open(manifest_path, 'rb') as manifest_file:
+            manifest_sha256 = hashlib.file_digest(manifest_file, 'sha256').hexdigest()
 
     # -- init optimizer and scheduler
     optimizer, scaler, scheduler, wd_scheduler = init_opt(
@@ -239,11 +278,38 @@ def main(args, resume_preempt=False):
             target_encoder=target_encoder,
             opt=optimizer,
             scaler=scaler)
+        checkpoint = torch.load(load_path, map_location='cpu', weights_only=False)
+        if 'rng_state' not in checkpoint:
+            raise ValueError(f'Checkpoint has no RNG state: {load_path}')
+        if dataset_name == 'agrifield40k':
+            if checkpoint.get('manifest_sha256') != manifest_sha256:
+                raise ValueError(f'Checkpoint manifest does not match {manifest_path}')
+        rng_state = checkpoint['rng_state']
+        random.setstate(rng_state['python'])
+        np.random.set_state(rng_state['numpy'])
+        torch.set_rng_state(rng_state['torch'])
+        if torch.cuda.is_available() and rng_state['cuda'] is not None:
+            torch.cuda.set_rng_state_all(rng_state['cuda'])
+        if 'loader_generator_state' in checkpoint:
+            unsupervised_loader.generator.set_state(checkpoint['loader_generator_state'])
+        mask_collator._itr_counter.value = checkpoint['mask_collator_step']
         for _ in range(start_epoch*ipe):
             scheduler.step()
             wd_scheduler.step()
             next(momentum_scheduler)
-            mask_collator.step()
+
+    optimizer_steps = checkpoint.get('optimizer_steps', 0) if load_model else 0
+    optimizer_steps_at_start = optimizer_steps
+    ema_formula_verified = False
+    first_loss = None
+    last_loss = None
+    if stop_after_epoch is not None and not (0 < stop_after_epoch <= num_epochs):
+        raise ValueError('optimization.stop_after_epoch must be within the configured epoch range')
+    epoch_limit = min(num_epochs, stop_after_epoch or num_epochs)
+    if load_model and start_epoch >= epoch_limit:
+        raise ValueError(f'No epochs remain: checkpoint epoch={start_epoch}, limit={epoch_limit}')
+    if device.type == 'cuda':
+        torch.cuda.reset_peak_memory_stats(device)
 
     def save_checkpoint(epoch):
         save_dict = {
@@ -256,15 +322,27 @@ def main(args, resume_preempt=False):
             'loss': loss_meter.avg,
             'batch_size': batch_size,
             'world_size': world_size,
-            'lr': lr
+            'lr': lr,
+            'optimizer_steps': optimizer_steps,
+            'config': args,
+            'rng_state': {
+                'python': random.getstate(),
+                'numpy': np.random.get_state(),
+                'torch': torch.get_rng_state(),
+                'cuda': torch.cuda.get_rng_state_all() if torch.cuda.is_available() else None,
+            },
+            'loader_generator_state': unsupervised_loader.generator.get_state(),
+            'mask_collator_step': mask_collator._itr_counter.value,
         }
+        if manifest_sha256 is not None:
+            save_dict['manifest_sha256'] = manifest_sha256
         if rank == 0:
             torch.save(save_dict, latest_path)
             if (epoch + 1) % checkpoint_freq == 0:
                 torch.save(save_dict, save_path.format(epoch=f'{epoch + 1}'))
 
     # -- TRAINING LOOP
-    for epoch in range(start_epoch, num_epochs):
+    for epoch in range(start_epoch, epoch_limit):
         logger.info('Epoch %d' % (epoch + 1))
 
         # -- update distributed-data-loader epoch
@@ -274,6 +352,7 @@ def main(args, resume_preempt=False):
         maskA_meter = AverageMeter()
         maskB_meter = AverageMeter()
         time_meter = AverageMeter()
+        step_times_ms = []
 
         for itr, (udata, masks_enc, masks_pred) in enumerate(unsupervised_loader):
 
@@ -288,6 +367,7 @@ def main(args, resume_preempt=False):
             maskB_meter.update(len(masks_pred[0][0]))
 
             def train_step():
+                nonlocal ema_formula_verified
                 _new_lr = scheduler.step()
                 _new_wd = wd_scheduler.step()
                 # --
@@ -313,18 +393,38 @@ def main(args, resume_preempt=False):
                     return loss
 
                 # Step 1. Forward
-                with torch.cuda.amp.autocast(dtype=torch.bfloat16, enabled=use_bfloat16):
+                with torch.amp.autocast(
+                    device_type='cuda', dtype=torch.bfloat16, enabled=use_bfloat16):
                     h = forward_target()
                     z = forward_context()
                     loss = loss_fn(z, h)
+                if not torch.isfinite(loss):
+                    raise FloatingPointError(f'Non-finite loss at epoch={epoch + 1}, itr={itr}: {loss}')
 
                 #  Step 2. Backward & step
                 if use_bfloat16:
                     scaler.scale(loss).backward()
+                else:
+                    loss.backward()
+
+                if not ema_formula_verified:
+                    def first_gradient_probe(module, label):
+                        for name, param in module.named_parameters():
+                            if param.grad is not None and torch.count_nonzero(param.grad).item():
+                                return name, param
+                        raise RuntimeError(f'No nonzero {label} gradient was produced')
+
+                    encoder_probe_name, encoder_probe = first_gradient_probe(encoder.module, 'encoder')
+                    _, predictor_probe = first_gradient_probe(predictor.module, 'predictor')
+                    target_probe = dict(target_encoder.module.named_parameters())[encoder_probe_name]
+                    encoder_before = encoder_probe.detach().clone()
+                    predictor_before = predictor_probe.detach().clone()
+                    target_before = target_probe.detach().clone()
+
+                if use_bfloat16:
                     scaler.step(optimizer)
                     scaler.update()
                 else:
-                    loss.backward()
                     optimizer.step()
                 grad_stats = grad_logger(encoder.named_parameters())
                 optimizer.zero_grad()
@@ -332,13 +432,26 @@ def main(args, resume_preempt=False):
                 # Step 3. momentum update of target encoder
                 with torch.no_grad():
                     m = next(momentum_scheduler)
+                    if not ema_formula_verified:
+                        expected_target = target_before.mul(m).add_(
+                            (1. - m) * encoder_probe.detach())
                     for param_q, param_k in zip(encoder.parameters(), target_encoder.parameters()):
                         param_k.data.mul_(m).add_((1.-m) * param_q.detach().data)
+                    if not ema_formula_verified:
+                        if torch.equal(encoder_before, encoder_probe) or torch.equal(predictor_before, predictor_probe):
+                            raise RuntimeError('Optimizer did not update encoder and predictor parameters')
+                        if not torch.allclose(target_probe, expected_target, rtol=1e-6, atol=1e-7):
+                            raise RuntimeError('Target encoder EMA does not match the configured update formula')
+                        ema_formula_verified = True
 
-                return (float(loss), _new_lr, _new_wd, grad_stats)
+                return (loss.detach().item(), _new_lr, _new_wd, grad_stats)
             (loss, _new_lr, _new_wd, grad_stats), etime = gpu_timer(train_step)
             loss_meter.update(loss)
             time_meter.update(etime)
+            step_times_ms.append(etime)
+            optimizer_steps += 1
+            first_loss = loss if first_loss is None else first_loss
+            last_loss = loss
 
             # -- Logging
             def log_stats():
@@ -368,11 +481,39 @@ def main(args, resume_preempt=False):
 
             log_stats()
 
-            assert not np.isnan(loss), 'loss is nan'
+            if not np.isfinite(loss):
+                raise FloatingPointError(f'Non-finite loss at epoch={epoch + 1}, itr={itr}: {loss}')
 
         # -- Save Checkpoint after every epoch
         logger.info('avg. loss %.3f' % loss_meter.avg)
         save_checkpoint(epoch+1)
+
+    if not ema_formula_verified:
+        raise RuntimeError('No optimizer update was verified in this run')
+    if rank == 0:
+        verification = {
+            'dataset': dataset_name,
+            'split': data_split,
+            'optimizer_steps_this_run': optimizer_steps - optimizer_steps_at_start,
+            'optimizer_steps_total': optimizer_steps,
+            'loss_first': first_loss,
+            'loss_last': last_loss,
+            'loss_finite': True,
+            'encoder_updated': True,
+            'predictor_updated': True,
+            'ema_formula_verified': ema_formula_verified,
+            'checkpoint': latest_path,
+            'checkpoint_epoch': epoch_limit,
+            'batch_size': batch_size,
+            'crop_size': crop_size,
+            'patch_size': patch_size,
+            'peak_memory_mib': torch.cuda.max_memory_allocated(device) / 1024.**2 if device.type == 'cuda' else None,
+            'step_time_ms_mean': float(np.mean(step_times_ms)) if step_times_ms else None,
+            'step_time_ms_last': step_times_ms[-1] if step_times_ms else None,
+            'manifest_sha256': manifest_sha256,
+        }
+        with open(os.path.join(folder, 'training_verification.yaml'), 'w') as verification_file:
+            yaml.safe_dump(verification, verification_file)
 
 
 if __name__ == "__main__":

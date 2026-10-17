@@ -1,0 +1,63 @@
+{
+  "kind": "synthetic_engineering_smoke_test",
+  "device": "cuda:1",
+  "torch_version": "2.9.1+cu128",
+  "cuda_version": "12.8",
+  "model": "vit_base",
+  "crop_size": 224,
+  "patch_size": 16,
+  "batch_size": 4,
+  "optimizer_updates": 10,
+  "loss_first": 0.46858900785446167,
+  "loss_last": 0.2904045283794403,
+  "loss_all_finite": true,
+  "encoder_updated": true,
+  "ema_target_updated": true,
+  "checkpoint": "/fj/jepa-\u4e8c\u7ef4\u56fe\u50cf\u4efb\u52a1/runs/synthetic_smoke/checkpoint.pth",
+  "checkpoint_reload_verified": true,
+  "peak_memory_mib": 2918.58740234375,
+  "step_time_ms_mean": 105.76321622356772,
+  "step_time_ms_last": 70.19205298274755,
+  "mask_sizes": [
+    {
+      "enc_keep": 11,
+      "pred_keep": 104
+    },
+    {
+      "enc_keep": 8,
+      "pred_keep": 91
+    },
+    {
+      "enc_keep": 9,
+      "pred_keep": 104
+    },
+    {
+      "enc_keep": 28,
+      "pred_keep": 33
+    },
+    {
+      "enc_keep": 10,
+      "pred_keep": 104
+    },
+    {
+      "enc_keep": 7,
+      "pred_keep": 91
+    },
+    {
+      "enc_keep": 10,
+      "pred_keep": 104
+    },
+    {
+      "enc_keep": 8,
+      "pred_keep": 104
+    },
+    {
+      "enc_keep": 12,
+      "pred_keep": 104
+    },
+    {
+      "enc_keep": 9,
+      "pred_keep": 91
+    }
+  ]
+}

@@ -140,6 +140,50 @@ python main_distributed.py \
 * torchvision
 * Other dependencies: pyyaml, numpy, opencv, submitit
 
+## AgriSA-JEPA Stage 1
+
+The local Stage 1 work keeps the official I-JEPA implementation and adds a manifest-backed AgriField-40K loader, conservative provenance audit, and small real-image training configs. The upstream checkout is pinned at `52c1ae95d05f743e000e8f10a1f3a79b10cff048`. No agriculture-specific masking method or long training run is included.
+
+### Isolated environment
+
+The tested environment is a project-local Conda prefix. These commands do not install packages into the base Python environment:
+
+```bash
+conda create --yes --prefix .venv python=3.13 pip
+conda run --prefix .venv python -m pip install \
+  --index-url https://pypi.org/simple \
+  --extra-index-url https://download.pytorch.org/whl/cu128 \
+  -r environment/requirements-lock.txt
+conda run --prefix .venv python -m pip check
+```
+
+### Dataset audit and loader check
+
+The verified archive and extracted images live outside Git at `/data/datasets/AgriField-40K/`. The audit expects `AgriField-40K.zip` and `agrifield40k/{train,val}` under that directory. Use `--extract` only when the archive has not already been extracted.
+
+```bash
+./.venv/bin/python -u -m tools.audit_data --workers 8 --verify-archive
+./.venv/bin/python -u -m tools.validate_loader \
+  --manifest pretrain_manifest.csv \
+  --root /data/datasets/AgriField-40K \
+  --workers 2
+```
+
+### Real-image smoke training and resume
+
+The smoke config uses 40 confirmed ACRECropWeed training images, ViT-B/16, 224-pixel input, batch size 4, and the upstream random multi-block masks. The first command trains one epoch and saves a checkpoint; the second restores it and runs the next epoch.
+
+```bash
+./.venv/bin/python -m pytest -q
+./.venv/bin/python -m tools.synthetic_smoke --device cuda:1
+./.venv/bin/python -u main.py \
+  --fname configs/original_smoke.yaml --devices cuda:1
+./.venv/bin/python -u main.py \
+  --fname configs/original_smoke_resume.yaml --devices cuda:1
+```
+
+Training logs, verification YAML, and checkpoints are written under `runs/` (ignored by Git). The checked results and limitations are recorded in `reports/`. The dataset card and its individual upstream licenses govern reuse; a manifest entry is not independent legal clearance.
+
 ## License
 See the [LICENSE](./LICENSE) file for details about the license under which this code is made available.
 

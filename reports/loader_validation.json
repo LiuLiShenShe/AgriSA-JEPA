@@ -1,0 +1,68 @@
+{
+  "manifest": "/fj/jepa-\u4e8c\u7ef4\u56fe\u50cf\u4efb\u52a1/pretrain_manifest.csv",
+  "root": "/data/datasets/AgriField-40K",
+  "real_images_checked": 8,
+  "image_shape": [
+    4,
+    3,
+    224,
+    224
+  ],
+  "sample_ids": [
+    "acw_rgb-2022-10-06-17-17-00",
+    "acw_rgb-2022-10-06-17-16-54",
+    "acw_rgb-2022-10-06-17-16-58",
+    "acw_rgb-2022-10-06-17-16-51"
+  ],
+  "repeatable_with_workers": 2,
+  "repeatable": true,
+  "mask_summary": [
+    {
+      "kind": "enc",
+      "shape": [
+        4,
+        67
+      ],
+      "min": 0,
+      "max": 180
+    },
+    {
+      "kind": "pred",
+      "shape": [
+        4,
+        36
+      ],
+      "min": 4,
+      "max": 176
+    },
+    {
+      "kind": "pred",
+      "shape": [
+        4,
+        36
+      ],
+      "min": 2,
+      "max": 162
+    },
+    {
+      "kind": "pred",
+      "shape": [
+        4,
+        36
+      ],
+      "min": 19,
+      "max": 178
+    },
+    {
+      "kind": "pred",
+      "shape": [
+        4,
+        36
+      ],
+      "min": 34,
+      "max": 164
+    }
+  ],
+  "mask_interface": "official MaskCollator -> (batch, masks_enc, masks_pred)",
+  "augmentation": "RandomResizedCrop(224), optional RandomHorizontalFlip, ToTensor, ImageNet normalization"
+}

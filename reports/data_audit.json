@@ -1,0 +1,138 @@
+{
+  "images": 39963,
+  "archive_size": 11900356365,
+  "archive_sha256": "63eec0b4f652340feddf9011c2ee26e2df341096018bdf7f5756cc29674e8976",
+  "expected_archive_sha256": "63eec0b4f652340feddf9011c2ee26e2df341096018bdf7f5756cc29674e8976",
+  "revision": "7f530c67572b6a572467adab840cdbbd7029b112",
+  "source_registry_match_counts": {
+    "acw": 791,
+    "vgn": 1607,
+    "lvb(?:11|12|13|14|15|16|21|22|31|32|33|55)": 11195,
+    "swd": 172,
+    "rwd": 534,
+    "inat": 1315,
+    "pnb": 9606,
+    "mc": 7242,
+    "vcd": 2258,
+    "pags": 516,
+    "gc": 435,
+    "rn": 135,
+    "weds": 1553,
+    "mw": 255,
+    "rl": 809,
+    "saw": 1300,
+    "per": 240
+  },
+  "inat_metadata_path": "data/iNatWeeds_metadata.json",
+  "inat_metadata_sha256": "8808f91f0be13832876d6e237a3b7cd870dd97a29b725b84bbb5e6ac9b9667a3",
+  "split_counts": {
+    "train": 32136,
+    "val": 7827
+  },
+  "source_prefix_counts": {
+    "acw": 791,
+    "gc": 435,
+    "inat": 1315,
+    "lvb11": 1569,
+    "lvb12": 287,
+    "lvb13": 1354,
+    "lvb14": 796,
+    "lvb15": 615,
+    "lvb16": 1137,
+    "lvb21": 828,
+    "lvb22": 871,
+    "lvb31": 477,
+    "lvb32": 1442,
+    "lvb33": 673,
+    "lvb55": 1146,
+    "mc": 7242,
+    "mw": 255,
+    "pags": 516,
+    "per": 240,
+    "pnb": 9606,
+    "rl": 809,
+    "rn": 135,
+    "rwd": 534,
+    "saw": 1300,
+    "swd": 172,
+    "vcd": 2258,
+    "vgn": 1607,
+    "weds": 1553
+  },
+  "source_counts": {
+    "ACRECropWeed": {
+      "train_include": 671,
+      "val_include": 120
+    },
+    "LUCASVision": {
+      "train_include": 8944,
+      "train_exclude": 6,
+      "val_include": 2245
+    },
+    "PhenoBench": {
+      "train_exclude": 7703,
+      "val_exclude": 1903
+    },
+    "RadishWheat": {
+      "train_include": 427,
+      "val_include": 107
+    },
+    "SorghumWeed": {
+      "train_include": 137,
+      "val_include": 35
+    },
+    "VegAnn": {
+      "train_include": 1245,
+      "train_exclude": 2,
+      "val_include": 360
+    },
+    "iNatWeeds": {
+      "train_include": 1034,
+      "train_exclude": 3,
+      "val_include": 278
+    },
+    "pending_audit": {
+      "train_pending_audit": 11964,
+      "val_pending_audit": 2779
+    }
+  },
+  "status_counts": {
+    "include": 15603,
+    "pending_audit": 14743,
+    "exclude": 9617
+  },
+  "reason_counts": {
+    "unconfirmed_source_mapping": 14743,
+    "duplicate_component_nonrepresentative": 11,
+    "phenobench_source": 9606
+  },
+  "formats": {
+    "JPEG": 27078,
+    "PNG": 12885
+  },
+  "dimensions": {
+    "512x512": 39963
+  },
+  "modes": {
+    "RGB": 39963
+  },
+  "decode_errors": 0,
+  "duplicate_edges": {
+    "perceptual_candidate": 776,
+    "sha256": 8
+  },
+  "duplicate_components": 389,
+  "cross_split_edges": 247,
+  "phash_radius": 4,
+  "dhash_radius": 6,
+  "seconds": 593.8732106685638,
+  "included_split_counts": {
+    "train": 12458,
+    "val": 3145
+  },
+  "manifest_sha256": {
+    "pretrain_manifest.csv": "3b60e1af8e3050e2354f2d21121dad51024e29eb4f1d06e6380aac21566cb204",
+    "val_manifest.csv": "4a7338d9f105164dd97fbf5719adef4b03d0e61e45d337cea07f24fbc1905a45",
+    "data/all_samples.csv": "c418a7f09ee2fb18f2f4f197f82e1012e8e2561b9680f66a284dfa40c7d0492c"
+  }
+}
