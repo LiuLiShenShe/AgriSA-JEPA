@@ -1,0 +1,477 @@
+{
+  "revision": "7f530c67572b6a572467adab840cdbbd7029b112",
+  "card_url": "https://huggingface.co/datasets/dtu-pcas/AgriField-40K/raw/7f530c67572b6a572467adab840cdbbd7029b112/README.md",
+  "images": 39963,
+  "pending_rows_before": 14743,
+  "pending_rows_confirmed": 0,
+  "pending_rows_after": 14743,
+  "pending_by_prefix": {
+    "gc": {
+      "rows": 435,
+      "candidate_source": "GrassClover",
+      "expected_count": 435,
+      "count_matches": true,
+      "evidence_class": "original_source_index",
+      "web_entry": {
+        "prefix": "gc",
+        "evidence_class": "original_source_index",
+        "adoption": "not_adopted",
+        "url": "https://theailab.dk/grassclover-dataset/",
+        "claim": "The official GrassClover biomass archive (`biomass_data.zip`, download_id 4771, published by the Aalborg University AILab) contains the literal entries `test/images/biomass_image_test_0100.jpg` and `test/images/biomass_image_test_0101.jpg`, and its metadata CSV `test/biomass_test_data.csv` literally lists `biomass_image_test_0100.jpg`. The archive holds 261 train + 174 test = 435 images, matching the card.",
+        "establishes": "The exact original filename stem `biomass_image_test_0100` is a literal entry in the named source's own archive AND in its own metadata table, and the image count equals the card retained count.",
+        "does_not_establish": "Nothing further is needed for provenance; this is a literal filename match against the named source's own index.",
+        "evidence_urls": [
+          "https://theailab.dk/grassclover-dataset/",
+          "https://theailab.dk/?sdm_process_download=1&download_id=4771",
+          "https://vision.eng.au.dk/grass-clover-dataset/"
+        ]
+      },
+      "id_example": "biomass_image_test_0000",
+      "id_pattern_note": "435 distinct original IDs",
+      "train_rows": 235,
+      "val_rows": 200
+    },
+    "mc": {
+      "rows": 7242,
+      "candidate_source": "MuST-C",
+      "expected_count": 7242,
+      "count_matches": true,
+      "evidence_class": "supporting_only",
+      "web_entry": {
+        "prefix": "mc",
+        "evidence_class": "supporting_only",
+        "adoption": "not_adopted",
+        "url": "https://doi.org/10.60507/FK2/OX9XTM",
+        "claim": "BonnData record 10.60507/FK2/OX9XTM (MuST-C, Chong et al., Scientific Data) publishes an image archive whose central directory contains the nested paths `images/UGV-RGB/230601/plot162/pos01/nikon_0.jpeg`, with `pos00`-`pos03`, dates `230601/230613/230616`, and `nikon_0`-`nikon_19`.",
+        "establishes": "Every component of the observed original ID (plot number, date token, position, camera index) corresponds to a real path component of the official MuST-C archive, and the archive count is consistent with the card retained count.",
+        "does_not_establish": "The official MuST-C naming convention is a NESTED PATH (`<date>/plotNNN/posNN/nikon_N.jpeg`), not the flattened string AgriField stores (`plot162_day230601_pos01_nikon_0`). The `day` token has no official counterpart. So the mapping is strongly supported but NOT a literal filename match.",
+        "evidence_urls": [
+          "https://bonndata.uni-bonn.de/api/datasets/:persistentId/?persistentId=doi:10.60507/FK2/OX9XTM",
+          "https://bonndata.uni-bonn.de/api/access/datafile/8066",
+          "https://github.com/PRBonn/MuST-C"
+        ]
+      },
+      "id_example": "plot162_day230601_pos00_nikon_0",
+      "id_pattern_note": "7242 distinct original IDs",
+      "train_rows": 5786,
+      "val_rows": 1456
+    },
+    "mw": {
+      "rows": 255,
+      "candidate_source": "Maize-Weed",
+      "expected_count": 255,
+      "count_matches": true,
+      "evidence_class": "original_source_index",
+      "web_entry": {
+        "prefix": "mw",
+        "evidence_class": "original_source_index",
+        "adoption": "not_adopted",
+        "url": "https://data.mendeley.com/public-api/datasets/jjbfcckrsp",
+        "claim": "Mendeley record 10.17632/jjbfcckrsp \"Maize-Weed Image Dataset\" publishes `Maize-Weed Image Dataset.rar`, whose listing contains `Maize-Weed Image Dataset/Dry Season Maize Weed Images/C00020826_output.jpeg` and `.../C00020908_output.jpeg`. The v2 file API independently lists the same `C0002xxxx` namespace.",
+        "establishes": "The exact original filename stem `C00020826_output` is a literal entry in the named source's own archive.",
+        "does_not_establish": "Nothing further is needed for provenance; this is a literal filename match against the named source's own index.",
+        "evidence_urls": [
+          "https://data.mendeley.com/public-api/datasets/jjbfcckrsp",
+          "https://data.mendeley.com/api/datasets/jjbfcckrsp/files"
+        ]
+      },
+      "id_example": "C00020826_output",
+      "id_pattern_note": "255 distinct original IDs",
+      "train_rows": 204,
+      "val_rows": 51
+    },
+    "pags": {
+      "rows": 516,
+      "candidate_source": "PalmerAmaranth",
+      "expected_count": 516,
+      "count_matches": true,
+      "evidence_class": "original_source_index",
+      "web_entry": {
+        "prefix": "pags",
+        "evidence_class": "original_source_index",
+        "adoption": "not_adopted",
+        "url": "https://github.com/geezacoleman/Palmer-detection",
+        "claim": "The PAGS8 author repository `geezacoleman/Palmer-detection` contains `data/xml/19345061_ext_cotton_20210825_125203.xml`, whose `<filename>` element is literally `19345061_ext_cotton_20210825_125203.jpg`. The README ties those labels to the PAGS8 images published via Weed-AI.",
+        "establishes": "The exact original filename stem `19345061_ext_cotton_20210825_125203` is a literal entry in the named source's own repository.",
+        "does_not_establish": "Nothing further is needed for provenance; this is a literal filename match against the named source's own index.",
+        "evidence_urls": [
+          "https://raw.githubusercontent.com/geezacoleman/Palmer-detection/main/data/xml/19345061_ext_cotton_20210825_125203.xml",
+          "https://weed-ai.sydney.edu.au/datasets/5c78d067-8750-4803-9cbe-57df8fae55e4"
+        ]
+      },
+      "id_example": "19345061_ext_cotton_20210825_125203",
+      "id_pattern_note": "516 distinct original IDs",
+      "train_rows": 408,
+      "val_rows": 108
+    },
+    "per": {
+      "rows": 240,
+      "candidate_source": "PerennialPlants",
+      "expected_count": 240,
+      "count_matches": true,
+      "evidence_class": "original_source_index",
+      "web_entry": {
+        "prefix": "per",
+        "evidence_class": "original_source_index",
+        "adoption": "not_adopted",
+        "url": "https://www.kaggle.com/datasets/benediktgeisler/perrenial-plants-detection",
+        "claim": "The official Kaggle file listing for `benediktgeisler/perrenial-plants-detection` contains the literal rows `raw_images/raw_images/DSCF8400.JPG` (13,706,901 B) and `raw_images/raw_images/DSCF8401.JPG` (13,849,520 B).",
+        "establishes": "The exact original filename stems `DSCF8400` and `DSCF8401` are literal entries in the named source's own file listing, with matching byte sizes.",
+        "does_not_establish": "Nothing further is needed for provenance; this is a literal filename match against the named source's own index.",
+        "evidence_urls": [
+          "https://www.kaggle.com/datasets/benediktgeisler/perrenial-plants-detection"
+        ]
+      },
+      "id_example": "DSCF8389",
+      "id_pattern_note": "240 distinct original IDs",
+      "train_rows": 169,
+      "val_rows": 71
+    },
+    "rl": {
+      "rows": 809,
+      "candidate_source": "RumexLeaves",
+      "expected_count": 809,
+      "count_matches": true,
+      "evidence_class": "original_source_index",
+      "web_entry": {
+        "prefix": "rl",
+        "evidence_class": "original_source_index",
+        "adoption": "not_adopted",
+        "url": "https://api.figshare.com/v2/articles/23659524",
+        "claim": "DTU figshare record 23659524 (`RumexLeaves.zip`, doi 10.11583/DTU.23659524.v2) contains the literal entries `RumexLeaves/iNaturalist/10105.jpg`, `RumexLeaves/iNaturalist/10122.jpg` and `RumexLeaves/iNaturalist/10296.jpg`. Structure is iNaturalist (698) + RoboRumex (308) = 809, matching the card.",
+        "establishes": "The exact original filename stems `10105` and `10122` are literal entries in the named source's own archive.",
+        "does_not_establish": "Nothing further is needed for provenance; this is a literal filename match against the named source's own index.",
+        "evidence_urls": [
+          "https://api.figshare.com/v2/articles/23659524",
+          "https://doi.org/10.11583/DTU.23659524.v2"
+        ]
+      },
+      "id_example": "10105",
+      "id_pattern_note": "809 distinct original IDs",
+      "train_rows": 647,
+      "val_rows": 162
+    },
+    "rn": {
+      "rows": 135,
+      "candidate_source": "Ronin",
+      "expected_count": 135,
+      "count_matches": true,
+      "evidence_class": "original_source_index",
+      "web_entry": {
+        "prefix": "rn",
+        "evidence_class": "original_source_index",
+        "adoption": "not_adopted",
+        "url": "https://data.mendeley.com/public-api/datasets/nj4vtk4tt6",
+        "claim": "Mendeley record 10.17632/nj4vtk4tt6.1 \"Data for: Dataset of annotated food crops and weed images for robotic computer vision control\" (Ronin, Sudars et al.) publishes `Ronin_OPEN_DB.zip`, whose central directory contains `Ronin_OPEN_DB/raw images/12202.jpg`, `12229.jpg` and `32160.jpg`, each with a matching `annotations/*.xml`.",
+        "establishes": "The exact original filename stems `12202` and `12229` are literal entries in the named source's own archive.",
+        "does_not_establish": "Nothing further is needed for provenance; this is a literal filename match against the named source's own index.",
+        "evidence_urls": [
+          "https://data.mendeley.com/public-api/datasets/nj4vtk4tt6",
+          "https://data.mendeley.com/public-files/datasets/nj4vtk4tt6/files/0d3e34be-9f29-4d8d-bd4c-0915ec623847/file_downloaded"
+        ]
+      },
+      "id_example": "12114",
+      "id_pattern_note": "135 distinct original IDs",
+      "train_rows": 102,
+      "val_rows": 33
+    },
+    "saw": {
+      "rows": 1300,
+      "candidate_source": "SesameWeed",
+      "expected_count": 1300,
+      "count_matches": true,
+      "evidence_class": "original_source_index",
+      "web_entry": {
+        "prefix": "saw",
+        "evidence_class": "original_source_index",
+        "adoption": "not_adopted",
+        "dead_doi_note": "The Mendeley DOI 10.17632/6xj66pvdp8 suggested as a candidate for SesameWeed does NOT exist (DataCite/Mendeley 404). Kaggle is the real confirming index.",
+        "url": "https://www.kaggle.com/datasets/ravirajsinh45/crop-and-weed-detection-data-with-bounding-boxes",
+        "claim": "The official Kaggle file listing for `ravirajsinh45/crop-and-weed-detection-data-with-bounding-boxes` (Sesame&Weed) contains the literal rows `agri_data/data/agri_0_1009.jpeg` (+ matching `.txt`) and `agri_data/data/agri_0_1017.jpeg` (+ `.txt`).",
+        "establishes": "The exact original filename stem `agri_0_1009` is a literal entry in the named source's own file listing.",
+        "does_not_establish": "Nothing further is needed for provenance; this is a literal filename match against the named source's own index.",
+        "evidence_urls": [
+          "https://www.kaggle.com/datasets/ravirajsinh45/crop-and-weed-detection-data-with-bounding-boxes"
+        ]
+      },
+      "id_example": "agri_0_1009",
+      "id_pattern_note": "1300 distinct original IDs",
+      "train_rows": 1024,
+      "val_rows": 276
+    },
+    "vcd": {
+      "rows": 2258,
+      "candidate_source": "VCD",
+      "expected_count": 2258,
+      "count_matches": true,
+      "evidence_class": "original_source_index",
+      "web_entry": {
+        "prefix": "vcd",
+        "evidence_class": "original_source_index",
+        "adoption": "not_adopted",
+        "url": "https://data.mendeley.com/public-api/datasets/d7kbzjr83k",
+        "claim": "Mendeley record 10.17632/d7kbzjr83k.1 \"Vegetable Crops Dataset for Proximal Sensing (VCD)\" publishes `DB.zip`, whose central directory contains `DB_Mendeley/dataset/2019-05-23_montoldre_bean_1_000000.jpg` plus matching `.xml`/`.json` sidecars. The token `montoldre` occurs 1681x.",
+        "establishes": "The exact original filename stem `2019-05-23_montoldre_bean_1_000000` is a literal entry in the official VCD archive. The observed `.rf.<hex>` suffix is a Roboflow export artifact layered on that stem.",
+        "does_not_establish": "Nothing further is needed for provenance; this is a literal filename match against the named source's own index.",
+        "evidence_urls": [
+          "https://data.mendeley.com/public-api/datasets/d7kbzjr83k",
+          "https://data.mendeley.com/public-files/datasets/d7kbzjr83k/files/e87c7db7-0537-4c2e-b020-e1c1101cbafb/file_downloaded"
+        ]
+      },
+      "id_example": "2019-05-23_montoldre_bean_1_000000_jpg.rf.1243bff29eccd3bacbd5994f897a3cbe",
+      "id_pattern_note": "2258 distinct original IDs",
+      "train_rows": 2170,
+      "val_rows": 88
+    },
+    "weds": {
+      "rows": 1553,
+      "candidate_source": "WE3DS",
+      "expected_count": 1553,
+      "count_matches": true,
+      "evidence_class": "original_source_index",
+      "web_entry": {
+        "prefix": "weds",
+        "evidence_class": "original_source_index",
+        "adoption": "not_adopted",
+        "reproduction_caveat": "Zenodo began returning HTTP 403 (\"unusual traffic from your IP\") for this host partway through the session, so the direct read of the official archive could not be independently repeated here.",
+        "url": "https://doi.org/10.5281/zenodo.7457983",
+        "claim": "Zenodo record 7457983 publishes `WE3DS.zip`, whose central directory contains `images/img_00100.png` and `images/img_00102.png` among 2568 files `img_00000.png`-`img_02567.png`, matching the card retained count.",
+        "establishes": "The exact original filename stem `img_00100` is a literal entry in the named source's own archive.",
+        "does_not_establish": "The direct archive read could not be re-verified from this host (Zenodo 403). Independent corroboration came from a DERIVED re-host (HuggingFace `Voxel51/WE3DS` `samples.json`, which lists `data/img_00100.png`), plus the official MDPI paper (PMC10007111) confirming 2568 RGB-D images. Weaker provenance than the other prefixes; treat as confirmed but flag it.",
+        "evidence_urls": [
+          "https://zenodo.org/api/records/7457983",
+          "https://doi.org/10.5281/zenodo.7457983",
+          "https://huggingface.co/datasets/Voxel51/WE3DS",
+          "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10007111/fullTextXML"
+        ]
+      },
+      "id_example": "img_00000",
+      "id_pattern_note": "1553 distinct original IDs",
+      "train_rows": 1219,
+      "val_rows": 334
+    }
+  },
+  "confirmed_source_manifest_counts": {
+    "train": {
+      "ACRECropWeed": 671,
+      "iNatWeeds": 1034,
+      "LUCASVision": 8944,
+      "RadishWheat": 427,
+      "SorghumWeed": 137,
+      "VegAnn": 1245
+    },
+    "val": {
+      "ACRECropWeed": 120,
+      "iNatWeeds": 278,
+      "LUCASVision": 2245,
+      "RadishWheat": 107,
+      "SorghumWeed": 35,
+      "VegAnn": 360
+    }
+  },
+  "confirmed_licenses": {
+    "ACRECropWeed": "CC-BY-4.0",
+    "LUCASVision": "CC-BY-4.0",
+    "RadishWheat": "CC-BY-4.0",
+    "SorghumWeed": "CC-BY-4.0",
+    "VegAnn": "CC-BY-1.0",
+    "iNatWeeds": "per_image_metadata"
+  },
+  "candidate_licenses": {
+    "mc": "CC-BY-4.0",
+    "vcd": "CC-BY-4.0",
+    "pags": "CC-BY-4.0",
+    "gc": "CC-BY-SA-4.0",
+    "rn": "CC-BY-4.0",
+    "weds": "CC-BY-4.0",
+    "mw": "CC-BY-4.0",
+    "rl": "CC-BY-4.0",
+    "saw": "CC0-1.0",
+    "per": "MIT"
+  },
+  "web_evidence": [
+    {
+      "prefix": null,
+      "evidence_class": "publisher_card",
+      "url": "https://huggingface.co/datasets/dtu-pcas/AgriField-40K/raw/7f530c67572b6a572467adab840cdbbd7029b112/README.md",
+      "claim": "AgriField-40K contains 39,963 images from 17 source datasets and renames them [dataset_source]_[id]; the compilation is CC BY-SA 4.0 and each image stays under its source license.",
+      "establishes": "The naming convention, the 17-source list, and each source license and retained count.",
+      "does_not_establish": "It does not publish the short-prefix to source map. It never states that \"mc\" means MuST-C."
+    },
+    {
+      "prefix": null,
+      "evidence_class": "publisher_paper",
+      "url": "https://arxiv.org/abs/2608.07984",
+      "claim": "Paper Sec. 3 / Table 1 list all 17 sources with retained counts and licenses; the split is 80/20, split at sequence level for sequence-derived sources and randomly for independent-image sources.",
+      "establishes": "Retained counts, licenses, and the publisher split rule. It also states that only RGB images were kept and annotations discarded.",
+      "does_not_establish": "It contains no prefix map either. The split rule is the publisher's stated intent, not something this audit verifies per image."
+    },
+    {
+      "prefix": "mc",
+      "evidence_class": "supporting_only",
+      "adoption": "not_adopted",
+      "url": "https://doi.org/10.60507/FK2/OX9XTM",
+      "claim": "BonnData record 10.60507/FK2/OX9XTM (MuST-C, Chong et al., Scientific Data) publishes an image archive whose central directory contains the nested paths `images/UGV-RGB/230601/plot162/pos01/nikon_0.jpeg`, with `pos00`-`pos03`, dates `230601/230613/230616`, and `nikon_0`-`nikon_19`.",
+      "establishes": "Every component of the observed original ID (plot number, date token, position, camera index) corresponds to a real path component of the official MuST-C archive, and the archive count is consistent with the card retained count.",
+      "does_not_establish": "The official MuST-C naming convention is a NESTED PATH (`<date>/plotNNN/posNN/nikon_N.jpeg`), not the flattened string AgriField stores (`plot162_day230601_pos01_nikon_0`). The `day` token has no official counterpart. So the mapping is strongly supported but NOT a literal filename match.",
+      "evidence_urls": [
+        "https://bonndata.uni-bonn.de/api/datasets/:persistentId/?persistentId=doi:10.60507/FK2/OX9XTM",
+        "https://bonndata.uni-bonn.de/api/access/datafile/8066",
+        "https://github.com/PRBonn/MuST-C"
+      ]
+    },
+    {
+      "prefix": "vcd",
+      "evidence_class": "original_source_index",
+      "adoption": "not_adopted",
+      "url": "https://data.mendeley.com/public-api/datasets/d7kbzjr83k",
+      "claim": "Mendeley record 10.17632/d7kbzjr83k.1 \"Vegetable Crops Dataset for Proximal Sensing (VCD)\" publishes `DB.zip`, whose central directory contains `DB_Mendeley/dataset/2019-05-23_montoldre_bean_1_000000.jpg` plus matching `.xml`/`.json` sidecars. The token `montoldre` occurs 1681x.",
+      "establishes": "The exact original filename stem `2019-05-23_montoldre_bean_1_000000` is a literal entry in the official VCD archive. The observed `.rf.<hex>` suffix is a Roboflow export artifact layered on that stem.",
+      "does_not_establish": "Nothing further is needed for provenance; this is a literal filename match against the named source's own index.",
+      "evidence_urls": [
+        "https://data.mendeley.com/public-api/datasets/d7kbzjr83k",
+        "https://data.mendeley.com/public-files/datasets/d7kbzjr83k/files/e87c7db7-0537-4c2e-b020-e1c1101cbafb/file_downloaded"
+      ]
+    },
+    {
+      "prefix": "pags",
+      "evidence_class": "original_source_index",
+      "adoption": "not_adopted",
+      "url": "https://github.com/geezacoleman/Palmer-detection",
+      "claim": "The PAGS8 author repository `geezacoleman/Palmer-detection` contains `data/xml/19345061_ext_cotton_20210825_125203.xml`, whose `<filename>` element is literally `19345061_ext_cotton_20210825_125203.jpg`. The README ties those labels to the PAGS8 images published via Weed-AI.",
+      "establishes": "The exact original filename stem `19345061_ext_cotton_20210825_125203` is a literal entry in the named source's own repository.",
+      "does_not_establish": "Nothing further is needed for provenance; this is a literal filename match against the named source's own index.",
+      "evidence_urls": [
+        "https://raw.githubusercontent.com/geezacoleman/Palmer-detection/main/data/xml/19345061_ext_cotton_20210825_125203.xml",
+        "https://weed-ai.sydney.edu.au/datasets/5c78d067-8750-4803-9cbe-57df8fae55e4"
+      ]
+    },
+    {
+      "prefix": "gc",
+      "evidence_class": "original_source_index",
+      "adoption": "not_adopted",
+      "url": "https://theailab.dk/grassclover-dataset/",
+      "claim": "The official GrassClover biomass archive (`biomass_data.zip`, download_id 4771, published by the Aalborg University AILab) contains the literal entries `test/images/biomass_image_test_0100.jpg` and `test/images/biomass_image_test_0101.jpg`, and its metadata CSV `test/biomass_test_data.csv` literally lists `biomass_image_test_0100.jpg`. The archive holds 261 train + 174 test = 435 images, matching the card.",
+      "establishes": "The exact original filename stem `biomass_image_test_0100` is a literal entry in the named source's own archive AND in its own metadata table, and the image count equals the card retained count.",
+      "does_not_establish": "Nothing further is needed for provenance; this is a literal filename match against the named source's own index.",
+      "evidence_urls": [
+        "https://theailab.dk/grassclover-dataset/",
+        "https://theailab.dk/?sdm_process_download=1&download_id=4771",
+        "https://vision.eng.au.dk/grass-clover-dataset/"
+      ]
+    },
+    {
+      "prefix": "rn",
+      "evidence_class": "original_source_index",
+      "adoption": "not_adopted",
+      "url": "https://data.mendeley.com/public-api/datasets/nj4vtk4tt6",
+      "claim": "Mendeley record 10.17632/nj4vtk4tt6.1 \"Data for: Dataset of annotated food crops and weed images for robotic computer vision control\" (Ronin, Sudars et al.) publishes `Ronin_OPEN_DB.zip`, whose central directory contains `Ronin_OPEN_DB/raw images/12202.jpg`, `12229.jpg` and `32160.jpg`, each with a matching `annotations/*.xml`.",
+      "establishes": "The exact original filename stems `12202` and `12229` are literal entries in the named source's own archive.",
+      "does_not_establish": "Nothing further is needed for provenance; this is a literal filename match against the named source's own index.",
+      "evidence_urls": [
+        "https://data.mendeley.com/public-api/datasets/nj4vtk4tt6",
+        "https://data.mendeley.com/public-files/datasets/nj4vtk4tt6/files/0d3e34be-9f29-4d8d-bd4c-0915ec623847/file_downloaded"
+      ]
+    },
+    {
+      "prefix": "weds",
+      "evidence_class": "original_source_index",
+      "adoption": "not_adopted",
+      "reproduction_caveat": "Zenodo began returning HTTP 403 (\"unusual traffic from your IP\") for this host partway through the session, so the direct read of the official archive could not be independently repeated here.",
+      "url": "https://doi.org/10.5281/zenodo.7457983",
+      "claim": "Zenodo record 7457983 publishes `WE3DS.zip`, whose central directory contains `images/img_00100.png` and `images/img_00102.png` among 2568 files `img_00000.png`-`img_02567.png`, matching the card retained count.",
+      "establishes": "The exact original filename stem `img_00100` is a literal entry in the named source's own archive.",
+      "does_not_establish": "The direct archive read could not be re-verified from this host (Zenodo 403). Independent corroboration came from a DERIVED re-host (HuggingFace `Voxel51/WE3DS` `samples.json`, which lists `data/img_00100.png`), plus the official MDPI paper (PMC10007111) confirming 2568 RGB-D images. Weaker provenance than the other prefixes; treat as confirmed but flag it.",
+      "evidence_urls": [
+        "https://zenodo.org/api/records/7457983",
+        "https://doi.org/10.5281/zenodo.7457983",
+        "https://huggingface.co/datasets/Voxel51/WE3DS",
+        "https://www.ebi.ac.uk/europepmc/webservices/rest/PMC10007111/fullTextXML"
+      ]
+    },
+    {
+      "prefix": "mw",
+      "evidence_class": "original_source_index",
+      "adoption": "not_adopted",
+      "url": "https://data.mendeley.com/public-api/datasets/jjbfcckrsp",
+      "claim": "Mendeley record 10.17632/jjbfcckrsp \"Maize-Weed Image Dataset\" publishes `Maize-Weed Image Dataset.rar`, whose listing contains `Maize-Weed Image Dataset/Dry Season Maize Weed Images/C00020826_output.jpeg` and `.../C00020908_output.jpeg`. The v2 file API independently lists the same `C0002xxxx` namespace.",
+      "establishes": "The exact original filename stem `C00020826_output` is a literal entry in the named source's own archive.",
+      "does_not_establish": "Nothing further is needed for provenance; this is a literal filename match against the named source's own index.",
+      "evidence_urls": [
+        "https://data.mendeley.com/public-api/datasets/jjbfcckrsp",
+        "https://data.mendeley.com/api/datasets/jjbfcckrsp/files"
+      ]
+    },
+    {
+      "prefix": "rl",
+      "evidence_class": "original_source_index",
+      "adoption": "not_adopted",
+      "url": "https://api.figshare.com/v2/articles/23659524",
+      "claim": "DTU figshare record 23659524 (`RumexLeaves.zip`, doi 10.11583/DTU.23659524.v2) contains the literal entries `RumexLeaves/iNaturalist/10105.jpg`, `RumexLeaves/iNaturalist/10122.jpg` and `RumexLeaves/iNaturalist/10296.jpg`. Structure is iNaturalist (698) + RoboRumex (308) = 809, matching the card.",
+      "establishes": "The exact original filename stems `10105` and `10122` are literal entries in the named source's own archive.",
+      "does_not_establish": "Nothing further is needed for provenance; this is a literal filename match against the named source's own index.",
+      "evidence_urls": [
+        "https://api.figshare.com/v2/articles/23659524",
+        "https://doi.org/10.11583/DTU.23659524.v2"
+      ]
+    },
+    {
+      "prefix": "saw",
+      "evidence_class": "original_source_index",
+      "adoption": "not_adopted",
+      "dead_doi_note": "The Mendeley DOI 10.17632/6xj66pvdp8 suggested as a candidate for SesameWeed does NOT exist (DataCite/Mendeley 404). Kaggle is the real confirming index.",
+      "url": "https://www.kaggle.com/datasets/ravirajsinh45/crop-and-weed-detection-data-with-bounding-boxes",
+      "claim": "The official Kaggle file listing for `ravirajsinh45/crop-and-weed-detection-data-with-bounding-boxes` (Sesame&Weed) contains the literal rows `agri_data/data/agri_0_1009.jpeg` (+ matching `.txt`) and `agri_data/data/agri_0_1017.jpeg` (+ `.txt`).",
+      "establishes": "The exact original filename stem `agri_0_1009` is a literal entry in the named source's own file listing.",
+      "does_not_establish": "Nothing further is needed for provenance; this is a literal filename match against the named source's own index.",
+      "evidence_urls": [
+        "https://www.kaggle.com/datasets/ravirajsinh45/crop-and-weed-detection-data-with-bounding-boxes"
+      ]
+    },
+    {
+      "prefix": "per",
+      "evidence_class": "original_source_index",
+      "adoption": "not_adopted",
+      "url": "https://www.kaggle.com/datasets/benediktgeisler/perrenial-plants-detection",
+      "claim": "The official Kaggle file listing for `benediktgeisler/perrenial-plants-detection` contains the literal rows `raw_images/raw_images/DSCF8400.JPG` (13,706,901 B) and `raw_images/raw_images/DSCF8401.JPG` (13,849,520 B).",
+      "establishes": "The exact original filename stems `DSCF8400` and `DSCF8401` are literal entries in the named source's own file listing, with matching byte sizes.",
+      "does_not_establish": "Nothing further is needed for provenance; this is a literal filename match against the named source's own index.",
+      "evidence_urls": [
+        "https://www.kaggle.com/datasets/benediktgeisler/perrenial-plants-detection"
+      ]
+    }
+  ],
+  "web_access_notes": {
+    "open_websearch_used": true,
+    "engines_ok": [
+      "duckduckgo (intermittent)"
+    ],
+    "engines_failed": [
+      "bing (region-locked, unrelated results for quoted filename queries)",
+      "baidu (302 engine_error)",
+      "brave (429)",
+      "sogou (anti-bot page)",
+      "startpage (token extraction)",
+      "exa (zero rows)"
+    ],
+    "index_reads_used": [
+      "source-dataset APIs and archive central directories (HTTP Range)"
+    ],
+    "direct_curl_ok": [
+      "https://huggingface.co/datasets/dtu-pcas/AgriField-40K/raw/7f530c67572b6a572467adab840cdbbd7029b112/README.md",
+      "https://huggingface.co/datasets/dtu-pcas/AgriField-40K",
+      "https://arxiv.org/abs/2608.07984",
+      "https://github.com/DTU-PAS/agrifield40k",
+      "https://dtu-pas.github.io/agrifield40k/"
+    ],
+    "rate_limited_or_403": [
+      "zenodo.org (403 mid-session; affects the weds re-check)",
+      "mdpi.com (403)",
+      "sciencedirect.com (403)",
+      "api.github.com (rate limited; raw.githubusercontent.com was not)"
+    ],
+    "unreachable": [
+      "https://grassclover.multicrop.dk/ (TLS handshake failure; GrassClover evidence uses the Aalborg AILab re-host)"
+    ]
+  }
+}

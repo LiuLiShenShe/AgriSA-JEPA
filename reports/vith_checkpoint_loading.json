@@ -1,0 +1,169 @@
+{
+  "checkpoint": "/data/checkpoints/ijepa/IN1K-vit.h.14-300e.pth.tar",
+  "architecture": {
+    "model_name": "vit_huge",
+    "embed_dim": 1280,
+    "patch_size": 14,
+    "crop_size": 224,
+    "num_patches": 256,
+    "predictor_depth": 12,
+    "predictor_embed_dim": 384
+  },
+  "checkpoint_sha256": "0382013c481743e9ccea89f970bc6c6aa126aa19a62127500d6e672a641aae22",
+  "checkpoint_bytes": 10358004345,
+  "load_mode": "weights_only=True",
+  "payload": {
+    "top_level_keys": [
+      "batch_size",
+      "encoder",
+      "epoch",
+      "loss",
+      "lr",
+      "opt",
+      "predictor",
+      "scaler",
+      "target_encoder",
+      "world_size"
+    ],
+    "encoder_tensors": 389,
+    "encoder_prefixed": true,
+    "predictor_tensors": 152,
+    "predictor_prefixed": true,
+    "target_encoder_tensors": 389,
+    "target_encoder_prefixed": true,
+    "epoch": 299,
+    "loss": 0.16633470356464386,
+    "batch_size": 32,
+    "world_size": 64,
+    "lr": 0.001
+  },
+  "state_dict_diff": {
+    "encoder": {
+      "is_exact": true,
+      "matched": 389,
+      "model_tensors": 389,
+      "checkpoint_tensors": 389,
+      "missing": [],
+      "unexpected": [],
+      "shape_mismatch": []
+    },
+    "predictor": {
+      "is_exact": true,
+      "matched": 152,
+      "model_tensors": 152,
+      "checkpoint_tensors": 152,
+      "missing": [],
+      "unexpected": [],
+      "shape_mismatch": []
+    },
+    "target_encoder": {
+      "is_exact": true,
+      "matched": 389,
+      "model_tensors": 389,
+      "checkpoint_tensors": 389,
+      "missing": [],
+      "unexpected": [],
+      "shape_mismatch": []
+    }
+  },
+  "all_exact": true,
+  "official_encoder_vs_target_max_abs_diff": 0.009632915258407593,
+  "operation_a": {
+    "load_mode": "weights_only=True",
+    "encoder_keys_loaded": 389,
+    "predictor_keys_loaded": 152,
+    "target_encoder_keys_loaded": 389,
+    "predictor_inherited": true,
+    "source_epoch": 299,
+    "sha256": "0382013c481743e9ccea89f970bc6c6aa126aa19a62127500d6e672a641aae22"
+  },
+  "weights_changed_by_init": {
+    "encoder.pos_embed_changed": false,
+    "encoder.qkv_changed": true,
+    "predictor.mask_token_changed": true
+  },
+  "loaded_vs_checkpoint_max_abs_diff": {
+    "encoder": 0.0,
+    "predictor": 0.0,
+    "target_encoder": 0.0
+  },
+  "masks": {
+    "num_patches": 196,
+    "nenc": 1,
+    "npred": 4,
+    "enc_shapes": [
+      [
+        2,
+        70
+      ]
+    ],
+    "enc_min_size": 70,
+    "enc_max_size": 70,
+    "pred_shapes": [
+      [
+        2,
+        36
+      ],
+      [
+        2,
+        36
+      ],
+      [
+        2,
+        36
+      ],
+      [
+        2,
+        36
+      ]
+    ],
+    "pred_min_size": 36,
+    "pred_max_size": 36,
+    "enc_pred_disjoint": false
+  },
+  "forward": {
+    "batch_1": {
+      "batch_size": 1,
+      "z_shape": [
+        4,
+        42,
+        1280
+      ],
+      "h_shape": [
+        4,
+        42,
+        1280
+      ],
+      "loss": 0.15031550824642181,
+      "z_finite": true,
+      "h_finite": true,
+      "loss_finite": true,
+      "target_feature_std": 0.999997079372406,
+      "context_norm": 22.264272689819336
+    },
+    "batch_2": {
+      "batch_size": 2,
+      "z_shape": [
+        8,
+        42,
+        1280
+      ],
+      "h_shape": [
+        8,
+        42,
+        1280
+      ],
+      "loss": 0.15294623374938965,
+      "z_finite": true,
+      "h_finite": true,
+      "loss_finite": true,
+      "target_feature_std": 0.9999958276748657,
+      "context_norm": 21.705982208251953
+    }
+  },
+  "param_counts": {
+    "encoder": 630762240,
+    "predictor": 22377728,
+    "target_encoder": 630762240
+  }
+}

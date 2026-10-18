@@ -1,0 +1,163 @@
+{
+  "data_version": "agrifield40k-v0",
+  "freeze_status": "provisional",
+  "freeze_revision": "7f530c67572b6a572467adab840cdbbd7029b112",
+  "card_url": "https://huggingface.co/datasets/dtu-pcas/AgriField-40K/raw/7f530c67572b6a572467adab840cdbbd7029b112/README.md",
+  "generated_at": "",
+  "stage": "Stage 2B",
+  "included_sample_count": {
+    "train": 12447,
+    "val": 3145,
+    "total": 15592
+  },
+  "per_source_breakdown": {
+    "train": {
+      "ACRECropWeed": 671,
+      "iNatWeeds": 1031,
+      "LUCASVision": 8938,
+      "RadishWheat": 427,
+      "SorghumWeed": 137,
+      "VegAnn": 1243
+    },
+    "val": {
+      "ACRECropWeed": 120,
+      "iNatWeeds": 278,
+      "LUCASVision": 2245,
+      "RadishWheat": 107,
+      "SorghumWeed": 35,
+      "VegAnn": 360
+    }
+  },
+  "split_rule": {
+    "origin": "publisher 80/20 split in the pinned HF revision (32,136 train / 7,827 val images before any filtering)",
+    "publisher_statement": "80% training, 20% validation; split at sequence level for sequence-derived sources, random split for independent-image sources",
+    "paper_url": "https://arxiv.org/abs/2608.07984",
+    "stage1_component_rule": "one deterministic representative per connected component, preferring validation; any component touching PhenoBench excluded in full",
+    "stage2b_isolation_rule": "both endpoints of every split-crossing or manifest-affecting candidate edge that is still pending_manual_review are excluded from the frozen split",
+    "train_val_disjoint": true
+  },
+  "license_and_review_status": {
+    "compilation_license": "CC-BY-SA-4.0",
+    "confirmed_sources": {
+      "ACRECropWeed": "CC-BY-4.0",
+      "LUCASVision": "CC-BY-4.0",
+      "RadishWheat": "CC-BY-4.0",
+      "SorghumWeed": "CC-BY-4.0",
+      "VegAnn": "CC-BY-1.0",
+      "iNatWeeds": "per_image_metadata"
+    },
+    "unresolved_prefixes": [
+      "gc",
+      "mc",
+      "mw",
+      "pags",
+      "per",
+      "rl",
+      "rn",
+      "saw",
+      "vcd",
+      "weds"
+    ],
+    "unresolved_rows_excluded": 14743,
+    "unresolved_prefix_evidence": {
+      "gc": "original_source_index",
+      "mc": "supporting_only",
+      "mw": "original_source_index",
+      "pags": "original_source_index",
+      "per": "original_source_index",
+      "rl": "original_source_index",
+      "rn": "original_source_index",
+      "saw": "original_source_index",
+      "vcd": "original_source_index",
+      "weds": "original_source_index"
+    },
+    "unresolved_prefix_adoption": {
+      "gc": "not_adopted",
+      "mc": "not_adopted",
+      "mw": "not_adopted",
+      "pags": "not_adopted",
+      "per": "not_adopted",
+      "rl": "not_adopted",
+      "rn": "not_adopted",
+      "saw": "not_adopted",
+      "vcd": "not_adopted",
+      "weds": "not_adopted"
+    },
+    "unresolved_prefix_evidence_note": "RECORD ONLY. 9 of the 10 unresolved prefixes have a literal filename match against their named source's own published index and 1 (`mc`) has components-only support; see reports/stage2_source_index_evidence.md. All 10 remain status=pending_audit and excluded: the freeze is driven by the status/source columns, so recording evidence here cannot admit a row. Promotion is a curator action and a data-version bump.",
+    "candidate_licenses_if_confirmed": {
+      "mc": "CC-BY-4.0",
+      "vcd": "CC-BY-4.0",
+      "pags": "CC-BY-4.0",
+      "gc": "CC-BY-SA-4.0",
+      "rn": "CC-BY-4.0",
+      "weds": "CC-BY-4.0",
+      "mw": "CC-BY-4.0",
+      "rl": "CC-BY-4.0",
+      "saw": "CC0-1.0",
+      "per": "MIT"
+    },
+    "phenobench_excluded_rows": 9606,
+    "gate_met": false,
+    "gate_note": "14,743 of 39,963 images remain pending_audit. For 9 prefixes a literal source-index match now exists and for 1 the match is components-only, but none has been adopted: their sources/licences are not confirmed in the dataset version, so the source/license gate is not met and the freeze stays provisional."
+  },
+  "exclusion_reasons": {
+    "unconfirmed_source_mapping": 14743,
+    "phenobench_source": 9606,
+    "duplicate_component_nonrepresentative": 11,
+    "duplicate_component_touches_phenobench": 0,
+    "stage2b_isolation_unreviewed_candidate": 11
+  },
+  "frozen_file_sha256": {
+    "data/frozen/agrifield40k-v0_train.csv": "d8a179b81f2052c6d66d2f43d26505652e95b1090560d13c1e9d46efe3b27037",
+    "data/frozen/agrifield40k-v0_val.csv": "4a7338d9f105164dd97fbf5719adef4b03d0e61e45d337cea07f24fbc1905a45"
+  },
+  "source_manifest_sha256": {
+    "pretrain_manifest.csv": "3b60e1af8e3050e2354f2d21121dad51024e29eb4f1d06e6380aac21566cb204",
+    "val_manifest.csv": "4a7338d9f105164dd97fbf5719adef4b03d0e61e45d337cea07f24fbc1905a45",
+    "data/all_samples.csv": "c418a7f09ee2fb18f2f4f197f82e1012e8e2561b9680f66a284dfa40c7d0492c",
+    "data/duplicate_pairs.csv": "85ea70c5f7a734fa2c8caf5ebf98e3fa2d13a1a485881c5cf07e8482f8ea5c08",
+    "data/exclusion_ledger.csv": "56547d1c1e12df8de27454e294252dd678bc220657737bba0b94bc7cf4c84303",
+    "data/source_registry.json": "5123726d5c9198a6c50209d338dd645bb32650408fc7d4737af3d267a52843d0"
+  },
+  "known_leakage_risks": [
+    {
+      "risk": "unreviewed perceptual duplicate candidates",
+      "detail": "776 perceptual_candidate edges and 8 exact edges exist. The 258 split-crossing or manifest-affecting ones are isolated, but manual visual adjudication has not been performed on any of them, so the true duplicate rate is unknown.",
+      "mitigation": "conservative isolation rule; see reports/duplicate_review_protocol.md"
+    },
+    {
+      "risk": "sequence-level split not independently verified",
+      "detail": "The publisher states the split is at sequence level for sequence-derived sources. This audit verified pixel identity, not that the publisher actually honoured the sequence rule. Near-duplicate frames from the same sequence could therefore still straddle the frozen split.",
+      "mitigation": "manual review of the perceptual candidates is the only way to close this; the screener rule (pHash<=4 AND dHash<=6) is a bound, not a guarantee"
+    },
+    {
+      "risk": "same-scene different-capture pairs below the screener threshold",
+      "detail": "A pair of the same field on different days, or a wider crop of the same scene, can fall outside the pHash/dHash radius and never appear as an edge at all. No hash-based screener can find these.",
+      "mitigation": "none in this audit; requires manual or learned semantic matching"
+    },
+    {
+      "risk": "unresolved sources could contain cross-split duplicates",
+      "detail": "247 cross-split perceptual candidates have both endpoints outside the include manifests, and all of them involve unresolved prefixes. They are quarantined, so they do not leak into the frozen split, but their provenance is unverified and they would need re-screening if ever admitted.",
+      "mitigation": "excluded from the frozen split entirely"
+    }
+  ],
+  "unfinished_items": [
+    "manual adjudication of all 784 duplicate candidate edges (0 reviewed, 784 pending_manual_review)",
+    "source/license confirmation for the 10 unresolved prefixes (14,743 rows) — evidence now recorded (reports/stage2_source_index_evidence.md) but adoption is a curator decision",
+    "resolution of the iNatWeeds per-image attribution/observation fields for redistribution (already retained in data/all_samples.csv)",
+    "independent verification of the publisher sequence-level split rule"
+  ],
+  "review_status_counts": {
+    "pending_manual_review": 784
+  },
+  "isolation_summary": {
+    "triggered_edges": 258,
+    "cross_split_edges": 247,
+    "manifest_affecting_edges": 11,
+    "flagged_endpoint_samples": 405,
+    "samples_removed_from_manifests": 11,
+    "train_samples_removed": 11,
+    "val_samples_removed": 0,
+    "note": "This is an isolation rule, not completed manual deduplication."
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "equivalence": {
+    "use_sdpa": false,
+    "output_max_abs_diff": 0.0,
+    "output_relative_diff": 0.0,
+    "grad_max_abs_diff": 2.1827872842550278e-11
+  },
+  "timing_reference": {
+    "use_sdpa": false,
+    "batch_size": 16,
+    "block_ms_mean": 28.557223547250032,
+    "peak_allocated_mib": 3058.36474609375,
+    "peak_reserved_mib": 5922.0
+  },
+  "timing_sdpa": {
+    "use_sdpa": true,
+    "batch_size": 16,
+    "block_ms_mean": 28.33436873431007,
+    "peak_allocated_mib": 2994.61474609375,
+    "peak_reserved_mib": 5922.0
+  },
+  "speedup_x": 1.0078651765645341,
+  "peak_reserved_saving_mib": 0.0
+}

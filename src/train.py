@@ -20,7 +20,9 @@ except Exception:
 import copy
 import hashlib
 import logging
+import os
 import random
+import subprocess
 import sys
 import yaml
 
@@ -33,6 +35,7 @@ from torch.nn.parallel import DistributedDataParallel
 
 from src.masks.multiblock import MaskCollator as MBMaskCollator
 from src.masks.utils import apply_masks
+from src.pretrained import init_from_pretrained, sha256_file
 from src.utils.distributed import (
     init_distributed,
     AllReduce
@@ -67,6 +70,35 @@ logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 logger = logging.getLogger()
 
 
+def git_commit():
+    """Best-effort current commit hash for provenance in checkpoints."""
+    try:
+        return subprocess.check_output(
+            ['git', 'rev-parse', 'HEAD'], stderr=subprocess.DEVNULL, text=True
+        ).strip()
+    except Exception:
+        return None
+
+
+def hardware_report(device):
+    """Describe the device actually used, so runs are attributable."""
+    if device.type != 'cuda':
+        return {'device_type': device.type}
+    index = torch.cuda.current_device()
+    return {
+        'device_type': 'cuda',
+        # index is the program-visible ordinal; physical is what nvidia-smi shows
+        'visible_device_index': index,
+        'name': torch.cuda.get_device_name(index),
+        'total_memory_mib': float(torch.cuda.get_device_properties(index).total_memory / 1024 ** 2),
+        # str(): torch.__version__ is a str subclass that yaml.safe_dump rejects
+        'torch_version': str(torch.__version__),
+        'cuda_version': str(torch.version.cuda),
+        'world_visible_devices': int(torch.cuda.device_count()),
+    }
+
+
+
 def main(args, resume_preempt=False):
 
     # ----------------------------------------------------------------------- #
@@ -81,6 +113,11 @@ def main(args, resume_preempt=False):
     copy_data = args['meta']['copy_data']
     pred_depth = args['meta']['pred_depth']
     pred_emb_dim = args['meta']['pred_emb_dim']
+    # -- Stage 2: single-GPU engineering knobs (do not change the JEPA objective)
+    use_sdpa = bool(args['meta'].get('use_sdpa', False))
+    activation_checkpointing = bool(args['meta'].get('activation_checkpointing', False))
+    pretrained_checkpoint = args['meta'].get('pretrained_checkpoint')
+    pretrained_sha256 = args['meta'].get('pretrained_sha256')
     if not torch.cuda.is_available():
         device = torch.device('cpu')
     else:
@@ -134,6 +171,10 @@ def main(args, resume_preempt=False):
     start_lr = args['optimization']['start_lr']
     lr = args['optimization']['lr']
     final_lr = args['optimization']['final_lr']
+    # -- gradient accumulation: micro-steps per optimizer update
+    grad_accum = int(args['optimization'].get('grad_accum', 1))
+    if grad_accum < 1:
+        raise ValueError(f'optimization.grad_accum must be >= 1, got {grad_accum}')
 
     # -- LOGGING
     folder = args['logging']['folder']
@@ -180,8 +221,36 @@ def main(args, resume_preempt=False):
         crop_size=crop_size,
         pred_depth=pred_depth,
         pred_emb_dim=pred_emb_dim,
-        model_name=model_name)
+        model_name=model_name,
+        use_sdpa=use_sdpa,
+        activation_checkpointing=activation_checkpointing)
     target_encoder = copy.deepcopy(encoder)
+
+    pretrained_report = None
+    if (not load_model) and pretrained_checkpoint:
+        # ---------------------------------------------------------------- #
+        #  OPERATION A: Pretrained Initialization
+        #  Transfer the official I-JEPA weights into a NEW agricultural run.
+        #  Optimizer / schedulers / scaler / epoch counters are NOT loaded.
+        # ---------------------------------------------------------------- #
+        if pretrained_sha256:
+            actual = sha256_file(pretrained_checkpoint)
+            if actual != pretrained_sha256:
+                raise ValueError(
+                    f'Pretrained checkpoint SHA-256 mismatch: expected '
+                    f'{pretrained_sha256}, got {actual}')
+            logger.info(f'Pretrained checkpoint SHA-256 verified: {actual}')
+        pretrained_report = init_from_pretrained(
+            pretrained_checkpoint,
+            encoder=encoder,
+            predictor=predictor,
+            target_encoder=target_encoder,
+            device=device)
+        logger.info(
+            'Operation A: loaded %d encoder / %d predictor / %d target_encoder tensors',
+            pretrained_report['encoder_keys_loaded'],
+            pretrained_report['predictor_keys_loaded'],
+            pretrained_report.get('target_encoder_keys_loaded'))
 
     # -- make data transforms
     mask_collator = MBMaskCollator(
@@ -238,12 +307,16 @@ def main(args, resume_preempt=False):
     else:
         raise ValueError(f'Unknown dataset: {dataset_name}')
     ipe = len(unsupervised_loader)
+    # -- number of optimizer updates per epoch under gradient accumulation
+    optimizer_steps_per_epoch = (ipe + grad_accum - 1) // grad_accum
     manifest_sha256 = None
     if dataset_name == 'agrifield40k':
         with open(manifest_path, 'rb') as manifest_file:
             manifest_sha256 = hashlib.file_digest(manifest_file, 'sha256').hexdigest()
 
     # -- init optimizer and scheduler
+    #    LR/WD schedules advance once per optimizer update, so they are sized in
+    #    optimizer steps, not micro-steps.
     optimizer, scaler, scheduler, wd_scheduler = init_opt(
         encoder=encoder,
         predictor=predictor,
@@ -252,7 +325,7 @@ def main(args, resume_preempt=False):
         start_lr=start_lr,
         ref_lr=lr,
         final_lr=final_lr,
-        iterations_per_epoch=ipe,
+        iterations_per_epoch=optimizer_steps_per_epoch,
         warmup=warmup,
         num_epochs=num_epochs,
         ipe_scale=ipe_scale,
@@ -263,9 +336,10 @@ def main(args, resume_preempt=False):
     for p in target_encoder.parameters():
         p.requires_grad = False
 
-    # -- momentum schedule
-    momentum_scheduler = (ema[0] + i*(ema[1]-ema[0])/(ipe*num_epochs*ipe_scale)
-                          for i in range(int(ipe*num_epochs*ipe_scale)+1))
+    # -- momentum schedule (one EMA update per optimizer update)
+    total_optimizer_steps = optimizer_steps_per_epoch * num_epochs * ipe_scale
+    momentum_scheduler = (ema[0] + i*(ema[1]-ema[0])/total_optimizer_steps
+                          for i in range(int(total_optimizer_steps)+1))
 
     start_epoch = 0
     # -- load training checkpoint
@@ -293,13 +367,16 @@ def main(args, resume_preempt=False):
         if 'loader_generator_state' in checkpoint:
             unsupervised_loader.generator.set_state(checkpoint['loader_generator_state'])
         mask_collator._itr_counter.value = checkpoint['mask_collator_step']
-        for _ in range(start_epoch*ipe):
+        # -- advance LR/WD/momentum to the resumed optimizer-step position
+        for _ in range(start_epoch * optimizer_steps_per_epoch):
             scheduler.step()
             wd_scheduler.step()
             next(momentum_scheduler)
 
     optimizer_steps = checkpoint.get('optimizer_steps', 0) if load_model else 0
     optimizer_steps_at_start = optimizer_steps
+    micro_steps = checkpoint.get('micro_steps', 0) if load_model else 0
+    micro_steps_at_start = micro_steps
     ema_formula_verified = False
     first_loss = None
     last_loss = None
@@ -324,7 +401,21 @@ def main(args, resume_preempt=False):
             'world_size': world_size,
             'lr': lr,
             'optimizer_steps': optimizer_steps,
+            'micro_steps': micro_steps,
+            'grad_accum': grad_accum,
             'config': args,
+            'hardware': hardware_report(device),
+            'git_commit': git_commit(),
+            'pretrained_init': None if pretrained_report is None else {
+                'source': pretrained_report['path'],
+                'sha256': pretrained_report['sha256'],
+                'load_mode': pretrained_report['load_mode'],
+                'encoder_keys_loaded': pretrained_report['encoder_keys_loaded'],
+                'predictor_keys_loaded': pretrained_report['predictor_keys_loaded'],
+                'target_encoder_keys_loaded': pretrained_report.get('target_encoder_keys_loaded'),
+                'predictor_inherited': pretrained_report['predictor_inherited'],
+                'source_epoch': pretrained_report['epoch_in_source_checkpoint'],
+            },
             'rng_state': {
                 'python': random.getstate(),
                 'numpy': np.random.get_state(),
@@ -354,7 +445,19 @@ def main(args, resume_preempt=False):
         time_meter = AverageMeter()
         step_times_ms = []
 
+        # -- gradient-accumulation state for this epoch.  Read LR/WD from a group
+        #    that is NOT weight-decay-excluded, so the reported WD is real.
+        _last_lr = optimizer.param_groups[0]['lr']
+        _last_wd = next(g['weight_decay'] for g in optimizer.param_groups
+                        if not g.get('WD_exclude', False))
+
         for itr, (udata, masks_enc, masks_pred) in enumerate(unsupervised_loader):
+
+            # -- deterministic accumulation window: derived only from (itr, ipe)
+            #    so a resumed run reconstructs exactly the same windows.
+            window_start = (itr // grad_accum) * grad_accum
+            window_size = min(grad_accum, ipe - window_start)
+            do_update = (itr - window_start + 1) == window_size
 
             def load_imgs():
                 # -- unsupervised imgs
@@ -367,9 +470,12 @@ def main(args, resume_preempt=False):
             maskB_meter.update(len(masks_pred[0][0]))
 
             def train_step():
-                nonlocal ema_formula_verified
-                _new_lr = scheduler.step()
-                _new_wd = wd_scheduler.step()
+                nonlocal ema_formula_verified, _last_lr, _last_wd
+                if do_update:
+                    # -- LR/WD advance once per optimizer update, not per micro-step
+                    _last_lr = scheduler.step()
+                    _last_wd = wd_scheduler.step()
+                _new_lr, _new_wd = _last_lr, _last_wd
                 # --
 
                 def forward_target():
@@ -402,10 +508,14 @@ def main(args, resume_preempt=False):
                     raise FloatingPointError(f'Non-finite loss at epoch={epoch + 1}, itr={itr}: {loss}')
 
                 #  Step 2. Backward & step
+                #    BF16 keeps the upstream GradScaler path (scale on backward,
+                #    unscale before step).  With gradient accumulation the scaling
+                #    factor cancels, so a single scaler window spans the
+                #    accumulation window and the unscale happens at the update.
                 if use_bfloat16:
-                    scaler.scale(loss).backward()
+                    scaler.scale(loss / grad_accum).backward()
                 else:
-                    loss.backward()
+                    (loss / grad_accum).backward()
 
                 if not ema_formula_verified:
                     def first_gradient_probe(module, label):
@@ -421,37 +531,44 @@ def main(args, resume_preempt=False):
                     predictor_before = predictor_probe.detach().clone()
                     target_before = target_probe.detach().clone()
 
-                if use_bfloat16:
-                    scaler.step(optimizer)
-                    scaler.update()
+                if do_update:
+                    if use_bfloat16:
+                        scaler.step(optimizer)
+                        scaler.update()
+                    else:
+                        optimizer.step()
+                    grad_stats = grad_logger(encoder.named_parameters())
+                    optimizer.zero_grad()
+
+                    # Step 3. momentum update of target encoder
+                    with torch.no_grad():
+                        m = next(momentum_scheduler)
+                        if not ema_formula_verified:
+                            expected_target = target_before.mul(m).add_(
+                                (1. - m) * encoder_probe.detach())
+                        for param_q, param_k in zip(encoder.parameters(), target_encoder.parameters()):
+                            param_k.data.mul_(m).add_((1.-m) * param_q.detach().data)
+                        if not ema_formula_verified:
+                            if torch.equal(encoder_before, encoder_probe) or torch.equal(predictor_before, predictor_probe):
+                                raise RuntimeError('Optimizer did not update encoder and predictor parameters')
+                            if not torch.allclose(target_probe, expected_target, rtol=1e-6, atol=1e-7):
+                                raise RuntimeError('Target encoder EMA does not match the configured update formula')
+                            ema_formula_verified = True
+                    return (loss.detach().item(), _new_lr, _new_wd, grad_stats)
                 else:
-                    optimizer.step()
-                grad_stats = grad_logger(encoder.named_parameters())
-                optimizer.zero_grad()
+                    grad_stats = None
+                    return (loss.detach().item(), _new_lr, _new_wd, grad_stats)
 
-                # Step 3. momentum update of target encoder
-                with torch.no_grad():
-                    m = next(momentum_scheduler)
-                    if not ema_formula_verified:
-                        expected_target = target_before.mul(m).add_(
-                            (1. - m) * encoder_probe.detach())
-                    for param_q, param_k in zip(encoder.parameters(), target_encoder.parameters()):
-                        param_k.data.mul_(m).add_((1.-m) * param_q.detach().data)
-                    if not ema_formula_verified:
-                        if torch.equal(encoder_before, encoder_probe) or torch.equal(predictor_before, predictor_probe):
-                            raise RuntimeError('Optimizer did not update encoder and predictor parameters')
-                        if not torch.allclose(target_probe, expected_target, rtol=1e-6, atol=1e-7):
-                            raise RuntimeError('Target encoder EMA does not match the configured update formula')
-                        ema_formula_verified = True
-
-                return (loss.detach().item(), _new_lr, _new_wd, grad_stats)
             (loss, _new_lr, _new_wd, grad_stats), etime = gpu_timer(train_step)
             loss_meter.update(loss)
             time_meter.update(etime)
             step_times_ms.append(etime)
-            optimizer_steps += 1
+            micro_steps += 1
             first_loss = loss if first_loss is None else first_loss
             last_loss = loss
+
+            if do_update:
+                optimizer_steps += 1
 
             # -- Logging
             def log_stats():
@@ -494,8 +611,18 @@ def main(args, resume_preempt=False):
         verification = {
             'dataset': dataset_name,
             'split': data_split,
+            'model_name': model_name,
+            'patch_size': patch_size,
+            'pred_depth': pred_depth,
+            'pred_emb_dim': pred_emb_dim,
+            'use_sdpa': use_sdpa,
+            'activation_checkpointing': activation_checkpointing,
+            'grad_accum': grad_accum,
             'optimizer_steps_this_run': optimizer_steps - optimizer_steps_at_start,
             'optimizer_steps_total': optimizer_steps,
+            'micro_steps_this_run': micro_steps - micro_steps_at_start,
+            'micro_steps_total': micro_steps,
+            'optimizer_steps_per_epoch': optimizer_steps_per_epoch,
             'loss_first': first_loss,
             'loss_last': last_loss,
             'loss_finite': True,
@@ -506,11 +633,20 @@ def main(args, resume_preempt=False):
             'checkpoint_epoch': epoch_limit,
             'batch_size': batch_size,
             'crop_size': crop_size,
-            'patch_size': patch_size,
             'peak_memory_mib': torch.cuda.max_memory_allocated(device) / 1024.**2 if device.type == 'cuda' else None,
             'step_time_ms_mean': float(np.mean(step_times_ms)) if step_times_ms else None,
             'step_time_ms_last': step_times_ms[-1] if step_times_ms else None,
             'manifest_sha256': manifest_sha256,
+            'git_commit': git_commit(),
+            'hardware': hardware_report(device),
+            'pretrained_init': None if pretrained_report is None else {
+                'source': pretrained_report['path'],
+                'sha256': pretrained_report['sha256'],
+                'encoder_keys_loaded': pretrained_report['encoder_keys_loaded'],
+                'predictor_keys_loaded': pretrained_report['predictor_keys_loaded'],
+                'target_encoder_keys_loaded': pretrained_report.get('target_encoder_keys_loaded'),
+                'predictor_inherited': pretrained_report['predictor_inherited'],
+            },
         }
         with open(os.path.join(folder, 'training_verification.yaml'), 'w') as verification_file:
             yaml.safe_dump(verification, verification_file)
