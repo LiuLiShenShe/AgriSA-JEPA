@@ -1,6 +1,10 @@
 meta:
   load_checkpoint: true
-  read_checkpoint: jepa-latest.pth.tar
+  # src/train.py resolves a relative read_checkpoint against logging.folder, so
+  # this explicit path points at the checkpoint written by
+  # configs/stage2_vith_10steps.yaml. Operation B (resume) reads that run's
+  # optimizer/RNG/scaler state and adds 10 more optimizer steps (total 20).
+  read_checkpoint: ../stage2_vith_10steps/jepa-latest.pth.tar
   pretrained_checkpoint: /data/checkpoints/ijepa/IN1K-vit.h.14-300e.pth.tar
   pretrained_sha256: 0382013c481743e9ccea89f970bc6c6aa126aa19a62127500d6e672a641aae22
   model_name: vit_huge
