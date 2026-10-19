@@ -717,6 +717,10 @@ def write_source_audit_report(path: Path, json_path: Path, audit, registry):
         lines.append('')
         lines.append(f'- Original-ID pattern observed: `{info["id_example"]}` '
                      f'({info["id_pattern_note"]})')
+        examples = info.get('id_examples') or []
+        if len(examples) > 1:
+            lines.append(f'- Example original IDs: '
+                         + ', '.join(f'`{e}`' for e in examples))
         lines.append(f'- Card retained count: {fmt_int(info["expected_count"])} '
                      f'({"matches" if info["count_matches"] else "DOES NOT match"} the audited '
                      f'row count)')
@@ -1289,7 +1293,8 @@ def main():
             'evidence_class': entry['evidence_class'],
             'web_entry': entry,
             'id_example': ids[0] if ids else '',
-            'id_pattern_note': f'{len(ids)} distinct original IDs',
+            'id_examples': ids[:3],
+            'id_pattern_note': f'{len(ids)} distinct original IDs; no source token in the ID',
             'train_rows': sum(1 for r in pending_rows if r['source_prefix'] == prefix
                               and r['split'] == 'train'),
             'val_rows': sum(1 for r in pending_rows if r['source_prefix'] == prefix

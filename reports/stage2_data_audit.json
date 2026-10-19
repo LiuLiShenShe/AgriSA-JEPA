@@ -27,7 +27,12 @@
         ]
       },
       "id_example": "biomass_image_test_0000",
-      "id_pattern_note": "435 distinct original IDs",
+      "id_examples": [
+        "biomass_image_test_0000",
+        "biomass_image_test_0001",
+        "biomass_image_test_0002"
+      ],
+      "id_pattern_note": "435 distinct original IDs; no source token in the ID",
       "train_rows": 235,
       "val_rows": 200
     },
@@ -52,7 +57,12 @@
         ]
       },
       "id_example": "plot162_day230601_pos00_nikon_0",
-      "id_pattern_note": "7242 distinct original IDs",
+      "id_examples": [
+        "plot162_day230601_pos00_nikon_0",
+        "plot162_day230601_pos00_nikon_1",
+        "plot162_day230601_pos00_nikon_10"
+      ],
+      "id_pattern_note": "7242 distinct original IDs; no source token in the ID",
       "train_rows": 5786,
       "val_rows": 1456
     },
@@ -76,7 +86,12 @@
         ]
       },
       "id_example": "C00020826_output",
-      "id_pattern_note": "255 distinct original IDs",
+      "id_examples": [
+        "C00020826_output",
+        "C00020908_output",
+        "C00020949_output"
+      ],
+      "id_pattern_note": "255 distinct original IDs; no source token in the ID",
       "train_rows": 204,
       "val_rows": 51
     },
@@ -100,7 +115,12 @@
         ]
       },
       "id_example": "19345061_ext_cotton_20210825_125203",
-      "id_pattern_note": "516 distinct original IDs",
+      "id_examples": [
+        "19345061_ext_cotton_20210825_125203",
+        "19345061_ext_cotton_20210825_125206",
+        "19345061_ext_cotton_20210825_125210"
+      ],
+      "id_pattern_note": "516 distinct original IDs; no source token in the ID",
       "train_rows": 408,
       "val_rows": 108
     },
@@ -123,7 +143,12 @@
         ]
       },
       "id_example": "DSCF8389",
-      "id_pattern_note": "240 distinct original IDs",
+      "id_examples": [
+        "DSCF8389",
+        "DSCF8391",
+        "DSCF8393"
+      ],
+      "id_pattern_note": "240 distinct original IDs; no source token in the ID",
       "train_rows": 169,
       "val_rows": 71
     },
@@ -147,7 +172,12 @@
         ]
       },
       "id_example": "10105",
-      "id_pattern_note": "809 distinct original IDs",
+      "id_examples": [
+        "10105",
+        "10122",
+        "10233"
+      ],
+      "id_pattern_note": "809 distinct original IDs; no source token in the ID",
       "train_rows": 647,
       "val_rows": 162
     },
@@ -171,7 +201,12 @@
         ]
       },
       "id_example": "12114",
-      "id_pattern_note": "135 distinct original IDs",
+      "id_examples": [
+        "12114",
+        "12148",
+        "12197"
+      ],
+      "id_pattern_note": "135 distinct original IDs; no source token in the ID",
       "train_rows": 102,
       "val_rows": 33
     },
@@ -195,7 +230,12 @@
         ]
       },
       "id_example": "agri_0_1009",
-      "id_pattern_note": "1300 distinct original IDs",
+      "id_examples": [
+        "agri_0_1009",
+        "agri_0_1017",
+        "agri_0_1018"
+      ],
+      "id_pattern_note": "1300 distinct original IDs; no source token in the ID",
       "train_rows": 1024,
       "val_rows": 276
     },
@@ -219,7 +259,12 @@
         ]
       },
       "id_example": "2019-05-23_montoldre_bean_1_000000_jpg.rf.1243bff29eccd3bacbd5994f897a3cbe",
-      "id_pattern_note": "2258 distinct original IDs",
+      "id_examples": [
+        "2019-05-23_montoldre_bean_1_000000_jpg.rf.1243bff29eccd3bacbd5994f897a3cbe",
+        "2019-05-23_montoldre_bean_1_000001_jpg.rf.6d66e98428af8489300189c2cac785f2",
+        "2019-05-23_montoldre_bean_1_000002_jpg.rf.e08500a607f95bb0bb37a3d8faf8cc4d"
+      ],
+      "id_pattern_note": "2258 distinct original IDs; no source token in the ID",
       "train_rows": 2170,
       "val_rows": 88
     },
@@ -246,7 +291,12 @@
         ]
       },
       "id_example": "img_00000",
-      "id_pattern_note": "1553 distinct original IDs",
+      "id_examples": [
+        "img_00000",
+        "img_00001",
+        "img_00005"
+      ],
+      "id_pattern_note": "1553 distinct original IDs; no source token in the ID",
       "train_rows": 1219,
       "val_rows": 334
     }

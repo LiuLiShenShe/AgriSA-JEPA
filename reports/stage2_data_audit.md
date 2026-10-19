@@ -45,7 +45,8 @@ These prefixes remain `pending_audit` in the freeze and stay out of the frozen s
 
 #### `gc` — GrassClover (435 rows)
 
-- Original-ID pattern observed: `biomass_image_test_0000` (435 distinct original IDs)
+- Original-ID pattern observed: `biomass_image_test_0000` (435 distinct original IDs; no source token in the ID)
+- Example original IDs: `biomass_image_test_0000`, `biomass_image_test_0001`, `biomass_image_test_0002`
 - Card retained count: 435 (matches the audited row count)
 - Checked: The official GrassClover biomass archive (`biomass_data.zip`, download_id 4771, published by the Aalborg University AILab) contains the literal entries `test/images/biomass_image_test_0100.jpg` and `test/images/biomass_image_test_0101.jpg`, and its metadata CSV `test/biomass_test_data.csv` literally lists `biomass_image_test_0100.jpg`. The archive holds 261 train + 174 test = 435 images, matching the card.
 - URL: <https://theailab.dk/grassclover-dataset/>
@@ -58,7 +59,8 @@ These prefixes remain `pending_audit` in the freeze and stay out of the frozen s
 
 #### `mc` — MuST-C (7,242 rows)
 
-- Original-ID pattern observed: `plot162_day230601_pos00_nikon_0` (7242 distinct original IDs)
+- Original-ID pattern observed: `plot162_day230601_pos00_nikon_0` (7242 distinct original IDs; no source token in the ID)
+- Example original IDs: `plot162_day230601_pos00_nikon_0`, `plot162_day230601_pos00_nikon_1`, `plot162_day230601_pos00_nikon_10`
 - Card retained count: 7,242 (matches the audited row count)
 - Checked: BonnData record 10.60507/FK2/OX9XTM (MuST-C, Chong et al., Scientific Data) publishes an image archive whose central directory contains the nested paths `images/UGV-RGB/230601/plot162/pos01/nikon_0.jpeg`, with `pos00`-`pos03`, dates `230601/230613/230616`, and `nikon_0`-`nikon_19`.
 - URL: <https://doi.org/10.60507/FK2/OX9XTM>
@@ -71,7 +73,8 @@ These prefixes remain `pending_audit` in the freeze and stay out of the frozen s
 
 #### `mw` — Maize-Weed (255 rows)
 
-- Original-ID pattern observed: `C00020826_output` (255 distinct original IDs)
+- Original-ID pattern observed: `C00020826_output` (255 distinct original IDs; no source token in the ID)
+- Example original IDs: `C00020826_output`, `C00020908_output`, `C00020949_output`
 - Card retained count: 255 (matches the audited row count)
 - Checked: Mendeley record 10.17632/jjbfcckrsp "Maize-Weed Image Dataset" publishes `Maize-Weed Image Dataset.rar`, whose listing contains `Maize-Weed Image Dataset/Dry Season Maize Weed Images/C00020826_output.jpeg` and `.../C00020908_output.jpeg`. The v2 file API independently lists the same `C0002xxxx` namespace.
 - URL: <https://data.mendeley.com/public-api/datasets/jjbfcckrsp>
@@ -83,7 +86,8 @@ These prefixes remain `pending_audit` in the freeze and stay out of the frozen s
 
 #### `pags` — PalmerAmaranth (516 rows)
 
-- Original-ID pattern observed: `19345061_ext_cotton_20210825_125203` (516 distinct original IDs)
+- Original-ID pattern observed: `19345061_ext_cotton_20210825_125203` (516 distinct original IDs; no source token in the ID)
+- Example original IDs: `19345061_ext_cotton_20210825_125203`, `19345061_ext_cotton_20210825_125206`, `19345061_ext_cotton_20210825_125210`
 - Card retained count: 516 (matches the audited row count)
 - Checked: The PAGS8 author repository `geezacoleman/Palmer-detection` contains `data/xml/19345061_ext_cotton_20210825_125203.xml`, whose `<filename>` element is literally `19345061_ext_cotton_20210825_125203.jpg`. The README ties those labels to the PAGS8 images published via Weed-AI.
 - URL: <https://github.com/geezacoleman/Palmer-detection>
@@ -95,7 +99,8 @@ These prefixes remain `pending_audit` in the freeze and stay out of the frozen s
 
 #### `per` — PerennialPlants (240 rows)
 
-- Original-ID pattern observed: `DSCF8389` (240 distinct original IDs)
+- Original-ID pattern observed: `DSCF8389` (240 distinct original IDs; no source token in the ID)
+- Example original IDs: `DSCF8389`, `DSCF8391`, `DSCF8393`
 - Card retained count: 240 (matches the audited row count)
 - Checked: The official Kaggle file listing for `benediktgeisler/perrenial-plants-detection` contains the literal rows `raw_images/raw_images/DSCF8400.JPG` (13,706,901 B) and `raw_images/raw_images/DSCF8401.JPG` (13,849,520 B).
 - URL: <https://www.kaggle.com/datasets/benediktgeisler/perrenial-plants-detection>
@@ -106,7 +111,8 @@ These prefixes remain `pending_audit` in the freeze and stay out of the frozen s
 
 #### `rl` — RumexLeaves (809 rows)
 
-- Original-ID pattern observed: `10105` (809 distinct original IDs)
+- Original-ID pattern observed: `10105` (809 distinct original IDs; no source token in the ID)
+- Example original IDs: `10105`, `10122`, `10233`
 - Card retained count: 809 (matches the audited row count)
 - Checked: DTU figshare record 23659524 (`RumexLeaves.zip`, doi 10.11583/DTU.23659524.v2) contains the literal entries `RumexLeaves/iNaturalist/10105.jpg`, `RumexLeaves/iNaturalist/10122.jpg` and `RumexLeaves/iNaturalist/10296.jpg`. Structure is iNaturalist (698) + RoboRumex (308) = 809, matching the card.
 - URL: <https://api.figshare.com/v2/articles/23659524>
@@ -118,7 +124,8 @@ These prefixes remain `pending_audit` in the freeze and stay out of the frozen s
 
 #### `rn` — Ronin (135 rows)
 
-- Original-ID pattern observed: `12114` (135 distinct original IDs)
+- Original-ID pattern observed: `12114` (135 distinct original IDs; no source token in the ID)
+- Example original IDs: `12114`, `12148`, `12197`
 - Card retained count: 135 (matches the audited row count)
 - Checked: Mendeley record 10.17632/nj4vtk4tt6.1 "Data for: Dataset of annotated food crops and weed images for robotic computer vision control" (Ronin, Sudars et al.) publishes `Ronin_OPEN_DB.zip`, whose central directory contains `Ronin_OPEN_DB/raw images/12202.jpg`, `12229.jpg` and `32160.jpg`, each with a matching `annotations/*.xml`.
 - URL: <https://data.mendeley.com/public-api/datasets/nj4vtk4tt6>
@@ -130,7 +137,8 @@ These prefixes remain `pending_audit` in the freeze and stay out of the frozen s
 
 #### `saw` — SesameWeed (1,300 rows)
 
-- Original-ID pattern observed: `agri_0_1009` (1300 distinct original IDs)
+- Original-ID pattern observed: `agri_0_1009` (1300 distinct original IDs; no source token in the ID)
+- Example original IDs: `agri_0_1009`, `agri_0_1017`, `agri_0_1018`
 - Card retained count: 1,300 (matches the audited row count)
 - Checked: The official Kaggle file listing for `ravirajsinh45/crop-and-weed-detection-data-with-bounding-boxes` (Sesame&Weed) contains the literal rows `agri_data/data/agri_0_1009.jpeg` (+ matching `.txt`) and `agri_data/data/agri_0_1017.jpeg` (+ `.txt`).
 - URL: <https://www.kaggle.com/datasets/ravirajsinh45/crop-and-weed-detection-data-with-bounding-boxes>
@@ -142,7 +150,8 @@ These prefixes remain `pending_audit` in the freeze and stay out of the frozen s
 
 #### `vcd` — VCD (2,258 rows)
 
-- Original-ID pattern observed: `2019-05-23_montoldre_bean_1_000000_jpg.rf.1243bff29eccd3bacbd5994f897a3cbe` (2258 distinct original IDs)
+- Original-ID pattern observed: `2019-05-23_montoldre_bean_1_000000_jpg.rf.1243bff29eccd3bacbd5994f897a3cbe` (2258 distinct original IDs; no source token in the ID)
+- Example original IDs: `2019-05-23_montoldre_bean_1_000000_jpg.rf.1243bff29eccd3bacbd5994f897a3cbe`, `2019-05-23_montoldre_bean_1_000001_jpg.rf.6d66e98428af8489300189c2cac785f2`, `2019-05-23_montoldre_bean_1_000002_jpg.rf.e08500a607f95bb0bb37a3d8faf8cc4d`
 - Card retained count: 2,258 (matches the audited row count)
 - Checked: Mendeley record 10.17632/d7kbzjr83k.1 "Vegetable Crops Dataset for Proximal Sensing (VCD)" publishes `DB.zip`, whose central directory contains `DB_Mendeley/dataset/2019-05-23_montoldre_bean_1_000000.jpg` plus matching `.xml`/`.json` sidecars. The token `montoldre` occurs 1681x.
 - URL: <https://data.mendeley.com/public-api/datasets/d7kbzjr83k>
@@ -154,7 +163,8 @@ These prefixes remain `pending_audit` in the freeze and stay out of the frozen s
 
 #### `weds` — WE3DS (1,553 rows)
 
-- Original-ID pattern observed: `img_00000` (1553 distinct original IDs)
+- Original-ID pattern observed: `img_00000` (1553 distinct original IDs; no source token in the ID)
+- Example original IDs: `img_00000`, `img_00001`, `img_00005`
 - Card retained count: 1,553 (matches the audited row count)
 - Checked: Zenodo record 7457983 publishes `WE3DS.zip`, whose central directory contains `images/img_00100.png` and `images/img_00102.png` among 2568 files `img_00000.png`-`img_02567.png`, matching the card retained count.
 - URL: <https://doi.org/10.5281/zenodo.7457983>
