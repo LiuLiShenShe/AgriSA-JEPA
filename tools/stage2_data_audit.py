@@ -909,6 +909,25 @@ def write_source_index_evidence_report(path, pend):
     write_text(path, '\n'.join(lines) + '\n')
 
 
+def write_leakage_report(path, json_path):
+    """Run the structural leakage checks on the frozen manifests just written.
+
+    Kept in a separate module (`tools/leakage_check.py`) so the same check can be
+    re-run on any future manifest without re-running the whole audit.
+    """
+    import subprocess
+    import sys as _sys
+    frozen_train = Path('data/frozen/agrifield40k-v0_train.csv')
+    frozen_val = Path('data/frozen/agrifield40k-v0_val.csv')
+    if not (frozen_train.is_file() and frozen_val.is_file()):
+        return
+    subprocess.run(
+        [_sys.executable, 'tools/leakage_check.py',
+         '--train', str(frozen_train), '--val', str(frozen_val),
+         '--md', str(path), '--json', str(json_path)],
+        check=True, stdout=subprocess.DEVNULL)
+
+
 def write_distribution_report(path: Path, dist):
     train = dist['train_counts']
     val = dist['val_counts']
@@ -1558,15 +1577,30 @@ def main():
                 'mitigation': 'conservative isolation rule; see reports/duplicate_review_protocol.md',
             },
             {
-                'risk': 'sequence-level split not independently verified',
+                'risk': 'sequence-level split REFUTED for ACRECropWeed (Stage 2C measured)',
                 'detail': 'The publisher states the split is at sequence level for '
-                          'sequence-derived sources. This audit verified pixel identity, not '
-                          'that the publisher actually honoured the sequence rule. Near-duplicate '
-                          'frames from the same sequence could therefore still straddle the '
-                          'frozen split.',
-                'mitigation': 'manual review of the perceptual candidates is the only way to '
-                              'close this; the screener rule (pHash<=4 AND dHash<=6) is a bound, '
-                              'not a guarantee',
+                          'sequence-derived sources. Stage 2C measured this directly and it '
+                          'does NOT hold for ACRECropWeed: the nearest frozen train and val '
+                          'frames are 2 seconds apart (val '
+                          'rgb-2022-10-06-17-39-59 vs train '
+                          'rgb-2022-10-06-17-40-01), and 112 of 120 frozen val frames have a '
+                          'frozen train frame within 60 seconds. The single 2022-10-06 robot '
+                          'sequence was split near-randomly across the two splits.',
+                'mitigation': 're-split ACRECropWeed by capture time (e.g. hold out whole '
+                              'minute-blocks or a contiguous tail) and re-freeze under a new '
+                              'data_version; see tools/leakage_check.py and '
+                              'reports/leakage_check_v0.md',
+            },
+            {
+                'risk': 'iNatWeeds observation straddling train and val (Stage 2C measured)',
+                'detail': '31 of 1,227 distinct iNaturalist observations have at least one '
+                          'image in frozen train and at least one in frozen val (36 train / '
+                          '31 val samples). One observation is one photographed plant, so the '
+                          'same individual appears on both sides of the split. Pixel-identity '
+                          'screening cannot see this because the images themselves differ.',
+                'mitigation': 'split iNatWeeds at the observation level (observation_id -> '
+                              'train or val, never both) and re-freeze under a new data_version; '
+                              'see tools/leakage_check.py and reports/leakage_check_v0.md',
             },
             {
                 'risk': 'same-scene different-capture pairs below the screener threshold',
@@ -1598,7 +1632,11 @@ def main():
             '(reports/stage2_source_index_evidence.md) but adoption is a curator decision',
             'resolution of the iNatWeeds per-image attribution/observation fields for '
             'redistribution (already retained in data/all_samples.csv)',
-            'independent verification of the publisher sequence-level split rule',
+            'independent verification of the publisher sequence-level split rule — '
+            'Stage 2C measured it and REFUTED it for ACRECropWeed (2 s nearest cross-split '
+            'gap); see reports/leakage_check_v0.md',
+            're-split ACRECropWeed by capture time and iNatWeeds by observation before any '
+            'reported result depends on this split; requires a new data_version',
         ],
         'review_status_counts': dict(Counter(r['review_status'] for r in review_rows)),
         'isolation_summary': {
@@ -1623,6 +1661,9 @@ def main():
 
     write_source_index_evidence_report(Path('reports/stage2_source_index_evidence.md'),
                                        audit['pending_by_prefix'])
+
+    write_leakage_report(Path('reports/leakage_check_v0.md'),
+                         Path('reports/leakage_check_v0.json'))
 
     elapsed = time.time() - started
     print(json.dumps({

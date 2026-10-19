@@ -106,7 +106,8 @@ def init_opt(
     final_wd=1e-6,
     final_lr=0.0,
     use_bfloat16=False,
-    ipe_scale=1.25
+    ipe_scale=1.25,
+    total_steps=None
 ):
     param_groups = [
         {
@@ -130,17 +131,25 @@ def init_opt(
 
     logger.info('Using AdamW')
     optimizer = torch.optim.AdamW(param_groups)
+    # -- `total_steps`, when given, is an EXACT optimizer-update budget and wins
+    #    over the epoch-derived horizon. It is used so that LR/WD cosine decay
+    #    ends precisely at the configured update count rather than at whatever
+    #    num_epochs * iterations_per_epoch happens to produce.
+    horizon = int(total_steps) if total_steps is not None \
+        else int(ipe_scale * num_epochs * iterations_per_epoch)
+    if horizon < 1:
+        raise ValueError(f'Scheduler horizon must be >= 1, got {horizon}')
     scheduler = WarmupCosineSchedule(
         optimizer,
         warmup_steps=int(warmup*iterations_per_epoch),
         start_lr=start_lr,
         ref_lr=ref_lr,
         final_lr=final_lr,
-        T_max=int(ipe_scale*num_epochs*iterations_per_epoch))
+        T_max=horizon)
     wd_scheduler = CosineWDSchedule(
         optimizer,
         ref_wd=wd,
         final_wd=final_wd,
-        T_max=int(ipe_scale*num_epochs*iterations_per_epoch))
+        T_max=horizon)
     scaler = torch.amp.GradScaler('cuda') if use_bfloat16 else None
     return optimizer, scaler, scheduler, wd_scheduler

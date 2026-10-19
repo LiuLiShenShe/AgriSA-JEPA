@@ -184,6 +184,66 @@ The smoke config uses 40 confirmed ACRECropWeed training images, ViT-B/16, 224-p
 
 Training logs, verification YAML, and checkpoints are written under `runs/` (ignored by Git). The checked results and limitations are recorded in `reports/`. The dataset card and its individual upstream licenses govern reuse; a manifest entry is not independent legal clearance.
 
+### Stage 2 — ViT-H/14 pilot and the versioned data freeze
+
+Stage 2 moved the backbone to the official ViT-H/14, froze a versioned corpus, and measured single-GPU throughput.
+
+```bash
+# re-audit + regenerate every audit product (also re-runs the leakage check)
+./.venv/bin/python -u -m tools.stage2_data_audit
+
+# structural leakage checks only, on any pair of manifests
+./.venv/bin/python tools/leakage_check.py \
+  --train data/frozen/agrifield40k-v0_train.csv \
+  --val   data/frozen/agrifield40k-v0_val.csv \
+  --md reports/leakage_check_v0.md \
+  --json reports/leakage_check_v0.json
+
+# ViT-H/14 single-GPU benchmark sweep
+./.venv/bin/python tools/bench_vith.py
+```
+
+Frozen corpus: `data_version=agrifield40k-v0`, train 12,447 / val 3,145,
+train ∩ val = ∅, manifest SHA-256 in `data/frozen/freeze_manifest.json`. It is
+**PROVISIONAL** — see [`reports/stage2c_data_gate.md`](reports/stage2c_data_gate.md).
+Two leaks were measured and are *not* fixed: ACRECropWeed frames 2 s apart
+across the split, and 31 iNatWeeds observations straddling it. Any number
+computed on this split is exploratory until those are re-split.
+
+### Stage 2C — 500-update pilot, resume fidelity, val-loss diagnostic
+
+```bash
+# bounded pilot: 500 optimizer updates, batch 16 x grad_accum 8
+./.venv/bin/python -u main.py \
+  --fname configs/stage3_armB_pilot_500.yaml --devices cuda:1
+
+# resume-consistency: three arms, must agree to the last digit
+./.venv/bin/python -u main.py \
+  --fname configs/stage2c_resume_baseline.yaml --devices cuda:1
+./.venv/bin/python -u main.py \
+  --fname configs/stage2c_resume_interrupted.yaml --devices cuda:1
+AGRISA_DEBUG_BATCH=1 ./.venv/bin/python -u main.py \
+  --fname configs/stage2c_resume_resumed.yaml --devices cuda:1
+
+# offline JEPA val loss for a checkpoint (diagnostic, NOT a result)
+./.venv/bin/python tools/eval_jepa_val_loss.py \
+  --checkpoint runs/stage3_armB_pilot_500/jepa-latest.pth.tar \
+  --manifest data/frozen/agrifield40k-v0_val.csv \
+  --out reports/jepa_val_loss_pilot500.json --num-batches 32
+```
+
+Results: pilot ran 500 updates in 3,965 micro-steps, loss 0.1908 → 0.1319,
+peak 23.4 GB, mean 372 ms/update
+([`reports/vith_single_gpu_benchmark.md`](reports/vith_single_gpu_benchmark.md)).
+Resume fidelity is exact — max abs loss difference **0.000e+00** across the
+interruption boundary
+([`reports/stage2c_resume_consistency.md`](reports/stage2c_resume_consistency.md)).
+The val-loss number (0.1322 mean) is a self-supervised diagnostic on a manifest
+with known leakage; it is not a generalisation result and is not reported as one.
+
+The full-budget Arm B candidate is `configs/stage3_baseline_candidate.yaml`
+(30,000 updates). It is a planning artefact and has **not** been executed.
+
 ## License
 See the [LICENSE](./LICENSE) file for details about the license under which this code is made available.
 

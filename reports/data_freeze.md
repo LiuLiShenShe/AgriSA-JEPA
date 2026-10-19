@@ -96,8 +96,11 @@ Provisioning note: 9 of those 10 prefixes now have a literal filename match agai
 **unreviewed perceptual duplicate candidates.** 776 perceptual_candidate edges and 8 exact edges exist. The 258 split-crossing or manifest-affecting ones are isolated, but manual visual adjudication has not been performed on any of them, so the true duplicate rate is unknown.
   - Mitigation: conservative isolation rule; see reports/duplicate_review_protocol.md
 
-**sequence-level split not independently verified.** The publisher states the split is at sequence level for sequence-derived sources. This audit verified pixel identity, not that the publisher actually honoured the sequence rule. Near-duplicate frames from the same sequence could therefore still straddle the frozen split.
-  - Mitigation: manual review of the perceptual candidates is the only way to close this; the screener rule (pHash<=4 AND dHash<=6) is a bound, not a guarantee
+**sequence-level split REFUTED for ACRECropWeed (Stage 2C measured).** The publisher states the split is at sequence level for sequence-derived sources. Stage 2C measured this directly and it does NOT hold for ACRECropWeed: the nearest frozen train and val frames are 2 seconds apart (val rgb-2022-10-06-17-39-59 vs train rgb-2022-10-06-17-40-01), and 112 of 120 frozen val frames have a frozen train frame within 60 seconds. The single 2022-10-06 robot sequence was split near-randomly across the two splits.
+  - Mitigation: re-split ACRECropWeed by capture time (e.g. hold out whole minute-blocks or a contiguous tail) and re-freeze under a new data_version; see tools/leakage_check.py and reports/leakage_check_v0.md
+
+**iNatWeeds observation straddling train and val (Stage 2C measured).** 31 of 1,227 distinct iNaturalist observations have at least one image in frozen train and at least one in frozen val (36 train / 31 val samples). One observation is one photographed plant, so the same individual appears on both sides of the split. Pixel-identity screening cannot see this because the images themselves differ.
+  - Mitigation: split iNatWeeds at the observation level (observation_id -> train or val, never both) and re-freeze under a new data_version; see tools/leakage_check.py and reports/leakage_check_v0.md
 
 **same-scene different-capture pairs below the screener threshold.** A pair of the same field on different days, or a wider crop of the same scene, can fall outside the pHash/dHash radius and never appear as an edge at all. No hash-based screener can find these.
   - Mitigation: none in this audit; requires manual or learned semantic matching
@@ -118,7 +121,8 @@ Frozen training manifest therefore holds 12,447 of the 12,458 samples in `pretra
 - manual adjudication of all 784 duplicate candidate edges (0 reviewed, 784 pending_manual_review)
 - source/license confirmation for the 10 unresolved prefixes (14,743 rows) — evidence now recorded (reports/stage2_source_index_evidence.md) but adoption is a curator decision
 - resolution of the iNatWeeds per-image attribution/observation fields for redistribution (already retained in data/all_samples.csv)
-- independent verification of the publisher sequence-level split rule
+- independent verification of the publisher sequence-level split rule — Stage 2C measured it and REFUTED it for ACRECropWeed (2 s nearest cross-split gap); see reports/leakage_check_v0.md
+- re-split ACRECropWeed by capture time and iNatWeeds by observation before any reported result depends on this split; requires a new data_version
 
 ## Files
 

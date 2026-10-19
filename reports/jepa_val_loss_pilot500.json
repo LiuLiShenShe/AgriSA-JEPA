@@ -1,0 +1,15 @@
+{
+  "checkpoint": "runs/stage3_armB_pilot_500/jepa-latest.pth.tar",
+  "manifest": "data/frozen/agrifield40k-v0_val.csv",
+  "num_batches": 32,
+  "batch_size": 16,
+  "seed": 0,
+  "val_loss_mean": 0.1321980725042522,
+  "val_loss_std": 0.019843879815764645,
+  "val_loss_first": 0.09823053330183029,
+  "val_loss_last": 0.1476706862449646,
+  "encoder_load": "<All keys matched successfully>",
+  "predictor_load": "<All keys matched successfully>",
+  "target_load": "<All keys matched successfully>",
+  "warning": "Diagnostic only. The val manifest has known cross-split provenance leakage; this is NOT a generalisation metric."
+}

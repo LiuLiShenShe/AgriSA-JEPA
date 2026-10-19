@@ -1,0 +1,108 @@
+{
+  "train": "data/frozen/agrifield40k-v0_train.csv",
+  "val": "data/frozen/agrifield40k-v0_val.csv",
+  "train_rows": 12447,
+  "val_rows": 3145,
+  "window_seconds": 60.0,
+  "sequence": {
+    "ACRECropWeed": {
+      "train_timestamped": 671,
+      "val_timestamped": 120,
+      "val_within_window": 112,
+      "window_seconds": 60.0,
+      "nearest_seconds": 2.0,
+      "nearest_val_original_id": "rgb-2022-10-06-17-39-59",
+      "nearest_train_original_id": "rgb-2022-10-06-17-40-01"
+    }
+  },
+  "grouping": {
+    "distinct_groups": 1227,
+    "straddling_groups": 31,
+    "straddling_samples_train": 36,
+    "straddling_samples_val": 31,
+    "examples": {
+      "342856862": {
+        "train": [
+          "inat_Rumex_crispus_624426924",
+          "inat_Rumex_crispus_624426925"
+        ],
+        "val": [
+          "inat_Rumex_crispus_624426923"
+        ]
+      },
+      "312767854": {
+        "train": [
+          "inat_barnyardgrass_564737203"
+        ],
+        "val": [
+          "inat_barnyardgrass_564737204"
+        ]
+      },
+      "315577030": {
+        "train": [
+          "inat_barnyardgrass_570091747",
+          "inat_barnyardgrass_570091788"
+        ],
+        "val": [
+          "inat_barnyardgrass_570091888"
+        ]
+      },
+      "319804047": {
+        "train": [
+          "inat_black_nightshade_578133983"
+        ],
+        "val": [
+          "inat_black_nightshade_578133947"
+        ]
+      },
+      "320666553": {
+        "train": [
+          "inat_black_nightshade_579810507"
+        ],
+        "val": [
+          "inat_black_nightshade_579810469"
+        ]
+      },
+      "325497081": {
+        "train": [
+          "inat_black_nightshade_592126919"
+        ],
+        "val": [
+          "inat_black_nightshade_592127032"
+        ]
+      },
+      "327532709": {
+        "train": [
+          "inat_black_nightshade_593396960"
+        ],
+        "val": [
+          "inat_black_nightshade_593396970"
+        ]
+      },
+      "273969282": {
+        "train": [
+          "inat_blackgrass_492615743"
+        ],
+        "val": [
+          "inat_blackgrass_492615907"
+        ]
+      },
+      "328558322": {
+        "train": [
+          "inat_broadleaf_plantain_595398397"
+        ],
+        "val": [
+          "inat_broadleaf_plantain_595398350"
+        ]
+      },
+      "328803026": {
+        "train": [
+          "inat_broadleaf_plantain_595890172"
+        ],
+        "val": [
+          "inat_broadleaf_plantain_595890263"
+        ]
+      }
+    }
+  }
+}

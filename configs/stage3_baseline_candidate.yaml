@@ -1,3 +1,20 @@
+# Stage 3 baseline candidate — Arm B (official I-JEPA ViT-H/14 continued
+# pretraining on agricultural data).
+#
+# This file is the FULL-budget candidate. It is a planning artefact: it is NOT
+# executed in Stage 2C and must not be launched as a wall-clock experiment
+# without a separate budget decision. The runnable 500-update pilot lives in
+# `configs/stage3_armB_pilot_500.yaml`.
+#
+# Superseded values and why (Stage 2C re-validation):
+#   - manifest `pretrain_manifest.csv` -> the versioned frozen manifest. The old
+#     path pointed at the Stage 1 pre-audit list, which still contains 14,743
+#     `pending_audit` rows; training from it would use unaudited images.
+#   - batch_size 1 / grad_accum 256 -> 16 / 8. Measured on one A6000: batch 16
+#     gives 63.5 img/s at 22 GB; batch 1 / accum 256 was never measured and
+#     implies ~34 s per optimizer update.
+#   - epochs 1 (uncontrolled) -> an explicit `max_optimizer_steps` budget, which
+#     is what actually bounds the run and is asserted at the end.
 meta:
   model_name: vit_huge
   patch_size: 14
@@ -13,10 +30,11 @@ meta:
   activation_checkpointing: false
 data:
   dataset: agrifield40k
-  manifest: pretrain_manifest.csv
+  # versioned PROVISIONAL frozen corpus; sha256 in data/frozen/freeze_manifest.json
+  manifest: data/frozen/agrifield40k-v0_train.csv
   split: train
-  seed: 20261018
-  batch_size: 1
+  seed: 20261019
+  batch_size: 16
   color_jitter_strength: 0.0
   crop_scale:
   - 0.3
@@ -49,8 +67,12 @@ optimization:
   ema:
   - 0.996
   - 1.0
-  epochs: 1
+  # outer-loop epoch count only; max_optimizer_steps is the real bound.
+  # 30,000 updates at 98 updates/epoch is ~306 epochs of the frozen corpus.
+  epochs: 320
   stop_after_epoch: null
+  # CANDIDATE full budget — NOT executed in Stage 2C
+  max_optimizer_steps: 30000
   warmup: 0.05
   start_lr: 1.0e-05
   lr: 0.0002
@@ -58,7 +80,7 @@ optimization:
   weight_decay: 0.04
   final_weight_decay: 0.4
   ipe_scale: 1.0
-  grad_accum: 256
+  grad_accum: 8
 logging:
   folder: runs/stage3_armB_candidate
   write_tag: jepa

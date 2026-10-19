@@ -98,6 +98,50 @@ def hardware_report(device):
     }
 
 
+def epochs_needed_for_optimizer_steps(max_optimizer_steps, optimizer_steps_per_epoch):
+    """Epochs required to cover an exact optimizer-update budget (ceiling)."""
+    budget = int(max_optimizer_steps)
+    per_epoch = int(optimizer_steps_per_epoch)
+    if budget < 1:
+        raise ValueError(f'max_optimizer_steps must be >= 1, got {budget}')
+    if per_epoch < 1:
+        raise ValueError(f'optimizer_steps_per_epoch must be >= 1, got {per_epoch}')
+    return -(-budget // per_epoch)
+
+
+def accumulation_window(itr, ipe, grad_accum):
+    """Deterministic gradient-accumulation window for micro-step ``itr``.
+
+    Returns ``(window_start, window_size, do_update)``. Derived only from
+    ``(itr, ipe, grad_accum)`` so a resumed run reconstructs identical windows.
+    """
+    if grad_accum < 1:
+        raise ValueError(f'grad_accum must be >= 1, got {grad_accum}')
+    window_start = (itr // grad_accum) * grad_accum
+    window_size = min(grad_accum, ipe - window_start)
+    do_update = (itr - window_start + 1) == window_size
+    return window_start, window_size, do_update
+
+
+def capture_rng_state():
+    """Snapshot every RNG the training loop consumes."""
+    return {
+        'python': random.getstate(),
+        'numpy': np.random.get_state(),
+        'torch': torch.get_rng_state(),
+        'cuda': torch.cuda.get_rng_state_all() if torch.cuda.is_available() else None,
+    }
+
+
+def restore_rng_state(state):
+    """Inverse of :func:`capture_rng_state`."""
+    random.setstate(state['python'])
+    np.random.set_state(state['numpy'])
+    torch.set_rng_state(state['torch'])
+    if torch.cuda.is_available() and state.get('cuda') is not None:
+        torch.cuda.set_rng_state_all(state['cuda'])
+
+
 
 def main(args, resume_preempt=False):
 
@@ -167,6 +211,31 @@ def main(args, resume_preempt=False):
     final_wd = float(args['optimization']['final_weight_decay'])
     num_epochs = args['optimization']['epochs']
     stop_after_epoch = args['optimization'].get('stop_after_epoch')
+    # -- exact optimizer-step budget. When set, training stops immediately after
+    #    the Nth optimizer update (mid-epoch allowed) and saves the checkpoint.
+    #    This is the only supported way to cap a run at a precise update count;
+    #    it must agree with (or override) the epoch budget, not conflict with it.
+    max_optimizer_steps = args['optimization'].get('max_optimizer_steps')
+    if max_optimizer_steps is not None:
+        max_optimizer_steps = int(max_optimizer_steps)
+        if max_optimizer_steps < 1:
+            raise ValueError(f'optimization.max_optimizer_steps must be >= 1, '
+                             f'got {max_optimizer_steps}')
+    # -- `interrupt_after_optimizer_steps` is a PURE interruption point: it saves
+    #    and exits after N updates but does NOT change the schedule horizon, so a
+    #    run interrupted this way and then resumed reproduces the uninterrupted
+    #    run exactly. Use it to emulate preemption. It is NOT a budget.
+    interrupt_after = args['optimization'].get('interrupt_after_optimizer_steps')
+    if interrupt_after is not None:
+        interrupt_after = int(interrupt_after)
+        if interrupt_after < 1:
+            raise ValueError('optimization.interrupt_after_optimizer_steps must be >= 1, '
+                             f'got {interrupt_after}')
+        if max_optimizer_steps is not None and interrupt_after >= max_optimizer_steps:
+            raise ValueError(
+                f'interrupt_after_optimizer_steps ({interrupt_after}) must be strictly less '
+                f'than max_optimizer_steps ({max_optimizer_steps}); otherwise it is not an '
+                f'interruption, it is the budget itself')
     warmup = args['optimization']['warmup']
     start_lr = args['optimization']['start_lr']
     lr = args['optimization']['lr']
@@ -314,9 +383,17 @@ def main(args, resume_preempt=False):
         with open(manifest_path, 'rb') as manifest_file:
             manifest_sha256 = hashlib.file_digest(manifest_file, 'sha256').hexdigest()
 
+    # -- optimizer-step horizon. With an exact budget (`max_optimizer_steps`)
+    #    the horizon is that budget; otherwise it is the epoch-derived count.
+    #    LR/WD and EMA all decay over this horizon so they end precisely at the
+    #    configured update count. A pure interruption
+    #    (`interrupt_after_optimizer_steps`) deliberately does NOT change it.
+    if max_optimizer_steps is not None:
+        total_optimizer_steps = max_optimizer_steps
+    else:
+        total_optimizer_steps = int(optimizer_steps_per_epoch * num_epochs * ipe_scale)
+
     # -- init optimizer and scheduler
-    #    LR/WD schedules advance once per optimizer update, so they are sized in
-    #    optimizer steps, not micro-steps.
     optimizer, scaler, scheduler, wd_scheduler = init_opt(
         encoder=encoder,
         predictor=predictor,
@@ -329,7 +406,8 @@ def main(args, resume_preempt=False):
         warmup=warmup,
         num_epochs=num_epochs,
         ipe_scale=ipe_scale,
-        use_bfloat16=use_bfloat16)
+        use_bfloat16=use_bfloat16,
+        total_steps=total_optimizer_steps)
     encoder = DistributedDataParallel(encoder, static_graph=True)
     predictor = DistributedDataParallel(predictor, static_graph=True)
     target_encoder = DistributedDataParallel(target_encoder)
@@ -337,11 +415,12 @@ def main(args, resume_preempt=False):
         p.requires_grad = False
 
     # -- momentum schedule (one EMA update per optimizer update)
-    total_optimizer_steps = optimizer_steps_per_epoch * num_epochs * ipe_scale
     momentum_scheduler = (ema[0] + i*(ema[1]-ema[0])/total_optimizer_steps
                           for i in range(int(total_optimizer_steps)+1))
 
     start_epoch = 0
+    optimizer_steps = 0
+    micro_steps = 0
     # -- load training checkpoint
     if load_model:
         encoder, predictor, target_encoder, optimizer, scaler, start_epoch = load_checkpoint(
@@ -359,23 +438,40 @@ def main(args, resume_preempt=False):
             if checkpoint.get('manifest_sha256') != manifest_sha256:
                 raise ValueError(f'Checkpoint manifest does not match {manifest_path}')
         rng_state = checkpoint['rng_state']
-        random.setstate(rng_state['python'])
-        np.random.set_state(rng_state['numpy'])
-        torch.set_rng_state(rng_state['torch'])
-        if torch.cuda.is_available() and rng_state['cuda'] is not None:
-            torch.cuda.set_rng_state_all(rng_state['cuda'])
         if 'loader_generator_state' in checkpoint:
             unsupervised_loader.generator.set_state(checkpoint['loader_generator_state'])
         mask_collator._itr_counter.value = checkpoint['mask_collator_step']
-        # -- advance LR/WD/momentum to the resumed optimizer-step position
-        for _ in range(start_epoch * optimizer_steps_per_epoch):
+        # -- restore the exact optimizer-update position recorded in the checkpoint
+        optimizer_steps = int(checkpoint.get('optimizer_steps', 0))
+        micro_steps = int(checkpoint.get('micro_steps', 0))
+        # -- mid-epoch resume: if the checkpoint stopped partway through an epoch,
+        #    replay that epoch's data pipeline from its beginning so the RNG,
+        #    loader generator and mask-collator sequence are reproduced exactly,
+        #    then discard the already-consumed micro-steps. Requires the
+        #    epoch-start snapshot saved by save_checkpoint().
+        epoch_itr_to_skip = int(checkpoint.get('epoch_itr', 0))
+        if epoch_itr_to_skip > 0:
+            start_state = checkpoint.get('epoch_start_state')
+            if not start_state:
+                raise ValueError(
+                    f'Checkpoint stopped mid-epoch (epoch_itr={epoch_itr_to_skip}) but has '
+                    f'no epoch_start_state to replay from: {load_path}')
+            restore_rng_state(start_state['rng_state'])
+            unsupervised_loader.generator.set_state(start_state['loader_generator_state'])
+            mask_collator._itr_counter.value = start_state['mask_collator_step']
+        else:
+            restore_rng_state(rng_state)
+        # -- advance LR/WD/momentum to the resumed optimizer-step position.
+        #    `optimizer_steps` is the number of updates ALREADY completed, which is
+        #    exactly the schedule position to restore. Sizing the fast-forward by
+        #    completed UPDATES (not by start_epoch * updates_per_epoch) keeps it
+        #    correct when an epoch ends on a partial accumulation window.
+        for _ in range(optimizer_steps):
             scheduler.step()
             wd_scheduler.step()
             next(momentum_scheduler)
 
-    optimizer_steps = checkpoint.get('optimizer_steps', 0) if load_model else 0
     optimizer_steps_at_start = optimizer_steps
-    micro_steps = checkpoint.get('micro_steps', 0) if load_model else 0
     micro_steps_at_start = micro_steps
     ema_formula_verified = False
     first_loss = None
@@ -383,12 +479,22 @@ def main(args, resume_preempt=False):
     if stop_after_epoch is not None and not (0 < stop_after_epoch <= num_epochs):
         raise ValueError('optimization.stop_after_epoch must be within the configured epoch range')
     epoch_limit = min(num_epochs, stop_after_epoch or num_epochs)
+    if max_optimizer_steps is not None:
+        # -- an exact update budget can land mid-epoch, so the epoch cap must be
+        #    raised to cover it. `epochs` stays the scheduler/epoch-count record.
+        needed_epochs = epochs_needed_for_optimizer_steps(
+            max_optimizer_steps, optimizer_steps_per_epoch)
+        epoch_limit = max(epoch_limit, min(needed_epochs, start_epoch + needed_epochs))
+    elif interrupt_after is not None:
+        needed_epochs = epochs_needed_for_optimizer_steps(
+            interrupt_after, optimizer_steps_per_epoch)
+        epoch_limit = max(epoch_limit, min(needed_epochs, start_epoch + needed_epochs))
     if load_model and start_epoch >= epoch_limit:
         raise ValueError(f'No epochs remain: checkpoint epoch={start_epoch}, limit={epoch_limit}')
     if device.type == 'cuda':
         torch.cuda.reset_peak_memory_stats(device)
 
-    def save_checkpoint(epoch):
+    def save_checkpoint(epoch, epoch_itr=0, epoch_start_state=None):
         save_dict = {
             'encoder': encoder.state_dict(),
             'predictor': predictor.state_dict(),
@@ -396,6 +502,10 @@ def main(args, resume_preempt=False):
             'opt': optimizer.state_dict(),
             'scaler': None if scaler is None else scaler.state_dict(),
             'epoch': epoch,
+            # -- micro-steps already consumed inside `epoch`; > 0 means the run
+            #    stopped mid-epoch and resume must replay from epoch_start_state
+            'epoch_itr': int(epoch_itr),
+            'epoch_start_state': epoch_start_state,
             'loss': loss_meter.avg,
             'batch_size': batch_size,
             'world_size': world_size,
@@ -416,12 +526,7 @@ def main(args, resume_preempt=False):
                 'predictor_inherited': pretrained_report['predictor_inherited'],
                 'source_epoch': pretrained_report['epoch_in_source_checkpoint'],
             },
-            'rng_state': {
-                'python': random.getstate(),
-                'numpy': np.random.get_state(),
-                'torch': torch.get_rng_state(),
-                'cuda': torch.cuda.get_rng_state_all() if torch.cuda.is_available() else None,
-            },
+            'rng_state': capture_rng_state(),
             'loader_generator_state': unsupervised_loader.generator.get_state(),
             'mask_collator_step': mask_collator._itr_counter.value,
         }
@@ -431,6 +536,15 @@ def main(args, resume_preempt=False):
             torch.save(save_dict, latest_path)
             if (epoch + 1) % checkpoint_freq == 0:
                 torch.save(save_dict, save_path.format(epoch=f'{epoch + 1}'))
+
+    # -- micro-steps already consumed inside `start_epoch` by the resumed run
+    epoch_itr_to_skip = 0
+    if load_model:
+        epoch_itr_to_skip = int(checkpoint.get('epoch_itr', 0))
+        if epoch_itr_to_skip >= ipe:
+            raise ValueError(
+                f'Resume checkpoint claims {epoch_itr_to_skip} consumed micro-steps but an '
+                f'epoch only has {ipe}: refusing to replay')
 
     # -- TRAINING LOOP
     for epoch in range(start_epoch, epoch_limit):
@@ -445,6 +559,18 @@ def main(args, resume_preempt=False):
         time_meter = AverageMeter()
         step_times_ms = []
 
+        # -- snapshot everything the data pipeline consumes AFTER set_epoch, so a
+        #    mid-epoch stop can be replayed exactly on resume.
+        epoch_start_state = {
+            'rng_state': capture_rng_state(),
+            'loader_generator_state': unsupervised_loader.generator.get_state(),
+            'mask_collator_step': mask_collator._itr_counter.value,
+        }
+        skip_until = epoch_itr_to_skip if epoch == start_epoch else 0
+        if skip_until:
+            logger.info('Replaying %d already-consumed micro-steps of epoch %d'
+                        % (skip_until, epoch + 1))
+
         # -- gradient-accumulation state for this epoch.  Read LR/WD from a group
         #    that is NOT weight-decay-excluded, so the reported WD is real.
         _last_lr = optimizer.param_groups[0]['lr']
@@ -453,11 +579,26 @@ def main(args, resume_preempt=False):
 
         for itr, (udata, masks_enc, masks_pred) in enumerate(unsupervised_loader):
 
+            if itr < skip_until:
+                # -- discard: the loader/collator side effects (mask counter,
+                #    generator state) are exactly what we want to reproduce.
+                continue
+
+            if os.environ.get('AGRISA_DEBUG_BATCH') and itr == skip_until:
+                # -- resume-fidelity probe: fingerprint the first real batch of
+                #    each epoch so a resumed run can be diffed against an
+                #    uninterrupted one. Off unless the env var is set.
+                _b = torch.from_numpy(np.asarray(udata[0])).float()
+                logger.info('BATCH_FP epoch=%d itr=%d sha=%s sum=%.6f maskA=%d maskB=%d rng=%s',
+                            epoch, itr,
+                            hashlib.sha256(_b.numpy().tobytes()).hexdigest()[:16],
+                            float(_b.sum()),
+                            int(masks_enc[0].numel()), int(masks_pred[0].numel()),
+                            hashlib.sha256(torch.get_rng_state().numpy().tobytes()).hexdigest()[:16])
+
             # -- deterministic accumulation window: derived only from (itr, ipe)
             #    so a resumed run reconstructs exactly the same windows.
-            window_start = (itr // grad_accum) * grad_accum
-            window_size = min(grad_accum, ipe - window_start)
-            do_update = (itr - window_start + 1) == window_size
+            window_start, window_size, do_update = accumulation_window(itr, ipe, grad_accum)
 
             def load_imgs():
                 # -- unsupervised imgs
@@ -570,6 +711,19 @@ def main(args, resume_preempt=False):
             if do_update:
                 optimizer_steps += 1
 
+            # -- exact optimizer-update budget, or a pure interruption point. When
+            #    reached, break out of the inner micro-step loop and let the epoch
+            #    loop's own check save + exit. The budget may fall mid-epoch; the
+            #    interruption point is meant to.
+            if max_optimizer_steps is not None and optimizer_steps >= max_optimizer_steps:
+                logger.info('Reached max_optimizer_steps=%d; stopping.' % max_optimizer_steps)
+                break
+            if interrupt_after is not None and optimizer_steps >= interrupt_after:
+                logger.info('Interrupted at interrupt_after_optimizer_steps=%d; '
+                            'saving and exiting (schedule horizon unchanged).'
+                            % interrupt_after)
+                break
+
             # -- Logging
             def log_stats():
                 csv_logger.log(epoch + 1, itr, loss, maskA_meter.val, maskB_meter.val, etime)
@@ -601,12 +755,37 @@ def main(args, resume_preempt=False):
             if not np.isfinite(loss):
                 raise FloatingPointError(f'Non-finite loss at epoch={epoch + 1}, itr={itr}: {loss}')
 
-        # -- Save Checkpoint after every epoch
-        logger.info('avg. loss %.3f' % loss_meter.avg)
-        save_checkpoint(epoch+1)
+        # -- if the exact budget or the interruption point was hit mid-epoch, save
+        #    and leave the epoch loop
+        budget_reached = (
+            (max_optimizer_steps is not None and optimizer_steps >= max_optimizer_steps)
+            or (interrupt_after is not None and optimizer_steps >= interrupt_after))
+
+        # -- Save Checkpoint after every epoch (and after a mid-epoch budget stop)
+        if optimizer_steps <= optimizer_steps_at_start:
+            logger.info('no optimizer updates occurred this run; skipping checkpoint')
+        else:
+            logger.info('avg. loss %.3f' % loss_meter.avg)
+            how_many = len(step_times_ms)  # micro-steps actually trained this epoch
+            resume_in_epoch = how_many < ipe
+            save_checkpoint(
+                epoch if resume_in_epoch else min(epoch + 1, epoch_limit),
+                epoch_itr=how_many if resume_in_epoch else 0,
+                epoch_start_state=epoch_start_state if resume_in_epoch else None)
+        if budget_reached:
+            break
 
     if not ema_formula_verified:
         raise RuntimeError('No optimizer update was verified in this run')
+    if (max_optimizer_steps is not None and interrupt_after is None
+            and optimizer_steps != max_optimizer_steps):
+        raise RuntimeError(
+            f'Optimizer-step budget violated: expected {max_optimizer_steps}, '
+            f'recorded {optimizer_steps}')
+    if interrupt_after is not None and optimizer_steps != interrupt_after:
+        raise RuntimeError(
+            f'Interruption point violated: expected {interrupt_after}, '
+            f'recorded {optimizer_steps}')
     if rank == 0:
         verification = {
             'dataset': dataset_name,
@@ -618,6 +797,9 @@ def main(args, resume_preempt=False):
             'use_sdpa': use_sdpa,
             'activation_checkpointing': activation_checkpointing,
             'grad_accum': grad_accum,
+            'max_optimizer_steps': max_optimizer_steps,
+            'interrupt_after_optimizer_steps': interrupt_after,
+            'total_optimizer_steps_horizon': total_optimizer_steps,
             'optimizer_steps_this_run': optimizer_steps - optimizer_steps_at_start,
             'optimizer_steps_total': optimizer_steps,
             'micro_steps_this_run': micro_steps - micro_steps_at_start,
