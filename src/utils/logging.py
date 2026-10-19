@@ -5,6 +5,8 @@
 # LICENSE file in the root directory of this source tree.
 #
 
+import os
+
 import torch
 
 
@@ -29,18 +31,39 @@ def gpu_timer(closure, log_timings=True):
 
 
 class CSVLogger(object):
+    """Append-only CSV of per-micro-step training stats.
 
-    def __init__(self, fname, *argv):
+    A *fresh* run truncates its log file, so a new experiment that reuses a
+    previous run's ``logging.folder`` can never silently inherit that run's
+    rows.  A *resumed* run (``append=True``) appends, but first asserts the
+    existing file's header matches the expected columns; a mismatch raises
+    instead of writing rows under the wrong header.  Stage 2D added this to
+    close the silent-append footgun in the original upstream logger, which
+    opened every file in ``'+a'`` mode.
+    """
+
+    def __init__(self, fname, *argv, append: bool = False):
         self.fname = fname
         self.types = []
-        # -- print headers
-        with open(self.fname, '+a') as f:
-            for i, v in enumerate(argv, 1):
-                self.types.append(v[0])
-                if i < len(argv):
-                    print(v[1], end=',', file=f)
-                else:
-                    print(v[1], end='\n', file=f)
+        header = []
+        for i, v in enumerate(argv, 1):
+            self.types.append(v[0])
+            header.append(v[1])
+        expected = ','.join(header)
+
+        if append and os.path.exists(self.fname) and os.path.getsize(self.fname) > 0:
+            with open(self.fname, 'r') as f:
+                found = f.readline().rstrip('\n')
+            if found != expected:
+                raise ValueError(
+                    f'Refusing to append to {self.fname}: its header\n  {found!r}\n'
+                    f'does not match this run\'s columns\n  {expected!r}. '
+                    f'Use a different logging.folder or start a fresh run.')
+            self.resumed = True
+        else:
+            with open(self.fname, 'w') as f:
+                print(expected, file=f)
+            self.resumed = False
 
     def log(self, *argv):
         with open(self.fname, '+a') as f:

@@ -274,14 +274,18 @@ def main(args, resume_preempt=False):
     if load_model:
         load_path = os.path.join(folder, r_file) if r_file is not None else latest_path
 
-    # -- make csv_logger
+    # -- make csv_logger.  A resumed run (load_model=True) appends to the
+    #    existing log so a run interrupted and then resumed keeps one continuous
+    #    CSV; a fresh run truncates it so a new experiment reusing this folder
+    #    can never silently inherit an older run's rows.
     csv_logger = CSVLogger(log_file,
                            ('%d', 'epoch'),
                            ('%d', 'itr'),
                            ('%.5f', 'loss'),
                            ('%.5f', 'mask-A'),
                            ('%.5f', 'mask-B'),
-                           ('%d', 'time (ms)'))
+                           ('%d', 'time (ms)'),
+                           append=bool(load_model))
 
     # -- init model
     encoder, predictor = init_model(
@@ -711,20 +715,11 @@ def main(args, resume_preempt=False):
             if do_update:
                 optimizer_steps += 1
 
-            # -- exact optimizer-update budget, or a pure interruption point. When
-            #    reached, break out of the inner micro-step loop and let the epoch
-            #    loop's own check save + exit. The budget may fall mid-epoch; the
-            #    interruption point is meant to.
-            if max_optimizer_steps is not None and optimizer_steps >= max_optimizer_steps:
-                logger.info('Reached max_optimizer_steps=%d; stopping.' % max_optimizer_steps)
-                break
-            if interrupt_after is not None and optimizer_steps >= interrupt_after:
-                logger.info('Interrupted at interrupt_after_optimizer_steps=%d; '
-                            'saving and exiting (schedule horizon unchanged).'
-                            % interrupt_after)
-                break
-
-            # -- Logging
+            # -- Logging.  This runs BEFORE the budget/interrupt break below, so
+            #    the micro-step that performs the final optimizer update of a
+            #    budgeted run is still recorded in the CSV.  Stage 2D fixed the
+            #    opposite order: the break used to fire first, so the last
+            #    update of every bounded run was silently missing from the log.
             def log_stats():
                 csv_logger.log(epoch + 1, itr, loss, maskA_meter.val, maskB_meter.val, etime)
                 if (itr % log_freq == 0) or np.isnan(loss) or np.isinf(loss):
@@ -754,6 +749,19 @@ def main(args, resume_preempt=False):
 
             if not np.isfinite(loss):
                 raise FloatingPointError(f'Non-finite loss at epoch={epoch + 1}, itr={itr}: {loss}')
+
+            # -- exact optimizer-update budget, or a pure interruption point. When
+            #    reached, break out of the inner micro-step loop and let the epoch
+            #    loop's own check save + exit. The budget may fall mid-epoch; the
+            #    interruption point is meant to.
+            if max_optimizer_steps is not None and optimizer_steps >= max_optimizer_steps:
+                logger.info('Reached max_optimizer_steps=%d; stopping.' % max_optimizer_steps)
+                break
+            if interrupt_after is not None and optimizer_steps >= interrupt_after:
+                logger.info('Interrupted at interrupt_after_optimizer_steps=%d; '
+                            'saving and exiting (schedule horizon unchanged).'
+                            % interrupt_after)
+                break
 
         # -- if the exact budget or the interruption point was hit mid-epoch, save
         #    and leave the epoch loop

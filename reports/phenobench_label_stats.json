@@ -1,0 +1,78 @@
+{
+  "summary": {
+    "root": "/data/datasets/PhenoBench/PhenoBench-v110",
+    "splits": {
+      "train": {
+        "images": 1407,
+        "leaf_instances": 1407,
+        "leaf_visibility": 1407,
+        "plant_instances": 1407,
+        "plant_visibility": 1407,
+        "semantics": 1407
+      },
+      "val": {
+        "images": 772,
+        "leaf_instances": 772,
+        "leaf_visibility": 772,
+        "plant_instances": 772,
+        "plant_visibility": 772,
+        "semantics": 772
+      },
+      "test": {
+        "images": 693
+      }
+    }
+  },
+  "label_histograms": {
+    "train": {
+      "0": 1293238516,
+      "1": 153463715,
+      "2": 7078797,
+      "3": 21310522,
+      "4": 254882
+    },
+    "train_fraction": {
+      "0": 0.876566,
+      "1": 0.104019,
+      "2": 0.004798,
+      "3": 0.014444,
+      "4": 0.000173
+    },
+    "val": {
+      "0": 727889307,
+      "1": 66418271,
+      "2": 4088634,
+      "3": 10916383,
+      "4": 188077
+    },
+    "val_fraction": {
+      "0": 0.899183,
+      "1": 0.082048,
+      "2": 0.005051,
+      "3": 0.013485,
+      "4": 0.000232
+    }
+  },
+  "mapped_histograms": {
+    "train": {
+      "0": 1293238516,
+      "1": 174774237,
+      "2": 7333679
+    },
+    "train_fraction": {
+      "0": 0.876566,
+      "1": 0.118463,
+      "2": 0.004971
+    },
+    "val": {
+      "0": 727889307,
+      "1": 77334654,
+      "2": 4276711
+    },
+    "val_fraction": {
+      "0": 0.899183,
+      "1": 0.095534,
+      "2": 0.005283
+    }
+  }
+}

@@ -1,0 +1,239 @@
+{
+  "arms": {
+    "A": {
+      "arm_label": "official_i-jepa_vith14",
+      "backbone_checkpoint": "/data/checkpoints/ijepa/IN1K-vit.h.14-300e.pth.tar",
+      "backbone_checkpoint_sha256": "0382013c481743e9ccea89f970bc6c6aa126aa19a62127500d6e672a641aae22",
+      "continued_training": "none",
+      "pretraining_data_version": null,
+      "protocol": {
+        "backbone": "ViT-H/14, frozen, 224x224 tiles, 16x16 tokens, embed 1280",
+        "head": "Linear(1280 -> 3) over patch tokens, nearest upsample x14",
+        "tiling": "overlapping 224x224, stride 200, 5x5 per 1024 image, no padding, every pixel covered, overlaps logit-averaged",
+        "optimizer": "AdamW",
+        "lr": 0.001,
+        "weight_decay": 0.0,
+        "epochs": 10,
+        "batch_size": 32,
+        "seeds": [
+          0,
+          1,
+          2
+        ],
+        "loss": "patch cross-entropy, exact equivalent of nearest-upsampled pixel CE",
+        "train_images": 1407,
+        "val_images": 772
+      },
+      "probe_parameters": 3843,
+      "aggregate": {
+        "n_seeds": 3,
+        "mIoU": {
+          "mean": 71.6833,
+          "std": 1.3462,
+          "values": [
+            72.67,
+            72.6,
+            69.78
+          ]
+        },
+        "crop_IoU": {
+          "mean": 81.4567,
+          "std": 0.1674,
+          "values": [
+            81.66,
+            81.46,
+            81.25
+          ]
+        },
+        "weed_IoU": {
+          "mean": 35.98,
+          "std": 3.8891,
+          "values": [
+            38.72,
+            38.74,
+            30.48
+          ]
+        }
+      }
+    },
+    "B": {
+      "arm_label": "agricultural_jepa_vith14_500step",
+      "backbone_checkpoint": "runs/stage3_armB_pilot_500/jepa-latest.pth.tar",
+      "backbone_checkpoint_sha256": "57181b8a65a1edf741b26d989e803c7640465393666308e257444ee8c31957e9",
+      "continued_training": "500 optimizer updates, standard I-JEPA objective",
+      "pretraining_data_version": "agrifield40k-v0 (PROVISIONAL)",
+      "protocol": {
+        "backbone": "ViT-H/14, frozen, 224x224 tiles, 16x16 tokens, embed 1280",
+        "head": "Linear(1280 -> 3) over patch tokens, nearest upsample x14",
+        "tiling": "overlapping 224x224, stride 200, 5x5 per 1024 image, no padding, every pixel covered, overlaps logit-averaged",
+        "optimizer": "AdamW",
+        "lr": 0.001,
+        "weight_decay": 0.0,
+        "epochs": 10,
+        "batch_size": 32,
+        "seeds": [
+          0,
+          1,
+          2
+        ],
+        "loss": "patch cross-entropy, exact equivalent of nearest-upsampled pixel CE",
+        "train_images": 1407,
+        "val_images": 772
+      },
+      "probe_parameters": 3843,
+      "aggregate": {
+        "n_seeds": 3,
+        "mIoU": {
+          "mean": 73.1333,
+          "std": 1.0876,
+          "values": [
+            74.35,
+            73.34,
+            71.71
+          ]
+        },
+        "crop_IoU": {
+          "mean": 82.38,
+          "std": 0.1575,
+          "values": [
+            82.6,
+            82.3,
+            82.24
+          ]
+        },
+        "weed_IoU": {
+          "mean": 39.32,
+          "std": 3.1207,
+          "values": [
+            42.75,
+            40.01,
+            35.2
+          ]
+        }
+      }
+    }
+  },
+  "paired_by_seed": {
+    "mIoU": {
+      "n": 3,
+      "paired_mean": 1.45,
+      "paired_std": 0.6275,
+      "t_statistic": 4.0026,
+      "degrees_of_freedom": 2,
+      "paired_differences": [
+        1.68,
+        0.74,
+        1.93
+      ],
+      "note": "Paired by seed. df=2 at n=3, so this is descriptive, not a significance claim; the protocol asks for 3 seeds for stability, not for inference."
+    },
+    "crop_IoU": {
+      "n": 3,
+      "paired_mean": 0.9233,
+      "paired_std": 0.0764,
+      "t_statistic": 20.9392,
+      "degrees_of_freedom": 2,
+      "paired_differences": [
+        0.94,
+        0.84,
+        0.99
+      ],
+      "note": "Paired by seed. df=2 at n=3, so this is descriptive, not a significance claim; the protocol asks for 3 seeds for stability, not for inference."
+    },
+    "weed_IoU": {
+      "n": 3,
+      "paired_mean": 3.34,
+      "paired_std": 1.8256,
+      "t_statistic": 3.1689,
+      "degrees_of_freedom": 2,
+      "paired_differences": [
+        4.03,
+        1.27,
+        4.72
+      ],
+      "note": "Paired by seed. df=2 at n=3, so this is descriptive, not a significance claim; the protocol asks for 3 seeds for stability, not for inference."
+    }
+  },
+  "per_seed": [
+    {
+      "arm": "A",
+      "seed": 0,
+      "mIoU": 72.67,
+      "soil_IoU": null,
+      "crop_IoU": 81.66,
+      "weed_IoU": 38.72,
+      "final_train_loss": 0.06438193713116917,
+      "train_updates": 11000,
+      "train_seconds": 73.5,
+      "peak_gpu_memory_mib": 117.5,
+      "self_mIoU": 72.6657
+    },
+    {
+      "arm": "A",
+      "seed": 1,
+      "mIoU": 72.6,
+      "soil_IoU": null,
+      "crop_IoU": 81.46,
+      "weed_IoU": 38.74,
+      "final_train_loss": 0.0643533535023149,
+      "train_updates": 11000,
+      "train_seconds": 71.0,
+      "peak_gpu_memory_mib": 117.5,
+      "self_mIoU": 72.6015
+    },
+    {
+      "arm": "A",
+      "seed": 2,
+      "mIoU": 69.78,
+      "soil_IoU": null,
+      "crop_IoU": 81.25,
+      "weed_IoU": 30.48,
+      "final_train_loss": 0.06439897055215418,
+      "train_updates": 11000,
+      "train_seconds": 95.8,
+      "peak_gpu_memory_mib": 117.5,
+      "self_mIoU": 69.7756
+    },
+    {
+      "arm": "B",
+      "seed": 0,
+      "mIoU": 74.35,
+      "soil_IoU": null,
+      "crop_IoU": 82.6,
+      "weed_IoU": 42.75,
+      "final_train_loss": 0.05897429129557569,
+      "train_updates": 11000,
+      "train_seconds": 99.6,
+      "peak_gpu_memory_mib": 117.5,
+      "self_mIoU": 74.3514
+    },
+    {
+      "arm": "B",
+      "seed": 1,
+      "mIoU": 73.34,
+      "soil_IoU": null,
+      "crop_IoU": 82.3,
+      "weed_IoU": 40.01,
+      "final_train_loss": 0.05895716713456796,
+      "train_updates": 11000,
+      "train_seconds": 68.9,
+      "peak_gpu_memory_mib": 117.5,
+      "self_mIoU": 73.3408
+    },
+    {
+      "arm": "B",
+      "seed": 2,
+      "mIoU": 71.71,
+      "soil_IoU": null,
+      "crop_IoU": 82.24,
+      "weed_IoU": 35.2,
+      "final_train_loss": 0.05896428002747518,
+      "train_updates": 11000,
+      "train_seconds": 67.2,
+      "peak_gpu_memory_mib": 117.5,
+      "self_mIoU": 71.7115
+    }
+  ],
+  "baseline_all_soil_mIoU": 29.97,
+  "caveat": "Arm B was continued-pretrained on agrifield40k-v0 (PROVISIONAL); Stage 2D built v1 afterwards. This is an exploratory comparison, not a final same-data-version experiment."
+}

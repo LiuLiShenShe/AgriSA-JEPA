@@ -1,0 +1,70 @@
+{
+  "label": "agrifield40k-v1",
+  "train": "data/frozen/agrifield40k-v1_train.csv",
+  "val": "data/frozen/agrifield40k-v1_val.csv",
+  "generated_at": "2026-10-19T11:53:03Z",
+  "intersection": {
+    "train_rows": 12567,
+    "val_rows": 3025,
+    "sample_id_intersection": 0,
+    "sample_id_intersection_examples": [],
+    "path_intersection": 0,
+    "path_intersection_examples": []
+  },
+  "exact_train": {
+    "rows": 12567,
+    "duplicate_file_sha256_values": 0,
+    "duplicate_file_sha256_samples": 0,
+    "duplicate_pixel_sha256_values": 0,
+    "duplicate_pixel_sha256_samples": 0
+  },
+  "exact_val": {
+    "rows": 3025,
+    "duplicate_file_sha256_values": 0,
+    "duplicate_file_sha256_samples": 0,
+    "duplicate_pixel_sha256_values": 0,
+    "duplicate_pixel_sha256_samples": 0
+  },
+  "sequence": {
+    "window_seconds": 60.0,
+    "per_source": {}
+  },
+  "grouping": {
+    "source": "iNatWeeds",
+    "distinct_groups": 1227,
+    "straddling_groups": 0,
+    "straddling_samples_train": 0,
+    "straddling_samples_val": 0,
+    "examples": {}
+  },
+  "phenobench": {
+    "phenobench_rows_in_train": 0,
+    "phenobench_rows_in_val": 0,
+    "phenobench_rows_in_frozen_total": 0,
+    "status": "PASS",
+    "examples": []
+  },
+  "duplicate_candidates": {
+    "available": true,
+    "edges_total": 784,
+    "edges_touching_this_version": 0,
+    "edges_now_internal_to_one_split": 0,
+    "of_which_were_cross_split_in_v0": 0,
+    "endpoint_count": 963,
+    "endpoint_status_counts": {
+      "pending_audit": 925,
+      "exclude": 27,
+      "include": 11
+    },
+    "all_edges_pending_manual_review": true,
+    "note": "Candidate endpoints are almost entirely pending_audit/exclude rows that no frozen split contains; the 11 include endpoints were the manifest-affecting edges isolated in v0 and are still outside v1. No candidate was adjudicated by a human."
+  },
+  "verdict": {
+    "sample_id_intersection": true,
+    "path_intersection": true,
+    "no_capture_sequence_cross_split": true,
+    "no_group_key_cross_split": true,
+    "no_phenobench_overlap": true
+  },
+  "all_pass": true
+}

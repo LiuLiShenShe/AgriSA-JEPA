@@ -1,0 +1,106 @@
+{
+  "data_version": "agrifield40k-v1",
+  "freeze_status": "provisional",
+  "freeze_revision": "7f530c67572b6a572467adab840cdbbd7029b112",
+  "card_url": "https://huggingface.co/datasets/dtu-pcas/AgriField-40K/raw/7f530c67572b6a572467adab840cdbbd7029b112/README.md",
+  "generated_at": "2026-10-19T09:45:10Z",
+  "stage": "Stage 2D",
+  "supersedes": "agrifield40k-v0",
+  "included_sample_count": {
+    "train": 12567,
+    "val": 3025,
+    "total": 15592
+  },
+  "v0_included_sample_count": {
+    "train": 12447,
+    "val": 3145
+  },
+  "per_source_breakdown": {
+    "train": {
+      "ACRECropWeed": 791,
+      "LUCASVision": 8938,
+      "RadishWheat": 427,
+      "SorghumWeed": 137,
+      "VegAnn": 1243,
+      "iNatWeeds": 1031
+    },
+    "val": {
+      "LUCASVision": 2245,
+      "RadishWheat": 107,
+      "SorghumWeed": 35,
+      "VegAnn": 360,
+      "iNatWeeds": 278
+    }
+  },
+  "split_rule": {
+    "origin": "v0 publisher split, repaired for two measured structural leaks",
+    "acw": {
+      "policy": "whole capture campaign -> train",
+      "images": 791,
+      "val_images_moved_to_train": 120,
+      "session_dates": {
+        "2022-10-06": 159,
+        "2022-10-10": 632
+      },
+      "note": "Gaps between frames (up to 87 min) do not prove independent sessions; no session split is invented."
+    },
+    "inat": {
+      "observations": 1227,
+      "images_with_observation_id": 1309,
+      "target_val_fraction": 0.21237585943468296,
+      "target_val_images": 278,
+      "assigned_val_images": 278,
+      "assigned_train_images": 1031,
+      "missing_observation_id_images": 0,
+      "missing_observation_id_policy": "forced to train",
+      "seed": 20261019
+    },
+    "other_sources": "copied unchanged from v0",
+    "train_val_disjoint": true,
+    "seed": 20261019
+  },
+  "changes_from_v0": {
+    "moved_counts": {
+      "ACRECropWeed:val->train": 120,
+      "iNatWeeds:train->val": 218,
+      "iNatWeeds:val->train": 218
+    },
+    "moved_examples": {
+      "iNatWeeds:train->val": [
+        "inat_Rumex_crispus_579091167",
+        "inat_Rumex_crispus_583307714",
+        "inat_Rumex_crispus_605199857",
+        "inat_Rumex_crispus_622907559",
+        "inat_Rumex_crispus_623434427"
+      ],
+      "ACRECropWeed:val->train": [
+        "acw_rgb-2022-10-06-17-39-39",
+        "acw_rgb-2022-10-06-17-39-41",
+        "acw_rgb-2022-10-06-17-39-43",
+        "acw_rgb-2022-10-06-17-39-45",
+        "acw_rgb-2022-10-06-17-39-48"
+      ],
+      "iNatWeeds:val->train": [
+        "inat_Rumex_crispus_554887961",
+        "inat_Rumex_crispus_558945554",
+        "inat_Rumex_crispus_560443350",
+        "inat_Rumex_crispus_570649538",
+        "inat_Rumex_crispus_576188045"
+      ]
+    }
+  },
+  "leakage_status": {
+    "acw_capture_sequence_cross_split": "resolved (whole source in train)",
+    "inat_observation_cross_split": "resolved (observation-level split)",
+    "unreviewed_perceptual_duplicate_candidates": 784,
+    "unresolved_source_prefixes_excluded": 14743
+  },
+  "gate": {
+    "source_license_gate_met": false,
+    "reason": "14,743 pending_audit images are still unadopted and the 784 duplicate candidate edges are still unreviewed; the v1 repair does not change either, so the version stays PROVISIONAL."
+  },
+  "sha256": {
+    "agrifield40k-v1_train.csv": "d63183af8ede53bc859474d1fc82cc969335c71967008812a485de10476a5435",
+    "agrifield40k-v1_val.csv": "86efe5156291950b25af692d41b5f1b4cee437dd3ba2a44ce39e2cf18984f944"
+  }
+}
