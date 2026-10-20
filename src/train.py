@@ -34,6 +34,7 @@ import torch.nn.functional as F
 from torch.nn.parallel import DistributedDataParallel
 
 from src.masks.multiblock import MaskCollator as MBMaskCollator
+from src.masks.structure_guided import StructureGuidedMaskCollator
 from src.masks.utils import apply_masks
 from src.pretrained import init_from_pretrained, sha256_file
 from src.utils.distributed import (
@@ -185,6 +186,8 @@ def main(args, resume_preempt=False):
     manifest_path = args['data'].get('manifest')
     data_split = args['data'].get('split', 'train')
     data_seed = int(args['data'].get('seed', _GLOBAL_SEED))
+    # -- optional isolation of the augmentation RNG stream from the mask RNG
+    augmentation_seed = args['data'].get('augmentation_seed')
     max_samples = args['data'].get('max_samples')
     random.seed(data_seed)
     np.random.seed(data_seed)
@@ -240,6 +243,19 @@ def main(args, resume_preempt=False):
     start_lr = args['optimization']['start_lr']
     lr = args['optimization']['lr']
     final_lr = args['optimization']['final_lr']
+    # -- mid-run evaluation points.  A snapshot taken at step N is written
+    #    WITHOUT touching the schedule, the optimizer, the EMA or the mask
+    #    random state: it is a pure observation of the run at that step.
+    save_at_steps = args['optimization'].get('save_at_optimizer_steps') or []
+    save_at_steps = sorted({int(s) for s in save_at_steps})
+    if any(s < 1 for s in save_at_steps):
+        raise ValueError('optimization.save_at_optimizer_steps must all be >= 1')
+    if max_optimizer_steps is not None:
+        for s in save_at_steps:
+            if s > max_optimizer_steps:
+                raise ValueError(
+                    f'optimization.save_at_optimizer_steps contains {s}, which is beyond '
+                    f'max_optimizer_steps={max_optimizer_steps}')
     # -- gradient accumulation: micro-steps per optimizer update
     grad_accum = int(args['optimization'].get('grad_accum', 1))
     if grad_accum < 1:
@@ -326,16 +342,44 @@ def main(args, resume_preempt=False):
             pretrained_report.get('target_encoder_keys_loaded'))
 
     # -- make data transforms
-    mask_collator = MBMaskCollator(
-        input_size=crop_size,
-        patch_size=patch_size,
-        pred_mask_scale=pred_mask_scale,
-        enc_mask_scale=enc_mask_scale,
-        aspect_ratio=aspect_ratio,
-        nenc=num_enc_masks,
-        npred=num_pred_masks,
-        allow_overlap=allow_overlap,
-        min_keep=min_keep)
+    mask_mode = args['mask'].get('mode', 'random')
+    if mask_mode == 'random':
+        mask_collator = MBMaskCollator(
+            input_size=crop_size,
+            patch_size=patch_size,
+            pred_mask_scale=pred_mask_scale,
+            enc_mask_scale=enc_mask_scale,
+            aspect_ratio=aspect_ratio,
+            nenc=num_enc_masks,
+            npred=num_pred_masks,
+            allow_overlap=allow_overlap,
+            min_keep=min_keep)
+    elif mask_mode == 'structure_guided':
+        # -- Stage 4A: identical geometry to the official collator, but the
+        #    TARGET BLOCK POSITION is drawn from a structure-weighted candidate
+        #    set.  The official collator itself is untouched and is still what
+        #    arm B uses.
+        mask_collator = StructureGuidedMaskCollator(
+            input_size=crop_size,
+            patch_size=patch_size,
+            pred_mask_scale=pred_mask_scale,
+            enc_mask_scale=enc_mask_scale,
+            aspect_ratio=aspect_ratio,
+            nenc=num_enc_masks,
+            npred=num_pred_masks,
+            allow_overlap=allow_overlap,
+            min_keep=min_keep,
+            prior_mode=args['mask'].get('prior_mode', 'vegetation'),
+            guidance_lambda=float(args['mask'].get('guidance_lambda', 0.0)),
+            num_candidates=int(args['mask'].get('num_candidates', 16)),
+            prior_device=(device if (device.type == 'cuda'
+                                     and int(args['data'].get('num_workers', 0)) == 0)
+                          else None),
+            base_seed=int(args['mask'].get('base_seed', data_seed)),
+            boundary_edge_weight=float(args['mask'].get('boundary_edge_weight', 0.5)))
+    else:
+        raise ValueError(f"Unknown mask.mode {mask_mode!r}; expected 'random' or "
+                         f"'structure_guided'")
 
     transform = make_transforms(
         crop_size=crop_size,
@@ -362,7 +406,8 @@ def main(args, resume_preempt=False):
             split=data_split,
             drop_last=True,
             seed=data_seed,
-            max_samples=max_samples)
+            max_samples=max_samples,
+            augmentation_seed=augmentation_seed)
     elif dataset_name == 'imagenet1k':
         _, unsupervised_loader, unsupervised_sampler = make_imagenet1k(
             transform=transform,
@@ -477,7 +522,11 @@ def main(args, resume_preempt=False):
 
     optimizer_steps_at_start = optimizer_steps
     micro_steps_at_start = micro_steps
+    # -- a resumed run must not re-take a snapshot it already took
+    save_at_steps = [s for s in save_at_steps if s > optimizer_steps_at_start]
     ema_formula_verified = False
+    _current_momentum = float(ema[0])   # updated once per optimizer step
+    saved_snapshots = []
     first_loss = None
     last_loss = None
     if stop_after_epoch is not None and not (0 < stop_after_epoch <= num_epochs):
@@ -541,6 +590,68 @@ def main(args, resume_preempt=False):
             if (epoch + 1) % checkpoint_freq == 0:
                 torch.save(save_dict, save_path.format(epoch=f'{epoch + 1}'))
 
+    def save_step_snapshot(step):
+        """Write an evaluation snapshot at a specific optimizer-step count.
+
+        Two files are written:
+          * ``<tag>-step<N>.pth.tar`` -- the FULL training state (encoder,
+            predictor, target encoder, optimizer, scaler, schedules, RNG), so
+            the run can be resumed from that point;
+          * ``<tag>-encoder-step<N>.pth`` -- the encoder weights only, which is
+            all the downstream probe needs.
+
+        The snapshot is a pure observation: it does not advance the LR/WD/EMA
+        schedule, does not touch the optimizer, and does not consume any random
+        state.  The EMA momentum and the current LR/WD are recorded so the
+        snapshot can be audited.
+        """
+        if rank != 0:
+            return None
+        full_path = os.path.join(folder, f'{tag}-step{step}.pth.tar')
+        encoder_path = os.path.join(folder, f'{tag}-encoder-step{step}.pth')
+        snapshot = {
+            'encoder': encoder.state_dict(),
+            'predictor': predictor.state_dict(),
+            'target_encoder': target_encoder.state_dict(),
+            'opt': optimizer.state_dict(),
+            'scaler': None if scaler is None else scaler.state_dict(),
+            'epoch': epoch,
+            'epoch_itr': itr,
+            'epoch_start_state': None,
+            'loss': loss_meter.avg,
+            'optimizer_steps': int(step),
+            'micro_steps': micro_steps,
+            'grad_accum': grad_accum,
+            'config': args,
+            'hardware': hardware_report(device),
+            'git_commit': git_commit(),
+            'pretrained_init': None if pretrained_report is None else {
+                'source': pretrained_report['path'],
+                'sha256': pretrained_report['sha256'],
+            },
+            'lr_at_snapshot': _last_lr,
+            'weight_decay_at_snapshot': _last_wd,
+            'ema_momentum_at_snapshot': _current_momentum,
+            'rng_state': capture_rng_state(),
+            'loader_generator_state': unsupervised_loader.generator.get_state(),
+            'mask_collator_step': mask_collator._itr_counter.value,
+        }
+        if manifest_sha256 is not None:
+            snapshot['manifest_sha256'] = manifest_sha256
+        torch.save(snapshot, full_path)
+        torch.save({
+            'encoder': encoder.state_dict(),
+            'optimizer_steps': int(step),
+            'manifest_sha256': manifest_sha256,
+            'pretrained_init_sha256': (None if pretrained_report is None
+                                       else pretrained_report['sha256']),
+            'config': args,
+            'git_commit': git_commit(),
+        }, encoder_path)
+        logger.info('Saved evaluation snapshot at optimizer step %d -> %s',
+                    step, full_path)
+        return {'full': full_path, 'encoder': encoder_path}
+
     # -- micro-steps already consumed inside `start_epoch` by the resumed run
     epoch_itr_to_skip = 0
     if load_model:
@@ -556,6 +667,11 @@ def main(args, resume_preempt=False):
 
         # -- update distributed-data-loader epoch
         unsupervised_sampler.set_epoch(epoch)
+        # -- keep the per-sample augmentation seed in step with the epoch, so a
+        #    resumed run reproduces the same crops AND different arms see the
+        #    same crops (the augmentation RNG is isolated from the mask RNG).
+        if hasattr(unsupervised_loader.dataset, 'set_epoch'):
+            unsupervised_loader.dataset.set_epoch(epoch)
 
         loss_meter = AverageMeter()
         maskA_meter = AverageMeter()
@@ -615,7 +731,7 @@ def main(args, resume_preempt=False):
             maskB_meter.update(len(masks_pred[0][0]))
 
             def train_step():
-                nonlocal ema_formula_verified, _last_lr, _last_wd
+                nonlocal ema_formula_verified, _last_lr, _last_wd, _current_momentum
                 if do_update:
                     # -- LR/WD advance once per optimizer update, not per micro-step
                     _last_lr = scheduler.step()
@@ -688,6 +804,7 @@ def main(args, resume_preempt=False):
                     # Step 3. momentum update of target encoder
                     with torch.no_grad():
                         m = next(momentum_scheduler)
+                        _current_momentum = m
                         if not ema_formula_verified:
                             expected_target = target_before.mul(m).add_(
                                 (1. - m) * encoder_probe.detach())
@@ -749,6 +866,16 @@ def main(args, resume_preempt=False):
 
             if not np.isfinite(loss):
                 raise FloatingPointError(f'Non-finite loss at epoch={epoch + 1}, itr={itr}: {loss}')
+
+            # -- mid-run evaluation snapshot.  Checked AFTER the update, the EMA
+            #    step and the logging for this micro-step, so the snapshot is the
+            #    exact state the run reached at that update count.  It writes
+            #    files only; it does not touch the schedule or the RNG.
+            while save_at_steps and optimizer_steps >= save_at_steps[0]:
+                step = save_at_steps.pop(0)
+                result_paths = save_step_snapshot(step)
+                if result_paths:
+                    saved_snapshots.append({'step': step, **result_paths})
 
             # -- exact optimizer-update budget, or a pure interruption point. When
             #    reached, break out of the inner micro-step loop and let the epoch
@@ -837,6 +964,11 @@ def main(args, resume_preempt=False):
                 'target_encoder_keys_loaded': pretrained_report.get('target_encoder_keys_loaded'),
                 'predictor_inherited': pretrained_report['predictor_inherited'],
             },
+            'mask_mode': mask_mode,
+            'mask_diagnostics': (mask_collator.diagnostics_summary()
+                                 if hasattr(mask_collator, 'diagnostics_summary')
+                                 else {'mask_mode': 'random'}),
+            'saved_step_snapshots': saved_snapshots,
         }
         with open(os.path.join(folder, 'training_verification.yaml'), 'w') as verification_file:
             yaml.safe_dump(verification, verification_file)
