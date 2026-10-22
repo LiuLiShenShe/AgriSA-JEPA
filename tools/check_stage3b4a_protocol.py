@@ -53,6 +53,7 @@ MUST_MATCH = (
     ('data', 'crop_size'),
     ('data', 'crop_scale'),
     ('data', 'root_path'),
+    ('data', 'image_cache_dir'),
     ('meta', 'pretrained_checkpoint'),
     ('meta', 'pretrained_sha256'),
     ('meta', 'model_name'),

@@ -148,3 +148,34 @@ def arm_config(arm: str) -> Dict[str, object]:
             'data_version': 'agrifield40k-v0 (PROVISIONAL)',
         }
     raise ValueError(f"Unknown arm {arm!r}; expected 'A' or 'B'")
+
+
+def checkpoint_config(checkpoint_path: str | Path, label: str,
+                      continued_training: str = 'unknown',
+                      data_version: Optional[str] = None) -> Dict[str, object]:
+    """Describe an arbitrary backbone checkpoint for the downstream evaluation.
+
+    Used by the Stage 3B / Stage 4A arms, whose backbones are mid-run encoder
+    snapshots rather than the two legacy arms.  The checkpoint's SHA-256 is
+    recorded so a feature cache can never be reused across different weights.
+    """
+    path = Path(checkpoint_path)
+    if not path.is_file():
+        raise FileNotFoundError(f'Backbone checkpoint not found: {path}')
+    return {
+        'arm': label,
+        'label': label,
+        'checkpoint': str(path),
+        'checkpoint_sha256': sha256_file(path),
+        'continued_training': continued_training,
+        'data_version': data_version,
+    }
+
+
+def cache_key(label: str, checkpoint_sha256: str) -> str:
+    """Feature-cache key.
+
+    The key binds the cache to the *weights*, not just to an arm name, so a
+    re-trained arm can never silently reuse another arm's features.
+    """
+    return f'{label}__{checkpoint_sha256[:16]}'

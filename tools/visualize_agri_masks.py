@@ -38,6 +38,7 @@ from __future__ import annotations
 
 import argparse
 import collections
+import math
 import csv
 import json
 import time
@@ -205,6 +206,55 @@ def heat_image(x: np.ndarray) -> Image.Image:
 # Statistics
 # --------------------------------------------------------------------------- #
 
+def paired_differences(per_image: Sequence[Dict[str, object]]) -> Dict[str, object]:
+    """Per-image paired comparison of each guided method against arm B.
+
+    Every image is scored under all four methods with the same block size, so the
+    differences are paired and the sign test below asks the question the
+    protocol actually cares about: does guidance move the target blocks onto
+    more structure *in the same image*, or is any apparent shift just
+    between-image variation?
+    """
+    metrics = ('mean_vegetation_in_target', 'mean_boundary_in_target',
+               'context_cells', 'coverage_fraction', 'target_cells')
+    out: Dict[str, object] = {}
+    for method in METHODS:
+        if method == 'B':
+            continue
+        entry: Dict[str, object] = {}
+        for metric in metrics:
+            deltas = []
+            for record in per_image:
+                methods = record.get('methods') or {}
+                if method not in methods or 'B' not in methods:
+                    continue
+                deltas.append(float(methods[method][metric]) - float(methods['B'][metric]))
+            if not deltas:
+                continue
+            array = np.asarray(deltas, dtype=np.float64)
+            wins = int((array > 0).sum())
+            losses = int((array < 0).sum())
+            # exact two-sided sign test, normal approximation without scipy
+            n = wins + losses
+            if n:
+                z = ((wins - n / 2) / np.sqrt(n / 4)) if n else 0.0
+                # normal tail probability
+                p_value = float(2 * 0.5 * math.erfc(abs(z) / math.sqrt(2)))
+            else:
+                z, p_value = 0.0, 1.0
+            entry[metric] = {
+                'mean_delta': float(array.mean()),
+                'std_delta': float(array.std(ddof=1)) if len(array) > 1 else 0.0,
+                'wins': wins,
+                'losses': losses,
+                'ties': int(n - wins - losses),
+                'sign_test_z': float(z),
+                'sign_test_p': p_value,
+            }
+        out[f'{method}_minus_B'] = entry
+    return out
+
+
 def mask_stats(target_masks: Sequence[torch.Tensor], context_masks: Sequence[torch.Tensor],
                vegetation: np.ndarray, boundary: np.ndarray,
                grid: int = 16) -> Dict[str, float]:
@@ -304,6 +354,7 @@ def main() -> int:
 
         p_size, e_size = block_sizes(collators['B'], args.base_seed + i)
         method_masks: Dict[str, Dict[str, np.ndarray]] = {}
+        per_method_stats: Dict[str, Dict[str, float]] = {}
         for method, collator in collators.items():
             t0 = time.time()
             if method == 'B':
@@ -337,6 +388,27 @@ def main() -> int:
                 context[rows_i, cols_i] = True
             method_masks[method] = {'target': target, 'context': context}
             stats = mask_stats(masks_p[0], masks_e[0], veg, bnd)
+            stats['boundary_in_target_of_selected'] = float(
+                bnd[target].mean()) if target.any() else 0.0
+            if hasattr(collator, 'diagnostics'):
+                guided = int(collator.diagnostics['guided_selections'])
+                fallbacks = int(collator.diagnostics['uniform_fallbacks'])
+                generated = int(collator.diagnostics['candidates_generated'])
+                invalid = int(collator.diagnostics['invalid_candidates'])
+                stats['guided_selections'] = guided
+                stats['uniform_fallbacks'] = fallbacks
+                stats['random_fallback_fraction'] = (
+                    fallbacks / (guided + fallbacks) if (guided + fallbacks) else 1.0)
+                stats['candidate_valid_fraction'] = (
+                    1.0 - invalid / generated if generated else 0.0)
+                stats['mean_selected_prior_score'] = (
+                    collator.diagnostics['selected_prior_score_sum'] / guided
+                    if guided else 0.0)
+                stats['mean_candidate_prior_score'] = (
+                    collator.diagnostics['uniform_candidate_score_sum'] / guided
+                    if guided else 0.0)
+                collator._reset_diagnostics()
+            per_method_stats[method] = stats
             for key, value in stats.items():
                 aggregate[f'{method}.{key}'].append(value)
 
@@ -350,8 +422,13 @@ def main() -> int:
         canvas = Image.new('RGB', (width * len(panels), height), (0, 0, 0))
         for j, panel in enumerate(panels):
             canvas.paste(panel.resize((width, height)), (j * width, 0))
-        canvas = canvas.resize((width * len(panels) // 2, height // 2))
         canvas.save(out_dir / 'figures' / f'{i:03d}_{row["source"]}.png')
+        # a full-resolution 5-panel detail (RGB + the four mask methods)
+        detail = Image.new('RGB', (width * 5, height), (0, 0, 0))
+        for j, panel in enumerate([rgb_img] + [mask_overlay(rgb_img, method_masks[m])
+                                              for m in METHODS]):
+            detail.paste(panel, (j * width, 0))
+        detail.save(out_dir / 'figures' / f'{i:03d}_{row["source"]}_detail.png')
 
         per_image.append({
             'index': i,
@@ -365,6 +442,7 @@ def main() -> int:
             'mean_boundary': float(bnd.mean()),
             'target_block_size': list(p_size),
             'context_block_size': list(e_size),
+            'methods': per_method_stats,
         })
 
     summary = {
@@ -386,6 +464,7 @@ def main() -> int:
             method: float(np.mean(values)) for method, values in timing.items()
         },
         'per_image': per_image,
+        'paired_differences': paired_differences(per_image),
     }
     (out_dir / 'mask_statistics.json').write_text(
         json.dumps(summary, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')

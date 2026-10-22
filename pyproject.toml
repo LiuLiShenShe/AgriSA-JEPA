@@ -1,0 +1,40 @@
+[project]
+name = "agrisa-jepa"
+version = "0.1.0"
+description = "AgriSA-JEPA: structure-aware JEPA continued pretraining for agricultural vision"
+requires-python = ">=3.13,<3.14"
+dependencies = [
+    "torch==2.9.1+cu128",
+    "torchvision==0.24.1+cu128",
+    "numpy==2.4.6",
+    "pillow==12.3.0",
+    "PyYAML==6.0.3",
+    "tqdm==4.70.1",
+    "matplotlib==3.11.2",
+    "phenobench==0.1.0",
+    "submitit==1.5.4",
+    "weasyprint==69.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest==9.1.1",
+    "torchmetrics==1.9.0",
+]
+
+[tool.uv.sources]
+torch = { index = "pytorch-cu128" }
+torchvision = { index = "pytorch-cu128" }
+
+[[tool.uv.index]]
+name = "pytorch-cu128"
+url = "https://download.pytorch.org/whl/cu128"
+explicit = true
+
+[[tool.uv.index]]
+name = "ustc"
+url = "https://mirrors.ustc.edu.cn/pypi/simple"
+default = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

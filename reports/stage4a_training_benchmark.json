@@ -1,0 +1,467 @@
+{
+  "runs_root": "/home/test/agrisa_runs",
+  "budget_optimizer_updates": 2000,
+  "effective_batch": 128,
+  "note": "step_time_ms is the compute-only timer inside the training loop; wall clock additionally contains the per-epoch checkpoint write and the data loading.",
+  "arms": {
+    "B": {
+      "run_dir": "/home/test/agrisa_runs/stage3b_random_2000",
+      "optimizer_updates": 2000,
+      "micro_steps": 15860,
+      "wall_clock_seconds": 6622.0,
+      "seconds_per_optimizer_update": 3.311,
+      "images_per_second": 38.7,
+      "peak_memory_mib": 23298.35205078125,
+      "step_time_ms_mean": 267.3477786064148,
+      "mask_mode": "random",
+      "mask_diagnostics": {
+        "mask_mode": "random"
+      },
+      "mask_overhead": {
+        "prior_seconds": null,
+        "selection_seconds": null,
+        "total_seconds": null,
+        "fraction_of_wall_clock": null,
+        "milliseconds_per_micro_step": null,
+        "uniform_fallbacks": null,
+        "target_blocks": null,
+        "note": "measured inside the collator in the main process; with num_workers=0 it is serial CPU time next to the GPU step, not additional GPU memory."
+      },
+      "saved_step_snapshots": [
+        {
+          "encoder": "/home/test/agrisa_runs/stage3b_random_2000/jepa-encoder-step500.pth",
+          "full": "/home/test/agrisa_runs/stage3b_random_2000/jepa-step500.pth.tar",
+          "step": 500
+        }
+      ],
+      "manifest_sha256": "d63183af8ede53bc859474d1fc82cc969335c71967008812a485de10476a5435",
+      "pretrained_init_sha256": "0382013c481743e9ccea89f970bc6c6aa126aa19a62127500d6e672a641aae22",
+      "git_commit": "e86c900c0d9a0da6f4e97d8efc11692bea7957f7",
+      "csv": {
+        "micro_steps": 15860,
+        "inferred_optimizer_updates": 2000,
+        "micro_steps_per_epoch": 160,
+        "epochs": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21
+        ],
+        "step_time_ms_mean": 272.2032156368222,
+        "step_time_ms_median": 253.0,
+        "step_time_ms_p95": 387.0,
+        "loss_first": 0.18381,
+        "loss_last": 0.09701,
+        "context_patches_mean": 80.90245901639344,
+        "target_patches_mean": 44.225851197982344
+      },
+      "checkpoints": [
+        {
+          "file": "jepa-encoder-step2000.pth",
+          "bytes": 2523198479,
+          "gib": 2.35,
+          "sha256": "1c4e1c484d89245ea3702c9603c62355bdfcd07be8594df020e6e3cf4d94d23f"
+        },
+        {
+          "file": "jepa-encoder-step500.pth",
+          "bytes": 2523203268,
+          "gib": 2.35,
+          "sha256": "ae9bc1bec28c5454ed1d61ca76fa2245cd8d1b130d3b4bb146601d58a8b49cd4"
+        },
+        {
+          "file": "jepa-latest.pth.tar",
+          "bytes": 10358212694,
+          "gib": 9.65,
+          "sha256": "9bbefabdd0538438273b9006a7fdd18eff613af088ea8ac73d641b14381472ae"
+        },
+        {
+          "file": "jepa-step500.pth.tar",
+          "bytes": 10358196505,
+          "gib": 9.65,
+          "sha256": "621a785f21a01282bd073344af50dca696da0e338b823dddc5975f27c635a23d"
+        }
+      ]
+    },
+    "C1": {
+      "run_dir": "/home/test/agrisa_runs/stage4a_vegetation_2000",
+      "optimizer_updates": 317,
+      "micro_steps": 16058,
+      "wall_clock_seconds": 12772.0,
+      "seconds_per_optimizer_update": 40.29,
+      "images_per_second": 3.2,
+      "peak_memory_mib": 23821.47998046875,
+      "step_time_ms_mean": 280.71896533966066,
+      "mask_mode": "structure_guided",
+      "mask_diagnostics": {
+        "candidates_generated": 2575360,
+        "guidance_lambda": 6.0,
+        "guided_selections": 160960,
+        "invalid_candidate_rate": 0.0,
+        "invalid_candidates": 0,
+        "mean_candidate_prior_score": 0.030457723096914708,
+        "mean_selected_prior_score": 0.5851222258846684,
+        "num_candidates": 16,
+        "prior_diagnostics": {
+          "exg_mean": 0.25687772035598755,
+          "exg_std": 0.24245251715183258,
+          "mode": "vegetation",
+          "usable_fraction": 1.0,
+          "vegetation_mean": 0.5001022815704346
+        },
+        "prior_mode": "vegetation",
+        "prior_seconds": 3.799180269241333,
+        "selection_seconds": 115.77921175956726,
+        "target_blocks": 160960,
+        "uniform_fallbacks": 0
+      },
+      "mask_overhead": {
+        "prior_seconds": 3.799180269241333,
+        "selection_seconds": 115.77921175956726,
+        "total_seconds": 119.6,
+        "fraction_of_wall_clock": 0.0094,
+        "milliseconds_per_micro_step": 7.45,
+        "uniform_fallbacks": 0,
+        "target_blocks": 160960,
+        "note": "measured inside the collator in the main process; with num_workers=0 it is serial CPU time next to the GPU step, not additional GPU memory."
+      },
+      "saved_step_snapshots": [
+        {
+          "encoder": "/home/test/agrisa_runs/stage4a_vegetation_2000/jepa-encoder-step2000.pth",
+          "full": "/home/test/agrisa_runs/stage4a_vegetation_2000/jepa-step2000.pth.tar",
+          "step": 2000
+        }
+      ],
+      "manifest_sha256": "d63183af8ede53bc859474d1fc82cc969335c71967008812a485de10476a5435",
+      "pretrained_init_sha256": null,
+      "git_commit": "e86c900c0d9a0da6f4e97d8efc11692bea7957f7",
+      "csv": {
+        "micro_steps": 16058,
+        "inferred_optimizer_updates": 2024,
+        "micro_steps_per_epoch": 160,
+        "epochs": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21
+        ],
+        "step_time_ms_mean": 401.6178851662723,
+        "step_time_ms_median": 280.0,
+        "step_time_ms_p95": 1038.0,
+        "loss_first": 0.18365,
+        "loss_last": 0.10259,
+        "context_patches_mean": 95.49495578527836,
+        "target_patches_mean": 44.22281728733341
+      },
+      "checkpoints": [
+        {
+          "file": "jepa-encoder-step2000.pth",
+          "bytes": 2523203791,
+          "gib": 2.35,
+          "sha256": "cbedb7a3caafd90e085f18dfc0015d45d4da2f789ca5d230fbfb7cf632b498a5"
+        },
+        {
+          "file": "jepa-encoder-step500.pth",
+          "bytes": 2523203396,
+          "gib": 2.35,
+          "sha256": "0386d4282e683a426b7b934e139de881aef1d3dd66fdc8b3ccfb7968e703840b"
+        },
+        {
+          "file": "jepa-latest.pth.tar",
+          "bytes": 10358212630,
+          "gib": 9.65,
+          "sha256": "950543236820ba8542e32d851b3171fdf3be2fd0a780dc176241127d492537e1"
+        },
+        {
+          "file": "jepa-step2000.pth.tar",
+          "bytes": 10358199189,
+          "gib": 9.65,
+          "sha256": "7e5652cf7e3fc17cb514b012a8cc64ed1e3834dcfe629ab58d31ad9f06097c2d"
+        },
+        {
+          "file": "jepa-step500.pth.tar",
+          "bytes": 10358196633,
+          "gib": 9.65,
+          "sha256": "29ece0c67ab6134f8c67386bb7cbb49008c44dd9eb6ab7a8a32915482d701a57"
+        }
+      ]
+    },
+    "C2": {
+      "run_dir": "/home/test/agrisa_runs/stage4a_boundary_2000",
+      "optimizer_updates": 2000,
+      "micro_steps": 15860,
+      "wall_clock_seconds": 8403.0,
+      "seconds_per_optimizer_update": 4.202,
+      "images_per_second": 30.5,
+      "peak_memory_mib": 23882.25537109375,
+      "step_time_ms_mean": 280.49249792099,
+      "mask_mode": "structure_guided",
+      "mask_diagnostics": {
+        "candidates_generated": 16240640,
+        "guidance_lambda": 6.0,
+        "guided_selections": 1015040,
+        "invalid_candidate_rate": 0.0,
+        "invalid_candidates": 0,
+        "mean_candidate_prior_score": 0.01759014107105568,
+        "mean_selected_prior_score": 0.30523282472276325,
+        "num_candidates": 16,
+        "prior_diagnostics": {
+          "boundary_edge_weight": 0.5,
+          "exg_mean": 0.25687772035598755,
+          "exg_std": 0.24245251715183258,
+          "mode": "boundary",
+          "raw_edge_mean": 0.3999521732330322,
+          "usable_fraction": 1.0,
+          "veg_edge_mean": 0.6876049041748047,
+          "vegetation_mean": 0.5001022815704346
+        },
+        "prior_mode": "boundary",
+        "prior_seconds": 79.72772550582886,
+        "selection_seconds": 738.5723888874054,
+        "target_blocks": 1015040,
+        "uniform_fallbacks": 0
+      },
+      "mask_overhead": {
+        "prior_seconds": 79.72772550582886,
+        "selection_seconds": 738.5723888874054,
+        "total_seconds": 818.3,
+        "fraction_of_wall_clock": 0.0974,
+        "milliseconds_per_micro_step": 51.6,
+        "uniform_fallbacks": 0,
+        "target_blocks": 1015040,
+        "note": "measured inside the collator in the main process; with num_workers=0 it is serial CPU time next to the GPU step, not additional GPU memory."
+      },
+      "saved_step_snapshots": [
+        {
+          "encoder": "/home/test/agrisa_runs/stage4a_boundary_2000/jepa-encoder-step500.pth",
+          "full": "/home/test/agrisa_runs/stage4a_boundary_2000/jepa-step500.pth.tar",
+          "step": 500
+        }
+      ],
+      "manifest_sha256": "d63183af8ede53bc859474d1fc82cc969335c71967008812a485de10476a5435",
+      "pretrained_init_sha256": "0382013c481743e9ccea89f970bc6c6aa126aa19a62127500d6e672a641aae22",
+      "git_commit": "e86c900c0d9a0da6f4e97d8efc11692bea7957f7",
+      "csv": {
+        "micro_steps": 15860,
+        "inferred_optimizer_updates": 2000,
+        "micro_steps_per_epoch": 160,
+        "epochs": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21
+        ],
+        "step_time_ms_mean": 314.1817780580076,
+        "step_time_ms_median": 274.0,
+        "step_time_ms_p95": 533.0,
+        "loss_first": 0.18693,
+        "loss_last": 0.09938,
+        "context_patches_mean": 94.84735182849937,
+        "target_patches_mean": 44.225851197982344
+      },
+      "checkpoints": [
+        {
+          "file": "jepa-encoder-step2000.pth",
+          "bytes": 2523198607,
+          "gib": 2.35,
+          "sha256": "0a7d695c7faddc2e793ca2c5c3d1700aae6d39da9b7061fc58f41bdcdc184f7c"
+        },
+        {
+          "file": "jepa-encoder-step500.pth",
+          "bytes": 2523203396,
+          "gib": 2.35,
+          "sha256": "3decac1ee47e72040f4cfb53e5ab887ed3a9dd599d01ac34c8742d065d0a7b77"
+        },
+        {
+          "file": "jepa-latest.pth.tar",
+          "bytes": 10358212886,
+          "gib": 9.65,
+          "sha256": "1ac4caded42d23d741fb8193a69463f2574316dc71c3849c23cb0346912cd207"
+        },
+        {
+          "file": "jepa-step500.pth.tar",
+          "bytes": 10358196633,
+          "gib": 9.65,
+          "sha256": "020a66b9518cee1a6739cd5da83237bbd8959ea10207c4fe0a232713246c05e5"
+        }
+      ]
+    },
+    "C3": {
+      "run_dir": "/home/test/agrisa_runs/stage4a_shuffled_2000",
+      "optimizer_updates": 713,
+      "micro_steps": 16594,
+      "wall_clock_seconds": 10991.0,
+      "seconds_per_optimizer_update": 15.415,
+      "images_per_second": 8.3,
+      "peak_memory_mib": 23583.07470703125,
+      "step_time_ms_mean": 274.2525212287903,
+      "mask_mode": "structure_guided",
+      "mask_diagnostics": {
+        "candidates_generated": 5790720,
+        "guidance_lambda": 6.0,
+        "guided_selections": 361920,
+        "invalid_candidate_rate": 0.0,
+        "invalid_candidates": 0,
+        "mean_candidate_prior_score": 0.017215157900938447,
+        "mean_selected_prior_score": 0.286140855894219,
+        "num_candidates": 16,
+        "prior_diagnostics": {
+          "boundary_edge_weight": 0.5,
+          "exg_mean": 0.25687772035598755,
+          "exg_std": 0.24245251715183258,
+          "images_with_identity_permutation": 0,
+          "mode": "shuffled_boundary",
+          "raw_edge_mean": 0.3999521732330322,
+          "shuffle_seed_source": "sha256(base_seed:sample_id)",
+          "shuffle_strategy": "per-image random permutation of the 16x16 patch cells",
+          "usable_fraction": 1.0,
+          "value_multiset_preserved": true,
+          "veg_edge_mean": 0.6876049041748047,
+          "vegetation_mean": 0.5001022815704346
+        },
+        "prior_mode": "shuffled_boundary",
+        "prior_seconds": 26.346369981765747,
+        "selection_seconds": 256.82789731025696,
+        "target_blocks": 361920,
+        "uniform_fallbacks": 0
+      },
+      "mask_overhead": {
+        "prior_seconds": 26.346369981765747,
+        "selection_seconds": 256.82789731025696,
+        "total_seconds": 283.2,
+        "fraction_of_wall_clock": 0.0258,
+        "milliseconds_per_micro_step": 17.07,
+        "uniform_fallbacks": 0,
+        "target_blocks": 361920,
+        "note": "measured inside the collator in the main process; with num_workers=0 it is serial CPU time next to the GPU step, not additional GPU memory."
+      },
+      "saved_step_snapshots": [
+        {
+          "encoder": "/home/test/agrisa_runs/stage4a_shuffled_2000/jepa-encoder-step2000.pth",
+          "full": "/home/test/agrisa_runs/stage4a_shuffled_2000/jepa-step2000.pth.tar",
+          "step": 2000
+        }
+      ],
+      "manifest_sha256": "d63183af8ede53bc859474d1fc82cc969335c71967008812a485de10476a5435",
+      "pretrained_init_sha256": null,
+      "git_commit": "e86c900c0d9a0da6f4e97d8efc11692bea7957f7",
+      "csv": {
+        "micro_steps": 16594,
+        "inferred_optimizer_updates": 2091,
+        "micro_steps_per_epoch": 160,
+        "epochs": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          20,
+          21
+        ],
+        "step_time_ms_mean": 343.92798601904303,
+        "step_time_ms_median": 268.0,
+        "step_time_ms_p95": 719.0,
+        "loss_first": 0.18223,
+        "loss_last": 0.10865,
+        "context_patches_mean": 89.59943353019163,
+        "target_patches_mean": 44.22435820175967
+      },
+      "checkpoints": [
+        {
+          "file": "jepa-encoder-step2000.pth",
+          "bytes": 2523203855,
+          "gib": 2.35,
+          "sha256": "9f13d3e179e6261f0eb83268371c8291d298a6f775db745b87816948fd70bfa8"
+        },
+        {
+          "file": "jepa-encoder-step500.pth",
+          "bytes": 2523203460,
+          "gib": 2.35,
+          "sha256": "5fa120b3342a8b35e315ae40d3a3e3b2cddb790039779baa9c4ebf937f66e6cc"
+        },
+        {
+          "file": "jepa-latest.pth.tar",
+          "bytes": 10358212694,
+          "gib": 9.65,
+          "sha256": "ce6a4da4ab4d85d14f39dbcb69fad5f707bd0412953ef300409ae65c60289ee4"
+        },
+        {
+          "file": "jepa-step2000.pth.tar",
+          "bytes": 10358199189,
+          "gib": 9.65,
+          "sha256": "beaa3f709c0bda1d8ca39a4179593baac6113eaf6e66bca8d16f469847a0a286"
+        },
+        {
+          "file": "jepa-step500.pth.tar",
+          "bytes": 10358196697,
+          "gib": 9.65,
+          "sha256": "80dab77579e221082a9d4446639307d7ea4673b4b14701e20406a9ac2c4636b8"
+        }
+      ]
+    }
+  }
+}

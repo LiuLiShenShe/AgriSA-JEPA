@@ -23,6 +23,8 @@ on what a label means.  Nothing is silently dropped.
 
 from __future__ import annotations
 
+import json
+import os
 from pathlib import Path
 from typing import Dict, List, Optional, Sequence, Tuple
 
@@ -73,6 +75,48 @@ def list_split_files(root: str | Path, split: str) -> List[str]:
     return names
 
 
+# --------------------------------------------------------------------------- #
+# Optional memory-mapped cache
+# --------------------------------------------------------------------------- #
+#
+# The dataset lives on a rotational disk; reading 2,179 image/label pairs from
+# it once per evaluated checkpoint dominated the evaluation wall clock.  When
+# ``AGRISA_PHENOBENCH_CACHE`` points at a cache built by
+# :mod:`tools.build_phenobench_cache` the same bytes are served from a
+# memory map instead.  The pixels and labels are identical -- the cache stores
+# exactly what the PNGs decode to -- so this changes where the bytes come from,
+# never what they are.
+
+_CACHE: Dict[str, object] = {}
+
+
+def _cache_base() -> Optional[Path]:
+    configured = os.environ.get('AGRISA_PHENOBENCH_CACHE')
+    if not configured:
+        return None
+    base = Path(configured).expanduser().resolve()
+    if not (base / 'train' / 'index.json').is_file():
+        raise FileNotFoundError(
+            f'PhenoBench cache {base} is incomplete (no train/index.json)')
+    _CACHE['base'] = base
+    return base
+
+
+def _cached_split(base: Path, split: str):
+    arrays = _CACHE.get('arrays')
+    if arrays is None:
+        arrays = {}
+        _CACHE['arrays'] = arrays
+    if split not in arrays:
+        index = json.loads((base / split / 'index.json').read_text(encoding='utf-8'))
+        arrays[split] = (
+            {name: position for position, name in enumerate(index['names'])},
+            np.load(base / split / 'images.uint8.npy', mmap_mode='r'),
+            np.load(base / split / 'labels.int16.npy', mmap_mode='r'),
+        )
+    return arrays[split]
+
+
 def load_image_and_label(root: str | Path, split: str, name: str
                          ) -> Tuple[np.ndarray, np.ndarray]:
     """Load one RGB image and its raw (unmapped) semantic label.
@@ -81,6 +125,14 @@ def load_image_and_label(root: str | Path, split: str, name: str
     official ids (including 3/4) so callers can decide the mapping themselves.
     """
     from PIL import Image
+
+    base = _cache_base()
+    if base is not None:
+        lookup, images, labels = _cached_split(base, split)
+        if name in lookup:
+            position = lookup[name]
+            return (np.asarray(images[position]),
+                    np.asarray(labels[position]))
 
     root = Path(root)
     image_path = root / split / 'images' / name

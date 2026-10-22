@@ -46,6 +46,8 @@ import torch
 from src.downstream.features import (
     arm_config,
     build_encoder,
+    cache_key,
+    checkpoint_config,
     extract_tile_features,
     sha256_file,
 )
@@ -82,8 +84,69 @@ DEFAULT_CACHE = 'runs/stage3a_phenobench/cache'
 # Feature caching
 # --------------------------------------------------------------------------- #
 
-def _cache_paths(cache_dir: Path, arm: str, split: str, name: str) -> Path:
-    return cache_dir / arm / split / f'{Path(name).stem}.npy'
+def _cache_paths(cache_dir: Path, key: str, split: str, name: str) -> Path:
+    return cache_dir / key / split / f'{Path(name).stem}.npy'
+
+
+def write_cache_manifest(cache_dir: Path, cfg: Dict[str, object]) -> None:
+    """Record which weights a feature cache belongs to.
+
+    A cache directory without this manifest is refused, and a manifest whose
+    checkpoint hash differs from the requested one is refused too, so a cache
+    can never be reused for different weights.
+    """
+    cache_dir.mkdir(parents=True, exist_ok=True)
+    manifest_path = cache_dir / 'cache_manifest.json'
+    expected = {
+        'label': cfg['label'],
+        'checkpoint': cfg['checkpoint'],
+        'checkpoint_sha256': cfg['checkpoint_sha256'],
+        'tiling': 'overlapping 224x224, stride 200, 5x5 per 1024 image',
+        'encoder': 'ViT-H/14 frozen, 16x16 tokens, embed 1280',
+    }
+    if manifest_path.is_file():
+        existing = json.loads(manifest_path.read_text(encoding='utf-8'))
+        if existing.get('checkpoint_sha256') != expected['checkpoint_sha256']:
+            raise RuntimeError(
+                f'Feature cache {cache_dir} belongs to checkpoint '
+                f"{existing.get('checkpoint_sha256')} but "
+                f'{expected["checkpoint_sha256"]} was requested. Refusing to '
+                f'reuse it.')
+        return
+    manifest_path.write_text(json.dumps(expected, indent=2) + '\n', encoding='utf-8')
+
+
+def verify_cache_manifest(cache_dir: Path, cfg: Dict[str, object]) -> None:
+    """Assert that a cache directory belongs to the requested weights."""
+    manifest_path = cache_dir / 'cache_manifest.json'
+    if not manifest_path.is_file():
+        raise FileNotFoundError(
+            f'Feature cache {cache_dir} has no cache_manifest.json; it cannot '
+            f'be verified against the requested checkpoint.')
+    existing = json.loads(manifest_path.read_text(encoding='utf-8'))
+    if existing.get('checkpoint_sha256') != cfg['checkpoint_sha256']:
+        raise RuntimeError(
+            f'Feature cache {cache_dir} was built from '
+            f"{existing.get('checkpoint')} "
+            f"({existing.get('checkpoint_sha256')}), not from "
+            f"{cfg['checkpoint']} ({cfg['checkpoint_sha256']}). Refusing to reuse it.")
+
+
+def resolve_arm_config(arm: Optional[str], checkpoint: Optional[str],
+                       arm_label: Optional[str],
+                       continued_training: str = 'unknown',
+                       data_version: Optional[str] = None) -> Dict[str, object]:
+    """Either a legacy arm (``A``/``B``) or an explicit checkpoint."""
+    if checkpoint:
+        label = arm_label or Path(checkpoint).stem
+        return checkpoint_config(checkpoint, label,
+                                 continued_training=continued_training,
+                                 data_version=data_version)
+    if not arm:
+        raise ValueError('either --arm or --checkpoint must be given')
+    cfg = dict(arm_config(arm))
+    cfg['checkpoint_sha256'] = sha256_file(cfg['checkpoint'])
+    return cfg
 
 
 def cache_split_features(
@@ -95,19 +158,23 @@ def cache_split_features(
     batch_size: int = 16,
     limit: Optional[int] = None,
     overwrite: bool = False,
+    checkpoint: Optional[str] = None,
+    arm_label: Optional[str] = None,
 ) -> Dict[str, object]:
     """Extract and cache ``[n_tiles,256,1280]`` fp16 features for one split."""
-    cfg = arm_config(arm)
+    cfg = resolve_arm_config(arm, checkpoint, arm_label)
+    key = cache_key(cfg['label'], cfg['checkpoint_sha256'])
     encoder = build_encoder(cfg['checkpoint'], device)
     names = list_split_files(root, split)
     if limit is not None:
         names = names[:limit]
 
-    out_dir = cache_dir / arm / split
+    out_dir = cache_dir / key / split
     out_dir.mkdir(parents=True, exist_ok=True)
+    write_cache_manifest(cache_dir / key, cfg)
     written, skipped, t0 = 0, 0, time.time()
     for i, name in enumerate(names):
-        out_path = _cache_paths(cache_dir, arm, split, name)
+        out_path = _cache_paths(cache_dir, key, split, name)
         if out_path.is_file() and not overwrite:
             skipped += 1
             continue
@@ -121,20 +188,22 @@ def cache_split_features(
             print(f'  [{arm}/{split}] {i + 1}/{len(names)} '
                   f'({(time.time() - t0):.0f}s)', flush=True)
     return {
-        'arm': arm, 'split': split, 'images': len(names),
+        'arm': cfg['arm'], 'label': cfg['label'], 'split': split,
+        'images': len(names),
         'written': written, 'skipped_existing': skipped,
         'seconds': round(time.time() - t0, 1),
-        'cache_dir': str(cache_dir / arm / split),
+        'cache_key': key,
+        'cache_dir': str(cache_dir / key / split),
         'checkpoint': cfg['checkpoint'],
-        'checkpoint_sha256': sha256_file(cfg['checkpoint']),
+        'checkpoint_sha256': cfg['checkpoint_sha256'],
     }
 
 
-def load_cached_split(cache_dir: Path, arm: str, split: str,
+def load_cached_split(cache_dir: Path, key: str, split: str,
                       names: Sequence[str]) -> Dict[str, np.ndarray]:
     out = {}
     for name in names:
-        path = _cache_paths(cache_dir, arm, split, name)
+        path = _cache_paths(cache_dir, key, split, name)
         if not path.is_file():
             raise FileNotFoundError(
                 f'Missing cached features for {arm}/{split}/{name}: {path}\n'
@@ -317,6 +386,10 @@ def train_and_evaluate(
     train_limit: Optional[int] = None,
     val_limit: Optional[int] = None,
     run_official: bool = True,
+    checkpoint: Optional[str] = None,
+    arm_label: Optional[str] = None,
+    continued_training: str = 'unknown',
+    data_version: Optional[str] = None,
 ) -> Dict[str, object]:
     """Train and evaluate one probe per seed, then aggregate.
 
@@ -324,7 +397,10 @@ def train_and_evaluate(
     run costs only the extra probe training (seconds per seed), not another
     feature pass.
     """
-    cfg = arm_config(arm)
+    cfg = resolve_arm_config(arm, checkpoint, arm_label,
+                              continued_training=continued_training,
+                              data_version=data_version)
+    key = cache_key(cfg['label'], cfg['checkpoint_sha256'])
     train_names = list_split_files(root, 'train')
     val_names = list_split_files(root, 'val')
     if train_limit is not None:
@@ -332,13 +408,14 @@ def train_and_evaluate(
     if val_limit is not None:
         val_names = val_names[:val_limit]
 
-    print(f'[{arm}] loading cached train features ({len(train_names)} images)', flush=True)
-    train_feats = load_cached_split(cache_dir, arm, 'train', train_names)
+    verify_cache_manifest(cache_dir / key, cfg)
+    print(f'[{cfg["arm"]}] loading cached train features ({len(train_names)} images)', flush=True)
+    train_feats = load_cached_split(cache_dir, key, 'train', train_names)
     tensors = build_training_tensors(root, train_names, train_feats)
     del train_feats
 
-    print(f'[{arm}] loading cached val features ({len(val_names)} images)', flush=True)
-    val_feats = load_cached_split(cache_dir, arm, 'val', val_names)
+    print(f'[{cfg["arm"]}] loading cached val features ({len(val_names)} images)', flush=True)
+    val_feats = load_cached_split(cache_dir, key, 'val', val_names)
 
     per_seed: List[Dict[str, object]] = []
     for seed in seeds:
@@ -391,8 +468,9 @@ def train_and_evaluate(
                          indent=2, ensure_ascii=False), flush=True)
 
     payload = {
-        'arm': arm,
+        'arm': cfg['arm'],
         'arm_label': cfg['label'],
+        'cache_key': key,
         'backbone_checkpoint': cfg['checkpoint'],
         'backbone_checkpoint_sha256': sha256_file(cfg['checkpoint']),
         'continued_training': cfg['continued_training'],
@@ -455,7 +533,15 @@ def aggregate_seeds(per_seed: Sequence[Dict[str, object]]) -> Dict[str, object]:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--arm', choices=['A', 'B'], required=True)
+    parser.add_argument('--arm', choices=['A', 'B'], default=None,
+                        help="legacy arms; 'A' is the official checkpoint")
+    parser.add_argument('--checkpoint', default=None,
+                        help='evaluate an arbitrary backbone checkpoint '
+                             '(e.g. a Stage 3B/4A encoder snapshot) instead of --arm')
+    parser.add_argument('--arm-label', default=None,
+                        help='label for --checkpoint; also the feature-cache key')
+    parser.add_argument('--continued-training', default='unknown')
+    parser.add_argument('--pretraining-data-version', default=None)
     parser.add_argument('--stage', choices=['features', 'train_eval', 'all'],
                         default='all')
     parser.add_argument('--root', default=DEFAULT_ROOT)
@@ -481,13 +567,17 @@ def main() -> int:
     out_dir = Path(args.out_dir or f'runs/stage3a_phenobench/arm{args.arm}')
     device = torch.device(args.device if torch.cuda.is_available() else 'cpu')
 
+    if not args.arm and not args.checkpoint:
+        raise SystemExit('either --arm or --checkpoint must be given')
+
     if args.stage in ('features', 'all'):
         for split in ('train', 'val'):
             report = cache_split_features(
                 args.arm, root, cache_dir, split, device,
                 batch_size=args.feature_batch_size,
                 limit=args.feature_limit,
-                overwrite=args.overwrite_features)
+                overwrite=args.overwrite_features,
+                checkpoint=args.checkpoint, arm_label=args.arm_label)
             print(json.dumps(report, indent=2), flush=True)
 
     if args.stage in ('train_eval', 'all'):
@@ -496,7 +586,10 @@ def main() -> int:
             epochs=args.epochs, lr=args.lr, batch_size=args.batch_size,
             weight_decay=args.weight_decay, seeds=args.seed,
             train_limit=args.train_limit, val_limit=args.val_limit,
-            run_official=not args.no_official)
+            run_official=not args.no_official,
+            checkpoint=args.checkpoint, arm_label=args.arm_label,
+            continued_training=args.continued_training,
+            data_version=args.pretraining_data_version)
         print(json.dumps({'result': str(out_dir / 'result.json')}, indent=2))
     return 0
 

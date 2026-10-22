@@ -210,17 +210,29 @@ def _run_training(config_path: Path, devices=('cpu',)) -> None:
     ``process_main``.  Leaving it initialized would leak into later tests (e.g.
     torchmetrics would try to all-reduce over it).
     """
+    import os
+
     import yaml
     import torch.distributed as dist
     from src.utils.distributed import init_distributed
     from src.train import main as app_main
     params = yaml.safe_load(Path(config_path).read_text())
-    init_distributed(rank_and_world_size=(0, 1))
+    # -- a real training run may already own the default rendezvous port, so the
+    #    in-process test uses its own and restores the previous value afterwards.
+    previous = os.environ.get('AGRISA_MASTER_PORT')
+    os.environ['AGRISA_MASTER_PORT'] = '40199'
     try:
-        app_main(args=params)
+        init_distributed(rank_and_world_size=(0, 1))
+        try:
+            app_main(args=params)
+        finally:
+            if dist.is_available() and dist.is_initialized():
+                dist.destroy_process_group()
     finally:
-        if dist.is_available() and dist.is_initialized():
-            dist.destroy_process_group()
+        if previous is None:
+            os.environ.pop('AGRISA_MASTER_PORT', None)
+        else:
+            os.environ['AGRISA_MASTER_PORT'] = previous
 
 
 @pytest.mark.slow

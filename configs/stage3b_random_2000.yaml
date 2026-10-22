@@ -44,6 +44,7 @@ data:
   - 1.0
   crop_size: 224
   image_folder: .
+  image_cache_dir: /home/test/agrisa_cache/agrifield40k-v1-train
   num_workers: 0
   pin_mem: true
   root_path: /data/datasets/AgriField-40K
@@ -85,5 +86,5 @@ optimization:
   weight_decay: 0.04
   grad_accum: 8
 logging:
-  folder: /data/agrisa_jepa_runs/stage3b_random_2000
+  folder: /home/test/agrisa_runs/stage3b_random_2000
   write_tag: jepa

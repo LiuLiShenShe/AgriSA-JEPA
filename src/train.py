@@ -24,6 +24,7 @@ import os
 import random
 import subprocess
 import sys
+import time
 import yaml
 
 import numpy as np
@@ -341,6 +342,10 @@ def main(args, resume_preempt=False):
             pretrained_report['predictor_keys_loaded'],
             pretrained_report.get('target_encoder_keys_loaded'))
 
+    # -- optional memory-mapped image cache (see tools/build_image_cache.py).
+    #    It changes where the pixels are read from, never what they are.
+    image_cache_dir = args['data'].get('image_cache_dir')
+
     # -- make data transforms
     mask_mode = args['mask'].get('mode', 'random')
     if mask_mode == 'random':
@@ -407,7 +412,8 @@ def main(args, resume_preempt=False):
             drop_last=True,
             seed=data_seed,
             max_samples=max_samples,
-            augmentation_seed=augmentation_seed)
+            augmentation_seed=augmentation_seed,
+            image_cache_dir=image_cache_dir)
     elif dataset_name == 'imagenet1k':
         _, unsupervised_loader, unsupervised_sampler = make_imagenet1k(
             transform=transform,
@@ -522,6 +528,11 @@ def main(args, resume_preempt=False):
 
     optimizer_steps_at_start = optimizer_steps
     micro_steps_at_start = micro_steps
+    # -- live progress bookkeeping.  Wall-clock only: it never touches the
+    #    schedule, the RNG, the optimizer or the checkpoint contents.  It only
+    #    feeds the PROGRESS log line so a run can be watched in real time.
+    _run_start_time = time.time()
+    _last_update_time = None
     # -- a resumed run must not re-take a snapshot it already took
     save_at_steps = [s for s in save_at_steps if s > optimizer_steps_at_start]
     ema_formula_verified = False
@@ -831,6 +842,22 @@ def main(args, resume_preempt=False):
 
             if do_update:
                 optimizer_steps += 1
+                if rank == 0 and max_optimizer_steps is not None:
+                    _now = time.time()
+                    _done_this_run = optimizer_steps - optimizer_steps_at_start
+                    _rate = _done_this_run / max(_now - _run_start_time, 1e-9)
+                    _remaining = max(0, int(total_optimizer_steps) - optimizer_steps)
+                    _eta = _remaining / _rate if _rate > 0 else float('inf')
+                    _ms = (float('nan') if _last_update_time is None
+                           else (_now - _last_update_time) * 1000.0)
+                    _last_update_time = _now
+                    logger.info(
+                        'PROGRESS step=%d/%d loss=%.4f lr=%.2e wd=%.2e '
+                        'gpu=%.1fGB ms/step=%.0f elapsed=%.1fmin eta=%.1fmin',
+                        optimizer_steps, int(total_optimizer_steps), loss,
+                        _new_lr, _new_wd,
+                        torch.cuda.max_memory_allocated() / 1024.**3,
+                        _ms, (_now - _run_start_time) / 60.0, _eta / 60.0)
 
             # -- Logging.  This runs BEFORE the budget/interrupt break below, so
             #    the micro-step that performs the final optimizer update of a
@@ -970,6 +997,18 @@ def main(args, resume_preempt=False):
                                  else {'mask_mode': 'random'}),
             'saved_step_snapshots': saved_snapshots,
         }
+        # -- with worker processes the collator lives in the workers, so the
+        #    main-process counters stay at zero; say so instead of implying
+        #    that no target block was ever guided.
+        _diag = verification.get('mask_diagnostics')
+        if isinstance(_diag, dict) and num_workers > 0 and mask_mode != 'random':
+            _diag['diagnostics_available'] = False
+            _diag['diagnostics_scope'] = 'main_process'
+            _diag['note'] = (
+                'num_workers > 0: the mask collator runs inside DataLoader '
+                'worker processes, so per-batch counters are not visible in the '
+                'main process. Mask placement statistics are measured offline '
+                'by tools/visualize_agri_masks.py on the same collator.')
         with open(os.path.join(folder, 'training_verification.yaml'), 'w') as verification_file:
             yaml.safe_dump(verification, verification_file)
 

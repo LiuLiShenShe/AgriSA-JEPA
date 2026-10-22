@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import csv
 import hashlib
+import json
 import os
 import random
 from pathlib import Path
@@ -64,6 +65,52 @@ def _read_manifest(
     return rows
 
 
+def _open_image_cache_index(
+    cache_dir: Optional[str | os.PathLike[str]],
+) -> Tuple[Optional[str], Optional[Dict[str, object]]]:
+    """Resolve a cache directory to ``(images_path, index_payload)``.
+
+    Returns ``(None, None)`` when no cache was requested, so the dataset keeps
+    its original decode-from-disk behaviour.
+    """
+    if not cache_dir:
+        return None, None
+    base = Path(cache_dir).expanduser().resolve()
+    images = base / "images.uint8.npy"
+    index_file = base / "index.json"
+    if not images.is_file() or not index_file.is_file():
+        raise FileNotFoundError(
+            f"image cache {base} is incomplete: expected {images.name} and {index_file.name}")
+    return str(images), json.loads(index_file.read_text(encoding="utf-8"))
+
+
+def _verify_cache_alignment(index_payload: Dict[str, object],
+                            samples: List[Dict[str, str]],
+                            manifest_path: str) -> None:
+    """Refuse a cache whose manifest or sample order does not match this dataset."""
+    cached_manifest = str(index_payload.get("manifest_sha256", ""))
+    actual = hashlib.sha256(Path(manifest_path).read_bytes()).hexdigest()
+    if cached_manifest != actual:
+        raise ValueError(
+            "image cache was built from a different manifest: "
+            f"cache {cached_manifest or '<missing>'}, dataset {actual}")
+    cached_ids = list(index_payload.get("sample_ids", []))
+    if len(samples) > len(cached_ids):
+        raise ValueError(
+            f"image cache holds {len(cached_ids)} samples but the manifest selects "
+            f"{len(samples)}")
+    # ``max_samples`` truncates the manifest from the front, so a cache covering
+    # the full manifest legitimately serves a shorter prefix of it.  The order
+    # of that prefix must still match exactly.
+    for position, (cached, row) in enumerate(zip(cached_ids, samples)):
+        if str(cached) != str(row.get("sample_id", "")):
+            raise ValueError(
+                f"image cache sample order diverges at index {position}: "
+                f"cache {cached!r} vs manifest {row.get('sample_id')!r}")
+    if not index_payload.get("sha256_verified", False):
+        raise ValueError("image cache was built without per-file sha256 verification")
+
+
 class AgriFieldDataset(Dataset):
     """Read RGB images listed by an audited manifest.
 
@@ -78,7 +125,14 @@ class AgriFieldDataset(Dataset):
     afterwards, so whatever the mask collator draws cannot shift the crops.
     The augmentation *protocol* is unchanged -- only the source of its
     randomness moves -- and different arms therefore see byte-identical
-    augmented images, which is what makes a mask-only comparison fair.
+    augmented crops for the same sample, which is what makes a mask-only
+    comparison fair.
+
+    ``image_cache_dir`` optionally points at a memory-mapped RGB cache built by
+    :mod:`tools.build_image_cache`.  Reading from it yields exactly the same
+    pixels as decoding the original file (``Image.open(path).convert('RGB')``);
+    it only removes the per-sample random read on the spinning disk that holds
+    the source images.
     """
 
     def __init__(
@@ -89,6 +143,7 @@ class AgriFieldDataset(Dataset):
         max_samples: Optional[int] = None,
         root_path: Optional[str | os.PathLike[str]] = None,
         augmentation_seed: Optional[int] = None,
+        image_cache_dir: Optional[str | os.PathLike[str]] = None,
     ) -> None:
         if max_samples is not None and max_samples <= 0:
             raise ValueError(f"max_samples must be positive, got {max_samples}")
@@ -97,6 +152,19 @@ class AgriFieldDataset(Dataset):
         self.samples = _read_manifest(self.manifest_path, split, max_samples, root_path)
         self.augmentation_seed = augmentation_seed
         self._epoch = 0
+        self._cache_path, self._cache_meta = _open_image_cache_index(image_cache_dir)
+        if self._cache_path is not None:
+            _verify_cache_alignment(self._cache_meta, self.samples, self.manifest_path)
+        # -- the memmap handle is per-process: spawn-based DataLoader workers must
+        #    each open their own, and it must not be pickled with the dataset.
+        self._cache_array = None
+
+    def _cache(self):
+        if self._cache_path is None:
+            return None
+        if self._cache_array is None:
+            self._cache_array = np.load(self._cache_path, mmap_mode="r")
+        return self._cache_array
 
     def set_epoch(self, epoch: int) -> None:
         """Set the epoch used to derive the per-sample augmentation seed."""
@@ -113,14 +181,18 @@ class AgriFieldDataset(Dataset):
     def __getitem__(self, index: int) -> Tuple[object, str]:
         row = self.samples[index]
         image_path = Path(row["path"])
-        try:
-            with Image.open(image_path) as image:
-                image = image.convert("RGB")
-        except (OSError, ValueError) as exc:
-            raise RuntimeError(
-                f"Failed to decode RGB image at {image_path} "
-                f"(sample_id={row.get('sample_id', index)}): {exc}"
-            ) from exc
+        cache = self._cache()
+        if cache is not None:
+            image = Image.fromarray(np.asarray(cache[index]), mode="RGB")
+        else:
+            try:
+                with Image.open(image_path) as handle:
+                    image = handle.convert("RGB")
+            except (OSError, ValueError) as exc:
+                raise RuntimeError(
+                    f"Failed to decode RGB image at {image_path} "
+                    f"(sample_id={row.get('sample_id', index)}): {exc}"
+                ) from exc
 
         if self.transform is not None:
             try:
@@ -156,6 +228,7 @@ def make_agrifield40k(
     seed: int = 0,
     max_samples: Optional[int] = None,
     augmentation_seed: Optional[int] = None,
+    image_cache_dir: Optional[str | os.PathLike[str]] = None,
 ):
     """Build an I-JEPA-compatible loader from an audited manifest."""
     dataset = AgriFieldDataset(
@@ -165,6 +238,7 @@ def make_agrifield40k(
         max_samples=max_samples,
         root_path=root_path,
         augmentation_seed=augmentation_seed,
+        image_cache_dir=image_cache_dir,
     )
     sampler = torch.utils.data.distributed.DistributedSampler(
         dataset=dataset,
