@@ -1,0 +1,175 @@
+{
+  "rule": "structure preference must survive (G1 vegetation-union gain > 0.02, G2 boundary-union gain > 0.005); then minimise the worst |union delta| / |context delta| over the PRIMARY geometry-matched arms G1/G2; tie-break by smaller beta. G3 is a control and its mismatch is reported separately. No downstream metric is used.",
+  "candidates": [
+    {
+      "file": "runs/stage4b_mask_audit/batch_sweep_lin2.5_b16.json",
+      "geometry_control": "linear",
+      "geometry_beta": 2.5,
+      "n_images": 400,
+      "batch_size": 16,
+      "union_delta": {
+        "G1": -6.605000000000004,
+        "G2": -5.5,
+        "G3": -1.7524999999999977
+      },
+      "context_delta": {
+        "G1": 6.240000000000009,
+        "G2": 5.200000000000003,
+        "G3": -0.480000000000004
+      },
+      "vegetation_union_gain": 0.06067283524809952,
+      "boundary_union_gain": 0.013842798803812784,
+      "structure_preference_ok": true,
+      "worst_geometry_mismatch_primary_G1G2": 6.605000000000004,
+      "worst_geometry_mismatch_all_G1G2G3": 6.605000000000004
+    },
+    {
+      "file": "runs/stage4b_mask_audit/batch_sweep_lin3.5_b16.json",
+      "geometry_control": "linear",
+      "geometry_beta": 3.5,
+      "n_images": 400,
+      "batch_size": 16,
+      "union_delta": {
+        "G1": -0.26250000000000284,
+        "G2": -1.4325000000000045,
+        "G3": 4.247500000000002
+      },
+      "context_delta": {
+        "G1": 1.1200000000000045,
+        "G2": 1.7999999999999972,
+        "G3": -6.959999999999994
+      },
+      "vegetation_union_gain": 0.05502456480432283,
+      "boundary_union_gain": 0.013216989222110564,
+      "structure_preference_ok": true,
+      "worst_geometry_mismatch_primary_G1G2": 1.7999999999999972,
+      "worst_geometry_mismatch_all_G1G2G3": 6.959999999999994
+    },
+    {
+      "file": "runs/stage4b_mask_audit/batch_sweep_lin3_b16.json",
+      "geometry_control": "linear",
+      "geometry_beta": 3.0,
+      "n_images": 400,
+      "batch_size": 16,
+      "union_delta": {
+        "G1": -3.0649999999999977,
+        "G2": -3.2650000000000006,
+        "G3": 1.875
+      },
+      "context_delta": {
+        "G1": 3.480000000000004,
+        "G2": 3.280000000000001,
+        "G3": -3.759999999999991
+      },
+      "vegetation_union_gain": 0.058038048375214535,
+      "boundary_union_gain": 0.013486262354304723,
+      "structure_preference_ok": true,
+      "worst_geometry_mismatch_primary_G1G2": 3.480000000000004,
+      "worst_geometry_mismatch_all_G1G2G3": 3.759999999999991
+    },
+    {
+      "file": "runs/stage4b_mask_audit/batch_sweep_lin4.5_b16.json",
+      "geometry_control": "linear",
+      "geometry_beta": 4.5,
+      "n_images": 400,
+      "batch_size": 16,
+      "union_delta": {
+        "G1": 3.707499999999996,
+        "G2": 3.947500000000005,
+        "G3": 9.302500000000009
+      },
+      "context_delta": {
+        "G1": -3.6400000000000006,
+        "G2": -0.1599999999999966,
+        "G3": -11.439999999999998
+      },
+      "vegetation_union_gain": 0.05271021159329348,
+      "boundary_union_gain": 0.011769962005835743,
+      "structure_preference_ok": true,
+      "worst_geometry_mismatch_primary_G1G2": 3.947500000000005,
+      "worst_geometry_mismatch_all_G1G2G3": 11.439999999999998
+    },
+    {
+      "file": "runs/stage4b_mask_audit/batch_sweep_lin4_b16.json",
+      "geometry_control": "linear",
+      "geometry_beta": 4.0,
+      "n_images": 400,
+      "batch_size": 16,
+      "union_delta": {
+        "G1": 1.6525000000000034,
+        "G2": 1.1375000000000028,
+        "G3": 6.855000000000004
+      },
+      "context_delta": {
+        "G1": -1.9599999999999937,
+        "G2": 0.7999999999999972,
+        "G3": -9.759999999999991
+      },
+      "vegetation_union_gain": 0.053634499756516574,
+      "boundary_union_gain": 0.012555529356785389,
+      "structure_preference_ok": true,
+      "worst_geometry_mismatch_primary_G1G2": 1.9599999999999937,
+      "worst_geometry_mismatch_all_G1G2G3": 9.759999999999991
+    }
+  ],
+  "eligible": [
+    {
+      "beta": 3.5,
+      "control": "linear",
+      "worst_primary": 1.7999999999999972,
+      "worst_all_arms": 6.959999999999994,
+      "file": "runs/stage4b_mask_audit/batch_sweep_lin3.5_b16.json"
+    },
+    {
+      "beta": 4.0,
+      "control": "linear",
+      "worst_primary": 1.9599999999999937,
+      "worst_all_arms": 9.759999999999991,
+      "file": "runs/stage4b_mask_audit/batch_sweep_lin4_b16.json"
+    },
+    {
+      "beta": 3.0,
+      "control": "linear",
+      "worst_primary": 3.480000000000004,
+      "worst_all_arms": 3.759999999999991,
+      "file": "runs/stage4b_mask_audit/batch_sweep_lin3_b16.json"
+    },
+    {
+      "beta": 4.5,
+      "control": "linear",
+      "worst_primary": 3.947500000000005,
+      "worst_all_arms": 11.439999999999998,
+      "file": "runs/stage4b_mask_audit/batch_sweep_lin4.5_b16.json"
+    },
+    {
+      "beta": 2.5,
+      "control": "linear",
+      "worst_primary": 6.605000000000004,
+      "worst_all_arms": 6.605000000000004,
+      "file": "runs/stage4b_mask_audit/batch_sweep_lin2.5_b16.json"
+    }
+  ],
+  "alternative_all_arm_choice": 3.0,
+  "chosen": {
+    "file": "runs/stage4b_mask_audit/batch_sweep_lin3.5_b16.json",
+    "geometry_control": "linear",
+    "geometry_beta": 3.5,
+    "n_images": 400,
+    "batch_size": 16,
+    "union_delta": {
+      "G1": -0.26250000000000284,
+      "G2": -1.4325000000000045,
+      "G3": 4.247500000000002
+    },
+    "context_delta": {
+      "G1": 1.1200000000000045,
+      "G2": 1.7999999999999972,
+      "G3": -6.959999999999994
+    },
+    "vegetation_union_gain": 0.05502456480432283,
+    "boundary_union_gain": 0.013216989222110564,
+    "structure_preference_ok": true,
+    "worst_geometry_mismatch_primary_G1G2": 1.7999999999999972,
+    "worst_geometry_mismatch_all_G1G2G3": 6.959999999999994
+  }
+}

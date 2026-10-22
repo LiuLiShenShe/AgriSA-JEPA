@@ -335,7 +335,9 @@ def main(args, resume_preempt=False):
             encoder=encoder,
             predictor=predictor,
             target_encoder=target_encoder,
-            device=device)
+            device=device,
+            sha256=pretrained_sha256,
+            trusted=bool(pretrained_sha256))
         logger.info(
             'Operation A: loaded %d encoder / %d predictor / %d target_encoder tensors',
             pretrained_report['encoder_keys_loaded'],
@@ -359,11 +361,16 @@ def main(args, resume_preempt=False):
             npred=num_pred_masks,
             allow_overlap=allow_overlap,
             min_keep=min_keep)
-    elif mask_mode == 'structure_guided':
+    elif mask_mode in ('structure_guided', 'geometry_controlled'):
         # -- Stage 4A: identical geometry to the official collator, but the
         #    TARGET BLOCK POSITION is drawn from a structure-weighted candidate
         #    set.  The official collator itself is untouched and is still what
         #    arm B uses.
+        # -- Stage 4B adds an optional overlap penalty (``geometry_beta``) and a
+        #    no-structure ``score_mode='uniform'`` arm (G0).  With
+        #    ``geometry_beta=0`` this is byte-for-byte the Stage 4A sampler.
+        prior_mode = args['mask'].get('prior_mode')
+        roll_shift = args['mask'].get('roll_shift', [8, 8])
         mask_collator = StructureGuidedMaskCollator(
             input_size=crop_size,
             patch_size=patch_size,
@@ -374,17 +381,23 @@ def main(args, resume_preempt=False):
             npred=num_pred_masks,
             allow_overlap=allow_overlap,
             min_keep=min_keep,
-            prior_mode=args['mask'].get('prior_mode', 'vegetation'),
+            prior_mode=prior_mode,
             guidance_lambda=float(args['mask'].get('guidance_lambda', 0.0)),
+            geometry_beta=float(args['mask'].get('geometry_beta', 0.0)),
+            geometry_control=args['mask'].get('geometry_control', 'linear'),
+            score_mode=args['mask'].get(
+                'score_mode', 'prior' if prior_mode is not None else 'uniform'),
+            force_candidates=bool(args['mask'].get('force_candidates', False)),
             num_candidates=int(args['mask'].get('num_candidates', 16)),
             prior_device=(device if (device.type == 'cuda'
                                      and int(args['data'].get('num_workers', 0)) == 0)
                           else None),
             base_seed=int(args['mask'].get('base_seed', data_seed)),
-            boundary_edge_weight=float(args['mask'].get('boundary_edge_weight', 0.5)))
+            boundary_edge_weight=float(args['mask'].get('boundary_edge_weight', 0.5)),
+            roll_shift=(int(roll_shift[0]), int(roll_shift[1])))
     else:
-        raise ValueError(f"Unknown mask.mode {mask_mode!r}; expected 'random' or "
-                         f"'structure_guided'")
+        raise ValueError(f"Unknown mask.mode {mask_mode!r}; expected 'random', "
+                         f"'structure_guided' or 'geometry_controlled'")
 
     transform = make_transforms(
         crop_size=crop_size,
@@ -628,7 +641,9 @@ def main(args, resume_preempt=False):
             'scaler': None if scaler is None else scaler.state_dict(),
             'epoch': epoch,
             'epoch_itr': itr,
-            'epoch_start_state': None,
+            # a step snapshot is a full training state; keeping the epoch-start
+            # state makes it genuinely resumable, like `jepa-latest.pth.tar`
+            'epoch_start_state': epoch_start_state,
             'loss': loss_meter.avg,
             'optimizer_steps': int(step),
             'micro_steps': micro_steps,

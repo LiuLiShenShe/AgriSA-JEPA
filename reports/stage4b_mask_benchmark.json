@@ -1,0 +1,161 @@
+{
+  "manifest": "data/frozen/agrifield40k-v1_train.csv",
+  "manifest_sha256": "d63183af8ede53bc859474d1fc82cc969335c71967008812a485de10476a5435",
+  "batch_size": 16,
+  "batches": 8,
+  "warmup_batches": 2,
+  "device": "cpu",
+  "num_workers": 0,
+  "note": "whole-collator timing on real augmented crops; prior work is included. With num_workers>0 the collator lives in a worker process and the prior runs on CPU there.",
+  "arms": {
+    "B": {
+      "spec": {
+        "mode": "random"
+      },
+      "batch_seconds_mean": 0.009333,
+      "batch_seconds_std": 0.000791,
+      "batch_seconds_p50": 0.009222,
+      "images_per_second": 1714.3,
+      "prior_seconds_per_batch": 0.0,
+      "selection_seconds_per_batch": 0.0,
+      "guided_selections": 0,
+      "uniform_fallbacks": 0,
+      "fallback_rate": null,
+      "invalid_candidate_rate": 0.0,
+      "mean_selected_overlap": null,
+      "mean_candidate_overlap": null,
+      "mean_expected_overlap": null,
+      "overhead_vs_B_ms": 0.0,
+      "overhead_vs_B_percent": 0.0
+    },
+    "U": {
+      "spec": {
+        "mode": "structure_guided",
+        "prior_mode": null,
+        "score_mode": "uniform",
+        "guidance_lambda": 0.0,
+        "geometry_beta": 0.0,
+        "force_candidates": true
+      },
+      "batch_seconds_mean": 0.065313,
+      "batch_seconds_std": 0.00606,
+      "batch_seconds_p50": 0.063025,
+      "images_per_second": 245.0,
+      "prior_seconds_per_batch": 0.0,
+      "selection_seconds_per_batch": 0.054619,
+      "guided_selections": 640,
+      "uniform_fallbacks": 0,
+      "fallback_rate": 0.0,
+      "invalid_candidate_rate": 0.0,
+      "mean_selected_overlap": 0.33809896058228334,
+      "mean_candidate_overlap": 0.3391409769887105,
+      "mean_expected_overlap": 0.33681284338235856,
+      "overhead_vs_B_ms": 55.98,
+      "overhead_vs_B_percent": 599.81
+    },
+    "G0": {
+      "spec": {
+        "mode": "geometry_controlled",
+        "prior_mode": null,
+        "score_mode": "uniform",
+        "guidance_lambda": 0.0,
+        "geometry_beta": 3.5,
+        "geometry_control": "linear"
+      },
+      "batch_seconds_mean": 0.067249,
+      "batch_seconds_std": 0.00745,
+      "batch_seconds_p50": 0.065038,
+      "images_per_second": 237.9,
+      "prior_seconds_per_batch": 0.0,
+      "selection_seconds_per_batch": 0.055857,
+      "guided_selections": 640,
+      "uniform_fallbacks": 0,
+      "fallback_rate": 0.0,
+      "invalid_candidate_rate": 0.0,
+      "mean_selected_overlap": 0.2318080375320278,
+      "mean_candidate_overlap": 0.36026448893826457,
+      "mean_expected_overlap": 0.3592576922848821,
+      "overhead_vs_B_ms": 57.916,
+      "overhead_vs_B_percent": 620.55
+    },
+    "G1": {
+      "spec": {
+        "mode": "geometry_controlled",
+        "prior_mode": "vegetation",
+        "score_mode": "prior",
+        "guidance_lambda": 6.0,
+        "geometry_beta": 3.5,
+        "geometry_control": "linear"
+      },
+      "batch_seconds_mean": 0.11192,
+      "batch_seconds_std": 0.018545,
+      "batch_seconds_p50": 0.099913,
+      "images_per_second": 143.0,
+      "prior_seconds_per_batch": 0.016782,
+      "selection_seconds_per_batch": 0.075246,
+      "guided_selections": 640,
+      "uniform_fallbacks": 0,
+      "fallback_rate": 0.0,
+      "invalid_candidate_rate": 0.0,
+      "mean_selected_overlap": 0.3892847865528893,
+      "mean_candidate_overlap": 0.31916899407515303,
+      "mean_expected_overlap": 0.3200646328739822,
+      "overhead_vs_B_ms": 102.587,
+      "overhead_vs_B_percent": 1099.19
+    },
+    "G2": {
+      "spec": {
+        "mode": "geometry_controlled",
+        "prior_mode": "boundary",
+        "score_mode": "prior",
+        "guidance_lambda": 6.0,
+        "geometry_beta": 3.5,
+        "geometry_control": "linear"
+      },
+      "batch_seconds_mean": 0.171534,
+      "batch_seconds_std": 0.065295,
+      "batch_seconds_p50": 0.146664,
+      "images_per_second": 93.3,
+      "prior_seconds_per_batch": 0.07668,
+      "selection_seconds_per_batch": 0.06967,
+      "guided_selections": 640,
+      "uniform_fallbacks": 0,
+      "fallback_rate": 0.0,
+      "invalid_candidate_rate": 0.0,
+      "mean_selected_overlap": 0.3347488862636965,
+      "mean_candidate_overlap": 0.3229908414417878,
+      "mean_expected_overlap": 0.3251370233250782,
+      "overhead_vs_B_ms": 162.201,
+      "overhead_vs_B_percent": 1737.93
+    },
+    "G3": {
+      "spec": {
+        "mode": "geometry_controlled",
+        "prior_mode": "shifted_boundary",
+        "score_mode": "prior",
+        "guidance_lambda": 6.0,
+        "geometry_beta": 3.5,
+        "geometry_control": "linear",
+        "roll_shift": [
+          8,
+          8
+        ]
+      },
+      "batch_seconds_mean": 0.190651,
+      "batch_seconds_std": 0.031221,
+      "batch_seconds_p50": 0.183085,
+      "images_per_second": 83.9,
+      "prior_seconds_per_batch": 0.093219,
+      "selection_seconds_per_batch": 0.076555,
+      "guided_selections": 640,
+      "uniform_fallbacks": 0,
+      "fallback_rate": 0.0,
+      "invalid_candidate_rate": 0.0,
+      "mean_selected_overlap": 0.33426246439048557,
+      "mean_candidate_overlap": 0.31887515378766695,
+      "mean_expected_overlap": 0.31583426203578713,
+      "overhead_vs_B_ms": 181.318,
+      "overhead_vs_B_percent": 1942.76
+    }
+  }
+}

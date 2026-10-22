@@ -1,0 +1,773 @@
+{
+  "results_dir": "runs/stage4b_phenobench/results",
+  "labels_present": [
+    "A_0",
+    "B_2000",
+    "B_500",
+    "C1_500",
+    "C2_500",
+    "C3_500",
+    "G0_500",
+    "G1_500",
+    "G2_500",
+    "G3_500"
+  ],
+  "labels_missing": [],
+  "metrics": [
+    "crop",
+    "weed",
+    "soil",
+    "mIoU"
+  ],
+  "per_evaluation_point": [
+    {
+      "label": "A_0",
+      "arm": "A",
+      "optimizer_steps": 0,
+      "checkpoint": "/data/checkpoints/ijepa/IN1K-vit.h.14-300e.pth.tar",
+      "checkpoint_sha256": "0382013c481743e9ccea89f970bc6c6aa126aa19a62127500d6e672a641aae22",
+      "continued_training": "none",
+      "n_seeds": 3,
+      "cross_check_agrees": true,
+      "official_crop_mean": 81.4533,
+      "official_crop_std": 0.1634,
+      "official_weed_mean": 35.9633,
+      "official_weed_std": 3.8774,
+      "official_mIoU_mean": 71.6767,
+      "official_mIoU_std": 1.3413
+    },
+    {
+      "label": "B_2000",
+      "arm": "B",
+      "optimizer_steps": 2000,
+      "checkpoint": "/home/test/agrisa_runs/stage3b_random_2000/jepa-encoder-step2000.pth",
+      "checkpoint_sha256": "1c4e1c484d89245ea3702c9603c62355bdfcd07be8594df020e6e3cf4d94d23f",
+      "continued_training": "2000 optimizer updates, mask=random",
+      "n_seeds": 3,
+      "cross_check_agrees": true,
+      "official_crop_mean": 82.3433,
+      "official_crop_std": 0.1644,
+      "official_weed_mean": 39.25,
+      "official_weed_std": 1.7033,
+      "official_mIoU_mean": 73.1,
+      "official_mIoU_std": 0.5967
+    },
+    {
+      "label": "B_500",
+      "arm": "B",
+      "optimizer_steps": 500,
+      "checkpoint": "/home/test/agrisa_runs/stage3b_random_2000/jepa-encoder-step500.pth",
+      "checkpoint_sha256": "ae9bc1bec28c5454ed1d61ca76fa2245cd8d1b130d3b4bb146601d58a8b49cd4",
+      "continued_training": "2000 optimizer updates, mask=random",
+      "n_seeds": 3,
+      "cross_check_agrees": true,
+      "official_crop_mean": 82.4033,
+      "official_crop_std": 0.1464,
+      "official_weed_mean": 37.7867,
+      "official_weed_std": 2.6954,
+      "official_mIoU_mean": 72.6433,
+      "official_mIoU_std": 0.9402
+    },
+    {
+      "label": "C1_500",
+      "arm": "C1",
+      "optimizer_steps": 500,
+      "checkpoint": "/home/test/agrisa_runs/stage4a_vegetation_2000/jepa-encoder-step500.pth",
+      "checkpoint_sha256": "0386d4282e683a426b7b934e139de881aef1d3dd66fdc8b3ccfb7968e703840b",
+      "continued_training": "2000 optimizer updates, mask=structure_guided/vegetation",
+      "n_seeds": 3,
+      "cross_check_agrees": true,
+      "official_crop_mean": 82.21,
+      "official_crop_std": 0.3059,
+      "official_weed_mean": 38.4833,
+      "official_weed_std": 2.3186,
+      "official_mIoU_mean": 72.7967,
+      "official_mIoU_std": 0.8755
+    },
+    {
+      "label": "C2_500",
+      "arm": "C2",
+      "optimizer_steps": 500,
+      "checkpoint": "/home/test/agrisa_runs/stage4a_boundary_2000/jepa-encoder-step500.pth",
+      "checkpoint_sha256": "3decac1ee47e72040f4cfb53e5ab887ed3a9dd599d01ac34c8742d065d0a7b77",
+      "continued_training": "2000 optimizer updates, mask=structure_guided/boundary",
+      "n_seeds": 3,
+      "cross_check_agrees": true,
+      "official_crop_mean": 82.1333,
+      "official_crop_std": 0.2346,
+      "official_weed_mean": 37.5233,
+      "official_weed_std": 4.1397,
+      "official_mIoU_mean": 72.45,
+      "official_mIoU_std": 1.444
+    },
+    {
+      "label": "C3_500",
+      "arm": "C3",
+      "optimizer_steps": 500,
+      "checkpoint": "/home/test/agrisa_runs/stage4a_shuffled_2000/jepa-encoder-step500.pth",
+      "checkpoint_sha256": "5fa120b3342a8b35e315ae40d3a3e3b2cddb790039779baa9c4ebf937f66e6cc",
+      "continued_training": "2000 optimizer updates, mask=structure_guided/shuffled_boundary",
+      "n_seeds": 3,
+      "cross_check_agrees": true,
+      "official_crop_mean": 82.3467,
+      "official_crop_std": 0.2735,
+      "official_weed_mean": 39.0467,
+      "official_weed_std": 3.159,
+      "official_mIoU_mean": 73.0333,
+      "official_mIoU_std": 1.1268
+    },
+    {
+      "label": "G0_500",
+      "arm": "G0",
+      "optimizer_steps": 500,
+      "checkpoint": "/home/test/agrisa_runs/stage4b_geometry_only_500/jepa-encoder-step500.pth",
+      "checkpoint_sha256": "926373c1c012c54a0cc5e6809233ca3c8c7d36d5bc967a0f7e9f5aa52ed518db",
+      "continued_training": "2000 optimizer updates (interrupted at 500), mask=geometry_controlled/None beta=3.5",
+      "n_seeds": 3,
+      "cross_check_agrees": true,
+      "official_crop_mean": 82.5667,
+      "official_crop_std": 0.0602,
+      "official_weed_mean": 38.7567,
+      "official_weed_std": 2.124,
+      "official_mIoU_mean": 73.02,
+      "official_mIoU_std": 0.7193
+    },
+    {
+      "label": "G1_500",
+      "arm": "G1",
+      "optimizer_steps": 500,
+      "checkpoint": "/home/test/agrisa_runs/stage4b_vegetation_controlled_500/jepa-encoder-step500.pth",
+      "checkpoint_sha256": "2da68bbe9cc03e592d4be35e01a929e3579f264e8bcddfdf74da69f7ff8b1393",
+      "continued_training": "2000 optimizer updates (interrupted at 500), mask=geometry_controlled/vegetation beta=3.5",
+      "n_seeds": 3,
+      "cross_check_agrees": true,
+      "official_crop_mean": 82.2467,
+      "official_crop_std": 0.5342,
+      "official_weed_mean": 37.2933,
+      "official_weed_std": 2.3988,
+      "official_mIoU_mean": 72.4133,
+      "official_mIoU_std": 0.9844
+    },
+    {
+      "label": "G2_500",
+      "arm": "G2",
+      "optimizer_steps": 500,
+      "checkpoint": "/home/test/agrisa_runs/stage4b_boundary_controlled_500/jepa-encoder-step500.pth",
+      "checkpoint_sha256": "b7f0a32def422c940b7d41ec916a2c32b076a42c61ad1f3bcb358eb4deab2364",
+      "continued_training": "2000 optimizer updates (interrupted at 500), mask=geometry_controlled/boundary beta=3.5",
+      "n_seeds": 3,
+      "cross_check_agrees": true,
+      "official_crop_mean": 82.3933,
+      "official_crop_std": 0.1907,
+      "official_weed_mean": 37.8633,
+      "official_weed_std": 3.51,
+      "official_mIoU_mean": 72.6567,
+      "official_mIoU_std": 1.2392
+    },
+    {
+      "label": "G3_500",
+      "arm": "G3",
+      "optimizer_steps": 500,
+      "checkpoint": "/home/test/agrisa_runs/stage4b_shifted_boundary_500/jepa-encoder-step500.pth",
+      "checkpoint_sha256": "275c3af6a93b9cfaa6b6b8dfa41267ba71c2fc6a65ee8e7aa0c13c4d45e16cb8",
+      "continued_training": "2000 optimizer updates (interrupted at 500), mask=geometry_controlled/shifted_boundary beta=3.5",
+      "n_seeds": 3,
+      "cross_check_agrees": true,
+      "official_crop_mean": 82.3867,
+      "official_crop_std": 0.226,
+      "official_weed_mean": 39.42,
+      "official_weed_std": 2.495,
+      "official_mIoU_mean": 73.18,
+      "official_mIoU_std": 0.895
+    }
+  ],
+  "comparisons": {
+    "G0-B": {
+      "crop": {
+        "baseline_mean": 82.4033,
+        "candidate_mean": 82.5667,
+        "delta_pp": 0.16333333333333636,
+        "relative_percent": 0.19821212661791013,
+        "n_seeds_paired": 3,
+        "wins": 3,
+        "losses": 0,
+        "sign_test_p_exact": 0.25000000000000006,
+        "per_seed_delta_pp": [
+          0.04,
+          0.22,
+          0.23
+        ],
+        "se_pp": 0.061734197258172245
+      },
+      "weed": {
+        "baseline_mean": 37.7867,
+        "candidate_mean": 38.7567,
+        "delta_pp": 0.9699999999999965,
+        "relative_percent": 2.5670407841912537,
+        "n_seeds_paired": 3,
+        "wins": 3,
+        "losses": 0,
+        "sign_test_p_exact": 0.25000000000000006,
+        "per_seed_delta_pp": [
+          0.13,
+          1.19,
+          1.59
+        ],
+        "se_pp": 0.43558389930452396
+      },
+      "mIoU": {
+        "baseline_mean": 72.6433,
+        "candidate_mean": 73.02,
+        "delta_pp": 0.37666666666666987,
+        "relative_percent": 0.5185153574612797,
+        "n_seeds_paired": 3,
+        "wins": 3,
+        "losses": 0,
+        "sign_test_p_exact": 0.25000000000000006,
+        "per_seed_delta_pp": [
+          0.05,
+          0.47,
+          0.61
+        ],
+        "se_pp": 0.16825905952165485
+      },
+      "question": "does the geometry-control mechanism itself help?",
+      "exploratory_signal": "positive",
+      "seeds_direction_consistent": true
+    },
+    "G1-G0": {
+      "crop": {
+        "baseline_mean": 82.5667,
+        "candidate_mean": 82.2467,
+        "delta_pp": -0.3200000000000074,
+        "relative_percent": -0.3875654470870307,
+        "n_seeds_paired": 3,
+        "wins": 2,
+        "losses": 1,
+        "sign_test_p_exact": 1.0,
+        "per_seed_delta_pp": [
+          0.07,
+          0.01,
+          -1.04
+        ],
+        "se_pp": 0.3604164258188015
+      },
+      "weed": {
+        "baseline_mean": 38.7567,
+        "candidate_mean": 37.2933,
+        "delta_pp": -1.4633333333333336,
+        "relative_percent": -3.7756912568235523,
+        "n_seeds_paired": 3,
+        "wins": 0,
+        "losses": 3,
+        "sign_test_p_exact": 0.25000000000000006,
+        "per_seed_delta_pp": [
+          -1.08,
+          -1.53,
+          -1.78
+        ],
+        "se_pp": 0.2048034287907427
+      },
+      "mIoU": {
+        "baseline_mean": 73.02,
+        "candidate_mean": 72.4133,
+        "delta_pp": -0.6066666666666691,
+        "relative_percent": -0.8308226056788128,
+        "n_seeds_paired": 3,
+        "wins": 0,
+        "losses": 3,
+        "sign_test_p_exact": 0.25000000000000006,
+        "per_seed_delta_pp": [
+          -0.34,
+          -0.51,
+          -0.97
+        ],
+        "se_pp": 0.18817840235029765
+      },
+      "question": "does vegetation structure help beyond geometry control?",
+      "exploratory_signal": "negative",
+      "seeds_direction_consistent": true
+    },
+    "G2-G0": {
+      "crop": {
+        "baseline_mean": 82.5667,
+        "candidate_mean": 82.3933,
+        "delta_pp": -0.17333333333334147,
+        "relative_percent": -0.2099312838388133,
+        "n_seeds_paired": 3,
+        "wins": 0,
+        "losses": 3,
+        "sign_test_p_exact": 0.25000000000000006,
+        "per_seed_delta_pp": [
+          -0.05,
+          -0.07,
+          -0.4
+        ],
+        "se_pp": 0.11348029687032674
+      },
+      "weed": {
+        "baseline_mean": 38.7567,
+        "candidate_mean": 37.8633,
+        "delta_pp": -0.8933333333333309,
+        "relative_percent": -2.3049778059879475,
+        "n_seeds_paired": 3,
+        "wins": 1,
+        "losses": 2,
+        "sign_test_p_exact": 1.0,
+        "per_seed_delta_pp": [
+          0.56,
+          -0.48,
+          -2.76
+        ],
+        "se_pp": 0.9804307443386527
+      },
+      "mIoU": {
+        "baseline_mean": 73.02,
+        "candidate_mean": 72.6567,
+        "delta_pp": -0.36333333333333445,
+        "relative_percent": -0.49758057153291485,
+        "n_seeds_paired": 3,
+        "wins": 1,
+        "losses": 2,
+        "sign_test_p_exact": 1.0,
+        "per_seed_delta_pp": [
+          0.17,
+          -0.19,
+          -1.07
+        ],
+        "se_pp": 0.3682993951182142
+      },
+      "question": "does boundary structure help beyond geometry control?",
+      "exploratory_signal": "mixed",
+      "seeds_direction_consistent": false
+    },
+    "G3-G0": {
+      "crop": {
+        "baseline_mean": 82.5667,
+        "candidate_mean": 82.3867,
+        "delta_pp": -0.18000000000000682,
+        "relative_percent": -0.218005563986458,
+        "n_seeds_paired": 3,
+        "wins": 1,
+        "losses": 2,
+        "sign_test_p_exact": 1.0,
+        "per_seed_delta_pp": [
+          0.03,
+          -0.38,
+          -0.19
+        ],
+        "se_pp": 0.11846237095944898
+      },
+      "weed": {
+        "baseline_mean": 38.7567,
+        "candidate_mean": 39.42,
+        "delta_pp": 0.663333333333334,
+        "relative_percent": 1.7115320275806092,
+        "n_seeds_paired": 3,
+        "wins": 2,
+        "losses": 1,
+        "sign_test_p_exact": 1.0,
+        "per_seed_delta_pp": [
+          1.78,
+          -0.79,
+          1.0
+        ],
+        "se_pp": 0.7607525513887182
+      },
+      "mIoU": {
+        "baseline_mean": 73.02,
+        "candidate_mean": 73.18,
+        "delta_pp": 0.16000000000000134,
+        "relative_percent": 0.2191180498493582,
+        "n_seeds_paired": 3,
+        "wins": 2,
+        "losses": 1,
+        "sign_test_p_exact": 1.0,
+        "per_seed_delta_pp": [
+          0.61,
+          -0.4,
+          0.27
+        ],
+        "se_pp": 0.2967041174863178
+      },
+      "question": "does a misaligned prior behave like no structure at all?",
+      "exploratory_signal": "positive",
+      "seeds_direction_consistent": false
+    },
+    "G2-G3": {
+      "crop": {
+        "baseline_mean": 82.3867,
+        "candidate_mean": 82.3933,
+        "delta_pp": 0.00666666666666534,
+        "relative_percent": 0.008091920985626732,
+        "n_seeds_paired": 3,
+        "wins": 1,
+        "losses": 2,
+        "sign_test_p_exact": 1.0,
+        "per_seed_delta_pp": [
+          -0.08,
+          0.31,
+          -0.21
+        ],
+        "se_pp": 0.1562405552701067
+      },
+      "weed": {
+        "baseline_mean": 39.42,
+        "candidate_mean": 37.8633,
+        "delta_pp": -1.5566666666666649,
+        "relative_percent": -3.9489260950448117,
+        "n_seeds_paired": 3,
+        "wins": 1,
+        "losses": 2,
+        "sign_test_p_exact": 1.0,
+        "per_seed_delta_pp": [
+          -1.22,
+          0.31,
+          -3.76
+        ],
+        "se_pp": 1.1869054066961042
+      },
+      "mIoU": {
+        "baseline_mean": 73.18,
+        "candidate_mean": 72.6567,
+        "delta_pp": -0.5233333333333358,
+        "relative_percent": -0.7151316388813005,
+        "n_seeds_paired": 3,
+        "wins": 1,
+        "losses": 2,
+        "sign_test_p_exact": 1.0,
+        "per_seed_delta_pp": [
+          -0.44,
+          0.21,
+          -1.34
+        ],
+        "se_pp": 0.4493822920904248
+      },
+      "question": "is the correct spatial position of the boundary prior useful?",
+      "exploratory_signal": "negative",
+      "seeds_direction_consistent": false
+    },
+    "G1-C1": {
+      "crop": {
+        "baseline_mean": 82.21,
+        "candidate_mean": 82.2467,
+        "delta_pp": 0.03666666666666648,
+        "relative_percent": 0.044601224506345315,
+        "n_seeds_paired": 3,
+        "wins": 2,
+        "losses": 1,
+        "sign_test_p_exact": 1.0,
+        "per_seed_delta_pp": [
+          0.09,
+          0.43,
+          -0.41
+        ],
+        "se_pp": 0.2439489928470903
+      },
+      "weed": {
+        "baseline_mean": 38.4833,
+        "candidate_mean": 37.2933,
+        "delta_pp": -1.1900000000000002,
+        "relative_percent": -3.092250404721009,
+        "n_seeds_paired": 3,
+        "wins": 0,
+        "losses": 3,
+        "sign_test_p_exact": 0.25000000000000006,
+        "per_seed_delta_pp": [
+          -1.04,
+          -1.27,
+          -1.26
+        ],
+        "se_pp": 0.07505553499465188
+      },
+      "mIoU": {
+        "baseline_mean": 72.7967,
+        "candidate_mean": 72.4133,
+        "delta_pp": -0.38333333333333525,
+        "relative_percent": -0.5265806462838772,
+        "n_seeds_paired": 3,
+        "wins": 0,
+        "losses": 3,
+        "sign_test_p_exact": 0.25000000000000006,
+        "per_seed_delta_pp": [
+          -0.32,
+          -0.27,
+          -0.56
+        ],
+        "se_pp": 0.08950481054731774
+      },
+      "question": "did controlling geometry change the vegetation result?",
+      "exploratory_signal": "mixed",
+      "seeds_direction_consistent": true
+    },
+    "G2-C2": {
+      "crop": {
+        "baseline_mean": 82.1333,
+        "candidate_mean": 82.3933,
+        "delta_pp": 0.2600000000000004,
+        "relative_percent": 0.31655857003188764,
+        "n_seeds_paired": 3,
+        "wins": 3,
+        "losses": 0,
+        "sign_test_p_exact": 0.25000000000000006,
+        "per_seed_delta_pp": [
+          0.14,
+          0.42,
+          0.22
+        ],
+        "se_pp": 0.0832666399786458
+      },
+      "weed": {
+        "baseline_mean": 37.5233,
+        "candidate_mean": 37.8633,
+        "delta_pp": 0.340000000000001,
+        "relative_percent": 0.9061036742504017,
+        "n_seeds_paired": 3,
+        "wins": 1,
+        "losses": 2,
+        "sign_test_p_exact": 1.0,
+        "per_seed_delta_pp": [
+          -0.11,
+          -0.15,
+          1.28
+        ],
+        "se_pp": 0.4701418225741392
+      },
+      "mIoU": {
+        "baseline_mean": 72.45,
+        "candidate_mean": 72.6567,
+        "delta_pp": 0.20666666666666345,
+        "relative_percent": 0.2852541982976721,
+        "n_seeds_paired": 3,
+        "wins": 3,
+        "losses": 0,
+        "sign_test_p_exact": 0.25000000000000006,
+        "per_seed_delta_pp": [
+          0.03,
+          0.09,
+          0.5
+        ],
+        "se_pp": 0.1476858527791727
+      },
+      "question": "did controlling geometry change the boundary result?",
+      "exploratory_signal": "mixed",
+      "seeds_direction_consistent": true
+    },
+    "G1-B": {
+      "crop": {
+        "baseline_mean": 82.4033,
+        "candidate_mean": 82.2467,
+        "delta_pp": -0.15666666666667103,
+        "relative_percent": -0.19012183573554825,
+        "n_seeds_paired": 3,
+        "wins": 2,
+        "losses": 1,
+        "sign_test_p_exact": 1.0,
+        "per_seed_delta_pp": [
+          0.11,
+          0.23,
+          -0.81
+        ],
+        "se_pp": 0.32849826652679653
+      },
+      "weed": {
+        "baseline_mean": 37.7867,
+        "candidate_mean": 37.2933,
+        "delta_pp": -0.493333333333337,
+        "relative_percent": -1.305574007080102,
+        "n_seeds_paired": 3,
+        "wins": 0,
+        "losses": 3,
+        "sign_test_p_exact": 0.25000000000000006,
+        "per_seed_delta_pp": [
+          -0.95,
+          -0.34,
+          -0.19
+        ],
+        "se_pp": 0.23240290684737763
+      },
+      "mIoU": {
+        "baseline_mean": 72.6433,
+        "candidate_mean": 72.4133,
+        "delta_pp": -0.22999999999999923,
+        "relative_percent": -0.316615572255114,
+        "n_seeds_paired": 3,
+        "wins": 0,
+        "losses": 3,
+        "sign_test_p_exact": 0.25000000000000006,
+        "per_seed_delta_pp": [
+          -0.29,
+          -0.04,
+          -0.36
+        ],
+        "se_pp": 0.09712534856222622
+      },
+      "question": "geometry-controlled vegetation against the random baseline",
+      "exploratory_signal": "mixed",
+      "seeds_direction_consistent": true
+    },
+    "G2-B": {
+      "crop": {
+        "baseline_mean": 82.4033,
+        "candidate_mean": 82.3933,
+        "delta_pp": -0.010000000000005116,
+        "relative_percent": -0.012135436323551503,
+        "n_seeds_paired": 3,
+        "wins": 1,
+        "losses": 2,
+        "sign_test_p_exact": 1.0,
+        "per_seed_delta_pp": [
+          -0.01,
+          0.15,
+          -0.17
+        ],
+        "se_pp": 0.09237604307033816
+      },
+      "weed": {
+        "baseline_mean": 37.7867,
+        "candidate_mean": 37.8633,
+        "delta_pp": 0.07666666666666562,
+        "relative_percent": 0.20289325785703863,
+        "n_seeds_paired": 3,
+        "wins": 2,
+        "losses": 1,
+        "sign_test_p_exact": 1.0,
+        "per_seed_delta_pp": [
+          0.69,
+          0.71,
+          -1.17
+        ],
+        "se_pp": 0.6233600707278083
+      },
+      "mIoU": {
+        "baseline_mean": 72.6433,
+        "candidate_mean": 72.6567,
+        "delta_pp": 0.013333333333335418,
+        "relative_percent": 0.018354525927835628,
+        "n_seeds_paired": 3,
+        "wins": 2,
+        "losses": 1,
+        "sign_test_p_exact": 1.0,
+        "per_seed_delta_pp": [
+          0.22,
+          0.28,
+          -0.46
+        ],
+        "se_pp": 0.23729962307410046
+      },
+      "question": "geometry-controlled boundary against the random baseline",
+      "exploratory_signal": "mixed",
+      "seeds_direction_consistent": false
+    },
+    "G3-B": {
+      "crop": {
+        "baseline_mean": 82.4033,
+        "candidate_mean": 82.3867,
+        "delta_pp": -0.016666666666670455,
+        "relative_percent": -0.020225727205913424,
+        "n_seeds_paired": 3,
+        "wins": 2,
+        "losses": 1,
+        "sign_test_p_exact": 1.0,
+        "per_seed_delta_pp": [
+          0.07,
+          -0.16,
+          0.04
+        ],
+        "se_pp": 0.07218802609236306
+      },
+      "weed": {
+        "baseline_mean": 37.7867,
+        "candidate_mean": 39.42,
+        "delta_pp": 1.6333333333333304,
+        "relative_percent": 4.322508536954352,
+        "n_seeds_paired": 3,
+        "wins": 3,
+        "losses": 0,
+        "sign_test_p_exact": 0.25000000000000006,
+        "per_seed_delta_pp": [
+          1.91,
+          0.4,
+          2.59
+        ],
+        "se_pp": 0.6471561721185315
+      },
+      "mIoU": {
+        "baseline_mean": 72.6433,
+        "candidate_mean": 73.18,
+        "delta_pp": 0.5366666666666712,
+        "relative_percent": 0.7387696685952747,
+        "n_seeds_paired": 3,
+        "wins": 3,
+        "losses": 0,
+        "sign_test_p_exact": 0.25000000000000006,
+        "per_seed_delta_pp": [
+          0.66,
+          0.07,
+          0.88
+        ],
+        "se_pp": 0.24182178929488052
+      },
+      "question": "the shifted (misaligned) control against the random baseline",
+      "exploratory_signal": "positive",
+      "seeds_direction_consistent": true
+    },
+    "B-A": {
+      "crop": {
+        "baseline_mean": 81.4533,
+        "candidate_mean": 82.3433,
+        "delta_pp": 0.8900000000000006,
+        "relative_percent": 1.0926506353947607,
+        "n_seeds_paired": 3,
+        "wins": 3,
+        "losses": 0,
+        "sign_test_p_exact": 0.25000000000000006,
+        "per_seed_delta_pp": [
+          0.88,
+          0.67,
+          1.12
+        ],
+        "se_pp": 0.13000000000000092
+      },
+      "weed": {
+        "baseline_mean": 35.9633,
+        "candidate_mean": 39.25,
+        "delta_pp": 3.2866666666666653,
+        "relative_percent": 9.138946277640443,
+        "n_seeds_paired": 3,
+        "wins": 3,
+        "losses": 0,
+        "sign_test_p_exact": 0.25000000000000006,
+        "per_seed_delta_pp": [
+          2.83,
+          0.13,
+          6.9
+        ],
+        "se_pp": 1.967624060750542
+      },
+      "mIoU": {
+        "baseline_mean": 71.6767,
+        "candidate_mean": 73.1,
+        "delta_pp": 1.423333333333332,
+        "relative_percent": 1.98576850403734,
+        "n_seeds_paired": 3,
+        "wins": 3,
+        "losses": 0,
+        "sign_test_p_exact": 0.25000000000000006,
+        "per_seed_delta_pp": [
+          1.26,
+          0.3,
+          2.71
+        ],
+        "se_pp": 0.700483959686281
+      },
+      "question": "agricultural continued pretraining against official weights",
+      "exploratory_signal": "positive",
+      "seeds_direction_consistent": true
+    }
+  },
+  "thresholds": {
+    "exploratory_pp": 0.5,
+    "note": "exploratory screening threshold, not a significance level; with 3 probe seeds the smallest attainable two-sided sign-test p is 0.25"
+  }
+}

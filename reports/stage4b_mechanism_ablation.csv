@@ -1,0 +1,12 @@
+comparison,candidate,baseline,question,mIoU_delta_pp,crop_delta_pp,weed_delta_pp,soil_delta_pp,seeds_winning,seeds_total,sign_test_p_exact,exploratory_signal,direction_consistent
+G0-B,G0_500,B_500,does the geometry-control mechanism itself help?,0.3767,0.1633,0.97,nan,3,3,0.25,positive,True
+G1-G0,G1_500,G0_500,does vegetation structure help beyond geometry control?,-0.6067,-0.32,-1.4633,nan,0,3,0.25,negative,True
+G2-G0,G2_500,G0_500,does boundary structure help beyond geometry control?,-0.3633,-0.1733,-0.8933,nan,1,3,1.0,mixed,False
+G3-G0,G3_500,G0_500,does a misaligned prior behave like no structure at all?,0.16,-0.18,0.6633,nan,2,3,1.0,positive,False
+G2-G3,G2_500,G3_500,is the correct spatial position of the boundary prior useful?,-0.5233,0.0067,-1.5567,nan,1,3,1.0,negative,False
+G1-C1,G1_500,C1_500,did controlling geometry change the vegetation result?,-0.3833,0.0367,-1.19,nan,0,3,0.25,mixed,True
+G2-C2,G2_500,C2_500,did controlling geometry change the boundary result?,0.2067,0.26,0.34,nan,3,3,0.25,mixed,True
+G1-B,G1_500,B_500,geometry-controlled vegetation against the random baseline,-0.23,-0.1567,-0.4933,nan,0,3,0.25,mixed,True
+G2-B,G2_500,B_500,geometry-controlled boundary against the random baseline,0.0133,-0.01,0.0767,nan,2,3,1.0,mixed,False
+G3-B,G3_500,B_500,the shifted (misaligned) control against the random baseline,0.5367,-0.0167,1.6333,nan,3,3,0.25,positive,True
+B-A,B_2000,A_0,agricultural continued pretraining against official weights,1.4233,0.89,3.2867,nan,3,3,0.25,positive,True

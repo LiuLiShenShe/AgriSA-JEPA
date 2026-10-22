@@ -1,0 +1,67 @@
+{
+  "manifest": "data/frozen/agrifield40k-v1_train.csv",
+  "manifest_sha256": "d63183af8ede53bc859474d1fc82cc969335c71967008812a485de10476a5435",
+  "num_images": 2000,
+  "shift": [
+    8,
+    8
+  ],
+  "value_multiset_preserved_fraction": 1.0,
+  "mean_pearson_correlation_with_original": -0.08969484016453498,
+  "median_pearson_correlation_with_original": -0.08442803472280502,
+  "p10_correlation": -0.27304255664348603,
+  "p90_correlation": 0.08441473543643954,
+  "fraction_abs_correlation_above_0.5": 0.006,
+  "fraction_abs_correlation_above_0.8": 0.0,
+  "mean_lag1_autocorrelation_original": 0.33477150677362805,
+  "mean_lag1_autocorrelation_shifted": 0.32839641753287285,
+  "lag1_retention_ratio": 0.9809568941449189,
+  "mean_interior_jump": 0.05356270498037338,
+  "mean_seam_jump": 0.08062333166599274,
+  "mean_seam_to_interior_ratio": 1.509835475214095,
+  "by_source": {
+    "ACRECropWeed": {
+      "n": 126,
+      "mean_correlation": -0.09325082114313744,
+      "mean_lag1_original": 0.3787440552361428,
+      "mean_lag1_shifted": 0.36653747054792585,
+      "mean_seam_to_interior_ratio": 1.4762958851880235
+    },
+    "LUCASVision": {
+      "n": 1423,
+      "mean_correlation": -0.09635771723175425,
+      "mean_lag1_original": 0.31073520741799654,
+      "mean_lag1_shifted": 0.306267760710798,
+      "mean_seam_to_interior_ratio": 1.5390827394037743
+    },
+    "RadishWheat": {
+      "n": 67,
+      "mean_correlation": -0.07017702092903096,
+      "mean_lag1_original": 0.42119875928359246,
+      "mean_lag1_shifted": 0.41389232629270695,
+      "mean_seam_to_interior_ratio": 1.4341034696139376
+    },
+    "SorghumWeed": {
+      "n": 21,
+      "mean_correlation": -0.03831713763065636,
+      "mean_lag1_original": 0.3535513487600145,
+      "mean_lag1_shifted": 0.3332565873861313,
+      "mean_seam_to_interior_ratio": 1.361234187614552
+    },
+    "VegAnn": {
+      "n": 198,
+      "mean_correlation": -0.07109687706021088,
+      "mean_lag1_original": 0.3841140106169864,
+      "mean_lag1_shifted": 0.37278031030989656,
+      "mean_seam_to_interior_ratio": 1.4184116652054497
+    },
+    "iNatWeeds": {
+      "n": 165,
+      "mean_correlation": -0.06629905026568325,
+      "mean_lag1_original": 0.41179147353678036,
+      "mean_lag1_shifted": 0.4015176645282543,
+      "mean_seam_to_interior_ratio": 1.4425852764133908
+    }
+  },
+  "note": "the shift preserves the value histogram exactly and keeps most lag-1 autocorrelation; it breaks alignment except on periodic textures, where the residual correlation is reported rather than hidden"
+}

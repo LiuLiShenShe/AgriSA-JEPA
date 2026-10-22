@@ -24,6 +24,14 @@ Three priors are provided:
     "the prior carries useful statistics" from "the prior is aligned with the
     image".
 
+``shifted_boundary`` (Stage 4B G3)
+    The C2 map circularly shifted by a fixed offset on the 16x16 patch grid
+    (``torch.roll``).  This preserves the value histogram *exactly* and keeps
+    most of the local autocorrelation (unlike C3, which destroys both), while
+    removing the alignment with the image.  It is the Stage 4B control for
+    "does the spatial alignment of the boundary prior matter?" and is reported
+    separately from C3, which it does not replace.
+
 Every prior is reduced to the ViT patch grid (16x16 for 224px / patch 14) by
 mean pooling, so it is aligned with the patch tokens the encoder sees.
 
@@ -192,17 +200,24 @@ class StructurePrior:
         Percentiles used by the robust normalisation.
     """
 
-    VALID_MODES = ('vegetation', 'boundary', 'shuffled_boundary')
+    VALID_MODES = ('vegetation', 'boundary', 'shuffled_boundary',
+                   'shifted_boundary')
 
     def __init__(self, mode: str = 'vegetation',
                  boundary_edge_weight: float = 0.5,
-                 low_q: float = 10.0, high_q: float = 90.0) -> None:
+                 low_q: float = 10.0, high_q: float = 90.0,
+                 roll_shift: Tuple[int, int] = (8, 8)) -> None:
         if mode not in self.VALID_MODES:
             raise ValueError(f'mode must be one of {self.VALID_MODES}, got {mode!r}')
         self.mode = mode
         self.boundary_edge_weight = float(boundary_edge_weight)
         self.low_q = float(low_q)
         self.high_q = float(high_q)
+        #: Fixed circular shift for ``shifted_boundary``.  Must be non-zero on
+        #: at least one axis; a shift of (0, 0) would silently reproduce C2.
+        self.roll_shift = (int(roll_shift[0]), int(roll_shift[1]))
+        if self.mode == 'shifted_boundary' and self.roll_shift == (0, 0):
+            raise ValueError('shifted_boundary requires a non-zero roll_shift')
 
     # -- internals ---------------------------------------------------------- #
 
@@ -266,6 +281,10 @@ class StructurePrior:
             grid_map, shuffle_info = shuffle_patch_cells(
                 grid_map, sample_ids=sample_ids, base_seed=base_seed)
             diagnostics.update(shuffle_info)
+        elif self.mode == 'shifted_boundary':
+            grid_map, shift_info = circular_shift_patch_cells(
+                grid_map, shift=self.roll_shift)
+            diagnostics.update(shift_info)
         if not torch.isfinite(grid_map).all():
             raise FloatingPointError('structure prior contains NaN/Inf')
         diagnostics['usable_fraction'] = float(usable.float().mean())
@@ -323,6 +342,91 @@ def shuffle_patch_cells(x: torch.Tensor, sample_ids: Optional[Sequence[str]] = N
         'value_multiset_preserved': True,
     }
     return out, info
+
+
+def circular_shift_patch_cells(x: torch.Tensor,
+                               shift: Tuple[int, int] = (8, 8),
+                               grid: int = PATCH_GRID
+                               ) -> Tuple[torch.Tensor, Dict[str, object]]:
+    """Circularly shift a ``[B, grid, grid]`` map by ``(dy, dx)`` cells.
+
+    Unlike :func:`shuffle_patch_cells`, this preserves:
+
+    * the exact value multiset (a roll is a permutation of cells),
+    * most of the local lag-1 autocorrelation, because neighbouring cells stay
+      neighbours apart from the wrap seam.
+
+    It destroys the correspondence with the image content.  The shift is fixed
+    and identical for every image, so G3 is a single reproducible control.
+
+    Diagnostics record the shift, the histogram-preservation claim, the mean
+    Pearson correlation between the original and the shifted map, the lag-1
+    autocorrelation of both, and the size of the artificial wrap seam.
+    """
+    if x.ndim != 3 or x.shape[1] != grid or x.shape[2] != grid:
+        raise ValueError(f'Expected [B,{grid},{grid}] map, got {tuple(x.shape)}')
+    dy, dx = int(shift[0]), int(shift[1])
+    if dy == 0 and dx == 0:
+        raise ValueError('a circular shift of (0, 0) does not destroy alignment')
+    if abs(dy) >= grid or abs(dx) >= grid:
+        raise ValueError(f'shift {(dy, dx)} must be smaller than the {grid}x{grid} grid')
+
+    out = torch.roll(x, shifts=(dy, dx), dims=(1, 2))
+
+    # -- verification that the multiset is preserved exactly
+    same_multiset = bool(torch.equal(x.reshape(x.shape[0], -1).sort(dim=1).values,
+                                     out.reshape(out.shape[0], -1).sort(dim=1).values))
+    corr = mean_grid_correlation(x, out)
+
+    # -- artificial seam.  A circular roll keeps every ORIGINAL adjacent pair
+    #    adjacent; the only discontinuity is the original image wrap, which now
+    #    sits at interior index (grid - dx) / (grid - dy).  Measure the jump
+    #    there, not at output index 0 (where the two columns are still original
+    #    neighbours and the jump is therefore ordinary).
+    interior_col = (x[:, :, 1:] - x[:, :, :-1]).abs().mean()
+    interior_row = (x[:, 1:, :] - x[:, :-1, :]).abs().mean()
+    if dx:
+        seam_index = (-dx) % grid
+        seam_col = (out[:, :, seam_index]
+                    - out[:, :, (seam_index - 1) % grid]).abs().mean()
+    else:
+        seam_col = torch.tensor(0.0)
+    if dy:
+        seam_index = (-dy) % grid
+        seam_row = (out[:, seam_index, :]
+                    - out[:, (seam_index - 1) % grid, :]).abs().mean()
+    else:
+        seam_row = torch.tensor(0.0)
+
+    info = {
+        'shift_strategy': 'fixed circular roll of the 16x16 patch grid',
+        'shift_dy': dy,
+        'shift_dx': dx,
+        'value_multiset_preserved': same_multiset,
+        'shift_pearson_correlation_with_original': corr,
+        'lag1_autocorrelation_original': lag1_autocorrelation(x),
+        'lag1_autocorrelation_shifted': lag1_autocorrelation(out),
+        'interior_mean_abs_jump': float(0.5 * (interior_col + interior_row)),
+        'seam_mean_abs_jump': float(0.5 * (seam_col + seam_row)),
+    }
+    return out, info
+
+
+def mean_grid_correlation(a: torch.Tensor, b: torch.Tensor) -> float:
+    """Mean per-image Pearson correlation between two ``[B, g, g]`` maps."""
+    if a.shape != b.shape or a.ndim != 3:
+        raise ValueError(f'Expected matching [B,g,g] maps, got {tuple(a.shape)} '
+                         f'and {tuple(b.shape)}')
+    af = a.reshape(a.shape[0], -1)
+    bf = b.reshape(b.shape[0], -1)
+    af = af - af.mean(dim=1, keepdim=True)
+    bf = bf - bf.mean(dim=1, keepdim=True)
+    num = (af * bf).sum(dim=1)
+    den = torch.sqrt((af * af).sum(dim=1) * (bf * bf).sum(dim=1))
+    valid = den > 1e-12
+    if not bool(valid.any()):
+        return 0.0
+    return float((num[valid] / den[valid]).mean())
 
 
 def lag1_autocorrelation(x: torch.Tensor) -> float:
