@@ -250,7 +250,11 @@ Stage 5B 测试，无既有测试回归）。
 
 **34. 最终 Git branch、commit SHA。**
 
-分支 `agri-stage5b-field-corpus`，commit SHA 见提交记录（本文件提交后更新）。
+分支 `agri-stage5b-field-corpus`。
+
+- Stage 5B 内容提交（代码、配置、数据清单、报告）：
+  `3cd21cad120b60407d01ec5f574766ab8c3cc570`
+- 本总结文件写入 commit SHA 的文档更新紧随其后，最终 HEAD 以 `git log` 为准。
 
 **35. 尚未完成的事项与真实阻塞原因。**
 
