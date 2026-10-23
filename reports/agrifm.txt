@@ -1,0 +1,858 @@
+                 This CVPR Workshop paper is the Open Access version, provided by the Computer Vision Foundation.
+                                  Except for this watermark, it is identical to the accepted version;
+                            the final published version of the proceedings is available on IEEE Xplore.
+
+
+
+
+      Agri-FM+: A Self-Supervised Foundation Model for Agricultural Vision
+
+                  Md Jaber Al Nahian, Tapotosh Ghosh, Farnaz Sheikhi, Farhad Maleki
+               Department of Computer Science, University of Calgary, Calgary, AB, Canada
+         {mdjaberal.nahian, tapotosh.ghosh, farnaz.sheikhi, farhad.maleki1}@ucalgary.ca
+
+
+
+                        Abstract                                      those in ImageNet [32] and COCO [53] datasets, in sev-
+                                                                      eral critical aspects. Agricultural objects of interest typi-
+Foundation models have revolutionized computer vision,                cally exhibit smaller sizes, higher density, and more repeti-
+yet their adoption in precision agriculture remains limited           tive spatial distributions compared to objects commonly de-
+due to significant domain shifts from natural images. Ex-             picted in natural scenes. Additionally, these objects are of-
+isting agricultural foundation models focus primarily on              ten visually similar and grouped closely together, present-
+remote sensing applications; to date, no dedicated foun-              ing unique challenges for precise identification, segmenta-
+dation model exists for close-field agricultural vision. In           tion, and counting tasks. Moreover, agricultural scenes fre-
+this paper, we propose Agri-FM+, a self-supervised foun-              quently require capturing subtle, fine-grained visual differ-
+dation model specifically tailored for agricultural vision,           ences critical for tasks like disease detection, pest identi-
+trained via a two-stage continual learning pipeline. Start-           fication, and crop phenotyping. Agricultural images also
+ing from publicly available unsupervised ImageNet weights             show significant heterogeneity due to substantial variations
+from the SlotCon, Agri-FM+ is continually adapted on a                in lighting, growth stages, occlusions, and environmental
+curated 147K-image agricultural dataset using SlotCon.                conditions [55, 91, 100]. Such distinctive characteristics
+Evaluated across eight diverse benchmarks—covering ob-                significantly limit the effectiveness and generalizability of
+ject detection, semantic segmentation, and instance seg-              traditional foundation models in precision agriculture, un-
+mentation tasks—Agri-FM+ consistently outperforms both                derscoring the necessity for specialized, domain-specific
+ImageNet-pretrained and randomly initialized models. Un-              foundation models tailored explicitly to agricultural vision
+der full supervision, it achieves average gains of +1.27%             tasks.
+over supervised ImageNet-pretrained and +8.25% over                      Some foundation models are developed for agricultural
+random initialization. Even when trained with only 10%                applications [23, 45, 54, 80, 83]. However, they primar-
+of the annotated data, Agri-FM+ maintains robust per-                 ily focus on remote sensing imagery from satellites and
+formance, achieving gains of +1.02% and +4.54% over                   drones. Despite being effective for large-scale field mon-
+supervised ImageNet pretraining and random initializa-                itoring and crop classification, these models fail to capture
+tion, respectively. These results demonstrate the ability of          the fine-grained details required for close-field agricultural
+Agri-FM+ to provide domain-adapted, label-efficient rep-              vision tasks, such as plant disease detection, pest identifica-
+resentations that scale effectively across real-world agri-           tion, and crop phenotyping. To bridge this gap, a dedicated
+cultural vision tasks. The code, weights, and more details            self-supervised foundation model, tailored specifically for
+will be made available at: https://github.com/                        close-field agricultural vision is essential.
+FarhadMaleki/AgriFMPlus.
+                                                                          To address these challenges, we introduce Agri-FM+, a
+                                                                      self-supervised foundation model tailored for agricultural
+1. Introduction                                                       vision tasks in close-field settings. We first develop Agri-
+                                                                      FM, which is pretrained solely on our curated Agri-147K
+Foundation Models (FMs) pretrained on large-scale                     dataset—collected and refined from 35 publicly available
+datasets have recently demonstrated success across vari-              agricultural datasets. Agri-FM achieves performance com-
+ous computer vision tasks, including classification [78],             parable to supervised ImageNet pretraining, highlighting
+detection [99], and segmentation [50]. However, the di-               the effectiveness of domain-specific self-supervised learn-
+rect application of general-purpose foundation models to              ing (SSL). Building upon this, we propose Agri-FM+,
+domain-specific applications, such as precision agriculture,          which adopts a continual pretraining strategy, first learning
+remains a significant challenge. Agricultural images sig-             from unsupervised ImageNet weights and then further pre-
+nificantly differ from conventional natural images, such as           training on Agri-147K. This approach enables Agri-FM+
+
+
+
+                                                               5520
+to retain general feature representations while adapting to             is costly and time-intensive. Self-supervised learning has
+agricultural-specific challenges, mitigating catastrophic for-          emerged as a powerful technique for learning visual repre-
+getting, and enhancing domain adaptation. Our key contri-               sentations without labeled data, making it particularly ef-
+butions to this study are as follows:                                   fective for tasks such as object detection and segmenta-
+• Curated Agri-147K dataset: We introduce Agri-147K,                    tion. By leveraging intrinsic patterns in raw data, SSL
+  a high-quality agricultural dataset curated from 35 pub-              eliminates the need for manual annotations and improves
+  licly available datasets, ensuring diverse and representa-            generalization between tasks. Early SSL methods relied
+  tive training data for agricultural vision tasks.                     on pretext tasks, such as rotation prediction [36], context
+• Agri-FM+ as the first agricultural vision foundation                  prediction [33], solving jigsaw puzzle [59], and coloriza-
+  model for close-field tasks: We propose Agri-FM+,                     tion [101], to extract meaningful representations. However,
+  leveraging continual self-supervised pretraining to bridge            these approaches often lacked scalability and failed to gen-
+  the gap between general and domain-specific feature rep-              eralize beyond specific datasets, leading to the widespread
+  resentations.                                                         adoption of contrastive self-supervised learning as the dom-
+• Comprehensive evaluation: We benchmark Agri-                          inant paradigm for dense prediction tasks.
+  FM+ on three core downstream vision tasks—i.e., ob-                       Contrastive learning enforces feature consistency across
+  ject detection, semantic segmentation, and instance                   augmented views by treating transformations of the same
+  segmentation—using eight diverse agricultural datasets.               image as positive pairs while considering different images
+   The rest of the paper is organized as follows: Section 2             as negative pairs. Early frameworks, such as SimCLR [25]
+reviews related work. While Section 3 details our method-               and MoCo [26, 43], demonstrated that contrastive learn-
+ology, describes downstream tasks, and evaluation protocol,             ing significantly improves representation learning by max-
+Section 4 presents the results. Section 5 provides a discus-            imizing agreement between similar views of images while
+sion, and finally, Section 6 concludes the paper.                       simultaneously minimizing agreement with negative sam-
+                                                                        ples, i.e., augmented views from different images. MoCo-
+2. Related Work                                                         V3 [27] later enhanced the training stability by eliminating
+Vision foundation models. Trained on large-scale                        the need for a memory queue, while DINO [22, 61] intro-
+datasets, vision foundation models have significantly ad-               duced self-distillation to learn feature representations with-
+vanced computer vision by improving model generalization                out explicit negative pairs. However, these methods primar-
+across diverse tasks. Segment Anything Model (SAM)                      ily focus on instance-level discrimination, which is insuffi-
+from Meta AI [49, 68] facilitates zero-shot segmentation                cient for dense prediction tasks that require spatial consis-
+with broad applicability. DINOv2 [61] leverages SSL                     tency across pixel-level features.
+for robust feature representation. SEEM [102] integrates                    For segmentation and object detection, pixel-level con-
+multi-modal information for open-set segmentation. Owl-                 trastive learning approaches [44, 63, 85, 87, 92] have been
+ViT [64] enhances open-world object detection using                     more effective than instance-based methods. DenseCL [85]
+vision-language alignment. CLIP from OpenAI [66]                        and PixCon [63] work by pixel-wise correspondence be-
+enables text-guided image recognition through contrastive               tween augmented views of images, enhancing the robust-
+pretraining. BLIP-2 [51] improves vision-language tasks,                ness of segmentation and detection models by maintaining
+including image captioning and visual question answering.               spatial alignment. SlotCon [87] further improves it by in-
+InternImage [84] achieves state-of-the-art performance in               troducing a group-wise contrastive learning framework that
+detection and segmentation through hierarchical vision                  clusters pixel embeddings into learnable slot prototypes, en-
+transformers. Florence from Microsoft [98] serves as a                  suring semantic consistency across spatial locations. This
+unified visual representation model for diverse vision tasks.           approach is particularly beneficial for agricultural vision
+I-JEPA from Meta AI [16] applies self-supervised learning               tasks, where fine-grained plant structures, disease regions,
+for robust scene understanding. Stable Diffusion [34] and               and pest-affected areas require structured feature represen-
+DALL·E 3 [19] generate high-fidelity images from text                   tations.
+prompts, expanding creative applications. These models                      Several studies have examined the continual pretraining
+establish new benchmarks for scalable and generalizable                 strategy, where pretrained encoder weights undergo further
+vision systems.                                                         refinement using self-supervised learning on a target dataset
+Self-supervised pretraining for dense prediction. Foun-                 before fine-tuning for downstream tasks [17, 30, 47, 56, 69].
+dation models can be trained using supervised learn-                    Continual pretraining enhances domain adaptation by utiliz-
+ing (e.g., CLIP [66]), weakly supervised learning (e.g.,                ing self-supervised signals prior to task-specific supervised
+SAM [49, 68]), or self-supervised learning (e.g., DINO                  learning. The second pretraining stage can either involve
+[22, 61]). Self-supervised approaches are particularly valu-            the entire model [17, 69] or focus on specific components
+able in precision agriculture, where obtaining labeled data             of a model [30]. In this work, we implement continual pre-
+
+
+
+                                                                 5521
+ Table 1. Summary of 35 agricultural datasets used in this study            agricultural conditions.
+                                                                                Our curation process was rigorous and multi-faceted, en-
+ Ref.   #Images   Ref.   #Images   Ref.   #Images   Ref.   #Images
+                                                                            suring dataset quality, domain relevance, and applicability
+ [7]    829       [5]    2599      [10]   40457     [2]    267
+ [76]   4000      [75]   3000      [57]   24881     [60]   17509
+                                                                            to real-world agricultural challenges. In the initial collec-
+ [95]   3600      [48]   14870     [3]    182       [46]   12354            tion phase, we collected 381,362 unlabeled images from
+ [6]    900       [8]    251       [29]   2355      [11]   2950
+ [15]   17724     [4]    392       [9]    100       [93]   20639
+                                                                            diverse sources. However, indiscriminate aggregation of
+ [65]   13878     [81]   3824      [1]    670       [37]   5539             datasets introduces issues such as inconsistent quality, do-
+ [79]   2822      [20]   1081      [35]   21397     [82]   360
+ [90]   520       [73]   4402      [74]   2400      [18]   3694
+                                                                            main mismatch, and redundancy, necessitating a meticulous
+ [58]   15402     [88]   129000    [31]   6514                              refinement pipeline. To ensure dataset integrity and rele-
+                                                                            vance, we applied a systematic filtering process. Images
+                                                                            below 224 × 224 pixels were discarded to maintain high
+training in the agricultural domain to further enhance the                  visual fidelity, and manual inspection was conducted to re-
+representations learned by the models.                                      move blurry or noisy images. Domain relevance was en-
+Self-supervised learning in precision agriculture. SSL                      forced by removing datasets containing aerial and satellite
+has transformed precision agriculture by reducing reliance                  imagery as well as lab-captured plant images, which lack
+on labeled data for plant disease classification, crop phe-                 real-world complexity. Additionally, licensing verification
+notyping, pest detection, and species identification [14].                  was rigorously conducted to confirm that all datasets ad-
+Contrastive learning-based SSL methods, such as Sim-                        hered to permissive licensing policies, thereby mitigating
+CLR [25], are effective in disease detection. However,                      ethical and legal concerns and ensuring unrestricted usabil-
+they require large batch sizes and extensive augmenta-                      ity for downstream research.
+tions [21]. Hybrid approaches, including Attentive Self-                        Following this systematic refinement process, Agri-
+Supervised Contrastive Learning (ASCL), improve model                       147K comprises 147,285 diverse, high-quality images op-
+robustness and transferability by integrating multi-branch                  timized for pretraining agricultural FMs. By eliminating
+contrastive learning and attention mechanisms [96].                         irrelevant, low-quality, and redundant samples, Agri-147K
+    Beyond plant disease classification, SSL has been ap-                   ensures that self-supervised pretraining is driven by high-
+plied to multi-label plant species identification using DI-                 resolution, domain-relevant agricultural imagery, ultimately
+NOv2 [39] and crop phenotyping with 3D plant simula-                        enhancing representation learning for real-world agricul-
+tions [52]. SSL also contributes to biodiversity monitoring,                tural applications.
+as demonstrated by BIOCLIP [78], a vision model trained
+on TREEOFLIFE-10M. However, FMs for high-resolution,                        3.2. Foundation model development
+close-up agricultural images, specifically for dense predic-
+                                                                            We develop two foundation models: Agri-FM and Agri-
+tion tasks (object detection and segmentation), are still un-
+                                                                            FM+. Agri-FM is pretrained exclusively on the Agri-
+derdeveloped.
+                                                                            147K dataset, while Agri-FM+ undergoes continual pre-
+                                                                            training, first on ImageNet and then on Agri-147K. Both
+3. Methodology
+                                                                            of these models are pretrained in self-supervised manner,
+Agri-FM+ is developed through a two-stage continual                         using SlotCon [87] framework. The rationale for choosing
+self-supervised learning process using SlotCon, where a                     this framework was its superior performance compared to
+ResNet-50 backbone is first pretrained on ImageNet and                      most of the group-level or pixel-level approaches, such as
+then continually adapted on the curated Agri-147K dataset.                  DenseCL [85], DetCon [44], and PixPro [92]. Moreover,
+An overview of the methodology is presented in Figure 1,                    SlotCon is also designed for learning from scene-centric
+which also highlights the downstream evaluations across                     data which is similar to the agriculture domain. We have
+eight datasets and the ablation studies conducted on key de-                pretrained a ResNet-50 network for both of the cases.
+sign choices.                                                                   SlotCon [87] is a group-level contrastive learning frame-
+                                                                            work that employs a student-teacher architecture to learn
+3.1. Large-scale Agri-147K dataset curation for                             structured representations by clustering pixel embeddings
+     pretraining                                                            into learnable slot prototypes. Given two augmented views
+To enable effective self-supervised pretraining for agricul-                of the same image, student and teacher encoders project
+tural vision tasks, we introduce Agri-147K, a large-scale,                  features into a latent space, where pixel-to-semantic group-
+unlabeled dataset specifically curated for close-up agricul-                ing assignments are computed via dot-product similarity
+tural image representation learning. Agri-147K consists of                  with slot prototype and softmax operation. To handle spa-
+147,285 high-quality images which are systematically se-                    tial misalignment induced by augmentations, inverse trans-
+lected from 35 publicly available datasets (see Table 1), en-               forms are applied to align assignments across views. A
+compassing crop fields, plant diseases, pests, and general                  cross-entropy-based grouping loss enforces consistent as-
+
+
+
+                                                                     5522
+                               Agri-147k                                                    Pretraining strategy                        Continual Pretraining strategy
+
+
+
+                                                                                                                       Slotcon
+                                                                                                                        loss
+   Public datasets             Curation process          Agri-147K                                                                         SSL                SSL          Supervised
+   • 35 datasets           •   Image quality           • 147K Images                                                                   pretraining        pretraining     downstream
+   • 381K images           •   Domain relevance        • Diverse scene                                                                on Imagenet        on Agri-147k        tasks
+   • Labelled              •   Licensing check         • Various tasks
+                           •   Close filed view        • Unlabelled
+
+
+
+                                                                      §5
+                                                                           Downstream applications
+
+                                                  Object Detection                                                               Semantic Segmentation             Instance Segmentation
+
+                                                                                                                                                   Weed
+      GWHD                 PlantDoc               MinneApple               Crop detection      Disease detection           Plantseg                                      GWHD
+                                                                                                                                                segmentation
+
+
+
+
+                         Ablation studies                                                                                  Performance evaluation
+
+                 Continual         Continual          Slotcon              Slotcon vs
+    Limited
+                 pretraining       pretraining        pretraining                                          Comparison with baseline                       Ranking across models
+    dataset                                                                DenseCL
+                 learning rate     epoch              learning rate
+
+
+
+Figure 1. Overview of the study: The Agri-147K dataset was curated for SSL pretraining, leading to the development of Agri-FM and Agri-
+FM+ through pretraining and continual pretraining with SlotCon. Evaluation was conducted across eight datasets for detection, semantic,
+and instance segmentation tasks. Ablation studies on the limited dataset, learning rates, epochs, and SlotCon vs DenseCL were performed,
+along with comparisons with the baseline models.
+
+
+signments, stabilized via a mean logit adjustment to avoid                                          while reducing the domain gap. During this second pre-
+prototype collapse (i.e: all pixels become assigned to the                                          training phase, we use a smaller learning rate to ensure that
+same prototype).                                                                                    the model retains the general features learned from Ima-
+    To improve slot expressiveness, attentive pooling aggre-                                        geNet while gradually adapting to the agricultural domain.
+gates pixel features into slot embeddings using learned at-                                         Both pretraining stages are conducted using the SlotCon
+tention weights. Irrelevant slots are filtered, and a con-                                          contrastive learning framework.
+trastive InfoNCE loss pulls semantically matching slots to-
+gether while separating unrelated ones. A predictor head                                            3.3. Implementation details
+further enhances slot alignment, with the final contrastive                                         Pretraining setup. The Agri-FM model is pretrained fol-
+loss applied symmetrically across views. This approach                                              lowing the SlotCon framework, employing a momentum-
+enables SlotCon to learn semantically consistent and spa-                                           based teacher-student contrastive learning strategy. The
+tially aligned representations, beneficial for dense predic-                                        model consists of two encoders, where the teacher encoder
+tion tasks such as segmentation and detection.                                                      is an exponential moving average of the student encoder. A
+    Agricultural images differ significantly from natural im-                                       prototype-based contrastive loss is used to enforce seman-
+ages, yet pretraining on large-scale natural image datasets                                         tic consistency by grouping features into learnable clusters.
+like ImageNet can still provide valuable feature represen-                                          The student encoder is optimized with LARS [97], while
+tations. However, to achieve optimal performance in the                                             prototype updates are based on batch statistics.
+agricultural domain, it is crucial to adapt these pretrained                                            Data augmentation follows BYOL [38], applying
+weights using domain-specific data. To accomplish this, we                                          224×224 random resized crops, horizontal flipping, color
+employed a continual pretraining strategy to develop Agri-                                          distortion, grayscale conversion, Gaussian blur, and solar-
+FM+. Our approach begins with pretraining a ResNet-50                                               ization. Cropped image pairs lacking sufficient overlap are
+backbone, along with all its auxiliary layers, on ImageNet                                          discarded to maintain feature alignment.
+to establish strong foundational features. Following this,                                              The network consists of a ResNet-50 backbone for
+we further pretrain the model on our curated agricultural                                           both encoders, with projection and prediction heads im-
+dataset, leveraging the prior knowledge from ImageNet,                                              plemented as MLPs, containing a 4096-dimensional hidden
+
+
+
+                                                                                             5523
+layer and a 256-dimensional output layer. Training is per-                          detect wheat heads in real-world field conditions. The
+formed on two NVIDIA A6000 GPUs (48 GB each), using                                 dataset is split into 4,560 training, 1,303 validation, and
+LARS optimization with a batch size of 512. The learning                            651 test images. Fine-tuning is performed on the training
+rate follows a cosine decay schedule, initialized at 1.0 and                        set, and evaluation is conducted on the test set.
+scaled with the batch size as LearningRate = 1.0 × BatchSize         256          • PlantDoc: PlantDoc [77] comprises 2,569 images, span-
+    A weight decay of 10^{-5} is applied, with a 5-epoch                            ning 13 plant species and 30 categories (healthy and dis-
+warm-up period for stabilization. The model undergoes 800                           eased). The dataset contains 8,851 labeled instances, with
+epochs of pretraining on the Agri-147K dataset, using the                           training and test splits of 2,328 and 239 images, respec-
+same protocol as COCO pretraining in SlotCon. Momen-                                tively. The images are annotated in COCO format and
+tum updates follow a cosine schedule, where the teacher                             resized to 416×416 pixels.
+momentum starts at 0.99 and progressively increases to 1.0.                       • MinneApple: The MinneApple [40] dataset consists of
+Synchronized batch normalization and automatic mixed                                1,001 images with 41,000 annotated apple instances. The
+precision training are enabled. Hyperparameters are set ac-                         train, validation, and test sets contain 701, 200, and 100
+cording to SlotCon, with student and teacher temperatures                           images, respectively. The images are resized to 720×1280
+of \tau _s = 0.1 and \tau _t = 0.07, center momentum \lambda _c = 0.9,              pixels.
+and 256 prototypes. The contrastive loss temperature is set                       • Disease Detection Dataset: This dataset [71] consists of
+to \tau _c = 0.2, and the balancing ratio \lambda _g remains at 0.5.                5,493 plant leaf images across 13 disease categories. The
+    This pretraining setup strictly follows the SlotCon                             dataset is split into 2,904 training, 1,416 validation, and
+framework, ensuring consistency with self-supervised                                1,163 test images. The image resolution is standardized
+learning approaches while optimizing feature representa-                            at 416×416 pixels.
+tions for agricultural vision tasks.                                              • Crop Detection Dataset: The crop detection dataset [72]
+                                                                                    contains 570 images of grass, maize, banana, sugarcane,
+Continual pretraining setup. The setup for Agri-FM+                                 and coffee. The dataset is sourced from Roboflow and is
+follows a two-stage SSL approach. Initially, a ResNet-50                            split into 392 training, 107 validation, and 71 test images,
+backbone is pretrained on the ImageNet dataset to estab-                            with a resolution of 360×202 pixels.
+lish general-purpose feature representations. We used the                         Semantic segmentation. For semantic segmentation, we
+unsupervised ImageNet weight, published by SlotCon [87]                           employ two datasets: PlantSeg [86] and the Multiclass
+after pretraining for 200 epochs with a learning rate of                          Weeds Dataset [94]. Fine-tuning is conducted using MM-
+1.0 scaled by batch size in this case. In the second stage,                       Segmentation pipeline.
+the model undergoes further self-supervised pretraining on                        • PlantSeg: A large-scale dataset for plant disease segmen-
+the curated Agri-147K agricultural dataset with a reduced                           tation, containing 11,458 images across 115 disease cate-
+learning rate of 0.001, ensuring that prior knowledge from                          gories and 34 plant hosts. It includes a standardized 20%
+the first stage is retained while adapting to domain-specific                       test set per disease category.
+agricultural data. To maintain consistency with SlotCon’s                         • Multiclass Weeds Dataset: This dataset includes two
+unsupervised ImageNet pretraining, the number of proto-                             weed species, Soliva Sessilis (Field Burrweed) and
+types is set to 2048. The continual pretraining is conducted                        Thlaspi Arvense L. (Field Pennycress), comprising 7,872
+for 300 epochs, while all other hyperparameters and train-                          augmented images with pixel-wise annotations.
+ing settings remain identical to the initial pretraining setup.                   Instance segmentation. Instance segmentation is evalu-
+                                                                                  ated using the GWHD Instance Segmentation dataset. Fine-
+3.4. Downstream tasks and evaluation protocol
+                                                                                  tuning is performed using Detectron2 pipeline.
+  To assess the effectiveness of our pretrained foundation                        • GWHD Instance Segmentation: This dataset [12] in-
+model, we evaluate it through three key vision tasks: ob-                           cludes 582 images with wheat head instance masks
+ject detection, semantic segmentation, and instance seg-                            sourced from Roboflow. It is split into 439 train-
+mentation. Each task is assessed using diverse agricultural                         ing, 102 validation, and 41 test images, all resized to
+datasets, ensuring a robust evaluation of domain adaptabil-                         1024×1024 pixels.
+ity and performance.
+                                                                                  3.4.2. Fine-tuning and evaluation protocol
+3.4.1. Downstream datasets
+                                                                                  To ensure a fair evaluation, we fine-tune our pretrained
+Object detection. For this task, we utilize the following                         models using standardized settings across all tasks. We
+five datasets, covering a wide range of agricultural scenar-                      transfer the pretrained encoder. The fine-tuning and each
+ios, from wheat head counting to disease and fruit detection.                     pretraining experiment are conducted only once.
+• Global Wheat Head Dataset (GWHD): The GWHD                                      Object detection and instance segmentation. For object
+   2021 [31] dataset contains 6,514 images, designed to                           detection, we employ Faster R-CNN [70] with a ResNet-
+
+
+
+                                                                           5524
+50 FPN backbone, while Mask R-CNN [42] with ResNet-                   (depicted in Table 3). The performance gap between ran-
+50 [41] FPN is used for instance segmentation. Both models            dom initialization and Agri-FM+ is also significantly higher
+are implemented in Detectron2 [89] and fine-tuned end-to-             compared to 100% available data (reported in Table 2).
+end. The total training schedule consists of 20K iterations,
+with learning rate decay steps at 12K and 16K iterations.             4.3. Ablation with pretraining strategy and epochs
+An exception is made for the MinneApple dataset, where                      in Agri-FM
+training is limited to 6K iterations with decay steps at 2K           We have ablated with a group level (SlotCon) and pixel
+and 4K iterations. All object detection and instance seg-             level (DenseCL) contrastive learning approach in six differ-
+mentation experiments are conducted on a single NVIDIA                ent downstream tasks. In both cases, the number of epochs
+A100 (80GB) GPU.                                                      was fixed at 800 and followed the original implementation.
+Semantic segmentation.            For this task, we use               We found out that in most cases, SlotCon outperformed
+DeepLabV3+ [24] with a ResNet-50 backbone, imple-                     DenseCL. After selecting SlotCon as our pretraining ap-
+mented in MMSegmentation. Training follows a longer                   proach, we have ablated with the number of epochs to pre-
+fine-tuning schedule, with the PlantSeg dataset trained for           train Agri-FM on Agri-147K dataset. We have tried out
+160K iterations and the Weed Segmentation dataset trained             with 800 and 1600 epochs, where we did not find any signif-
+for 80K iterations. Experiments are conducted on a single             icant improvement even after pretraining with 2× epochs.
+NVIDIA A100 (40GB) GPU.                                               Table 4 depicts the aforementioned performances.
+Evaluation metrics. Model performance is assessed using
+the standard task-specific metrics. For object detection and          4.4. Ablation with learning rate and epochs in Agri-
+instance segmentation, we report mean Average Precision                     FM+
+(mAP) [62] on test sets. Moreover, for semantic segmenta-
+tion, we use mean Intersection over Union (mIoU) [67] as              The ablation study on the learning rate and continual pre-
+the primary metric.                                                   training epochs for Agri-FM+ (Table 5) shows that a learn-
+Reproducibility. The experiments on the same dataset are              ing rate of 0.001 and 300 continual pretraining epochs pro-
+conducted under identical hardware and software condi-                vide the best overall performance. In continual pretraining
+tions. Object detection and instance segmentation models              scenario, the learning rate is a crucial factor. Too high of
+are fine-tuned using Detectron2 v0.6 [89], while seman-               a learning rate can lead to forgetting of previously acquired
+tic segmentation experiments are performed using MMSeg-               knowledge with a larger dataset. We have ablated with dif-
+mentation v1.0.0 [28].                                                ferent learning rates where the number of epochs we train
+                                                                      Agri-FM+ with Agri-147K dataset was kept fixed at 300
+4. Results                                                            (shown in Table 5). We have found an equal share in perfor-
+                                                                      mance where the learning rate of 0.01 was the best in three
+In this section, we present the performance evaluation of             tasks, whereas in other three out of four tasks, the learning
+Agri-FM and Agri-FM+ across multiple agricultural vision              rate of 0.001 performed the best. Since the performance
+tasks. Our experiments cover object detection, instance seg-          shows no trend, we moved further with the learning rate of
+mentation, and semantic segmentation, comparing different             0.001. On the other hand, after finding 0.001 as our go-to
+pretraining strategies.                                               learning rate, we have ablated it with the number of epochs
+                                                                      where we did not find any continuous increment or decre-
+4.1. Performance of Agri-FM and Agri-FM+
+                                                                      ment. We found that continual pretraining with 300 epochs
+Table 2 compares the performance of Agri-FM and Agri-                 on Agri-147K dataset yielded a better overall performance.
+FM+ on various object detection, semantic segmentation,
+and instance segmentation tasks. Agri-FM+ outperforms                 5. Discussion
+the supervised ImageNet weights in all tasks except the
+MinneApple object detection and weed semantic segmen-                 In this study, we presented Agri-FM+, a self-supervised
+tation. Herein, Agri-FM achieves the best performance in              foundation model for agricultural vision, trained via con-
+weed semantic segmentation.                                           tinual pretraining on ImageNet and a curated agricultural
+                                                                      dataset (Agri-147K). Agri-FM+ demonstrated strong gen-
+4.2. Performance in limited data scenario                             eralization across object detection, semantic segmentation,
+Foundation models are capable of performing well with                 and instance segmentation tasks, surpassing both super-
+limited annotated data during fine-tuning. We tested Agri-            vised ImageNet and single-stage self-supervised learning
+FM and Agri-FM+ with 5%, 10%, and 20% of annotated                    baselines in its best configuration.
+data during fine-tining. Agri-FM+ outperformed super-                    As shown in Table 6 and the radar chart in Figure 2,
+vised ImageNet, Agri-FM, and random initialized weights               Agri-FM+ achieved the highest performance across a di-
+in all scenarios except the MinneApple 5% data scenario               verse set of tasks and datasets. It ranked first in six out of
+
+
+
+                                                               5525
+  Table 2. Performance of Agri-FM and Agri-FM+ in several object detection, semantic segmentation and instance segmentation tasks.
+
+                                                            Object Det. (mAP )                                           Instance Seg. (mAP )                          Semantic Seg. (mIoU )
+            Pretrained
+         ResNet-50 Weight        GWHD         PlantDoc       MinneApple           Crop Det.     Disease Det.             GWHD                                          PlantSeg            Weed Seg.
+        Random Init.             44.27        20.99          35.61                32.96         34.57                    66.26                                         16.15               95.13
+        Supervised ImageNet      47.97        38.15          40.53                31.81         47.71                    72.09                                         28.31               95.17
+        Agri-FM                  48.18        38.53          38.21                30.01         47.90                    72.41                                         28.07               95.87
+        Agri-FM+                 48.48        41.61          40.41                33.41         49.83                    73.48                                         29.76               94.95
+
+
+Table 3. Performance of Agri-FM and Agri-FM+ in GWHD, PlantDoc, MinneApple, and Disease Detection Object Detection tasks with
+limited annotated data during fine-tuning. The results reported here are AP . We have randomly selected 5%, 10% and 20% annotated data
+during the fine-tuning process.
+
+                                           GWHD (mAP )                      PlantDoc (mAP )              MinneApple (mAP )                             Disease Detection (mAP )
+                Pretrained
+             ResNet-50 Weight            5%        10%       20%        5%            10%     20%        5%              10%         20%               5%                  10%         20%
+           Random Init.                  34.57     38.32     41.91      3.72          6.19    10.84      19.82           25.81       27.11             15.94               19.13       26.16
+           Supervised ImageNet           38.33     39.71     41.99      9.17          17.97   22.92      23.25           28.55       32.52             22.46               27.29       36.31
+           Agri-FM                       37.92     39.41     41.29      9.16          15.04   19.79      21.44           28.96       32.61             20.62               25.71       34.98
+           Agri-FM+                      39.24     40.41     42.44      10.73         18.09   24.22      22.08           30.01       33.21             23.18               29.09       37.06
+
+
+Table 4. Ablation study with different pretraining approaches and                                                                                                                                Agri-FM
+                                                                                                                                         MinneApple (mAP)                                        Agri-FM+
+epochs for Agri-FM.                                                                                                                             1                                                Supervised ImageNet
+                                                                                                                                                                                                 Random Init.
+
+                                                                                                           Disease Detection                       2
+                                 Pretraining Approach        Pretraining Epochs                                        1 (mAP)                                                   PlantDoc
+                                                                                                                                                                                      1 (mAP)
+ Task             Dataset
+                                 SlotCon         DenseCL     800 Ep.     1600 Ep.                                           2                      3                         2
+
+                  GWHD             48.18           48.03      48.18           48.08                                              3                                     3
+                                                                                                                                                   4
+                  PlantDoc         38.53           35.68      38.53           38.43                                                      4                     4
+ Obj Det (mAP)
+                  MinneApple       38.21           39.57      38.21           38.23
+                  Disease Det.     47.90           46.88      47.90           48.75              Crops Detection
+                                                                                                             1 (mAP) 2      3        4                             4         3         2    GWHD
+                                                                                                                                                                                              1 (mAP)
+                  Weed Seg.        95.87           94.90      95.87           95.89
+ Sem Seg (mIoU)                                                                                                                          4                     4
+                  PlantSeg         28.07           25.40      28.07           28.03                                                                4
+                                                                                                                                 3                                     3
+
+                                                                                                                            2                      3                         2
+Table 5. Ablation on the learning rate and continual pretraining
+epochs for Agri-FM+.                                                                                                  1 (mIOU)
+                                                                                                          Weed Segmentation                        2
+                                                                                                                                                                                   1
+                                                                                                                                                                       Wheat Head Instance Seg (mAP)
+
+
+                                    Learning Rate              Cont. Epochs                                                                         1
+ Task             Dataset                                                                                                                    PlantSeg (mIOU)
+                                  0.01     0.001 0.0001      200      300       400
+                  GWHD           48.68     48.48    48.29   48.63     48.48    48.54           Figure 2. Model performance ranking across multiple datasets.
+                  PlantDoc       42.72     41.61    41.06   42.00     41.61    41.60           The radar chart compares the models of Agri-FM, Agri-FM+, Su-
+ Obj Det (mAP)    MinneApple     40.50     40.41    39.76   40.33     40.41    40.68
+                  Crop Det.      32.63     33.41    30.56   31.83     33.41    31.06
+                                                                                               pervised ImageNet, and Random Init., based on their rankings in
+                  Disease Det.   49.30     49.83    49.56   50.60     49.83    50.43           object detection and segmentation tasks. Lower rankings (closer
+                  PlantSeg       29.01 29.76        30.93   29.91 29.76 28.88                  to the center) indicate inferior, while higher rankings (closer to the
+ Sem Seg (mIoU)
+                  Weed Seg.      95.03 94.95        95.20   95.22 94.95 95.28                  outer edge) indicate superior performance. Agri-FM+ consistently
+                                                                                               achieves the best rankings in most datasets.
+
+eight benchmarks, confirming its strength as a unified agri-
+cultural foundation model. In the fully annotated settings,                                    to generalize across dense and sparse prediction tasks alike.
+it achieved an average gain of +1.27% over supervised Ima-                                         Agri-FM+ also maintained a strong performance in low-
+geNet weights and +8.25% over random initialization. The                                       label regimes. As shown in Table 7, with only 10% of the
+most notable improvements were observed in object de-                                          annotated data, the model improved by +1.02% over mod-
+tection datasets such as PlantDoc (+3.46% vs ImageNet,                                         els where the training started from supervised ImageNet ini-
++20.62% vs random) and Disease Detection (+2.12% vs Im-                                        tialization and by +4.54% over randomly initialized models.
+ageNet, +15.26% vs random). Performance gains also ex-                                         These results underline the data efficiency of Agri-FM+—a
+tend to instance segmentation tasks (+1.39% vs ImageNet                                        key advantage in agriculture, where acquiring large-scale
+on GWHD) and semantic segmentation (+1.45% vs Ima-                                             expert-labeled datasets is often impractical. Notably, even
+geNet on PlantSeg), highlighting the ability of Agri-FM+                                       Agri-FM, a variant trained only on the Agri-147K dataset
+
+
+
+                                                                                        5526
+Table 6. Performance gains (%) of Agri-FM+ over ImageNet and
+Random Init under full annotation.
+
+  Dataset         Task           ∆ over ImgNet   ∆ over RandInit
+  GWHD           Obj Det            +0.51            +4.21
+  PlantDoc       Obj Det            +3.46            +20.62
+  MinneApple     Obj Det            −0.12            +4.80
+  Crop Det.      Obj Det            +1.60            +0.45
+  Disease Det.   Obj Det            +2.12            +15.26
+  GWHD           Inst Seg           +1.39            +7.22
+  PlantSeg       Sem Seg            +1.45            +13.61
+  Weed Seg.      Sem Seg            −0.22            −0.18                                  (a) Supervised ImageNet pretrained
+  Average             —              +1.27            +8.25
+
+
+Table 7. Agri-FM+ gains (%) over ImageNet and RandInit with
+10% annotated data.
+
+       Dataset            Task       ∆ ImgNet    ∆ RandInit
+       GWHD           Obj Det          +0.70       +2.09
+       PlantDoc       Obj Det          +0.12       +1.90
+       MinneApple     Obj Det          +1.46       +4.20
+       Disease Det.   Obj Det          +1.80       +9.96
+                                                                                                      (b) Agri-FM+
+       Average             —           +1.02       +4.54
+
+                                                                          Figure 3. PCA visualization of learned features from five datasets.
+                                                                          (a) Supervised ImageNet (b) Agri-FM+. As depicted, Agri-FM+
+without ImageNet pretraining, performs competitively with                 shows improved feature compactness and inter-dataset separation
+                                                                          compared to supervised ImageNet-pretrained ResNet-50, suggest-
+or better than supervised ImageNet models. This finding
+                                                                          ing enhanced domain adaptation and generalization.
+supports the idea that domain-specific self-supervised learn-
+ing on high-quality unlabeled data can produce highly trans-
+ferable representations for downstream agricultural tasks.                6. Conclusion
+   To further assess representational quality, we have con-
+ducted PCA [13] visualization (shown in Figure 3) on em-                  In this paper, we have proposed the first self-supervised
+beddings from five downstream datasets. Compared to                       foundation model, designed specifically for close-field agri-
+ImageNet-pretrained models, Agri-FM+ embeddings form                      cultural vision. The proposed model, titled Agri-FM+, is
+more compact, well-separated clusters, suggesting better                  built upon a continual pretraining strategy that first learns
+inter-dataset discrimination. This aligns with the SlotCon                from unsupervised pretraining on ImageNet and then adapts
+framework’s objective of learning semantically consistent                 to a curated agricultural dataset (Agri-147K). Agri-FM+
+prototypes, which is particularly advantageous for struc-                 demonstrates strong generalization across object detection,
+tured agricultural imagery, involving crops, diseases, or                 semantic segmentation, and instance segmentation tasks. It
+row-level patterns.                                                       consistently outperforms supervised ImageNet pretraining
+                                                                          and random initialization, with notable gains in both fully
+    The curation quality of the Agri-147K dataset also plays
+                                                                          annotated and limited annotation settings. The results con-
+a vital role. By refining an initial pool of 381K images and
+                                                                          firm that domain-specific self-supervised learning, coupled
+removing non-agricultural or noisy samples, we ensured
+                                                                          with high-quality dataset curation, enables efficient and ro-
+high domain relevance, which significantly improved pre-
+                                                                          bust representation learning for agriculture. This work lays
+training outcomes. These findings reinforce the idea that, in
+                                                                          the foundation for building scalable and label-efficient vi-
+self-supervised learning, the quality and specificity of the
+                                                                          sion systems, tailored to real-world agricultural challenges.
+dataset can be more impactful than the dataset size alone.
+   It is important to acknowledge that our study has several              Acknowledgments
+limitations. Currently, Agri-FM+ is limited to close-field
+RGB imagery and a ResNet-50 backbone. Future work will                    This research was generously supported by Google’s Com-
+explore larger architectures (e.g., transformers), multimodal             pute Credit Scholarship, which provided the computational
+input (e.g., hyperspectral, UAV, or temporal imagery), and                resources for this study. The authors extend their sincere
+zero-shot generalization using vision-language alignment.                 gratitude to Dr. Ian McQuillan for his invaluable guidance.
+
+
+
+                                                                   5527
+References                                                             [15] Emmanuel Asante, Obed Appiah, and Eric Opoku. Maize
+                                                                            seed dataset, 2024. https://www.kaggle.com/
+ [1] Wheat spike dataset.        https : / / www . kaggle .                 dsv/8681789. 3
+     com / datasets / voglinio / wheat - dataset -
+                                                                       [16] Mahmoud Assran, Quentin Duval, Ishan Misra, Piotr Bo-
+     original, 2020. Kaggle. Accessed: 2025-03-22. 3
+                                                                            janowski, Pascal Vincent, Michael Rabbat, Yann LeCun,
+ [2] Corn field mapped with ebee ag in brazil. https://
+                                                                            and Nicolas Ballas. Self-supervised learning from images
+     ageagle.com/data-set/corn-field-mapped-
+                                                                            with a joint-embedding predictive architecture. In Proceed-
+     with-ebee-ag-in-brazil/, 2021. AgEagle. Pub-
+                                                                            ings of the IEEE/CVF Conference on Computer Vision and
+     lished: 2021-02-18. Accessed: 2025-03-22. 3
+                                                                            Pattern Recognition (CVPR), pages 15619–15629, 2023. 2
+ [3] Mixed-use agricultural fields ebee ag.         https :
+                                                                       [17] Shekoofeh Azizi, Basil Mustafa, Fiona Ryan, Zachary
+     / / ageagle . com / data - set / mixed - use -
+                                                                            Beaver, Jan Freyberg, Jonathan Deaton, Aaron Loh, Alan
+     agricultural- fields- ebee- ag/, 2021. AgEa-
+                                                                            Karthikesalingam, Simon Kornblith, Ting Chen, Vivek
+     gle. Published: 2021-02-17. Accessed: 2025-03-22.
+                                                                            Natarajan, and Mohammad Norouzi. Big self-supervised
+     3
+                                                                            models advance medical image classification. In Proceed-
+ [4] Perrenial plants detection. https://www.kaggle.
+                                                                            ings of the IEEE/CVF International Conference on Com-
+     com/datasets/benediktgeisler/perrenial-
+                                                                            puter Vision (ICCV), pages 3478–3488, 2021. 2
+     plants-detection, 2021. Kaggle. Accessed: 2025-
+                                                                       [18] Suchet Bargoti and James Underwood. Deep fruit detection
+     03-22. 3
+                                                                            in orchards. arXiv preprint arXiv:1610.03677, 2016. 3
+ [5] Makerere fall armyworm crop challenge dataset. https:
+     / / zindi . africa / competitions / makerere -                    [19] James Betker, Gabriel Goh, Li Jing, Tim Brooks, Jianfeng
+     fall- armyworm- crop- challenge/data, 2022.                            Wang, Linjie Li, Long Ouyang, Juntang Zhuang, Joyce
+     Zindi. Accessed: 2025-03-22. 3                                         Lee, Yufei Guo, et al. Improving image generation with
+                                                                            better captions. Computer Science. https://cdn. openai.
+ [6] Leaf-images-dataset.       https : / / www . kaggle .
+                                                                            com/papers/dall-e-3. pdf, 2(3):8, 2023. 2
+     com / datasets / hamedetezadi / leaf - image -
+     dataset, 2022. Kaggle. Accessed: 2025-03-22. 3                    [20] Swami Nisha Bhagirath, Vaibhav Bhatnagar, and Linesh
+ [7] Agriculture crops dataset.          https : / / www .                  Raja. Winter wheat leaf images dataset. Mendeley
+     kaggle . com / datasets / osamajalilhassan /                           Data, V1, 2023. https://doi.org/10.17632/
+     agriculture- crops- dataset, 2023. Accessed:                           gj72pjfvb2.1. 3
+     2025-03-22. 3                                                     [21] Songpol Bunyang, Natdanai Thedwichienchai, Krisna Pin-
+ [8] Maize images dataset. https://www.kaggle.com/                          tong, Nuj Lael, Wuthipoom Kunaborimas, Phawit Boonrat,
+     datasets / devanshujoshi01 / maize - images -                          and Thitirat Siriborvornratanakul. Self-supervised learning
+     dataset, 2023. Kaggle. Accessed: 2025-03-22. 3                         advanced plant disease image classification with simclr. Ad-
+ [9] Pinotnoirgrapes.         https : / / www . kaggle .                    vances in Computational Intelligence, 3(5):18, 2023. 3
+     com / datasets / nicolaasregnier /                                [22] Mathilde Caron, Hugo Touvron, Ishan Misra, Hervé Jégou,
+     pinotnoirgrapes/data, 2023. Kaggle. Accessed:                          Julien Mairal, Piotr Bojanowski, and Armand Joulin.
+     2025-03-22. 3                                                          Emerging properties in self-supervised vision transformers.
+[10] Classification maize & cocoa datasets.         https :                 In Proceedings of the IEEE/CVF International Conference
+     / / www . kaggle . com / datasets / clarentjd /                        on Computer Vision (ICCV), pages 9650–9660, 2021. 2
+     classification - maize - and - cocoa -                            [23] Keumgang Cha, Junghoon Seo, and Taekyung Lee. A
+     datasets, 2024.          Kaggle. Accessed: 2025-03-22.                 billion-scale foundation model for remote sensing images.
+     3                                                                      arXiv preprint arXiv:2304.05215, 2023. 1
+[11] Maize phenology images acquired using ndvi camera.                [24] Liang-Chieh Chen, Yukun Zhu, George Papandreou, Flo-
+     https://www.kaggle.com/datasets/zzzzqi/                                rian Schroff, and Hartwig Adam. Encoder-decoder with
+     maize- phenology- images- acquired- using-                             atrous separable convolution for semantic image segmenta-
+     ndvi- camera, 2024. Kaggle. Accessed: 2025-03-22.                      tion. In Proceedings of the European conference on com-
+     3                                                                      puter vision (ECCV), pages 801–818, 2018. 6
+[12] Wheat segmentation dataset. https://universe.                     [25] Ting Chen, Simon Kornblith, Mohammad Norouzi, and Ge-
+     roboflow . com / wheat - seg - xcxow / wheat -                         offrey Hinton. A simple framework for contrastive learning
+     segmentation-sr7mm, 2024. visited on 2024-07-29.                       of visual representations. In Proceedings of the 37th In-
+     5                                                                      ternational Conference on Machine Learning, pages 1597–
+[13] Hervé Abdi and Lynne J Williams. Principal component                  1607. PMLR, 2020. 2, 3
+     analysis. Wiley interdisciplinary reviews: computational          [26] Xinlei Chen, Haoqi Fan, Ross Girshick, and Kaiming He.
+     statistics, 2(4):433–459, 2010. 8                                      Improved baselines with momentum contrastive learning,
+[14] Abdullah Al Mamun, David Ahmedt-Aristizabal, Miao-                     2020. 2
+     hua Zhang, Md Ismail Hossen, Zeeshan Hayder, and Mo-              [27] Xinlei Chen, Saining Xie, and Kaiming He. An empiri-
+     hammad Awrangjeb. Plant disease detection using self-                  cal study of training self-supervised vision transformers. In
+     supervised learning: A systematic review. IEEE Access,                 Proceedings of the IEEE/CVF International Conference on
+     2024. 3                                                                Computer Vision (ICCV), pages 9640–9649, 2021. 2
+
+
+
+
+                                                                5528
+[28] MMSegmentation Contributors.              MMSegmentation:              [41] Kaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian Sun.
+     Openmmlab semantic segmentation toolbox and                                 Deep residual learning for image recognition. In Proceed-
+     benchmark.         https : / / github . com / open -                        ings of the IEEE conference on computer vision and pattern
+     mmlab/mmsegmentation, 2020. 6                                               recognition, pages 770–778, 2016. 6
+[29] Hamish Craze and Dave Berger. Maize in field dataset,                  [42] Kaiming He, Georgia Gkioxari, Piotr Dollár, and Ross Gir-
+     2022. https://www.kaggle.com/dsv/3603983.                                   shick. Mask r-cnn. In Proceedings of the IEEE interna-
+     3                                                                           tional conference on computer vision, pages 2961–2969,
+[30] Amirhossein Dadashzadeh, Shuchao Duan, Alan Whone,                          2017. 6
+     and Majid Mirmehdi. Pecop: Parameter efficient con-                    [43] Kaiming He, Haoqi Fan, Yuxin Wu, Saining Xie, and Ross
+     tinual pretraining for action quality assessment. In 2024                   Girshick. Momentum contrast for unsupervised visual rep-
+     IEEE/CVF Winter Conference on Applications of Computer                      resentation learning. In Proceedings of the IEEE/CVF
+     Vision (WACV), pages 42–52, 2024. 2                                         Conference on Computer Vision and Pattern Recognition
+[31] Etienne David, Mario Serouart, Daniel Smith, Simon                          (CVPR), 2020. 2
+     Madec, Kaaviya Velumani, Shouyang Liu, Xu Wang, Fran-                  [44] Olivier J. Hénaff, Skanda Koppula, Jean-Baptiste Alayrac,
+     cisco Pinto, Shahameh Shafiee, Izzat SA Tahir, et al. Global                Aaron van den Oord, Oriol Vinyals, and João Carreira.
+     wheat head detection 2021: An improved dataset for bench-                   Efficient visual pretraining with contrastive detection. In
+     marking wheat head detection methods. Plant Phenomics,                      Proceedings of the IEEE/CVF International Conference on
+     2021. 3, 5                                                                  Computer Vision (ICCV), pages 10086–10096, 2021. 2, 3
+[32] Jia Deng, Wei Dong, Richard Socher, Li-Jia Li, Kai Li,                 [45] Danfeng Hong, Bing Zhang, Xuyang Li, Yuxuan Li,
+     and Li Fei-Fei. Imagenet: A large-scale hierarchical im-                    Chenyu Li, Jing Yao, Naoto Yokoya, Hao Li, Pedram
+     age database. In 2009 IEEE conference on computer vision                    Ghamisi, Xiuping Jia, et al. Spectralgpt: Spectral remote
+     and pattern recognition, pages 248–255. Ieee, 2009. 1                       sensing foundation model. IEEE Transactions on Pattern
+                                                                                 Analysis and Machine Intelligence, 2024. 1
+[33] Carl Doersch, Abhinav Gupta, and Alexei A. Efros. Unsu-
+     pervised visual representation learning by context predic-             [46] Aminul Huq, Dimitris Zermas, and George Bebis. Iden-
+     tion. In Proceedings of the IEEE International Conference                   tification of abnormality in maize plants from uav images
+     on Computer Vision (ICCV), 2015. 2                                          using deep learning approaches. In International Sympo-
+                                                                                 sium on Visual Computing, pages 583–596. Springer, 2023.
+[34] Chengbin Du, Yanxi Li, Zhongwei Qiu, and Chang Xu. Sta-
+                                                                                 3
+     ble diffusion is unstable. In Advances in Neural Informa-
+                                                                            [47] András Kalapos and Bálint Gyires-Tóth. Self-supervised
+     tion Processing Systems, pages 58648–58669. Curran As-
+                                                                                 pretraining for 2d medical image segmentation. In Com-
+     sociates, Inc., 2023. 2
+                                                                                 puter Vision – ECCV 2022 Workshops, pages 472–484,
+[35] ErnestMwebaze, Jesse Mostipak, Joyce, Julia Elliott, and                    Cham, 2023. Springer Nature Switzerland. 2
+     Sohier Dane. Cassava leaf disease classification. https:
+                                                                            [48] KaraAgro AI Foundation.          Drone-based-agricultural-
+     //kaggle.com/competitions/cassava-leaf-
+                                                                                 dataset-for-crop-yield-estimation (revision 2530d1d),
+     disease-classification, 2020. Kaggle. 3
+                                                                                 2023. https : / / huggingface . co / datasets /
+[36] Spyros Gidaris, Praveer Singh, and Nikos Komodakis. Un-                     KaraAgroAI / Drone - based - Agricultural -
+     supervised representation learning by predicting image ro-                  Dataset-for-Crop-Yield-Estimation. 3
+     tations. arXiv preprint arXiv:1803.07728, 2018. 2
+                                                                            [49] Alexander Kirillov, Eric Mintun, Nikhila Ravi, Hanzi
+[37] Thomas Mosgaard Giselsson, Rasmus Nyholm Jørgensen,                         Mao, Chloe Rolland, Laura Gustafson, Tete Xiao, Spencer
+     Peter Kryger Jensen, Mads Dyrmann, and Henrik Skov                          Whitehead, Alexander C. Berg, Wan-Yen Lo, Piotr Dollar,
+     Midtiby. A public image database for benchmark of                           and Ross Girshick. Segment anything. In Proceedings of
+     plant seedling classification algorithms. arXiv preprint                    the IEEE/CVF International Conference on Computer Vi-
+     arXiv:1711.05458, 2017. 3                                                   sion (ICCV), pages 4015–4026, 2023. 2
+[38] Jean-Bastien Grill, Florian Strub, Florent Altché, Corentin           [50] Alexander Kirillov, Eric Mintun, Nikhila Ravi, Hanzi
+     Tallec, Pierre Richemond, Elena Buchatskaya, Carl Do-                       Mao, Chloe Rolland, Laura Gustafson, Tete Xiao, Spencer
+     ersch, Bernardo Avila Pires, Zhaohan Guo, Mohammad                          Whitehead, Alexander C Berg, Wan-Yen Lo, et al. Segment
+     Gheshlaghi Azar, et al. Bootstrap your own latent-a new                     anything. In Proceedings of the IEEE/CVF international
+     approach to self-supervised learning. Advances in neural                    conference on computer vision, pages 4015–4026, 2023. 1
+     information processing systems, 33:21271–21284, 2020. 4                [51] Junnan Li, Dongxu Li, Silvio Savarese, and Steven Hoi.
+[39] Murilo Gustineli, Anthony Miyaguchi, and Ian Stalter.                       BLIP-2: Bootstrapping language-image pre-training with
+     Multi-label plant species classification with self-supervised               frozen image encoders and large language models. In Pro-
+     vision transformers. arXiv preprint arXiv:2407.06298,                       ceedings of the 40th International Conference on Machine
+     2024. 3                                                                     Learning, pages 19730–19742. PMLR, 2023. 2
+[40] Nicolai Häni, Pravakar Roy, and Volkan Isler. Minneap-                [52] Yinglun Li, Xiaohai Zhan, Shouyang Liu, Hao Lu, Ruibo
+     ple: a benchmark dataset for apple detection and segmenta-                  Jiang, Wei Guo, Scott Chapman, Yufeng Ge, Benoit Solan,
+     tion. IEEE Robotics and Automation Letters, 5(2):852–858,                   Yanfeng Ding, et al. Self-supervised plant phenotyping by
+     2020. 5                                                                     combining domain adaptation with 3d plant model simula-
+
+
+
+
+                                                                     5529
+     tions: Application to wheat leaf counting at seedling stage.          [62] Rafael Padilla, Sergio L. Netto, and Eduardo A. B. da Silva.
+     Plant Phenomics, 5:0041, 2023. 3                                           A survey on performance metrics for object-detection al-
+[53] Tsung-Yi Lin, Michael Maire, Serge Belongie, James                         gorithms. In 2020 International Conference on Systems,
+     Hays, Pietro Perona, Deva Ramanan, Piotr Dollár, and                      Signals and Image Processing (IWSSIP), pages 237–242,
+     C Lawrence Zitnick. Microsoft coco: Common objects                         2020. 6
+     in context. In Computer vision–ECCV 2014: 13th Eu-                    [63] Zongshang Pang, Yuta Nakashima, Mayu Otani, and Ha-
+     ropean conference, zurich, Switzerland, September 6-12,                    jime Nagahara. Revisiting pixel-level contrastive pre-
+     2014, proceedings, part v 13, pages 740–755. Springer,                     training on scene images. In Proceedings of the IEEE/CVF
+     2014. 1                                                                    Winter Conference on Applications of Computer Vision
+[54] Fan Liu, Delong Chen, Zhangqingyun Guan, Xiaocong                          (WACV), pages 1784–1793, 2024. 2
+     Zhou, Jiale Zhu, Qiaolin Ye, Liyong Fu, and Jun Zhou.                 [64] Sarah Parisot, Yongxin Yang, and Steven McDonagh.
+     Remoteclip: A vision language foundation model for re-                     Learning to name classes for vision and language models.
+     mote sensing. IEEE Transactions on Geoscience and Re-                      In Proceedings of the IEEE/CVF Conference on Computer
+     mote Sensing, 2024. 1                                                      Vision and Pattern Recognition (CVPR), pages 23477–
+[55] Federico Magistri, Jan Weyler, Dario Gogoll, Philipp                       23486, 2023. 2
+     Lottes, Jens Behley, Nik Petrinic, and Cyrill Stachniss.              [65] Petchiammal, Briskline Kiruba, Murugan, and Pan-
+     From one field to another—unsupervised domain adap-                        darasamy Arjunan. Paddy doctor: A visual image dataset
+     tation for semantic segmentation in agricultural robotics.                 for automated paddy disease classification and benchmark-
+     Computers and Electronics in Agriculture, 212:108114,                      ing. In Proceedings of the 6th Joint International Confer-
+     2023. 1                                                                    ence on Data Science & Management of Data (10th ACM
+[56] Matias Mendieta, Boran Han, Xingjian Shi, Yi Zhu, and                      IKDD CODS and 28th COMAD), pages 203–207, 2023. 3
+     Chen Chen. Towards Geospatial Foundation Models via                   [66] Alec Radford, Jong Wook Kim, Chris Hallacy, Aditya
+     Continual Pretraining . In 2023 IEEE/CVF International                     Ramesh, Gabriel Goh, Sandhini Agarwal, Girish Sastry,
+     Conference on Computer Vision (ICCV), pages 16760–                         Amanda Askell, Pamela Mishkin, Jack Clark, Gretchen
+     16770, Los Alamitos, CA, USA, 2023. IEEE Computer So-                      Krueger, and Ilya Sutskever. Learning transferable visual
+     ciety. 2                                                                   models from natural language supervision. In Proceedings
+[57] Patrick Mensah Kwabena, Vivian Akoto-Adjepong,                             of the 38th International Conference on Machine Learning,
+     Kwabena Adu, Mighty Abra Ayidzoe, Elvis Asare Be-                          pages 8748–8763. PMLR, 2021. 2
+     diako, Owusu Nyarko-Boateng, Samuel Boateng, Esther
+                                                                           [67] Md Atiqur Rahman and Yang Wang.                 Optimizing
+     Fobi Donkor, Faiza Umar Bawah, Nicodemus Songose
+                                                                                intersection-over-union in deep neural networks for image
+     Awarayi, Peter Nimbe, Isaac Kofi Nti, Muntala Abdulai,
+                                                                                segmentation. In International symposium on visual com-
+     Remember Roger Adjei, and Michael Opoku. Dataset for
+                                                                                puting, pages 234–244. Springer, 2016. 6
+     crop pest and disease detection. Mendeley Data, V1, 2023.
+     https://doi.org/10.17632/bwh3zbpkpv.1. 3                              [68] Nikhila Ravi, Valentin Gabeur, Yuan-Ting Hu, Ronghang
+                                                                                Hu, Chaitanya Ryali, Tengyu Ma, Haitham Khedr, Roman
+[58] Ben-Wycliff Mugalu, Joyce Nakatumba-Nabende, An-
+                                                                                Rädle, Chloe Rolland, Laura Gustafson, Eric Mintun, Junt-
+     drew Katumba, Claire Babirye, Francis-Jeremy Tusubira,
+                                                                                ing Pan, Kalyan Vasudev Alwala, Nicolas Carion, Chao-
+     Chodrine Mutebi, Solomon Nsumba, and Gloria Namanya.
+                                                                                Yuan Wu, Ross Girshick, Piotr Dollár, and Christoph Fe-
+     Makerere university beans image dataset. https://
+                                                                                ichtenhofer. Sam 2: Segment anything in images and
+     doi.org/10.7910/DVN/TCKVEW, 2022. Harvard
+                                                                                videos, 2024. 2
+     Dataverse, V2. 3
+[59] Mehdi Noroozi and Paolo Favaro. Unsupervised learn-                   [69] Colorado J Reed, Xiangyu Yue, Ani Nrusimha, Sayna
+     ing of visual representations by solving jigsaw puzzles.                   Ebrahimi, Vivek Vijaykumar, Richard Mao, Bo Li, Shang-
+     In European conference on computer vision, pages 69–84.                    hang Zhang, Devin Guillory, Sean Metzger, Kurt Keutzer,
+     Springer, 2016. 2                                                          and Trevor Darrell. Self-Supervised Pretraining Improves
+[60] Alex Olsen, Dmitry A Konovalov, Bronson Philippa, Peter                    Self-Supervised Pretraining . In 2022 IEEE/CVF Winter
+     Ridd, Jake C Wood, Jamie Johns, Wesley Banks, Benjamin                     Conference on Applications of Computer Vision (WACV),
+     Girgenti, Owen Kenny, James Whinney, et al. Deepweeds:                     pages 1050–1060, Los Alamitos, CA, USA, 2022. IEEE
+     A multiclass weed species image dataset for deep learning.                 Computer Society. 2
+     Scientific reports, 9(1):2058, 2019. 3                                [70] Shaoqing Ren, Kaiming He, Ross Girshick, and Jian Sun.
+[61] Maxime Oquab, Timothée Darcet, Théo Moutakanni, Huy                      Faster r-cnn: Towards real-time object detection with re-
+     Vo, Marc Szafraniec, Vasil Khalidov, Pierre Fernandez,                     gion proposal networks. IEEE transactions on pattern anal-
+     Daniel Haziza, Francisco Massa, Alaaeldin El-Nouby,                        ysis and machine intelligence, 39(6):1137–1149, 2016. 5
+     Mahmoud Assran, Nicolas Ballas, Wojciech Galuba, Rus-                 [71] Roboflow.       Detecting diseases dataset.      https :
+     sell Howes, Po-Yao Huang, Shang-Wen Li, Ishan Misra,                       / / universe . roboflow . com / artificial -
+     Michael Rabbat, Vasu Sharma, Gabriel Synnaeve, Hu                          intelligence - 82oex / detecting - diseases /
+     Xu, Hervé Jegou, Julien Mairal, Patrick Labatut, Armand                   dataset/6, 2022. visited on 2025-03-21. 5
+     Joulin, and Piotr Bojanowski. Dinov2: Learning robust vi-             [72] Roboflow.        Crops (maize, cassava, sugarcane vs
+     sual features without supervision, 2024. 2                                 grass) dataset. https : / / universe . roboflow .
+
+
+
+
+                                                                    5530
+     com / school - el5qm / crops - maize - cassava -                           Conference on Computer Vision and Pattern Recognition
+     sugarcane-vs-grass, 2023. visited on 2025-03-21.                           (CVPR), pages 14408–14419, 2023. 2
+     5                                                                     [85] Xinlong Wang, Rufeng Zhang, Chunhua Shen, Tao Kong,
+[73] Adrian Salazar-Gomez, Madeleine Darbyshire, Junfeng                        and Lei Li. Dense contrastive learning for self-supervised
+     Gao, Elizabeth I. Sklar, and Simon Parsons. Towards prac-                  visual pre-training. In Proceedings of the IEEE/CVF
+     tical object detection for weed spraying in precision agri-                Conference on Computer Vision and Pattern Recognition
+     culture. arXiv preprint arXiv:2109.11048, 2021. https:                     (CVPR), pages 3024–3033, 2021. 2, 3
+     //arxiv.org/abs/2109.11048. 3                                         [86] Tianqi Wei, Zhi Chen, Xin Yu, Scott Chapman, Paul Mel-
+[74] Thiago T Santos and Luciano Gebler. A methodology for                      loy, and Zi Huang. Plantseg: A large-scale in-the-wild
+     detection and localization of fruits in apples orchards from               dataset for plant disease segmentation. arXiv preprint
+     aerial images. arXiv preprint arXiv:2110.12331, 2021. 3                    arXiv:2409.04038, 2024. 5
+[75] Sandi Indika Saputra. Corn stalk disease, 2023. https:                [87] Xin Wen, Bingchen Zhao, Anlin Zheng, Xiangyu Zhang,
+     //www.kaggle.com/dsv/6848682. 3                                            and Xiaojuan Qi. Self-supervised visual representation
+[76] Sandi Indika Saputra. Corn leaf disease, 2023. https:                      learning with semantic grouping. In Advances in Neural
+     //www.kaggle.com/dsv/6341289. 3                                            Information Processing Systems, pages 16423–16438. Cur-
+                                                                                ran Associates, Inc., 2022. 2, 3, 5
+[77] Davinder Singh, Naman Jain, Pranjali Jain, Pratik Kayal,
+                                                                           [88] Jan Weyler, Federico Magistri, Elias Marks, Yue Linn
+     Sudhakar Kumawat, and Nipun Batra. Plantdoc: A dataset
+                                                                                Chong, Matteo Sodano, Gianmarco Roggiolani, Nived
+     for visual plant disease detection. In Proceedings of the
+                                                                                Chebrolu, Cyrill Stachniss, and Jens Behley. Phenobench:
+     7th ACM IKDD CoDS and 25th COMAD, pages 249–253.
+                                                                                A large dataset and benchmarks for semantic image inter-
+     2020. 5
+                                                                                pretation in the agricultural domain. IEEE Transactions on
+[78] Samuel Stevens, Jiaman Wu, Matthew J Thompson, Eliza-
+                                                                                Pattern Analysis and Machine Intelligence, 2024. 3
+     beth G Campolongo, Chan Hee Song, David Edward Car-
+                                                                           [89] Yuxin Wu, Alexander Kirillov, Francisco Massa, Wan-Yen
+     lyn, Li Dong, Wasila M Dahdul, Charles Stewart, Tanya
+                                                                                Lo, and Ross Girshick. Detectron2. https://github.
+     Berger-Wolf, et al. Bioclip: A vision foundation model for
+                                                                                com/facebookresearch/detectron2, 2019. 6
+     the tree of life. In Proceedings of the IEEE/CVF conference
+                                                                           [90] Zhenwei Wu, Xinfa Wang, Minghao Liu, and Chengxiu
+     on computer vision and pattern recognition, pages 19412–
+                                                                                Sun. Tomatoplantfactorydataset. Mendeley Data, V1, 2023.
+     19424, 2024. 1, 3
+                                                                                https://doi.org/10.17632/8h3s6jkyff.1. 3
+[79] Kaspars Sudars, Janis Jasko, Ivars Namatevs, Liva Ozola,              [91] Shuai Xiang, Pieter M Blok, James Burridge, Haozhou
+     and Niks Badaukis. Dataset of annotated food crops and                     Wang, and Wei Guo.            Doda: Diffusion for object-
+     weed images for robotic computer vision control. Data in                   detection domain adaptation in agriculture. arXiv preprint
+     brief, 31:105833, 2020. 3                                                  arXiv:2403.18334, 2024. 1
+[80] Xian Sun, Peijin Wang, Wanxuan Lu, Zicong Zhu, Xiao-                  [92] Zhenda Xie, Yutong Lin, Zheng Zhang, Yue Cao, Stephen
+     nan Lu, Qibin He, Junxi Li, Xuee Rong, Zhujun Yang, Hao                    Lin, and Han Hu. Propagate yourself: Exploring pixel-
+     Chang, et al. Ringmo: A remote sensing foundation model                    level consistency for unsupervised visual representation
+     with masked image modeling. IEEE Transactions on Geo-                      learning. In Proceedings of the IEEE/CVF Conference on
+     science and Remote Sensing, 61:1–22, 2022. 1                               Computer Vision and Pattern Recognition (CVPR), pages
+[81] Vivek Tiwari, Ravi R Saxena, and Muneendra Ojha.                           16684–16693, 2021. 2, 3
+     Insectbase: Soybean crop insect raw image dataset v1                  [93] H. Xu. Plantvillage disease classification challenge - color
+     with bounding boxes for classification and localiza-                       images. https://doi.org/10.5281/zenodo.
+     tion.       https : / / doi . org / 10 . 6084 / m9 .                       1204914, 2018. Zenodo. doi: 10.5281/zenodo.1204914.
+     figshare.13077221.v4, 2020. figshare. Dataset.                             3
+     doi:10.6084/m9.figshare.13077221.v4. 3                                [94] Shivam Yadav, Sanjay Soni, and Sanjay Gupta. Multi-
+[82] Aleksandar Vakanski. A dataset of multispectral potato                     class weeds dataset for image segmentation. https:
+     plants images. https://www.webpages.uidaho.                                //doi.org/10.6084/m9.figshare.22643434.
+     edu / vakanski / Multispectral _ Images _                                  v1, 2023. Dataset, accessed on 2025-03-21. 5
+     Dataset.html, 2024. University of Idaho. Accessed:                    [95] Jinhui Yi, Lukas Krusenbaum, Paula Unger, Hubert
+     2025-03-22. 3                                                              Hüging, Sabine J. Seidel, Gabriel Schaaf, and Juergen Gall.
+[83] Di Wang, Qiming Zhang, Yufei Xu, Jing Zhang, Bo Du,                        Deep learning for non-invasive diagnosis of nutrient defi-
+     Dacheng Tao, and Liangpei Zhang. Advancing plain vision                    ciencies in sugar beet using rgb images. Sensors, 20(20):
+     transformer toward remote sensing foundation model. IEEE                   5893, 2020. 3
+     Transactions on Geoscience and Remote Sensing, 61:1–15,               [96] Getinet Yilma, Mesfin Dagne, Mohammed Kemal Ahmed,
+     2022. 1                                                                    and Ravindra Babu Bellam. Attentive self-supervised con-
+[84] Wenhai Wang, Jifeng Dai, Zhe Chen, Zhenhang Huang,                         trastive learning (ascl) for plant disease classification. Re-
+     Zhiqi Li, Xizhou Zhu, Xiaowei Hu, Tong Lu, Lewei Lu,                       sults in Engineering, page 103922, 2025. 3
+     Hongsheng Li, Xiaogang Wang, and Yu Qiao. Internim-                   [97] Yang You, Igor Gitman, and Boris Ginsburg. Large
+     age: Exploring large-scale vision foundation models with                   batch training of convolutional networks. arXiv preprint
+     deformable convolutions. In Proceedings of the IEEE/CVF                    arXiv:1708.03888, 2017. 4
+
+
+
+
+                                                                    5531
+ [98] Lu Yuan, Dongdong Chen, Yi-Ling Chen, Noel Codella,
+      Xiyang Dai, Jianfeng Gao, Houdong Hu, Xuedong Huang,
+      Boxin Li, Chunyuan Li, Ce Liu, Mengchen Liu, Zicheng
+      Liu, Yumao Lu, Yu Shi, Lijuan Wang, Jianfeng Wang, Bin
+      Xiao, Zhen Xiao, Jianwei Yang, Michael Zeng, Luowei
+      Zhou, and Pengchuan Zhang. Florence: A new foundation
+      model for computer vision, 2021. 2
+ [99] Hao Zhang, Feng Li, Shilong Liu, Lei Zhang, Hang Su, Jun
+      Zhu, Lionel M Ni, and Heung-Yeung Shum. Dino: Detr
+      with improved denoising anchor boxes for end-to-end ob-
+      ject detection. arXiv preprint arXiv:2203.03605, 2022. 1
+[100] Junbo Zhang, Shifeng Xu, Jun Sun, Dinghua Ou, Xiaobo
+      Wu, and Mantao Wang. Unsupervised adversarial domain
+      adaptation for agricultural land extraction of remote sensing
+      images. Remote Sensing, 14(24):6298, 2022. 1
+[101] Richard Zhang, Phillip Isola, and Alexei A. Efros. Color-
+      ful image colorization. In Computer Vision – ECCV 2016,
+      pages 649–666, Cham, 2016. Springer International Pub-
+      lishing. 2
+[102] Xueyan Zou, Jianwei Yang, Hao Zhang, Feng Li, Linjie Li,
+      Jianfeng Wang, Lijuan Wang, Jianfeng Gao, and Yong Jae
+      Lee. Segment everything everywhere all at once. In Ad-
+      vances in Neural Information Processing Systems, pages
+      19769–19782. Curran Associates, Inc., 2023. 2
+
+
+
+
+                                                                      5532
+

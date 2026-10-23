@@ -1,0 +1,44 @@
+{
+  "status": "CANDIDATE",
+  "approved": false,
+  "images": 3025,
+  "sources": 5,
+  "composition": {
+    "iNatWeeds": {
+      "images": 278,
+      "bytes": 0
+    },
+    "LUCASVision": {
+      "images": 2245,
+      "bytes": 0
+    },
+    "RadishWheat": {
+      "images": 107,
+      "bytes": 0
+    },
+    "SorghumWeed": {
+      "images": 35,
+      "bytes": 0
+    },
+    "VegAnn": {
+      "images": 360,
+      "bytes": 0
+    }
+  },
+  "sha256_canonical_csv": "b4715e148f229f02dee38e604c750c352b3edfcbba78885227c5989825b6c03f",
+  "rows_with_pending_perceptual_review": 0,
+  "holdout_sources_excluded": [
+    "cropandweed",
+    "deepweeds",
+    "growliflower",
+    "gwhd_2021",
+    "gwhd_instance_seg",
+    "minneapple",
+    "multiclass_weeds",
+    "phenobench",
+    "plantdoc",
+    "plantseg",
+    "roboflow_crop_detection",
+    "roboflow_disease_detection"
+  ]
+}
