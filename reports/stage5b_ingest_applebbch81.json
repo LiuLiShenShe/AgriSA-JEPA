@@ -1,0 +1,30 @@
+{
+  "source_id": "applebbch81",
+  "source_name": "AppleBBCH81 (orchard apple fruit, BBCH 81-85)",
+  "root": "/data/datasets/Stage5B/applebbch81/extracted",
+  "license": "CC-BY-4.0",
+  "source_url": "https://doi.org/10.3390/drones8120734",
+  "files_found": 1838,
+  "files_decoded": 1838,
+  "decode_failures": 0,
+  "decode_failure_examples": [],
+  "exact_duplicate_pairs": 0,
+  "exact_duplicate_examples": [],
+  "perceptual_candidate_pairs": 0,
+  "perceptual_candidate_examples": [],
+  "cross_source_exact_matches": 0,
+  "cross_source_candidates": 0,
+  "cross_source_examples": [],
+  "images_duplicate_free": 1838,
+  "unique_class_labels": 1,
+  "unique_group_keys": 140,
+  "image_suffixes": [
+    ".jpg"
+  ],
+  "notes": "Perceptual pairs are screening candidates, not proof of duplication; hidden and stepped images differ by design.",
+  "generated_at_utc": "2026-10-23T13:48:09.156123+00:00",
+  "archive": "/data/datasets/Stage5B/applebbch81/applebbch81.zip",
+  "archive_sha256": "d5f47554e00e19c7e73c766ee8d986d8cd2be5036c7a39a97b1981059ace519a",
+  "upstream_pending_reclassified": 0,
+  "cross_source_duplicates_in_adopted_corpus": 0
+}

@@ -1,0 +1,381 @@
+{
+  "source_id": "weedcrop",
+  "source_name": "WeedCrop Image Dataset (Ronin-derived)",
+  "root": "/data/datasets/Stage5B/weedcrop/extracted",
+  "license": "CC0-1.0",
+  "source_url": "https://www.kaggle.com/datasets/vinayakshanawad/weedcrop-image-dataset",
+  "files_found": 2822,
+  "files_decoded": 2822,
+  "decode_failures": 0,
+  "decode_failure_examples": [],
+  "exact_duplicate_pairs": 0,
+  "exact_duplicate_examples": [],
+  "perceptual_candidate_pairs": 11104,
+  "perceptual_candidate_examples": [
+    {
+      "kind": "phash",
+      "distance": 4,
+      "a": "weedcrop:WeedCrop.v1i.yolov5pytorch/test/images/32264_jpg.rf.5ed191606674bb044db6c55d26ca3b69.jpg",
+      "b": "weedcrop:WeedCrop.v1i.yolov5pytorch/valid/images/32262_jpg.rf.f35f818296671993999e1b5a8bc84002.jpg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "weedcrop:WeedCrop.v1i.yolov5pytorch/test/images/32429_jpg.rf.22d609ca981966f966a0f8919cafdeb0.jpg",
+      "b": "weedcrop:WeedCrop.v1i.yolov5pytorch/valid/images/32428_jpg.rf.1782fa924f78113c94e505481206f54b.jpg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 2,
+      "a": "weedcrop:WeedCrop.v1i.yolov5pytorch/test/images/32673_jpg.rf.89d88edc3c05e3f31233ab8360ac47f7.jpg",
+      "b": "weedcrop:WeedCrop.v1i.yolov5pytorch/valid/images/32671_jpg.rf.e3ad1d8e2c3a5f7c5aea3aa8befb6588.jpg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 0,
+      "a": "weedcrop:WeedCrop.v1i.yolov5pytorch/test/images/32673_jpg.rf.89d88edc3c05e3f31233ab8360ac47f7.jpg",
+      "b": "weedcrop:WeedCrop.v1i.yolov5pytorch/valid/images/32672_jpg.rf.349edea99f0ce647ffdf312e2c38a6bc.jpg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "weedcrop:WeedCrop.v1i.yolov5pytorch/test/images/32690_jpg.rf.ce35bbf5449ad9c60ba4a45ae2d74a9b.jpg",
+      "b": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/32688_jpg.rf.120a08d4a2c4db1e882ae24ae0012798.jpg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 0,
+      "a": "weedcrop:WeedCrop.v1i.yolov5pytorch/test/images/32754_jpg.rf.ab03fe8871a543828e8f03ed8eae9ff3.jpg",
+      "b": "weedcrop:WeedCrop.v1i.yolov5pytorch/test/images/32757_jpg.rf.602a1d18b252432bacfe0d750395be40.jpg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 0,
+      "a": "weedcrop:WeedCrop.v1i.yolov5pytorch/test/images/32754_jpg.rf.ab03fe8871a543828e8f03ed8eae9ff3.jpg",
+      "b": "weedcrop:WeedCrop.v1i.yolov5pytorch/valid/images/32755_jpg.rf.5888e6a6987d409dca5601e3c81c2ead.jpg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 0,
+      "a": "weedcrop:WeedCrop.v1i.yolov5pytorch/test/images/32754_jpg.rf.ab03fe8871a543828e8f03ed8eae9ff3.jpg",
+      "b": "weedcrop:WeedCrop.v1i.yolov5pytorch/valid/images/32760_jpg.rf.d4d1fae1415f219e76ffb0fb72f20b88.jpg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 0,
+      "a": "weedcrop:WeedCrop.v1i.yolov5pytorch/test/images/32757_jpg.rf.602a1d18b252432bacfe0d750395be40.jpg",
+      "b": "weedcrop:WeedCrop.v1i.yolov5pytorch/valid/images/32755_jpg.rf.5888e6a6987d409dca5601e3c81c2ead.jpg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 0,
+      "a": "weedcrop:WeedCrop.v1i.yolov5pytorch/test/images/32757_jpg.rf.602a1d18b252432bacfe0d750395be40.jpg",
+      "b": "weedcrop:WeedCrop.v1i.yolov5pytorch/valid/images/32760_jpg.rf.d4d1fae1415f219e76ffb0fb72f20b88.jpg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 0,
+      "a": "weedcrop:WeedCrop.v1i.yolov5pytorch/test/images/32959_jpg.rf.faa022a1de5afd44320b9f35b9df789e.jpg",
+      "b": "weedcrop:WeedCrop.v1i.yolov5pytorch/valid/images/32945_jpg.rf.683f0e9854309eb9717f986864a62c54.jpg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 0,
+      "a": "weedcrop:WeedCrop.v1i.yolov5pytorch/test/images/32959_jpg.rf.faa022a1de5afd44320b9f35b9df789e.jpg",
+      "b": "weedcrop:WeedCrop.v1i.yolov5pytorch/valid/images/32946_jpg.rf.1f967dd31426c09f4e0b0ab2715a81fe.jpg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 0,
+      "a": "weedcrop:WeedCrop.v1i.yolov5pytorch/test/images/32959_jpg.rf.faa022a1de5afd44320b9f35b9df789e.jpg",
+      "b": "weedcrop:WeedCrop.v1i.yolov5pytorch/valid/images/32951_jpg.rf.fe69b2f42b95bf40dc97648f7f08bf06.jpg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 0,
+      "a": "weedcrop:WeedCrop.v1i.yolov5pytorch/test/images/32959_jpg.rf.faa022a1de5afd44320b9f35b9df789e.jpg",
+      "b": "weedcrop:WeedCrop.v1i.yolov5pytorch/valid/images/32952_jpg.rf.4eedd90b4e4c190b69cfe9d905325dc4.jpg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 0,
+      "a": "weedcrop:WeedCrop.v1i.yolov5pytorch/test/images/32959_jpg.rf.faa022a1de5afd44320b9f35b9df789e.jpg",
+      "b": "weedcrop:WeedCrop.v1i.yolov5pytorch/valid/images/32960_jpg.rf.c1131b7c31b2380f2592264666e48565.jpg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 0,
+      "a": "weedcrop:WeedCrop.v1i.yolov5pytorch/test/images/33297_jpg.rf.bae61a9099efba510b082164480abfad.jpg",
+      "b": "weedcrop:WeedCrop.v1i.yolov5pytorch/test/images/33299_jpg.rf.43a96296549c850a088629f9add8b7f5.jpg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "weedcrop:WeedCrop.v1i.yolov5pytorch/test/images/33297_jpg.rf.bae61a9099efba510b082164480abfad.jpg",
+      "b": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/33291_jpg.rf.2eb4f07eead6af8bce0784d795ac9b73.jpg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 4,
+      "a": "weedcrop:WeedCrop.v1i.yolov5pytorch/test/images/33297_jpg.rf.bae61a9099efba510b082164480abfad.jpg",
+      "b": "weedcrop:WeedCrop.v1i.yolov5pytorch/valid/images/33290_jpg.rf.6b987b4e5f27a942da3891e8d5690c49.jpg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "weedcrop:WeedCrop.v1i.yolov5pytorch/test/images/33299_jpg.rf.43a96296549c850a088629f9add8b7f5.jpg",
+      "b": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/33291_jpg.rf.2eb4f07eead6af8bce0784d795ac9b73.jpg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 4,
+      "a": "weedcrop:WeedCrop.v1i.yolov5pytorch/test/images/33299_jpg.rf.43a96296549c850a088629f9add8b7f5.jpg",
+      "b": "weedcrop:WeedCrop.v1i.yolov5pytorch/valid/images/33290_jpg.rf.6b987b4e5f27a942da3891e8d5690c49.jpg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/12114_jpg.rf.6b8206b39679d8e1c8e6a7bcb91073c7.jpg",
+      "b": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/32481_jpg.rf.e6892f336fb3dbfca538c912ff05be4b.jpg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/12114_jpg.rf.f6b940751bf827a1068aa8c6b0e05a51.jpg",
+      "b": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/34033_jpg.rf.3512d614d8bfc755aed560b50edf39ce.jpg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/12114_jpg.rf.f6b940751bf827a1068aa8c6b0e05a51.jpg",
+      "b": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/34247_jpg.rf.2aa81fba43e1cf022dab24cc6a074687.jpg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/12147_jpg.rf.e07a62fc64bc1c3751ad372cc829f99c.jpg",
+      "b": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/32343_jpg.rf.da6453fb25eae159f3bcafff6b68a161.jpg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/12147_jpg.rf.f51709a3fcaf689cae2def01fc562693.jpg",
+      "b": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/12197_jpg.rf.fdf70eedc831db707db3dd792dc8ff7e.jpg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/12147_jpg.rf.f51709a3fcaf689cae2def01fc562693.jpg",
+      "b": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/32187_jpg.rf.40709e219b35f09214d5497513ea0342.jpg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 4,
+      "a": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/12147_jpg.rf.f51709a3fcaf689cae2def01fc562693.jpg",
+      "b": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/32189_jpg.rf.be0d536e042769121441385cf3c7d86f.jpg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/12147_jpg.rf.f51709a3fcaf689cae2def01fc562693.jpg",
+      "b": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/32190_jpg.rf.b524a7111720fc5caa5bb6411b3f64e7.jpg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/12147_jpg.rf.f51709a3fcaf689cae2def01fc562693.jpg",
+      "b": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/32195_jpg.rf.ab1ad58bc4a25f44c1813b3c7b8b5739.jpg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/12147_jpg.rf.f51709a3fcaf689cae2def01fc562693.jpg",
+      "b": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/32230_jpg.rf.b8e73bcd6e1afdbe80ba4ff575eeb116.jpg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/12147_jpg.rf.f51709a3fcaf689cae2def01fc562693.jpg",
+      "b": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/32245_jpg.rf.5eea1c6a348944ef19a230d886562d1b.jpg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/12147_jpg.rf.f51709a3fcaf689cae2def01fc562693.jpg",
+      "b": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/32265_jpg.rf.7992bac6d6eb41d83b35fd7f24d61795.jpg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/12147_jpg.rf.f51709a3fcaf689cae2def01fc562693.jpg",
+      "b": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/32281_jpg.rf.878aadf92782f798b603d649681d5ddc.jpg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 0,
+      "a": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/12147_jpg.rf.f51709a3fcaf689cae2def01fc562693.jpg",
+      "b": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/32316_jpg.rf.f8984133742046d1c97d968f3c5b99da.jpg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 4,
+      "a": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/12147_jpg.rf.f51709a3fcaf689cae2def01fc562693.jpg",
+      "b": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/32318_jpg.rf.9689ec6ae98b5b3fc971ec514a814395.jpg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 4,
+      "a": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/12147_jpg.rf.f51709a3fcaf689cae2def01fc562693.jpg",
+      "b": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/32328_jpg.rf.97a4694f45fb5561aa8aa9bed4d65ac3.jpg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/12147_jpg.rf.f51709a3fcaf689cae2def01fc562693.jpg",
+      "b": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/32334_jpg.rf.9ce44a0bbd289bb979511458f1a2b84a.jpg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 4,
+      "a": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/12147_jpg.rf.f51709a3fcaf689cae2def01fc562693.jpg",
+      "b": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/32353_jpg.rf.98a1496e239685ced8560bfd07baa513.jpg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/12147_jpg.rf.f51709a3fcaf689cae2def01fc562693.jpg",
+      "b": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/32363_jpg.rf.c50678f2a381c54afb56cc9ff70a5fb7.jpg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 4,
+      "a": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/12147_jpg.rf.f51709a3fcaf689cae2def01fc562693.jpg",
+      "b": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/32365_jpg.rf.500abe733509c5c0a6db50ed220beff4.jpg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/12147_jpg.rf.f51709a3fcaf689cae2def01fc562693.jpg",
+      "b": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/32426_jpg.rf.6f9cfbd2712b939280e0b4b47760e1e5.jpg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 4,
+      "a": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/12147_jpg.rf.f51709a3fcaf689cae2def01fc562693.jpg",
+      "b": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/32427_jpg.rf.86fb0855646977fb9c1c93c910d2c106.jpg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/12147_jpg.rf.f51709a3fcaf689cae2def01fc562693.jpg",
+      "b": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/32434_jpg.rf.b9d8295e4a0fb72bdd09e9f83b77b17b.jpg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/12147_jpg.rf.f51709a3fcaf689cae2def01fc562693.jpg",
+      "b": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/32444_jpg.rf.852f40ea1ba98afc38075244cba202c4.jpg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/12147_jpg.rf.f51709a3fcaf689cae2def01fc562693.jpg",
+      "b": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/32614_jpg.rf.66001ed6ac8654eacf3072e992fa9a89.jpg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/12147_jpg.rf.f51709a3fcaf689cae2def01fc562693.jpg",
+      "b": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/32693_jpg.rf.8b95dc22e51953470e619dcbb942018c.jpg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 4,
+      "a": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/12147_jpg.rf.f51709a3fcaf689cae2def01fc562693.jpg",
+      "b": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/32695_jpg.rf.6a35ef33cffeb50248ba3c5b547e6133.jpg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/12147_jpg.rf.f51709a3fcaf689cae2def01fc562693.jpg",
+      "b": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/32715_jpg.rf.754135d7acb8d0760e5f08e1ea7401eb.jpg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/12147_jpg.rf.f51709a3fcaf689cae2def01fc562693.jpg",
+      "b": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/32768_jpg.rf.88cee97b8eb63d4db483faad3f2e0d13.jpg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/12147_jpg.rf.f51709a3fcaf689cae2def01fc562693.jpg",
+      "b": "weedcrop:WeedCrop.v1i.yolov5pytorch/train/images/32984_jpg.rf.ffe563d1749cc31e7b9c1f6887904b53.jpg",
+      "review_status": "pending_manual_review"
+    }
+  ],
+  "cross_source_exact_matches": 0,
+  "cross_source_candidates": 0,
+  "cross_source_examples": [],
+  "images_duplicate_free": 2822,
+  "unique_class_labels": 1,
+  "unique_group_keys": 1544,
+  "image_suffixes": [
+    ".jpg"
+  ],
+  "notes": "Perceptual pairs are screening candidates, not proof of duplication; hidden and stepped images differ by design.",
+  "generated_at_utc": "2026-10-23T13:49:04.907624+00:00",
+  "archive": "/data/datasets/Stage5B/weedcrop/weedcrop.zip",
+  "archive_sha256": "db7a8ccb22a9385ef1603e1e624b08c512efc4eb2bb14d34c038966f46bbdfbb",
+  "upstream_pending_reclassified": 0,
+  "cross_source_duplicates_in_adopted_corpus": 0
+}

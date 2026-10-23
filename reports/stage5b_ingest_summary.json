@@ -1,0 +1,45 @@
+{
+  "sources": [
+    {
+      "source_id": "sesame_weed",
+      "files_found": 1300,
+      "files_decoded": 1300,
+      "decode_failures": 0,
+      "exact_duplicate_pairs": 0,
+      "perceptual_candidate_pairs": 1547,
+      "cross_source_exact_matches": 1300,
+      "cross_source_candidates": 1045,
+      "images_duplicate_free": 1300,
+      "unique_group_keys": 1300,
+      "manifest": "/fj/jepa-二维图像任务/data/registry/ingested/sesame_weed_stage5b_manifest.csv"
+    },
+    {
+      "source_id": "applebbch81",
+      "files_found": 1838,
+      "files_decoded": 1838,
+      "decode_failures": 0,
+      "exact_duplicate_pairs": 0,
+      "perceptual_candidate_pairs": 0,
+      "cross_source_exact_matches": 0,
+      "cross_source_candidates": 0,
+      "images_duplicate_free": 1838,
+      "unique_group_keys": 140,
+      "manifest": "/fj/jepa-二维图像任务/data/registry/ingested/applebbch81_stage5b_manifest.csv"
+    },
+    {
+      "source_id": "weedcrop",
+      "files_found": 2822,
+      "files_decoded": 2822,
+      "decode_failures": 0,
+      "exact_duplicate_pairs": 0,
+      "perceptual_candidate_pairs": 11104,
+      "cross_source_exact_matches": 0,
+      "cross_source_candidates": 0,
+      "images_duplicate_free": 2822,
+      "unique_group_keys": 1544,
+      "manifest": "/fj/jepa-二维图像任务/data/registry/ingested/weedcrop_stage5b_manifest.csv"
+    }
+  ],
+  "reference_rows": 39963,
+  "generated_at_utc": "2026-10-23T13:49:04.909076+00:00"
+}

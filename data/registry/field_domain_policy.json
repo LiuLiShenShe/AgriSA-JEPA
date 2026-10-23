@@ -1,0 +1,93 @@
+{
+  "policy_version": "stage5b-field-domain-policy-v1",
+  "domains": [
+    "FIELD_IN_SITU",
+    "ORCHARD_IN_SITU",
+    "PROTECTED_CULTIVATION",
+    "CONTROLLED_LAB",
+    "UAV_AERIAL",
+    "SATELLITE_REMOTE",
+    "UNKNOWN"
+  ],
+  "field_domains": [
+    "FIELD_IN_SITU",
+    "ORCHARD_IN_SITU"
+  ],
+  "excluded_by_default": [
+    "CONTROLLED_LAB",
+    "PROTECTED_CULTIVATION",
+    "UAV_AERIAL",
+    "SATELLITE_REMOTE",
+    "UNKNOWN"
+  ],
+  "evidence_types": [
+    "official_documentation",
+    "manual_inspection",
+    "model_assisted_inspection",
+    "filename_or_metadata_only",
+    "none"
+  ],
+  "confidences": [
+    "high",
+    "medium",
+    "low",
+    "unknown"
+  ],
+  "review_statuses": [
+    "reviewed",
+    "model_assisted_pending_human",
+    "pending_human_review",
+    "unreviewed"
+  ],
+  "rules": {
+    "candidate": {
+      "allowed_domains": [
+        "FIELD_IN_SITU",
+        "ORCHARD_IN_SITU"
+      ],
+      "allowed_evidence": [
+        "manual_inspection",
+        "model_assisted_inspection",
+        "official_documentation"
+      ],
+      "allowed_confidence": [
+        "high",
+        "medium"
+      ],
+      "allowed_review_status": [
+        "reviewed",
+        "model_assisted_pending_human"
+      ],
+      "note": "A CANDIDATE row may rest on documented capture setting or model-assisted sample inspection, but the review status must say which."
+    },
+    "freeze": {
+      "allowed_domains": [
+        "FIELD_IN_SITU",
+        "ORCHARD_IN_SITU"
+      ],
+      "allowed_evidence": [
+        "manual_inspection",
+        "official_documentation"
+      ],
+      "allowed_confidence": [
+        "high",
+        "medium"
+      ],
+      "allowed_review_status": [
+        "reviewed"
+      ],
+      "note": "Freezing requires a non-model evidence type and a human review record; a model prediction is never a confirmation."
+    }
+  },
+  "quality_gate": {
+    "min_short_side_px": 224,
+    "min_short_side_rationale": "Agri-FM+ excludes sources below 224x224; the side is measured before any resize and images are never upscaled to pass the gate.",
+    "exclude_grayscale": true,
+    "max_blur_laplacian_variance_below": 0.0,
+    "blur_note": "blur is reported as a distribution; only an explicit per-source threshold may reject images"
+  },
+  "holdout_rule": {
+    "enforced": true,
+    "note": "A source listed in downstream_holdout_sources.csv is excluded from every pretraining manifest, whatever its domain label."
+  }
+}
