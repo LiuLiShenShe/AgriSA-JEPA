@@ -216,7 +216,7 @@ PhenoBench 语义分割 mIoU、GWHD 检测 mAP50-95、PlantDoc 检测 mAP（数�
 
 **31. 运行的 pytest 结果。**
 
-`499 passed, 7 skipped`（Stage 5A 基线为 466 passed / 7 skipped；新增 33 条
+`500 passed, 7 skipped`（Stage 5A 基线为 466 passed / 7 skipped；新增 34 条
 Stage 5B 测试，无既有测试回归）。
 
 **32. 修改的代码和配置。**

@@ -239,20 +239,26 @@ def build_registry_v2(registry_rows, sources, review_count=None):
     review_by_row = {s['registry_row']: s for s in sources}
     by_id = {s['source_id']: s for s in sources}
     review_count = review_count or {}
+    from src.registry.source_domains import label_for
     rows = []
     for row in registry_rows:
         new = dict(row)
         sid = row['source_id']
-        src = by_id.get(sid) or review_by_row.get(sid)
-        if src is not None:
-            new['acquisition_domain'] = src['acquisition_domain']
-            new['domain_evidence_type'] = src['domain_evidence_type']
-            new['domain_confidence'] = src['domain_confidence']
-            new['domain_review_status'] = 'pending_human_review'
-            new['domain_review_reason'] = src['domain_review_reason']
-            if review_count.get(sid):
-                new['files_downloaded'] = review_count[sid]
-                new['images_decoded'] = review_count[sid]
+        # Every registry row gets a domain label from the Stage 5B ledger.  A
+        # derivative download (weedcrop) must NOT relabel its upstream source
+        # (ronin); the derivative is recorded separately in
+        # field_source_download.csv.
+        entry = label_for(sid)
+        new['acquisition_domain'] = entry['acquisition_domain']
+        new['domain_evidence_type'] = entry['evidence_type']
+        new['domain_confidence'] = entry['confidence']
+        new['domain_review_status'] = ('reviewed'
+                                       if entry['evidence_type'] == 'official_documentation'
+                                       else 'unreviewed')
+        new['domain_review_reason'] = entry['reason']
+        if review_count.get(sid):
+            new['files_downloaded'] = review_count[sid]
+            new['images_decoded'] = review_count[sid]
         rows.append(new)
     existing = {r['source_id'] for r in rows}
     for extra in NEW_REGISTRY_ROWS:
@@ -264,7 +270,7 @@ def build_registry_v2(registry_rows, sources, review_count=None):
             new['acquisition_domain'] = src['acquisition_domain']
             new['domain_evidence_type'] = src['domain_evidence_type']
             new['domain_confidence'] = src['domain_confidence']
-            new['domain_review_status'] = 'pending_human_review'
+            new['domain_review_status'] = 'model_assisted_pending_human'
             new['domain_review_reason'] = src['domain_review_reason']
             count = review_count.get(extra['source_id'])
             if count:

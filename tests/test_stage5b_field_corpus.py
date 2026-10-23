@@ -420,3 +420,20 @@ def test_triage_marks_lab_like_images_for_review():
              'vegetation_fraction': 0.4}
     suggestion, _ = suggest_domain(field, 'field.jpg')
     assert suggestion == 'FIELD_IN_SITU'
+
+
+def test_registry_v2_labels_every_row():
+    """Every Stage 5B registry row carries a domain label and a reason."""
+    path = ROOT / 'data/registry/agricultural_sources_v2.csv'
+    if not path.is_file():
+        pytest.skip('registry v2 not built on this machine')
+    with open(path, newline='', encoding='utf-8') as handle:
+        rows = list(csv.DictReader(handle))
+    assert len(rows) >= 64
+    for row in rows:
+        assert row['acquisition_domain'] in DOMAINS
+        assert row['domain_evidence_type']
+        assert row['domain_review_reason']
+    # the derivative upload must not relabel its upstream source
+    ronin = next(r for r in rows if r['source_id'] == 'ronin')
+    assert ronin['acquisition_domain'] == 'FIELD_IN_SITU'
