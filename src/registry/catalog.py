@@ -504,6 +504,7 @@ def agrifm_sources() -> List[Dict[str, object]]:
             'https://doi.org/10.17632/8h3s6jkyff.1', category='tomato phenotyping'),
         _row(
             source_id='agrifm_ref93',
+             official_name='PlantVillage (colour images)',
              catalog_groups='agrifmplus;project_d1',
              paper=f'{FM_PAPER_CITE} ref [93]',
              year='2018', paper_url=FM_PAPER,
@@ -560,9 +561,37 @@ def downstream_sources() -> List[Dict[str, object]]:
                               'so their GWHD test images may have been seen during '
                               'pretraining. Our protocol must exclude all GWHD images '
                               'from continued pretraining.',
-             state='LICENSE_VERIFIED',
+             state='APPROVED', downloaded='yes',
+             files_remote=6518, files_downloaded=6518,
+             images_decoded=6515, images_duplicate_free=6514,
+             images_approved=6512,
+             human_review_status='auto+reviewed',
+             download_evidence='Zenodo record 5092309: gwhd_2021.zip, '
+                               '10,215,190,132 bytes, MD5 22b4b542c9ae7e056d7fcdeae9ecaed5 '
+                               'matches the official value; SHA-256 '
+                               '87649215c9dd413af26d295cbf54f6f245da8d49747a2f13058133ff64b01f68',
+             decode_evidence='6,515 images on disk, 6,515 decode as 1024x1024 RGB, '
+                             '0 decode errors (reports/stage5a_gwhd_data_audit.json)',
+             duplicate_evidence='1 byte-level duplicate pair and 1 decoded-pixel '
+                                'duplicate pair inside GWHD; perceptual pairs are '
+                                'candidates only. Cross-source vs the D1 candidate '
+                                'manifest: 0 exact and 0 pHash matches at <=6.',
+             split_evidence='Official competition_train/val/test CSVs used verbatim; '
+                            '3,655 / 1,476 / 1,381 images after dropping 3 duplicate '
+                            'rows (2 train, 1 test); 0 shared image names and 0 shared '
+                            'acquisition domains across splits.',
+             approval_evidence='Audit verdict: checksum_verified=true, '
+                               'labels_parse=true, official_splits_preserved=true, '
+                               'ready_for_training=true. Approved as the Stage 5A '
+                               'downstream evaluation set only; excluded from the D1 '
+                               'corpus by HOLDOUT_SOURCE_IDS.',
              evidence='Zenodo API record fetched 2026-10-23; single file gwhd_2021.zip '
-                      '(10,215,190,132 bytes)'),
+                      '(10,215,190,132 bytes). 6,518 archive members = 6,515 images + '
+                      '3 official CSVs; 3 images carry no label row. Paper-reported '
+                      '6,514 images, 6,515 files on disk — both recorded as-is.',
+             notes='Downstream holdout: must never enter a pretraining corpus. '
+                   'Agri-FM+ Table 1 ref [31] includes GWHD in Agri-147K, so their '
+                   'GWHD test images may have been seen during pretraining.'),
         _row(source_id='plantdoc', official_name='PlantDoc',
              catalog_groups='agrifmplus;downstream',
              paper='Singh et al., CoDS-COMAD 2020, pp. 249-253',

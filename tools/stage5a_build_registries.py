@@ -203,8 +203,11 @@ def write_catalog_md(path, rows, checks, groups, holdouts):
         '- **远端文件数量**只在真实列出归档目录后填写。',
         '- **实际已取得数量**以本地目录为准；**解码通过**以 Pillow 实际解码为准；'
         '**最终纳入**必须通过去重、隔离与人工复核。',
-        '- 当前 **没有任何一行达到 `APPROVED`/`FROZEN`**；D1 candidate 的冻结'
-        '在 `reports/stage5a_summary.md` 中单独报告。',
+        f"- 状态分布：{dict(sorted(counts.items()))}。",
+        f"- `APPROVED` 行 {counts.get('APPROVED', 0)} 个、`FROZEN` 行 "
+        f"{counts.get('FROZEN', 0)} 个。任何 `APPROVED` 行都必须是下游保留集"
+        f"（只批准用于评价，不计入预训练）；D1 candidate 的状态见 "
+        f"`reports/stage5a_summary.md`。",
         '',
         '## 5. 未找到 / 不可达资源',
         '',
@@ -327,7 +330,8 @@ def write_benchmark_md(path):
         '- Agri-FM+ 的 GWHD 结果使用 Detectron2 Faster R-CNN + 20K iterations；'
         '与我们的冻结 ViT-H + 检测头协议不可直接比数字，只能比“同协议内 A vs B”。',
         '- PhenoBench 已有本项目真实结果（A 71.68 / B_2000 73.10 mIoU）；'
-        '其余 11 项本阶段均为 `NOT_RUN`。',
+        'GWHD 2021 检测已在 Stage 5A 跑通 A/B（`reports/stage5a_gwhd_results.md`）；'
+        '其余 10 项本阶段均为 `NOT_RUN`。',
         '',
         '## 统一评价接口',
         '',

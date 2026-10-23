@@ -28,7 +28,7 @@ from __future__ import annotations
 import csv
 import json
 import re
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict, Iterable, List, Optional, Sequence, Tuple
 
@@ -103,16 +103,32 @@ class GWHDSplit:
     boxes: List[List[Tuple[float, float, float, float]]]
     widths: List[int]
     heights: List[int]
+    domains: List[str] = field(default_factory=list)
+    dropped_duplicates: List[Dict[str, object]] = field(default_factory=list)
 
     def __len__(self) -> int:
         return len(self.images)
 
 
-def read_split(csv_path: Path, root: Path, name: str) -> GWHDSplit:
+def read_split(csv_path: Path, root: Path, name: str,
+               deduplicate: bool = True) -> GWHDSplit:
+    """Read one official CSV.
+
+    The official release contains a handful of *rows* that repeat an image name
+    with a different ``domain`` and a different box set (3 rows out of 6,515 in
+    v2021).  Because the filename is a content hash, these are the same pixels
+    annotated twice.  ``deduplicate=True`` keeps the first official row and
+    records the dropped rows verbatim in ``dropped_duplicates``; it never
+    silently merges boxes.  A name repeated *across* splits is still a hard
+    error (checked by ``split_isolation_report``).
+    """
     images: List[str] = []
     boxes: List[List[Tuple[float, float, float, float]]] = []
     widths: List[int] = []
     heights: List[int] = []
+    domains: List[str] = []
+    dropped: List[Dict[str, object]] = []
+    seen: Dict[str, int] = {}
     with open(csv_path, newline='', encoding='utf-8-sig') as handle:
         reader = csv.DictReader(handle)
         if not reader.fieldnames:
@@ -121,6 +137,7 @@ def read_split(csv_path: Path, root: Path, name: str) -> GWHDSplit:
         name_col = _column(reader.fieldnames, NAME_COLUMNS)
         width_col = _column(reader.fieldnames, ('width', 'img_width'))
         height_col = _column(reader.fieldnames, ('height', 'img_height'))
+        domain_col = _column(reader.fieldnames, ('domain', 'sub_dataset'))
         if box_col is None or name_col is None:
             raise ValueError(
                 f'{csv_path}: cannot find box/name columns in {reader.fieldnames}')
@@ -128,13 +145,25 @@ def read_split(csv_path: Path, root: Path, name: str) -> GWHDSplit:
             image = str(row[name_col]).strip()
             if not image:
                 continue
+            if image.lower() in seen:
+                if deduplicate:
+                    dropped.append({
+                        'image': image,
+                        'domain': str(row.get(domain_col, '')) if domain_col else '',
+                        'boxes': len(parse_boxes(row.get(box_col))),
+                        'kept_domain': domains[seen[image.lower()]],
+                        'reason': 'duplicate image name within official split',
+                    })
+                    continue
+                raise ValueError(f'{csv_path}: duplicate image names inside one split')
+            seen[image.lower()] = len(images)
             images.append(image)
             boxes.append(parse_boxes(row.get(box_col)))
             widths.append(int(float(row[width_col])) if width_col and row.get(width_col) else 0)
             heights.append(int(float(row[height_col])) if height_col and row.get(height_col) else 0)
-    if len({p.lower() for p in images}) != len(images):
-        raise ValueError(f'{csv_path}: duplicate image names inside one split')
-    return GWHDSplit(name, csv_path, images, boxes, widths, heights)
+            domains.append(str(row.get(domain_col, '')) if domain_col else '')
+    return GWHDSplit(name, csv_path, images, boxes, widths, heights,
+                     domains=domains, dropped_duplicates=dropped)
 
 
 @dataclass
@@ -146,7 +175,7 @@ class BoxValidation:
     out_of_bounds: int
     partially_outside: int
     duplicate_boxes: int
-    suspicious_xy_swap: int
+    very_wide_boxes: int
     examples: List[Dict[str, object]]
 
     def to_dict(self) -> Dict[str, object]:
@@ -157,7 +186,7 @@ class BoxValidation:
             'out_of_bounds': self.out_of_bounds,
             'partially_outside': self.partially_outside,
             'duplicate_boxes': self.duplicate_boxes,
-            'suspicious_xy_swap': self.suspicious_xy_swap,
+            'very_wide_boxes': self.very_wide_boxes,
             'examples': self.examples,
         }
 
@@ -250,6 +279,18 @@ class GWHDDataset(Dataset):
         self.train = train
         self.hflip_prob = hflip_prob
         self.min_box_size = min_box_size
+        self._index: Optional[Dict[str, Path]] = None
+
+    def _name_index(self) -> Dict[str, Path]:
+        if self._index is None:
+            self._index = {}
+            for path in self.root.rglob('*'):
+                if path.is_file():
+                    if path.name in self._index:
+                        raise RuntimeError(
+                            f'duplicate image filename in {self.root}: {path.name}')
+                    self._index[path.name] = path
+        return self._index
 
     def __len__(self) -> int:
         return len(self.split)
@@ -258,12 +299,10 @@ class GWHDDataset(Dataset):
         direct = self.root / name
         if direct.is_file():
             return direct
-        matches = list(self.root.rglob(Path(name).name))
-        if len(matches) != 1:
-            raise FileNotFoundError(
-                f'{name}: expected exactly one match under {self.root}, '
-                f'found {len(matches)}')
-        return matches[0]
+        path = self._name_index().get(Path(name).name)
+        if path is None:
+            raise FileNotFoundError(f'{name}: no image with this filename under {self.root}')
+        return path
 
     def __getitem__(self, index: int):
         name = self.split.images[index]
@@ -300,7 +339,11 @@ def collate(batch):
 def split_isolation_report(splits: Dict[str, GWHDSplit]) -> Dict[str, object]:
     """Check that no image (or acquisition domain) leaks across official splits."""
     names = {k: {n.lower() for n in v.images} for k, v in splits.items()}
-    groups = {k: {image_group(n) for n in v.images} for k, v in splits.items()}
+    groups = {
+        k: ({d for d in v.domains if d} if any(v.domains)
+            else {image_group(n) for n in v.images})
+        for k, v in splits.items()
+    }
     overlaps = {}
     for a, b in (('train', 'val'), ('train', 'test'), ('val', 'test')):
         shared_names = names[a] & names[b]
@@ -314,4 +357,6 @@ def split_isolation_report(splits: Dict[str, GWHDSplit]) -> Dict[str, object]:
         'counts': {k: len(v) for k, v in splits.items()},
         'groups': {k: len(v) for k, v in groups.items()},
         'overlaps': overlaps,
+        'dropped_duplicate_rows': {k: len(v.dropped_duplicates)
+                                   for k, v in splits.items()},
     }

@@ -105,11 +105,14 @@ def test_read_split_and_official_isolation(tmp_path):
     assert not report['overlaps']['train_test']['shared_groups']
 
 
-def test_read_split_rejects_duplicate_names(tmp_path):
+def test_read_split_dedupes_duplicate_names_and_strict_mode_refuses(tmp_path):
     path = tmp_path / 'competition_train.csv'
     _write_split_csv(path, ['a.jpg,1024,1024,[]', 'a.jpg,1024,1024,[]'])
+    split = read_split(path, tmp_path, 'train')
+    assert len(split) == 1
+    assert len(split.dropped_duplicates) == 1
     with pytest.raises(ValueError):
-        read_split(path, tmp_path, 'train')
+        read_split(path, tmp_path, 'train', deduplicate=False)
 
 
 def test_read_split_rejects_missing_box_column(tmp_path):
@@ -141,6 +144,24 @@ def test_dataset_never_invents_boxes(tmp_path):
     _, target = GWHDDataset(tmp_path, split)[0]
     assert target['boxes'].shape == (0, 4)
     assert target['labels'].shape == (0,)
+
+
+def test_dataset_length_and_hflip_box_mapping(tmp_path):
+    image_dir = tmp_path / 'images'
+    image_dir.mkdir()
+    array = np.zeros((32, 32, 3), dtype=np.uint8)
+    array[:, :16] = 255                      # left half white, so flip is visible
+    for name in ('a.jpg', 'b.jpg'):
+        Image.fromarray(array).save(image_dir / name)
+    split = GWHDSplit('train', tmp_path / 'c.csv', ['a.jpg', 'b.jpg'],
+                      [[(4, 4, 16, 16)], [(2, 2, 8, 8)]], [32, 32], [32, 32])
+    dataset = GWHDDataset(tmp_path, split, train=True, hflip_prob=1.0)
+    assert len(dataset) == 2
+    image, target = dataset[0]
+    # x1' = width - x2, x2' = width - x1
+    assert target['boxes'].tolist() == [[16.0, 4.0, 28.0, 16.0]]
+    assert float(image[:, :, :16].mean()) < 0.1   # white half moved to the right
+    assert float(image[:, :, 16:].mean()) > 0.9
 
 
 # --------------------------------------------------------------------------- #
@@ -231,3 +252,33 @@ def test_positive_transformed_boxes_have_positive_area():
     _, targets = transform([torch.zeros(3, 1024, 1024)], [target])
     box = targets[0]['boxes'][0]
     assert box[2] > box[0] and box[3] > box[1]
+
+
+# --------------------------------------------------------------------------- #
+# checkpoint contents
+# --------------------------------------------------------------------------- #
+
+def test_trainable_state_dict_keeps_neck_and_drops_encoder():
+    """A head-only checkpoint that silently lost the neck could not be re-evaluated."""
+    import torch.nn as nn
+
+    from src.downstream.detection_train import trainable_state_dict
+
+    encoder = vit_tiny(img_size=[224], patch_size=14)
+    backbone = ViTFPNBackbone(encoder, input_size=224, out_channels=64,
+                              embed_dim=192, frozen=True)
+
+    class Wrap(nn.Module):
+        def __init__(self, b):
+            super().__init__()
+            self.backbone = b
+            self.rpn = nn.Linear(4, 4)
+
+    model = Wrap(backbone)
+    state = trainable_state_dict(model)
+    assert any(k.startswith('backbone.lateral') for k in state)
+    assert any(k.startswith('backbone.smooth') for k in state)
+    assert not any(k.startswith('backbone.encoder') for k in state)
+    assert any(k.startswith('rpn') for k in state)
+    trainable = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    assert sum(v.numel() for v in state.values()) == trainable

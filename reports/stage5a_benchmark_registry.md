@@ -4,7 +4,7 @@
 
 | benchmark_id | 任务 | 数据集 | 指标 | 官方工具 | 重叠风险 | 本项目状态 |
 |---|---|---|---|---|---|---|
-| gwhd2021_det | object_detection | Global Wheat Head Dataset 2021 | mAP (COCO definition) / AP50 / AP50:95 | pycocotools COCOeval (official split files) | HIGH in Agri-FM+ (ref [31] in Agri-147K); excluded from all of our pretraining manifests | NOT_RUN |
+| gwhd2021_det | object_detection | Global Wheat Head Dataset 2021 | mAP (COCO definition) / AP50 / AP50:95 | pycocotools COCOeval (official split files) | HIGH in Agri-FM+ (ref [31] in Agri-147K); excluded from all of our pretraining manifests | RUN |
 | plantdoc_det | object_detection | PlantDoc | mAP | COCOeval | not in our pretraining sources | NOT_RUN |
 | minneapple_det | object_detection | MinneApple | mAP | COCOeval | none | NOT_RUN |
 | disease_det | object_detection | Roboflow Detecting-Diseases | mAP | COCOeval | none | NOT_RUN |
@@ -21,7 +21,7 @@
 
 - **GWHD 2021 目标检测**（6,514 张，COCO bbox）与 **GWHD Instance Segmentation**（582 张，Roboflow mask）是两个不同资源，不能把 bbox 当 mask。
 - Agri-FM+ 的 GWHD 结果使用 Detectron2 Faster R-CNN + 20K iterations；与我们的冻结 ViT-H + 检测头协议不可直接比数字，只能比“同协议内 A vs B”。
-- PhenoBench 已有本项目真实结果（A 71.68 / B_2000 73.10 mIoU）；其余 11 项本阶段均为 `NOT_RUN`。
+- PhenoBench 已有本项目真实结果（A 71.68 / B_2000 73.10 mIoU）；GWHD 2021 检测已在 Stage 5A 跑通 A/B（`reports/stage5a_gwhd_results.md`）；其余 10 项本阶段均为 `NOT_RUN`。
 
 ## 统一评价接口
 

@@ -1,0 +1,136 @@
+{
+  "protocol": {
+    "backbone": "B",
+    "backbone_checkpoint": "/home/test/agrisa_runs/stage3b_random_2000/jepa-encoder-step2000.pth",
+    "backbone_sha256": "1c4e1c484d89245ea3702c9603c62355bdfcd07be8594df020e6e3cf4d94d23f",
+    "input_size": 518,
+    "iterations": 20000,
+    "batch_size": 2,
+    "lr": 0.0025,
+    "momentum": 0.9,
+    "weight_decay": 0.0001,
+    "warmup_iterations": 500,
+    "eval_every": 2000,
+    "min_box_size": 2.0,
+    "hflip_prob": 0.5,
+    "score_thresh": 0.01,
+    "seed": 0,
+    "architecture": "FasterRCNN + SimpleFeaturePyramid(ViT-H/14 patch tokens)",
+    "anchors": "4 levels (16,32,64,128) x (0.5,1.0,2.0)",
+    "optimizer": "SGD(momentum, nesterov=False) on head/neck only",
+    "scheduler": "linear warmup + cosine to 0",
+    "data_root": "/data/datasets/GWHD2021/extracted",
+    "split_files": {
+      "test": "/data/datasets/GWHD2021/extracted/gwhd_2021/competition_test.csv",
+      "train": "/data/datasets/GWHD2021/extracted/gwhd_2021/competition_train.csv",
+      "val": "/data/datasets/GWHD2021/extracted/gwhd_2021/competition_val.csv"
+    },
+    "split_counts": {
+      "test": 1381,
+      "train": 3655,
+      "val": 1476
+    },
+    "split_isolation": {
+      "counts": {
+        "test": 1381,
+        "train": 3655,
+        "val": 1476
+      },
+      "groups": {
+        "test": 18,
+        "train": 18,
+        "val": 11
+      },
+      "overlaps": {
+        "train_val": {
+          "shared_image_names": 0,
+          "shared_groups": [],
+          "shared_group_count": 0
+        },
+        "train_test": {
+          "shared_image_names": 0,
+          "shared_groups": [],
+          "shared_group_count": 0
+        },
+        "val_test": {
+          "shared_image_names": 0,
+          "shared_groups": [],
+          "shared_group_count": 0
+        }
+      },
+      "dropped_duplicate_rows": {
+        "test": 1,
+        "train": 2,
+        "val": 0
+      }
+    },
+    "trainable_parameters": 17188121,
+    "frozen_parameters": 632186880,
+    "gpu": "NVIDIA RTX A6000"
+  },
+  "final_val": {
+    "map": 0.08282966166734695,
+    "map_50": 0.27369099855422974,
+    "map_75": 0.028192074969410896,
+    "map_small": 0.000857852806802839,
+    "map_medium": 0.06454461067914963,
+    "map_large": 0.11574248224496841,
+    "mar_1": 0.012363857589662075,
+    "mar_10": 0.07194624096155167,
+    "mar_100": 0.20469704270362854,
+    "mar_small": 0.002902374602854252,
+    "mar_medium": 0.19058993458747864,
+    "mar_large": 0.23640176653862,
+    "map_per_class": -1.0,
+    "mar_100_per_class": -1.0,
+    "classes": 1.0,
+    "precision@0.5": 0.34950074826427224,
+    "recall@0.5": 0.3212393172029675,
+    "images": 1476,
+    "seconds": 95.23,
+    "ms_per_image": 64.52
+  },
+  "final_test": {
+    "map": 0.018725547939538956,
+    "map_50": 0.0784866139292717,
+    "map_75": 0.00404023053124547,
+    "map_small": 0.00238023791462183,
+    "map_medium": 0.023019226267933846,
+    "map_large": 0.02499144710600376,
+    "mar_1": 0.0034808670170605183,
+    "mar_10": 0.020572131499648094,
+    "mar_100": 0.07524518668651581,
+    "mar_small": 0.0008798436028882861,
+    "mar_medium": 0.0862225815653801,
+    "mar_large": 0.13989205658435822,
+    "map_per_class": -1.0,
+    "mar_100_per_class": -1.0,
+    "classes": 1.0,
+    "precision@0.5": 0.2829761282453389,
+    "recall@0.5": 0.09638411205246525,
+    "images": 1381,
+    "seconds": 62.82,
+    "ms_per_image": 45.49
+  },
+  "train_seconds": 4301.3,
+  "peak_gpu_gb": 2.89552640914917,
+  "metric_definition": {
+    "name": "gwhd_coco_ap",
+    "dataset": "gwhd2021",
+    "task": "object_detection",
+    "primary": "AP50:95",
+    "secondary": [
+      "AP50",
+      "AP75",
+      "AP_small",
+      "AP_medium",
+      "AP_large",
+      "AR100",
+      "precision@0.5",
+      "recall@0.5"
+    ],
+    "tool": "pycocotools COCOeval via torchmetrics MeanAveragePrecision",
+    "notes": "Single class (wheat head). 0.50:0.95 IoU, 101-point interpolation. Absolute numbers are not comparable to Agri-FM+ Detectron2 runs; only A vs B under this identical protocol is."
+  },
+  "metric_note": "AP50:95 follows COCO IoU 0.50:0.95. Absolute mAP is not comparable to Agri-FM+ Detectron2 numbers; A vs B is."
+}

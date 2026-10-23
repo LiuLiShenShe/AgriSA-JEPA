@@ -19,7 +19,7 @@ Outputs (per run directory)
 ``train_log.csv``      iteration, losses, LR, images/s
 ``eval.jsonl``         one line per evaluation point (val)
 ``results.json``       final val + test metrics, cost, parameter counts
-``head.pth``           trainable-head state dict only
+``head.pth``           trainable state dict (neck + RPN + ROI, no encoder)
 """
 
 from __future__ import annotations
@@ -62,6 +62,18 @@ def seed_everything(seed: int) -> None:
     torch.manual_seed(seed)
     torch.cuda.manual_seed_all(seed)
     os.environ['PYTHONHASHSEED'] = str(seed)
+
+
+def trainable_state_dict(model) -> Dict[str, torch.Tensor]:
+    """The trained part of the detector: neck + RPN/ROI, minus the encoder.
+
+    ``model.state_dict()`` exposes the frozen ViT under ``backbone.encoder.*``
+    (632 M parameters, 2.4 GB); the neck lives under ``backbone.lateral`` /
+    ``backbone.smooth`` and **must** be saved with the head, otherwise the
+    checkpoint cannot reconstruct the evaluated model.
+    """
+    return {k: v for k, v in model.state_dict().items()
+            if not k.startswith('backbone.encoder.')}
 
 
 def precision_recall(preds: List[Dict[str, torch.Tensor]],
@@ -293,13 +305,13 @@ def main() -> int:
         torch.nn.utils.clip_grad_norm_(trainable, 10.0)
         optimizer.step()
         for key, value in loss_dict.items():
-            running[key] = running.get(key, 0.0) + float(value)
+            running[key] = running.get(key, 0.0) + float(value.detach())
         if (step + 1) % 50 == 0 or step == 0:
             elapsed = time.time() - t0
             ips = (step + 1) * args.batch_size / max(elapsed, 1e-6)
             peak = (torch.cuda.max_memory_allocated(device) / 2**30
                     if device.type == 'cuda' else 0.0)
-            logger.writerow([step + 1, float(loss), running.get('loss_classifier', 0) / 50,
+            logger.writerow([step + 1, float(loss.detach()), running.get('loss_classifier', 0) / 50,
                              running.get('loss_box_reg', 0) / 50,
                              running.get('loss_rpn_box_reg', 0) / 50,
                              running.get('loss_objectness', 0) / 50, lr,
@@ -340,8 +352,9 @@ def main() -> int:
     }
     (out_dir / 'results.json').write_text(
         json.dumps(results, indent=2) + '\n', encoding='utf-8')
-    torch.save({k: v for k, v in model.state_dict().items()
-                if not k.startswith('backbone.')}, out_dir / 'head.pth')
+    # Everything that was trained: neck (backbone.lateral/smooth) + RPN + ROI.
+    # The frozen encoder is the only part that must not be duplicated here.
+    torch.save(trainable_state_dict(model), out_dir / 'head.pth')
     print(f'[{backbone_key}] val AP={final_val.get("map", 0):.4f} '
           f'AP50={final_val.get("map_50", 0):.4f}; '
           f'test AP={final_test.get("map", 0) if final_test else float("nan"):.4f} '

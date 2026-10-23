@@ -50,8 +50,14 @@ def benchmarks() -> List[Dict[str, object]]:
            official_eval_tool='pycocotools COCOeval (official split files)',
            overlap_risk='HIGH in Agri-FM+ (ref [31] in Agri-147K); excluded from '
                         'all of our pretraining manifests',
-           project_status='NOT_RUN',
-           comparable_to_agrifm='yes, if COCO mAP and official split are used'),
+           project_status='RUN',
+           comparable_to_agrifm='yes, if COCO mAP and official split are used',
+           notes='Stage 5A frozen ViT-H + Faster R-CNN, 518 input, 20K iters, '
+                 '2 head seeds. test AP50: A 0.0582±0.0018, B 0.0786±0.0001 '
+                 '(delta +0.0204, 2/2 seeds); test AP50:95: A 0.0146, B 0.0189. '
+                 'A single pretraining seed and a single detection dataset: '
+                 'exploratory, not a paper-level claim. '
+                 'See reports/stage5a_gwhd_results.md.'),
         _b(benchmark_id='plantdoc_det', task='object_detection',
            dataset='PlantDoc', paper_version='Singh et al. 2020',
            paper_url='https://doi.org/10.1145/3371158.3371196',

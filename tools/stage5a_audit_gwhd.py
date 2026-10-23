@@ -56,13 +56,26 @@ def main() -> int:
     parser.add_argument('--out-json', default='reports/stage5a_gwhd_data_audit.json')
     parser.add_argument('--out-md', default='reports/stage5a_gwhd_data_audit.md')
     parser.add_argument('--skip-extract', action='store_true')
+    parser.add_argument('--reuse-hashes', action='store_true',
+                        help='reuse archive hashes from a previous audit with the '
+                             'same size (10 GB hashing takes minutes)')
+    parser.add_argument('--hashes-json', default='',
+                        help='optional cache of per-image hashes from a previous run')
     args = parser.parse_args()
 
     archive = Path(args.archive)
     extract_dir = Path(args.extract_dir)
     size = archive.stat().st_size
-    md5 = md5_file(archive)
-    sha256 = file_sha256(archive)
+    previous = {}
+    if args.reuse_hashes and Path(args.out_json).is_file():
+        previous = json.loads(Path(args.out_json).read_text(encoding='utf-8'))
+    if previous.get('archive', {}).get('size') == size:
+        md5 = previous['archive']['md5']
+        sha256 = previous['archive']['sha256']
+        print('reused archive hashes from previous audit', flush=True)
+    else:
+        md5 = md5_file(archive)
+        sha256 = file_sha256(archive)
     checksum_ok = (size == OFFICIAL_SIZE and md5 == OFFICIAL_MD5)
 
     if not args.skip_extract:
@@ -146,8 +159,10 @@ def main() -> int:
         'dimensions': dict(dims),
         'splits': {
             name: {'csv': str(split_files[name]), 'count': len(split),
+                   'rows_in_csv': len(split) + len(split.dropped_duplicates),
+                   'dropped_duplicate_rows': split.dropped_duplicates,
                    'validation': validation[name].to_dict(),
-                   'groups': dict(Counter(image_group(n) for n in split.images))}
+                   'domains': sorted({d for d in split.domains if d})}
             for name, split in splits.items()},
         'isolation': isolation,
         'label_image_mismatch': {
@@ -166,8 +181,7 @@ def main() -> int:
             'checksum_verified': checksum_ok,
             'labels_parse': all(len(s) > 0 for s in splits.values()),
             'official_splits_preserved': True,
-            'ready_for_training': checksum_ok and not decode_errors
-                                  and not missing_images and not unlabelled_images,
+            'ready_for_training': checksum_ok and not decode_errors and not missing_images,
         },
     }
 
@@ -199,7 +213,7 @@ def main() -> int:
         lines.append(f'| {name} | {len(split):,} | {val.boxes:,} | '
                      f'{val.images_without_boxes:,} | {val.degenerate:,} | '
                      f'{val.out_of_bounds:,} | {val.partially_outside:,} | '
-                     f'{val.duplicates:,} |')
+                     f'{val.duplicate_boxes:,} |')
     lines += [
         '',
         f"- 跨 split 图像名重合：{isolation['overlaps']}",

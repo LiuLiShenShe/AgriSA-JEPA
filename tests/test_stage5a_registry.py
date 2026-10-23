@@ -262,8 +262,24 @@ def test_source_manifest_records_no_frozen_rows():
     path = ROOT / 'data/registry/agricultural_sources_manifest.json'
     manifest = json.loads(path.read_text(encoding='utf-8'))
     assert manifest['states']['FROZEN'] == 0
-    assert manifest['states']['APPROVED'] == 0
     assert manifest['sha256_canonical_csv']
+
+
+def test_only_holdouts_may_be_approved():
+    """APPROVED means accepted for its intended use.
+
+    GWHD is approved **as the evaluation set**; it must never be counted as
+    approved pretraining data, so every APPROVED row has to be a holdout and
+    no row may be FROZEN.
+    """
+    path = ROOT / 'data/registry/agricultural_sources.csv'
+    with open(path, newline='', encoding='utf-8') as handle:
+        rows = list(csv.DictReader(handle))
+    approved = [r for r in rows if r['state'] == 'APPROVED']
+    for row in approved:
+        assert row['downstream_holdout'] == 'yes', row['source_id']
+        assert int(row['images_approved']) > 0, row['source_id']
+    assert not [r for r in rows if r['state'] == 'FROZEN']
 
 
 def test_overlap_candidates_record_all_members():

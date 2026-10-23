@@ -7,7 +7,7 @@
 
 - 台账行数：**63**（AgriField-40K 17 个原始来源、Agri-FM+ Table 1 35 个来源、12 个下游数据集；同一物理数据集在不同目录中保留独立行，不合并计数）。
 - 目录分组：{'agrifield40k': 17, 'agrifmplus': 49, 'project_v1': 5, 'downstream': 12, 'project_d1': 1}
-- 状态分布：{'DISCOVERED': 1, 'URL_VERIFIED': 26, 'LICENSE_VERIFIED': 28, 'DOWNLOADED': 0, 'DECODED': 0, 'DUPLICATE_SCREENED': 1, 'SPLIT_CHECKED': 7, 'APPROVED': 0, 'FROZEN': 0, 'BLOCKED': 0}
+- 状态分布：{'DISCOVERED': 1, 'URL_VERIFIED': 26, 'LICENSE_VERIFIED': 27, 'DOWNLOADED': 0, 'DECODED': 0, 'DUPLICATE_SCREENED': 1, 'SPLIT_CHECKED': 7, 'APPROVED': 1, 'FROZEN': 0, 'BLOCKED': 0}
 - 下游 holdout：**12** 个数据集，全部禁止进入预训练语料。
 
 ### 状态含义
@@ -71,7 +71,7 @@
 | agrifm_ref90 | Tomato Plant Factory Dataset | agrifmplus | 520 |  |  |  | unverified | URL_VERIFIED | no |
 | agrifm_ref95 | Sugar Beet Nutrient Deficiency RGB | agrifmplus | 3600 |  |  |  | unverified | URL_VERIFIED | no |
 | deepweeds | DeepWeeds | agrifmplus;downstream | 17509 |  |  |  | CC-BY-4.0 | LICENSE_VERIFIED | yes |
-| gwhd_2021 | Global Wheat Head Dataset 2021 | agrifmplus;downstream | 6514 |  |  |  | CC-BY-4.0 | LICENSE_VERIFIED | yes |
+| gwhd_2021 | Global Wheat Head Dataset 2021 | agrifmplus;downstream | 6514 | 6518 | 6518 | 6515 | CC-BY-4.0 | APPROVED | yes |
 | gwhd_instance_seg | GWHD Instance Segmentation (Roboflow wheat-seg) | agrifmplus;downstream | 582 |  |  |  | CC-BY-4.0 (Roboflow dataset page) | LICENSE_VERIFIED | yes |
 | minneapple | MinneApple | agrifmplus;downstream | 1001 |  |  |  | research use (see repository) | LICENSE_VERIFIED | yes |
 | multiclass_weeds | Multiclass Weeds Dataset | agrifmplus;downstream | 7872 |  |  |  | CC-BY-4.0 (figshare record) | LICENSE_VERIFIED | yes |
@@ -79,7 +79,7 @@
 | plantseg | PlantSeg | agrifmplus;downstream | 11458 |  |  |  | see repository | LICENSE_VERIFIED | yes |
 | roboflow_crop_detection | Roboflow Crops (maize, cassava, sugarcane vs grass) | agrifmplus;downstream | 570 |  |  |  | CC-BY-4.0 (Roboflow dataset page) | LICENSE_VERIFIED | yes |
 | roboflow_disease_detection | Roboflow Detecting-Diseases | agrifmplus;downstream | 5493 |  |  |  | CC-BY-4.0 (Roboflow dataset page) | LICENSE_VERIFIED | yes |
-| agrifm_ref93 |  | agrifmplus;project_d1 | 20639 | 54305 | 54305 | 54305 | CC-BY-SA-3.0-US (Zenodo also lists CC-BY-4.0) | DUPLICATE_SCREENED | no |
+| agrifm_ref93 | PlantVillage (colour images) | agrifmplus;project_d1 | 20639 | 54305 | 54305 | 54305 | CC-BY-SA-3.0-US (Zenodo also lists CC-BY-4.0) | DUPLICATE_SCREENED | no |
 | cropandweed | CropAndWeed | downstream | 5616 |  |  |  | CC-BY-SA-4.0 | LICENSE_VERIFIED | yes |
 | growliflower | GrowliFlower | downstream | 1400 |  |  |  | CC-BY-4.0 | LICENSE_VERIFIED | yes |
 
@@ -93,7 +93,8 @@
 - **论文报告数量**只代表原论文陈述，绝不等于本机已有数据。
 - **远端文件数量**只在真实列出归档目录后填写。
 - **实际已取得数量**以本地目录为准；**解码通过**以 Pillow 实际解码为准；**最终纳入**必须通过去重、隔离与人工复核。
-- 当前 **没有任何一行达到 `APPROVED`/`FROZEN`**；D1 candidate 的冻结在 `reports/stage5a_summary.md` 中单独报告。
+- 状态分布：{'APPROVED': 1, 'DISCOVERED': 1, 'DUPLICATE_SCREENED': 1, 'LICENSE_VERIFIED': 27, 'SPLIT_CHECKED': 7, 'URL_VERIFIED': 26}。
+- `APPROVED` 行 1 个、`FROZEN` 行 0 个。任何 `APPROVED` 行都必须是下游保留集（只批准用于评价，不计入预训练）；D1 candidate 的状态见 `reports/stage5a_summary.md`。
 
 ## 5. 未找到 / 不可达资源
 

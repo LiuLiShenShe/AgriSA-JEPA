@@ -10,6 +10,10 @@ Usage
 
 For several seeds pass ``--seed-results seed=pathA,pathB`` repeatedly; the tool
 reports per-seed and mean ± std.  Only the backbone may differ.
+
+Outputs ``<prefix>_comparison.csv``, ``<prefix>_comparison.json`` and
+``<prefix>_ab_summary.md``.  The long-form human report is
+``reports/stage5a_gwhd_results.md`` and is written separately.
 """
 
 from __future__ import annotations
@@ -151,7 +155,7 @@ def main() -> int:
               '- 这里的绝对 mAP 不能与 Agri-FM+ 的 Detectron2 数字直接比较（协议不同）。',
               '- 冻结 ViT-H + Faster R-CNN Head 的预算固定；不做测试集调参。',
               '- 若 B ≤ A，应优先归因于任务/分辨率/冻结特征，而不是修改协议找正数。', '']
-    Path(str(prefix) + '_results.md').write_text('\n'.join(lines) + '\n',
+    Path(str(prefix) + '_ab_summary.md').write_text('\n'.join(lines) + '\n',
                                                  encoding='utf-8')
     print(json.dumps({'deltas': deltas, 'rows': rows}, indent=2))
     return 0
