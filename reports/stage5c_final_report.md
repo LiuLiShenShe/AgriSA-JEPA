@@ -261,5 +261,6 @@ Amazon S3 匿名 ListObjectsV2 可访问；图片按清单分块下载，ledger 
 - R2 manifest SHA：`16780dc9f89c1dd8653724d6441650e02b033726299b28c03dd26f480090daa5`
 - R3 manifest SHA：`f01c148d9e108140510ddba4cef2a3f6fff7fe131c7981febc1bb3bf1a48bee9`
 - 测试数量与失败/跳过：见 `reports/stage5c_test_summary.md`（本地 pytest 实跑记录）。
-- 分支与 commit SHA：`agri-stage5c-agrifm147k-auto-corpus`；SHA 见本轮提交记录与回复。
+- 分支：`agri-stage5c-agrifm147k-auto-corpus`
+- 代码与报告提交 SHA：`138ba2e83a7d33dedc3c8f7ab25af17f5d3c5a51`
 

@@ -69,7 +69,7 @@ pytest 以 `skip` 记录并在 `-q` 汇总中单列。
 ## 5. Git
 
 - 分支：`agri-stage5c-agrifm147k-auto-corpus`
-- 代码与报告提交：见 `reports/stage5c_final_report.md` 第 25 问与分支 HEAD
+- 代码与报告提交：`138ba2e83a7d33dedc3c8f7ab25af17f5d3c5a51`
 - 未提交（按 `.gitignore`）：`data/corpus_v2/images/`（逐图 ledger，356 MB）、
   `data/corpus_v2/work/`、`*_manifest.csv`（R0–R3 共 221 MB）。
   这些文件的 SHA-256 记录在对应 `*_manifest.json` 中，可校验。
