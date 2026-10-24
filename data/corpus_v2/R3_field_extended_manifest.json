@@ -1,0 +1,48 @@
+{
+  "version": "R3_field_extended",
+  "status": "AUTO_FROZEN",
+  "auto_status_meaning": "programmatic gates satisfied; NOT human-verified",
+  "policy_version": "stage5c-policy-v1",
+  "policy_sha256": "45379ed1a669edb64778b97c1e9dd59ba9f3d8d5983418f642a2542b437a565c",
+  "counts": {
+    "images": 177396,
+    "sources": 6,
+    "groups": 27370,
+    "groups_unknown_images": 100387,
+    "train": 150613,
+    "val": 26783
+  },
+  "by_source": {
+    "artemis_imagesafari": 130961,
+    "agrifield40k_pool": 23742,
+    "agrifm_ref58": 15396,
+    "agrifm_ref11": 5458,
+    "applebbch81": 1749,
+    "agrifm_ref9": 90
+  },
+  "by_domain": {
+    "FIELD_IN_SITU": 175557,
+    "ORCHARD_IN_SITU": 1839
+  },
+  "by_crop": {
+    "unknown": 177396
+  },
+  "max_source_share": 0.7382409975422219,
+  "cross_split_groups": 0,
+  "holdout_images": 0,
+  "license_blocked_images": 0,
+  "csv_sha256": "a3d4e0ea843619bc84f5babad6bfafc7e535ae702f70a9239032d15c3deff118",
+  "note": "R2 plus verified extensions; programmatic gates only",
+  "manifest_csv": "/fj/jepa-\u4e8c\u7ef4\u56fe\u50cf\u4efb\u52a1/data/corpus_v2/R3_field_extended_manifest.csv",
+  "manifest_csv_sha256": "ce32e5c819d0c1e4d4cf6a9866176415f9c2e911638be449c1f9aef7526aaf71",
+  "gates": {
+    "no_holdout": true,
+    "no_license_blocked": true,
+    "groups_disjoint": true,
+    "no_duplicate_representatives": true,
+    "no_unconfirmed_near_duplicates": true,
+    "no_giant_clusters": true,
+    "all_qc_labelled": true,
+    "all_domain_labelled": true
+  }
+}

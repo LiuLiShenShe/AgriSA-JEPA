@@ -244,7 +244,94 @@ with known leakage; it is not a generalisation result and is not reported as one
 The full-budget Arm B candidate is `configs/stage3_baseline_candidate.yaml`
 (30,000 updates). It is a planning artefact and has **not** been executed.
 
+## AgriSA-JEPA Stage 5C — field-centric pretraining corpus
+
+Stage 5C builds a versioned, auditable corpus for a later JEPA run. It does
+**not** start training. Four layers are produced, and they are not
+interchangeable:
+
+| Layer | Meaning | Trainable |
+|---|---|---|
+| `R0_agrifm35_source_pool` | everything actually on disk (audit) | no |
+| `R1_agrifm147_rebuild` | paper-disclosed rules only (reconstruction, not reproduction) | no |
+| `R2_field_strict` | field/orchard-only, holdouts excluded, deduplicated | yes |
+| `R3_field_extended` | R2 plus verified extension sources | yes |
+
+`AUTO_FROZEN` means *programmatic gates passed*; it is never `HUMAN_VERIFIED`.
+
+### Environment
+
+The project uses `uv` (no conda). GPU 1 only:
+
+```bash
+export UV_PROJECT_ENVIRONMENT=.venv-uv
+uv sync --extra stage5c
+CUDA_VISIBLE_DEVICES=1 .venv-uv/bin/python -m pytest tests/test_stage5c_corpus.py -q
+```
+
+### Source registry and download
+
+```bash
+# probe every source, write data/corpus_v2/download_plan.csv + source inventory
+.venv-uv/bin/python tools/stage5c_inventory_sources.py
+
+# list / download registered sources (resumable; archives under /data/datasets/Stage5C)
+.venv-uv/bin/python tools/stage5c_download_all_available.py --list
+.venv-uv/bin/python tools/stage5c_download_all_available.py --source agrifm_ref58 --workers 8
+.venv-uv/bin/python tools/stage5c_download_all_available.py --all --workers 16
+
+# audit what actually arrived (states + sizes + hashes)
+.venv-uv/bin/python tools/stage5c_verify_downloads.py
+```
+
+### Artemis / Image Safari
+
+```bash
+# enumerate the public S3 bucket (once; ~6.9M JPEG keys)
+.venv-uv/bin/python tools/stage5c_index_artemis.py --index
+
+# deterministic, byte-capped, crop-floored sample and download
+.venv-uv/bin/python tools/stage5c_index_artemis.py \
+  --sample 130000 --seed 20261024 --max-farm-share 0.12 --max-bytes 1500000 --download
+```
+
+### Ledgers, automated QC, versions
+
+```bash
+# per-image ledger (SHA-256, decode, geometry, basic quality, domain)
+.venv-uv/bin/python tools/stage5c_build_ledger.py --source agrifm_ref1 --workers 16
+
+# CleanVision + MUSIQ/NIQE enrichment (writes <source>_qc.csv)
+.venv-uv/bin/python tools/stage5c_run_all_qc.py --sources ALL --device cuda:0
+
+# threshold sensitivity calibration (synthetic faults, not human labels)
+.venv-uv/bin/python tools/stage5c_calibrate_qc.py --sources agrifm_ref1,agrifm_ref6 --device cuda:0
+
+# global dedup + R0/R1/R2/R3 manifests, funnel, composition
+.venv-uv/bin/python tools/stage5c_build_versions.py --sources ALL --r3 --no-embeddings
+```
+
+Note: `--no-embeddings` skips the optional DINOv2 confirmation for ambiguous
+near-duplicate pairs; those pairs stay quarantined instead. Use the flag only
+when GPU memory is needed elsewhere.
+
+### Reports
+
+```bash
+.venv-uv/bin/python tools/stage5c_generate_tables.py
+.venv-uv/bin/python tools/stage5c_final_report.py
+```
+
+Reports land in `reports/` (`stage5c_final_report.md`,
+`stage5c_dataset_composition.{csv,json,parquet,md}`,
+`stage5c_filtering_funnel.{csv,md}`, `stage5c_download_audit.md`, figures in
+`reports/stage5c_figures/`). Manifests land in `data/corpus_v2/`
+(`R*_manifest.csv/json`). Images and archives stay outside Git under
+`/data/datasets/Stage5C/`.
+
+
 ## License
+
 See the [LICENSE](./LICENSE) file for details about the license under which this code is made available.
 
 ## Citation

@@ -1,0 +1,81 @@
+# Stage 5C corpus policy.  Every threshold here is versioned and hashed into
+# the R1/R2/R3 manifests, so a rebuild with a different policy can never be
+# mistaken for the same corpus.
+version: stage5c-policy-v1
+created: '2026-10-24'
+owner: agrisa-jepa
+
+paths:
+  data_root: /data/datasets/Stage5C
+  raw: raw
+  archives: archives
+  work: work
+  crops: crops
+  embeddings: embeddings
+
+download:
+  user_agent: 'AgriSA-JEPA/0.1 (academic research; contact: project owner)'
+  chunk_bytes: 8388608
+  retries: 4
+  timeout_seconds: 60
+  max_parallel_files: 32
+
+quality:
+  # P0_PAPER_DISCLOSED_RULES (the paper discloses a 224 px short-side rule and
+  # scene/licence screening; blur/noise handling is not disclosed and is
+  # approximated with the explicit Laplacian rule below).
+  min_short_side: 224
+  require_decode: true
+  # P1_AUTOMATED_MULTI_STAGE_QC
+  laplacian_var_min: 35.0
+  tenengrad_min: 25.0
+  dark_mean_max: 22.0
+  bright_mean_min: 238.0
+  entropy_min: 2.6
+  extreme_aspect_ratio_max: 8.0
+  blank_pixel_fraction_max: 0.85
+  # A single failing metric is AUTO_REJECT; contradictory metrics are
+  # quarantined, never silently accepted.
+  quarantine_on_conflict: true
+  iqa:
+    enabled: true
+    metric: musiq
+    accept_min: 0.35
+    reject_max: 0.22
+    conflict_gap: 0.08
+    batch_size: 16
+    device: cuda:1
+  cleanvision:
+    enabled: true
+    sample_per_source: 400
+    analyzers: [blurry, dark, light, low_information, odd_size, grayscale, duplicate]
+
+domain:
+  field_label_set: [FIELD_IN_SITU, ORCHARD_IN_SITU]
+  strict_excluded: [PROTECTED_CULTIVATION, CONTROLLED_LAB, UAV_AERIAL, SATELLITE_REMOTE, UNKNOWN]
+  vision_model: openai/clip-vit-base-patch32
+  vision_accept_min: 0.55
+  vision_conflict_margin: 0.08
+  apply_vision_to: [UNKNOWN, MIXED, FIELD_IN_SITU]
+
+dedup:
+  phash_candidate_distance: 8
+  dhash_confirmation_distance: 6
+  pixel_sha_exact: true
+  giant_cluster_threshold: 300
+  embedding:
+    enabled: true
+    model: vit_small_patch14_dinov2.lvd142m
+    cosine_similarity: 0.97
+    batch_size: 64
+    device: cuda:1
+
+groups:
+  min_group_size_for_split: 2
+  hash_salt: agrisa-stage5c-groups-v1
+  val_fraction: 0.15
+
+budget:
+  max_raw_download_bytes: 400000000000   # 400 GB hard stop
+  max_artemis_images: 160000
+  target_r3_strict_images: 147286

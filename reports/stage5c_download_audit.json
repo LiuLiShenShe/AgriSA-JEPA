@@ -1,0 +1,282 @@
+[
+  {
+    "physical_source_id": "agrifm_ref1",
+    "access_method": "kaggle_dataset",
+    "status": "DOWNLOADED_FULL",
+    "archived_bytes": 546032010,
+    "images_on_disk": 670
+  },
+  {
+    "physical_source_id": "agrifm_ref2",
+    "access_method": "url",
+    "status": "BLOCKED",
+    "archived_bytes": 0,
+    "images_on_disk": 0
+  },
+  {
+    "physical_source_id": "agrifm_ref3",
+    "access_method": "url",
+    "status": "BLOCKED",
+    "archived_bytes": 0,
+    "images_on_disk": 0
+  },
+  {
+    "physical_source_id": "perennial_plants",
+    "access_method": "kaggle_dataset",
+    "status": "DOWNLOADED_FULL",
+    "archived_bytes": 0,
+    "images_on_disk": 397
+  },
+  {
+    "physical_source_id": "agrifm_ref5",
+    "access_method": "url",
+    "status": "BLOCKED",
+    "archived_bytes": 0,
+    "images_on_disk": 0
+  },
+  {
+    "physical_source_id": "agrifm_ref6",
+    "access_method": "kaggle_dataset",
+    "status": "DOWNLOADED_FULL",
+    "archived_bytes": 14105730,
+    "images_on_disk": 900
+  },
+  {
+    "physical_source_id": "agrifm_ref7",
+    "access_method": "kaggle_dataset",
+    "status": "DOWNLOADED_FULL",
+    "archived_bytes": 82830492,
+    "images_on_disk": 829
+  },
+  {
+    "physical_source_id": "agrifm_ref8",
+    "access_method": "kaggle_dataset",
+    "status": "DOWNLOADED_FULL",
+    "archived_bytes": 273842393,
+    "images_on_disk": 251
+  },
+  {
+    "physical_source_id": "agrifm_ref9",
+    "access_method": "kaggle_dataset",
+    "status": "DOWNLOADED_FULL",
+    "archived_bytes": 1701005180,
+    "images_on_disk": 115
+  },
+  {
+    "physical_source_id": "agrifm_ref10",
+    "access_method": "kaggle_dataset",
+    "status": "NOT_STARTED",
+    "archived_bytes": 0,
+    "images_on_disk": 0
+  },
+  {
+    "physical_source_id": "agrifm_ref11",
+    "access_method": "kaggle_dataset",
+    "status": "DOWNLOADED_FULL",
+    "archived_bytes": 0,
+    "images_on_disk": 5899
+  },
+  {
+    "physical_source_id": "agrifm_ref15",
+    "access_method": "kaggle_dsv",
+    "status": "BLOCKED",
+    "archived_bytes": 0,
+    "images_on_disk": 0
+  },
+  {
+    "physical_source_id": "agrifm_ref18",
+    "access_method": "url",
+    "status": "BLOCKED",
+    "archived_bytes": 0,
+    "images_on_disk": 0
+  },
+  {
+    "physical_source_id": "agrifm_ref20",
+    "access_method": "mendeley",
+    "status": "DOWNLOADED_FULL",
+    "archived_bytes": 0,
+    "images_on_disk": 1081
+  },
+  {
+    "physical_source_id": "agrifm_ref29",
+    "access_method": "kaggle_dsv",
+    "status": "BLOCKED",
+    "archived_bytes": 0,
+    "images_on_disk": 0
+  },
+  {
+    "physical_source_id": "gwhd_2021",
+    "access_method": "local_reuse",
+    "status": "DOWNLOADED_FULL",
+    "archived_bytes": 0,
+    "images_on_disk": 6515
+  },
+  {
+    "physical_source_id": "agrifm_ref35",
+    "access_method": "kaggle_competition",
+    "status": "BLOCKED",
+    "archived_bytes": 0,
+    "images_on_disk": 0
+  },
+  {
+    "physical_source_id": "agrifm_ref37",
+    "access_method": "kaggle_competition",
+    "status": "BLOCKED",
+    "archived_bytes": 0,
+    "images_on_disk": 0
+  },
+  {
+    "physical_source_id": "agrifm_ref46",
+    "access_method": "url",
+    "status": "BLOCKED",
+    "archived_bytes": 0,
+    "images_on_disk": 0
+  },
+  {
+    "physical_source_id": "agrifm_ref48",
+    "access_method": "none",
+    "status": "BLOCKED",
+    "archived_bytes": 0,
+    "images_on_disk": 0
+  },
+  {
+    "physical_source_id": "agrifm_ref57",
+    "access_method": "mendeley",
+    "status": "DOWNLOADED_PARTIAL",
+    "archived_bytes": 1971986776,
+    "images_on_disk": 31500
+  },
+  {
+    "physical_source_id": "agrifm_ref58",
+    "access_method": "dataverse",
+    "status": "DOWNLOADED_FULL",
+    "archived_bytes": 0,
+    "images_on_disk": 23205
+  },
+  {
+    "physical_source_id": "deepweeds",
+    "access_method": "local_reuse",
+    "status": "ARCHIVE_ONLY",
+    "archived_bytes": 0,
+    "images_on_disk": 0
+  },
+  {
+    "physical_source_id": "agrifm_ref65",
+    "access_method": "url",
+    "status": "BLOCKED",
+    "archived_bytes": 0,
+    "images_on_disk": 0
+  },
+  {
+    "physical_source_id": "agrifm_ref73",
+    "access_method": "url",
+    "status": "BLOCKED",
+    "archived_bytes": 0,
+    "images_on_disk": 0
+  },
+  {
+    "physical_source_id": "agrifm_ref74",
+    "access_method": "url",
+    "status": "BLOCKED",
+    "archived_bytes": 0,
+    "images_on_disk": 0
+  },
+  {
+    "physical_source_id": "agrifm_ref75",
+    "access_method": "kaggle_dsv",
+    "status": "BLOCKED",
+    "archived_bytes": 0,
+    "images_on_disk": 0
+  },
+  {
+    "physical_source_id": "agrifm_ref76",
+    "access_method": "kaggle_dsv",
+    "status": "BLOCKED",
+    "archived_bytes": 0,
+    "images_on_disk": 0
+  },
+  {
+    "physical_source_id": "ronin",
+    "access_method": "local_reuse",
+    "status": "DOWNLOADED_FULL",
+    "archived_bytes": 0,
+    "images_on_disk": 2822
+  },
+  {
+    "physical_source_id": "agrifm_ref81",
+    "access_method": "url",
+    "status": "BLOCKED",
+    "archived_bytes": 0,
+    "images_on_disk": 0
+  },
+  {
+    "physical_source_id": "agrifm_ref82",
+    "access_method": "url",
+    "status": "BLOCKED",
+    "archived_bytes": 0,
+    "images_on_disk": 0
+  },
+  {
+    "physical_source_id": "phenobench",
+    "access_method": "local_reuse",
+    "status": "DOWNLOADED_FULL",
+    "archived_bytes": 0,
+    "images_on_disk": 13767
+  },
+  {
+    "physical_source_id": "agrifm_ref90",
+    "access_method": "mendeley_zip",
+    "status": "DOWNLOADED_FULL",
+    "archived_bytes": 0,
+    "images_on_disk": 520
+  },
+  {
+    "physical_source_id": "plantvillage",
+    "access_method": "local_reuse",
+    "status": "DOWNLOADED_FULL",
+    "archived_bytes": 0,
+    "images_on_disk": 54305
+  },
+  {
+    "physical_source_id": "agrifm_ref95",
+    "access_method": "url",
+    "status": "BLOCKED",
+    "archived_bytes": 0,
+    "images_on_disk": 0
+  },
+  {
+    "physical_source_id": "artemis_imagesafari",
+    "access_method": "s3_prefix",
+    "status": "DOWNLOADED_PARTIAL",
+    "archived_bytes": 122389034611,
+    "images_on_disk": 135623
+  },
+  {
+    "physical_source_id": "agrifield40k_pool",
+    "access_method": "local_reuse",
+    "status": "DOWNLOADED_FULL",
+    "archived_bytes": 0,
+    "images_on_disk": 39963
+  },
+  {
+    "physical_source_id": "sesame_weed",
+    "access_method": "local_reuse",
+    "status": "DOWNLOADED_FULL",
+    "archived_bytes": 0,
+    "images_on_disk": 1300
+  },
+  {
+    "physical_source_id": "applebbch81",
+    "access_method": "local_reuse",
+    "status": "DOWNLOADED_FULL",
+    "archived_bytes": 0,
+    "images_on_disk": 1838
+  },
+  {
+    "physical_source_id": "user_owned",
+    "access_method": "none",
+    "status": "NOT_STARTED",
+    "archived_bytes": 0,
+    "images_on_disk": 0
+  }
+]

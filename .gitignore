@@ -9,3 +9,10 @@ runs/
 artifacts/
 .venv-uv/
 .cache/
+
+# Stage 5C derived data: images and per-image ledgers live outside Git.
+data/corpus_v2/images/
+data/corpus_v2/work/
+data/corpus_v2/download_manifest.csv
+data/corpus_v2/*.tmp
+data/corpus_v2/*_manifest.csv
