@@ -1,0 +1,301 @@
+version,step,reason,input_images,excluded_this_step,remaining_images
+R3v2/agrifield40k_pool,input,all ledger rows,39963,0,39963
+R3v2/agrifield40k_pool,HOLDOUT_EXCLUDED,registered downstream holdout,39963,9606,30357
+R3v2/agrifield40k_pool,LICENCE_BLOCKED,licence unverified or conflicting,30357,0,30357
+R3v2/agrifield40k_pool,ARCHIVE_ONLY,archive-only source,30357,0,30357
+R3v2/agrifield40k_pool,MODALITY_NOT_VISIBLE_RGB,documented non-visible modality,30357,0,30357
+R3v2/agrifield40k_pool,MODALITY_UNKNOWN,modality cannot be evidenced,30357,0,30357
+R3v2/agrifield40k_pool,DECODE_FAILED,file did not decode,30357,0,30357
+R3v2/agrifield40k_pool,BELOW_MIN_RESOLUTION,short side below policy minimum,30357,0,30357
+R3v2/agrifield40k_pool,BASIC_QC_REJECT,deterministic basic-quality rejection,30357,41,30316
+R3v2/agrifield40k_pool,BASIC_QC_QUARANTINE,basic-quality ambiguity,30316,22,30294
+R3v2/agrifield40k_pool,IQA_REJECT,reference-free IQA below reject threshold,30294,0,30294
+R3v2/agrifield40k_pool,IQA_QUARANTINE,reference-free IQA in the grey band,30294,121,30173
+R3v2/agrifield40k_pool,IQA_MISSING,reference-free IQA not measured,30173,0,30173
+R3v2/agrifield40k_pool,DOMAIN_REJECT,acquisition domain excluded by policy,30173,0,30173
+R3v2/agrifield40k_pool,DOMAIN_QUARANTINE,acquisition domain uncertain,30173,8287,21886
+R3v2/agrifield40k_pool,EXACT_DUPLICATE,byte/pixel identical copy,21886,8,21878
+R3v2/agrifield40k_pool,NEAR_DUPLICATE,confirmed near duplicate,21878,366,21512
+R3v2/agrifield40k_pool,DUPLICATE_UNCERTAIN,near-duplicate candidate unresolved,21512,94,21418
+R3v2/agrifield40k_pool,GIANT_CLUSTER,texture-collision cluster,21418,0,21418
+R3v2/agrifield40k_pool,ACCEPTED,strict eligible,21418,0,21418
+R3v2/agrifm_ref1,input,all ledger rows,670,0,670
+R3v2/agrifm_ref1,HOLDOUT_EXCLUDED,registered downstream holdout,670,0,670
+R3v2/agrifm_ref1,LICENCE_BLOCKED,licence unverified or conflicting,670,0,670
+R3v2/agrifm_ref1,ARCHIVE_ONLY,archive-only source,670,0,670
+R3v2/agrifm_ref1,MODALITY_NOT_VISIBLE_RGB,documented non-visible modality,670,0,670
+R3v2/agrifm_ref1,MODALITY_UNKNOWN,modality cannot be evidenced,670,0,670
+R3v2/agrifm_ref1,DECODE_FAILED,file did not decode,670,0,670
+R3v2/agrifm_ref1,BELOW_MIN_RESOLUTION,short side below policy minimum,670,0,670
+R3v2/agrifm_ref1,BASIC_QC_REJECT,deterministic basic-quality rejection,670,0,670
+R3v2/agrifm_ref1,BASIC_QC_QUARANTINE,basic-quality ambiguity,670,0,670
+R3v2/agrifm_ref1,IQA_REJECT,reference-free IQA below reject threshold,670,0,670
+R3v2/agrifm_ref1,IQA_QUARANTINE,reference-free IQA in the grey band,670,0,670
+R3v2/agrifm_ref1,IQA_MISSING,reference-free IQA not measured,670,0,670
+R3v2/agrifm_ref1,DOMAIN_REJECT,acquisition domain excluded by policy,670,0,670
+R3v2/agrifm_ref1,DOMAIN_QUARANTINE,acquisition domain uncertain,670,0,670
+R3v2/agrifm_ref1,EXACT_DUPLICATE,byte/pixel identical copy,670,12,658
+R3v2/agrifm_ref1,NEAR_DUPLICATE,confirmed near duplicate,658,0,658
+R3v2/agrifm_ref1,DUPLICATE_UNCERTAIN,near-duplicate candidate unresolved,658,618,40
+R3v2/agrifm_ref1,GIANT_CLUSTER,texture-collision cluster,40,0,40
+R3v2/agrifm_ref1,ACCEPTED,strict eligible,40,0,40
+R3v2/agrifm_ref11,input,all ledger rows,5899,0,5899
+R3v2/agrifm_ref11,HOLDOUT_EXCLUDED,registered downstream holdout,5899,0,5899
+R3v2/agrifm_ref11,LICENCE_BLOCKED,licence unverified or conflicting,5899,0,5899
+R3v2/agrifm_ref11,ARCHIVE_ONLY,archive-only source,5899,0,5899
+R3v2/agrifm_ref11,MODALITY_NOT_VISIBLE_RGB,documented non-visible modality,5899,2949,2950
+R3v2/agrifm_ref11,MODALITY_UNKNOWN,modality cannot be evidenced,2950,0,2950
+R3v2/agrifm_ref11,DECODE_FAILED,file did not decode,2950,0,2950
+R3v2/agrifm_ref11,BELOW_MIN_RESOLUTION,short side below policy minimum,2950,0,2950
+R3v2/agrifm_ref11,BASIC_QC_REJECT,deterministic basic-quality rejection,2950,0,2950
+R3v2/agrifm_ref11,BASIC_QC_QUARANTINE,basic-quality ambiguity,2950,0,2950
+R3v2/agrifm_ref11,IQA_REJECT,reference-free IQA below reject threshold,2950,1,2949
+R3v2/agrifm_ref11,IQA_QUARANTINE,reference-free IQA in the grey band,2949,0,2949
+R3v2/agrifm_ref11,IQA_MISSING,reference-free IQA not measured,2949,0,2949
+R3v2/agrifm_ref11,DOMAIN_REJECT,acquisition domain excluded by policy,2949,0,2949
+R3v2/agrifm_ref11,DOMAIN_QUARANTINE,acquisition domain uncertain,2949,0,2949
+R3v2/agrifm_ref11,EXACT_DUPLICATE,byte/pixel identical copy,2949,0,2949
+R3v2/agrifm_ref11,NEAR_DUPLICATE,confirmed near duplicate,2949,1369,1580
+R3v2/agrifm_ref11,DUPLICATE_UNCERTAIN,near-duplicate candidate unresolved,1580,1198,382
+R3v2/agrifm_ref11,GIANT_CLUSTER,texture-collision cluster,382,0,382
+R3v2/agrifm_ref11,ACCEPTED,strict eligible,382,0,382
+R3v2/agrifm_ref20,input,all ledger rows,1081,0,1081
+R3v2/agrifm_ref20,HOLDOUT_EXCLUDED,registered downstream holdout,1081,0,1081
+R3v2/agrifm_ref20,LICENCE_BLOCKED,licence unverified or conflicting,1081,0,1081
+R3v2/agrifm_ref20,ARCHIVE_ONLY,archive-only source,1081,0,1081
+R3v2/agrifm_ref20,MODALITY_NOT_VISIBLE_RGB,documented non-visible modality,1081,0,1081
+R3v2/agrifm_ref20,MODALITY_UNKNOWN,modality cannot be evidenced,1081,0,1081
+R3v2/agrifm_ref20,DECODE_FAILED,file did not decode,1081,0,1081
+R3v2/agrifm_ref20,BELOW_MIN_RESOLUTION,short side below policy minimum,1081,0,1081
+R3v2/agrifm_ref20,BASIC_QC_REJECT,deterministic basic-quality rejection,1081,934,147
+R3v2/agrifm_ref20,BASIC_QC_QUARANTINE,basic-quality ambiguity,147,103,44
+R3v2/agrifm_ref20,IQA_REJECT,reference-free IQA below reject threshold,44,0,44
+R3v2/agrifm_ref20,IQA_QUARANTINE,reference-free IQA in the grey band,44,0,44
+R3v2/agrifm_ref20,IQA_MISSING,reference-free IQA not measured,44,0,44
+R3v2/agrifm_ref20,DOMAIN_REJECT,acquisition domain excluded by policy,44,44,0
+R3v2/agrifm_ref20,DOMAIN_QUARANTINE,acquisition domain uncertain,0,0,0
+R3v2/agrifm_ref20,EXACT_DUPLICATE,byte/pixel identical copy,0,0,0
+R3v2/agrifm_ref20,NEAR_DUPLICATE,confirmed near duplicate,0,0,0
+R3v2/agrifm_ref20,DUPLICATE_UNCERTAIN,near-duplicate candidate unresolved,0,0,0
+R3v2/agrifm_ref20,GIANT_CLUSTER,texture-collision cluster,0,0,0
+R3v2/agrifm_ref20,ACCEPTED,strict eligible,0,0,0
+R3v2/agrifm_ref57,input,all ledger rows,31500,0,31500
+R3v2/agrifm_ref57,HOLDOUT_EXCLUDED,registered downstream holdout,31500,0,31500
+R3v2/agrifm_ref57,LICENCE_BLOCKED,licence unverified or conflicting,31500,0,31500
+R3v2/agrifm_ref57,ARCHIVE_ONLY,archive-only source,31500,0,31500
+R3v2/agrifm_ref57,MODALITY_NOT_VISIBLE_RGB,documented non-visible modality,31500,0,31500
+R3v2/agrifm_ref57,MODALITY_UNKNOWN,modality cannot be evidenced,31500,0,31500
+R3v2/agrifm_ref57,DECODE_FAILED,file did not decode,31500,0,31500
+R3v2/agrifm_ref57,BELOW_MIN_RESOLUTION,short side below policy minimum,31500,40,31460
+R3v2/agrifm_ref57,BASIC_QC_REJECT,deterministic basic-quality rejection,31460,1805,29655
+R3v2/agrifm_ref57,BASIC_QC_QUARANTINE,basic-quality ambiguity,29655,930,28725
+R3v2/agrifm_ref57,IQA_REJECT,reference-free IQA below reject threshold,28725,464,28261
+R3v2/agrifm_ref57,IQA_QUARANTINE,reference-free IQA in the grey band,28261,4186,24075
+R3v2/agrifm_ref57,IQA_MISSING,reference-free IQA not measured,24075,0,24075
+R3v2/agrifm_ref57,DOMAIN_REJECT,acquisition domain excluded by policy,24075,0,24075
+R3v2/agrifm_ref57,DOMAIN_QUARANTINE,acquisition domain uncertain,24075,24075,0
+R3v2/agrifm_ref57,EXACT_DUPLICATE,byte/pixel identical copy,0,0,0
+R3v2/agrifm_ref57,NEAR_DUPLICATE,confirmed near duplicate,0,0,0
+R3v2/agrifm_ref57,DUPLICATE_UNCERTAIN,near-duplicate candidate unresolved,0,0,0
+R3v2/agrifm_ref57,GIANT_CLUSTER,texture-collision cluster,0,0,0
+R3v2/agrifm_ref57,ACCEPTED,strict eligible,0,0,0
+R3v2/agrifm_ref58,input,all ledger rows,23205,0,23205
+R3v2/agrifm_ref58,HOLDOUT_EXCLUDED,registered downstream holdout,23205,0,23205
+R3v2/agrifm_ref58,LICENCE_BLOCKED,licence unverified or conflicting,23205,0,23205
+R3v2/agrifm_ref58,ARCHIVE_ONLY,archive-only source,23205,0,23205
+R3v2/agrifm_ref58,MODALITY_NOT_VISIBLE_RGB,documented non-visible modality,23205,0,23205
+R3v2/agrifm_ref58,MODALITY_UNKNOWN,modality cannot be evidenced,23205,0,23205
+R3v2/agrifm_ref58,DECODE_FAILED,file did not decode,23205,0,23205
+R3v2/agrifm_ref58,BELOW_MIN_RESOLUTION,short side below policy minimum,23205,0,23205
+R3v2/agrifm_ref58,BASIC_QC_REJECT,deterministic basic-quality rejection,23205,2,23203
+R3v2/agrifm_ref58,BASIC_QC_QUARANTINE,basic-quality ambiguity,23203,0,23203
+R3v2/agrifm_ref58,IQA_REJECT,reference-free IQA below reject threshold,23203,0,23203
+R3v2/agrifm_ref58,IQA_QUARANTINE,reference-free IQA in the grey band,23203,6,23197
+R3v2/agrifm_ref58,IQA_MISSING,reference-free IQA not measured,23197,0,23197
+R3v2/agrifm_ref58,DOMAIN_REJECT,acquisition domain excluded by policy,23197,0,23197
+R3v2/agrifm_ref58,DOMAIN_QUARANTINE,acquisition domain uncertain,23197,0,23197
+R3v2/agrifm_ref58,EXACT_DUPLICATE,byte/pixel identical copy,23197,7801,15396
+R3v2/agrifm_ref58,NEAR_DUPLICATE,confirmed near duplicate,15396,0,15396
+R3v2/agrifm_ref58,DUPLICATE_UNCERTAIN,near-duplicate candidate unresolved,15396,10,15386
+R3v2/agrifm_ref58,GIANT_CLUSTER,texture-collision cluster,15386,0,15386
+R3v2/agrifm_ref58,ACCEPTED,strict eligible,15386,0,15386
+R3v2/agrifm_ref6,input,all ledger rows,900,0,900
+R3v2/agrifm_ref6,HOLDOUT_EXCLUDED,registered downstream holdout,900,0,900
+R3v2/agrifm_ref6,LICENCE_BLOCKED,licence unverified or conflicting,900,900,0
+R3v2/agrifm_ref6,ARCHIVE_ONLY,archive-only source,0,0,0
+R3v2/agrifm_ref6,MODALITY_NOT_VISIBLE_RGB,documented non-visible modality,0,0,0
+R3v2/agrifm_ref6,MODALITY_UNKNOWN,modality cannot be evidenced,0,0,0
+R3v2/agrifm_ref6,DECODE_FAILED,file did not decode,0,0,0
+R3v2/agrifm_ref6,BELOW_MIN_RESOLUTION,short side below policy minimum,0,0,0
+R3v2/agrifm_ref6,BASIC_QC_REJECT,deterministic basic-quality rejection,0,0,0
+R3v2/agrifm_ref6,BASIC_QC_QUARANTINE,basic-quality ambiguity,0,0,0
+R3v2/agrifm_ref6,IQA_REJECT,reference-free IQA below reject threshold,0,0,0
+R3v2/agrifm_ref6,IQA_QUARANTINE,reference-free IQA in the grey band,0,0,0
+R3v2/agrifm_ref6,IQA_MISSING,reference-free IQA not measured,0,0,0
+R3v2/agrifm_ref6,DOMAIN_REJECT,acquisition domain excluded by policy,0,0,0
+R3v2/agrifm_ref6,DOMAIN_QUARANTINE,acquisition domain uncertain,0,0,0
+R3v2/agrifm_ref6,EXACT_DUPLICATE,byte/pixel identical copy,0,0,0
+R3v2/agrifm_ref6,NEAR_DUPLICATE,confirmed near duplicate,0,0,0
+R3v2/agrifm_ref6,DUPLICATE_UNCERTAIN,near-duplicate candidate unresolved,0,0,0
+R3v2/agrifm_ref6,GIANT_CLUSTER,texture-collision cluster,0,0,0
+R3v2/agrifm_ref6,ACCEPTED,strict eligible,0,0,0
+R3v2/agrifm_ref7,input,all ledger rows,829,0,829
+R3v2/agrifm_ref7,HOLDOUT_EXCLUDED,registered downstream holdout,829,0,829
+R3v2/agrifm_ref7,LICENCE_BLOCKED,licence unverified or conflicting,829,829,0
+R3v2/agrifm_ref7,ARCHIVE_ONLY,archive-only source,0,0,0
+R3v2/agrifm_ref7,MODALITY_NOT_VISIBLE_RGB,documented non-visible modality,0,0,0
+R3v2/agrifm_ref7,MODALITY_UNKNOWN,modality cannot be evidenced,0,0,0
+R3v2/agrifm_ref7,DECODE_FAILED,file did not decode,0,0,0
+R3v2/agrifm_ref7,BELOW_MIN_RESOLUTION,short side below policy minimum,0,0,0
+R3v2/agrifm_ref7,BASIC_QC_REJECT,deterministic basic-quality rejection,0,0,0
+R3v2/agrifm_ref7,BASIC_QC_QUARANTINE,basic-quality ambiguity,0,0,0
+R3v2/agrifm_ref7,IQA_REJECT,reference-free IQA below reject threshold,0,0,0
+R3v2/agrifm_ref7,IQA_QUARANTINE,reference-free IQA in the grey band,0,0,0
+R3v2/agrifm_ref7,IQA_MISSING,reference-free IQA not measured,0,0,0
+R3v2/agrifm_ref7,DOMAIN_REJECT,acquisition domain excluded by policy,0,0,0
+R3v2/agrifm_ref7,DOMAIN_QUARANTINE,acquisition domain uncertain,0,0,0
+R3v2/agrifm_ref7,EXACT_DUPLICATE,byte/pixel identical copy,0,0,0
+R3v2/agrifm_ref7,NEAR_DUPLICATE,confirmed near duplicate,0,0,0
+R3v2/agrifm_ref7,DUPLICATE_UNCERTAIN,near-duplicate candidate unresolved,0,0,0
+R3v2/agrifm_ref7,GIANT_CLUSTER,texture-collision cluster,0,0,0
+R3v2/agrifm_ref7,ACCEPTED,strict eligible,0,0,0
+R3v2/agrifm_ref8,input,all ledger rows,251,0,251
+R3v2/agrifm_ref8,HOLDOUT_EXCLUDED,registered downstream holdout,251,0,251
+R3v2/agrifm_ref8,LICENCE_BLOCKED,licence unverified or conflicting,251,251,0
+R3v2/agrifm_ref8,ARCHIVE_ONLY,archive-only source,0,0,0
+R3v2/agrifm_ref8,MODALITY_NOT_VISIBLE_RGB,documented non-visible modality,0,0,0
+R3v2/agrifm_ref8,MODALITY_UNKNOWN,modality cannot be evidenced,0,0,0
+R3v2/agrifm_ref8,DECODE_FAILED,file did not decode,0,0,0
+R3v2/agrifm_ref8,BELOW_MIN_RESOLUTION,short side below policy minimum,0,0,0
+R3v2/agrifm_ref8,BASIC_QC_REJECT,deterministic basic-quality rejection,0,0,0
+R3v2/agrifm_ref8,BASIC_QC_QUARANTINE,basic-quality ambiguity,0,0,0
+R3v2/agrifm_ref8,IQA_REJECT,reference-free IQA below reject threshold,0,0,0
+R3v2/agrifm_ref8,IQA_QUARANTINE,reference-free IQA in the grey band,0,0,0
+R3v2/agrifm_ref8,IQA_MISSING,reference-free IQA not measured,0,0,0
+R3v2/agrifm_ref8,DOMAIN_REJECT,acquisition domain excluded by policy,0,0,0
+R3v2/agrifm_ref8,DOMAIN_QUARANTINE,acquisition domain uncertain,0,0,0
+R3v2/agrifm_ref8,EXACT_DUPLICATE,byte/pixel identical copy,0,0,0
+R3v2/agrifm_ref8,NEAR_DUPLICATE,confirmed near duplicate,0,0,0
+R3v2/agrifm_ref8,DUPLICATE_UNCERTAIN,near-duplicate candidate unresolved,0,0,0
+R3v2/agrifm_ref8,GIANT_CLUSTER,texture-collision cluster,0,0,0
+R3v2/agrifm_ref8,ACCEPTED,strict eligible,0,0,0
+R3v2/agrifm_ref9,input,all ledger rows,115,0,115
+R3v2/agrifm_ref9,HOLDOUT_EXCLUDED,registered downstream holdout,115,0,115
+R3v2/agrifm_ref9,LICENCE_BLOCKED,licence unverified or conflicting,115,0,115
+R3v2/agrifm_ref9,ARCHIVE_ONLY,archive-only source,115,0,115
+R3v2/agrifm_ref9,MODALITY_NOT_VISIBLE_RGB,documented non-visible modality,115,0,115
+R3v2/agrifm_ref9,MODALITY_UNKNOWN,modality cannot be evidenced,115,0,115
+R3v2/agrifm_ref9,DECODE_FAILED,file did not decode,115,0,115
+R3v2/agrifm_ref9,BELOW_MIN_RESOLUTION,short side below policy minimum,115,0,115
+R3v2/agrifm_ref9,BASIC_QC_REJECT,deterministic basic-quality rejection,115,9,106
+R3v2/agrifm_ref9,BASIC_QC_QUARANTINE,basic-quality ambiguity,106,0,106
+R3v2/agrifm_ref9,IQA_REJECT,reference-free IQA below reject threshold,106,0,106
+R3v2/agrifm_ref9,IQA_QUARANTINE,reference-free IQA in the grey band,106,16,90
+R3v2/agrifm_ref9,IQA_MISSING,reference-free IQA not measured,90,0,90
+R3v2/agrifm_ref9,DOMAIN_REJECT,acquisition domain excluded by policy,90,0,90
+R3v2/agrifm_ref9,DOMAIN_QUARANTINE,acquisition domain uncertain,90,0,90
+R3v2/agrifm_ref9,EXACT_DUPLICATE,byte/pixel identical copy,90,0,90
+R3v2/agrifm_ref9,NEAR_DUPLICATE,confirmed near duplicate,90,1,89
+R3v2/agrifm_ref9,DUPLICATE_UNCERTAIN,near-duplicate candidate unresolved,89,5,84
+R3v2/agrifm_ref9,GIANT_CLUSTER,texture-collision cluster,84,0,84
+R3v2/agrifm_ref9,ACCEPTED,strict eligible,84,0,84
+R3v2/agrifm_ref90,input,all ledger rows,520,0,520
+R3v2/agrifm_ref90,HOLDOUT_EXCLUDED,registered downstream holdout,520,0,520
+R3v2/agrifm_ref90,LICENCE_BLOCKED,licence unverified or conflicting,520,520,0
+R3v2/agrifm_ref90,ARCHIVE_ONLY,archive-only source,0,0,0
+R3v2/agrifm_ref90,MODALITY_NOT_VISIBLE_RGB,documented non-visible modality,0,0,0
+R3v2/agrifm_ref90,MODALITY_UNKNOWN,modality cannot be evidenced,0,0,0
+R3v2/agrifm_ref90,DECODE_FAILED,file did not decode,0,0,0
+R3v2/agrifm_ref90,BELOW_MIN_RESOLUTION,short side below policy minimum,0,0,0
+R3v2/agrifm_ref90,BASIC_QC_REJECT,deterministic basic-quality rejection,0,0,0
+R3v2/agrifm_ref90,BASIC_QC_QUARANTINE,basic-quality ambiguity,0,0,0
+R3v2/agrifm_ref90,IQA_REJECT,reference-free IQA below reject threshold,0,0,0
+R3v2/agrifm_ref90,IQA_QUARANTINE,reference-free IQA in the grey band,0,0,0
+R3v2/agrifm_ref90,IQA_MISSING,reference-free IQA not measured,0,0,0
+R3v2/agrifm_ref90,DOMAIN_REJECT,acquisition domain excluded by policy,0,0,0
+R3v2/agrifm_ref90,DOMAIN_QUARANTINE,acquisition domain uncertain,0,0,0
+R3v2/agrifm_ref90,EXACT_DUPLICATE,byte/pixel identical copy,0,0,0
+R3v2/agrifm_ref90,NEAR_DUPLICATE,confirmed near duplicate,0,0,0
+R3v2/agrifm_ref90,DUPLICATE_UNCERTAIN,near-duplicate candidate unresolved,0,0,0
+R3v2/agrifm_ref90,GIANT_CLUSTER,texture-collision cluster,0,0,0
+R3v2/agrifm_ref90,ACCEPTED,strict eligible,0,0,0
+R3v2/applebbch81,input,all ledger rows,1838,0,1838
+R3v2/applebbch81,HOLDOUT_EXCLUDED,registered downstream holdout,1838,0,1838
+R3v2/applebbch81,LICENCE_BLOCKED,licence unverified or conflicting,1838,0,1838
+R3v2/applebbch81,ARCHIVE_ONLY,archive-only source,1838,0,1838
+R3v2/applebbch81,MODALITY_NOT_VISIBLE_RGB,documented non-visible modality,1838,0,1838
+R3v2/applebbch81,MODALITY_UNKNOWN,modality cannot be evidenced,1838,0,1838
+R3v2/applebbch81,DECODE_FAILED,file did not decode,1838,0,1838
+R3v2/applebbch81,BELOW_MIN_RESOLUTION,short side below policy minimum,1838,0,1838
+R3v2/applebbch81,BASIC_QC_REJECT,deterministic basic-quality rejection,1838,6,1832
+R3v2/applebbch81,BASIC_QC_QUARANTINE,basic-quality ambiguity,1832,54,1778
+R3v2/applebbch81,IQA_REJECT,reference-free IQA below reject threshold,1778,0,1778
+R3v2/applebbch81,IQA_QUARANTINE,reference-free IQA in the grey band,1778,29,1749
+R3v2/applebbch81,IQA_MISSING,reference-free IQA not measured,1749,0,1749
+R3v2/applebbch81,DOMAIN_REJECT,acquisition domain excluded by policy,1749,0,1749
+R3v2/applebbch81,DOMAIN_QUARANTINE,acquisition domain uncertain,1749,0,1749
+R3v2/applebbch81,EXACT_DUPLICATE,byte/pixel identical copy,1749,0,1749
+R3v2/applebbch81,NEAR_DUPLICATE,confirmed near duplicate,1749,0,1749
+R3v2/applebbch81,DUPLICATE_UNCERTAIN,near-duplicate candidate unresolved,1749,3,1746
+R3v2/applebbch81,GIANT_CLUSTER,texture-collision cluster,1746,0,1746
+R3v2/applebbch81,ACCEPTED,strict eligible,1746,0,1746
+R3v2/artemis_imagesafari,input,all ledger rows,135623,0,135623
+R3v2/artemis_imagesafari,HOLDOUT_EXCLUDED,registered downstream holdout,135623,0,135623
+R3v2/artemis_imagesafari,LICENCE_BLOCKED,licence unverified or conflicting,135623,0,135623
+R3v2/artemis_imagesafari,ARCHIVE_ONLY,archive-only source,135623,0,135623
+R3v2/artemis_imagesafari,MODALITY_NOT_VISIBLE_RGB,documented non-visible modality,135623,0,135623
+R3v2/artemis_imagesafari,MODALITY_UNKNOWN,modality cannot be evidenced,135623,0,135623
+R3v2/artemis_imagesafari,DECODE_FAILED,file did not decode,135623,0,135623
+R3v2/artemis_imagesafari,BELOW_MIN_RESOLUTION,short side below policy minimum,135623,0,135623
+R3v2/artemis_imagesafari,BASIC_QC_REJECT,deterministic basic-quality rejection,135623,2986,132637
+R3v2/artemis_imagesafari,BASIC_QC_QUARANTINE,basic-quality ambiguity,132637,954,131683
+R3v2/artemis_imagesafari,IQA_REJECT,reference-free IQA below reject threshold,131683,20,131663
+R3v2/artemis_imagesafari,IQA_QUARANTINE,reference-free IQA in the grey band,131663,702,130961
+R3v2/artemis_imagesafari,IQA_MISSING,reference-free IQA not measured,130961,0,130961
+R3v2/artemis_imagesafari,DOMAIN_REJECT,acquisition domain excluded by policy,130961,0,130961
+R3v2/artemis_imagesafari,DOMAIN_QUARANTINE,acquisition domain uncertain,130961,0,130961
+R3v2/artemis_imagesafari,EXACT_DUPLICATE,byte/pixel identical copy,130961,0,130961
+R3v2/artemis_imagesafari,NEAR_DUPLICATE,confirmed near duplicate,130961,19,130942
+R3v2/artemis_imagesafari,DUPLICATE_UNCERTAIN,near-duplicate candidate unresolved,130942,672,130270
+R3v2/artemis_imagesafari,GIANT_CLUSTER,texture-collision cluster,130270,0,130270
+R3v2/artemis_imagesafari,ACCEPTED,strict eligible,130270,0,130270
+R3v2/sesame_weed,input,all ledger rows,1300,0,1300
+R3v2/sesame_weed,HOLDOUT_EXCLUDED,registered downstream holdout,1300,0,1300
+R3v2/sesame_weed,LICENCE_BLOCKED,licence unverified or conflicting,1300,0,1300
+R3v2/sesame_weed,ARCHIVE_ONLY,archive-only source,1300,0,1300
+R3v2/sesame_weed,MODALITY_NOT_VISIBLE_RGB,documented non-visible modality,1300,0,1300
+R3v2/sesame_weed,MODALITY_UNKNOWN,modality cannot be evidenced,1300,0,1300
+R3v2/sesame_weed,DECODE_FAILED,file did not decode,1300,0,1300
+R3v2/sesame_weed,BELOW_MIN_RESOLUTION,short side below policy minimum,1300,0,1300
+R3v2/sesame_weed,BASIC_QC_REJECT,deterministic basic-quality rejection,1300,0,1300
+R3v2/sesame_weed,BASIC_QC_QUARANTINE,basic-quality ambiguity,1300,0,1300
+R3v2/sesame_weed,IQA_REJECT,reference-free IQA below reject threshold,1300,0,1300
+R3v2/sesame_weed,IQA_QUARANTINE,reference-free IQA in the grey band,1300,0,1300
+R3v2/sesame_weed,IQA_MISSING,reference-free IQA not measured,1300,0,1300
+R3v2/sesame_weed,DOMAIN_REJECT,acquisition domain excluded by policy,1300,0,1300
+R3v2/sesame_weed,DOMAIN_QUARANTINE,acquisition domain uncertain,1300,0,1300
+R3v2/sesame_weed,EXACT_DUPLICATE,byte/pixel identical copy,1300,1300,0
+R3v2/sesame_weed,NEAR_DUPLICATE,confirmed near duplicate,0,0,0
+R3v2/sesame_weed,DUPLICATE_UNCERTAIN,near-duplicate candidate unresolved,0,0,0
+R3v2/sesame_weed,GIANT_CLUSTER,texture-collision cluster,0,0,0
+R3v2/sesame_weed,ACCEPTED,strict eligible,0,0,0
+R3v2/ALL,input,all ledger rows,243694,0,243694
+R3v2/ALL,HOLDOUT_EXCLUDED,registered downstream holdout,243694,9606,234088
+R3v2/ALL,LICENCE_BLOCKED,licence unverified or conflicting,234088,2500,231588
+R3v2/ALL,ARCHIVE_ONLY,archive-only source,231588,0,231588
+R3v2/ALL,MODALITY_NOT_VISIBLE_RGB,documented non-visible modality,231588,2949,228639
+R3v2/ALL,MODALITY_UNKNOWN,modality cannot be evidenced,228639,0,228639
+R3v2/ALL,DECODE_FAILED,file did not decode,228639,0,228639
+R3v2/ALL,BELOW_MIN_RESOLUTION,short side below policy minimum,228639,40,228599
+R3v2/ALL,BASIC_QC_REJECT,deterministic basic-quality rejection,228599,5783,222816
+R3v2/ALL,BASIC_QC_QUARANTINE,basic-quality ambiguity,222816,2063,220753
+R3v2/ALL,IQA_REJECT,reference-free IQA below reject threshold,220753,485,220268
+R3v2/ALL,IQA_QUARANTINE,reference-free IQA in the grey band,220268,5060,215208
+R3v2/ALL,IQA_MISSING,reference-free IQA not measured,215208,0,215208
+R3v2/ALL,DOMAIN_REJECT,acquisition domain excluded by policy,215208,44,215164
+R3v2/ALL,DOMAIN_QUARANTINE,acquisition domain uncertain,215164,32362,182802
+R3v2/ALL,EXACT_DUPLICATE,byte/pixel identical copy,182802,9121,173681
+R3v2/ALL,NEAR_DUPLICATE,confirmed near duplicate,173681,1755,171926
+R3v2/ALL,DUPLICATE_UNCERTAIN,near-duplicate candidate unresolved,171926,2600,169326
+R3v2/ALL,GIANT_CLUSTER,texture-collision cluster,169326,0,169326
+R3v2/ALL,ACCEPTED,strict eligible,169326,0,169326

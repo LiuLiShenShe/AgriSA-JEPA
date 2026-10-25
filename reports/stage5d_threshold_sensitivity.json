@@ -1,0 +1,461 @@
+{
+  "musiq_sensitivity": [
+    {
+      "accept_threshold": 40.0,
+      "reject_threshold": 15.0,
+      "pass": 211061,
+      "quarantine": 1133,
+      "reject": 0,
+      "missing": 0,
+      "retention_among_scored": 0.9946605464810504
+    },
+    {
+      "accept_threshold": 40.0,
+      "reject_threshold": 20.0,
+      "pass": 211061,
+      "quarantine": 1118,
+      "reject": 15,
+      "missing": 0,
+      "retention_among_scored": 0.9946605464810504
+    },
+    {
+      "accept_threshold": 40.0,
+      "reject_threshold": 25.0,
+      "pass": 211061,
+      "quarantine": 1025,
+      "reject": 108,
+      "missing": 0,
+      "retention_among_scored": 0.9946605464810504
+    },
+    {
+      "accept_threshold": 40.0,
+      "reject_threshold": 30.0,
+      "pass": 211061,
+      "quarantine": 870,
+      "reject": 263,
+      "missing": 0,
+      "retention_among_scored": 0.9946605464810504
+    },
+    {
+      "accept_threshold": 40.0,
+      "reject_threshold": 35.0,
+      "pass": 211061,
+      "quarantine": 585,
+      "reject": 548,
+      "missing": 0,
+      "retention_among_scored": 0.9946605464810504
+    },
+    {
+      "accept_threshold": 45.0,
+      "reject_threshold": 15.0,
+      "pass": 209953,
+      "quarantine": 2241,
+      "reject": 0,
+      "missing": 0,
+      "retention_among_scored": 0.9894389096769937
+    },
+    {
+      "accept_threshold": 45.0,
+      "reject_threshold": 20.0,
+      "pass": 209953,
+      "quarantine": 2226,
+      "reject": 15,
+      "missing": 0,
+      "retention_among_scored": 0.9894389096769937
+    },
+    {
+      "accept_threshold": 45.0,
+      "reject_threshold": 25.0,
+      "pass": 209953,
+      "quarantine": 2133,
+      "reject": 108,
+      "missing": 0,
+      "retention_among_scored": 0.9894389096769937
+    },
+    {
+      "accept_threshold": 45.0,
+      "reject_threshold": 30.0,
+      "pass": 209953,
+      "quarantine": 1978,
+      "reject": 263,
+      "missing": 0,
+      "retention_among_scored": 0.9894389096769937
+    },
+    {
+      "accept_threshold": 45.0,
+      "reject_threshold": 35.0,
+      "pass": 209953,
+      "quarantine": 1693,
+      "reject": 548,
+      "missing": 0,
+      "retention_among_scored": 0.9894389096769937
+    },
+    {
+      "accept_threshold": 50.0,
+      "reject_threshold": 15.0,
+      "pass": 207747,
+      "quarantine": 4447,
+      "reject": 0,
+      "missing": 0,
+      "retention_among_scored": 0.9790427627548376
+    },
+    {
+      "accept_threshold": 50.0,
+      "reject_threshold": 20.0,
+      "pass": 207747,
+      "quarantine": 4432,
+      "reject": 15,
+      "missing": 0,
+      "retention_among_scored": 0.9790427627548376
+    },
+    {
+      "accept_threshold": 50.0,
+      "reject_threshold": 25.0,
+      "pass": 207747,
+      "quarantine": 4339,
+      "reject": 108,
+      "missing": 0,
+      "retention_among_scored": 0.9790427627548376
+    },
+    {
+      "accept_threshold": 50.0,
+      "reject_threshold": 30.0,
+      "pass": 207747,
+      "quarantine": 4184,
+      "reject": 263,
+      "missing": 0,
+      "retention_among_scored": 0.9790427627548376
+    },
+    {
+      "accept_threshold": 50.0,
+      "reject_threshold": 35.0,
+      "pass": 207747,
+      "quarantine": 3899,
+      "reject": 548,
+      "missing": 0,
+      "retention_among_scored": 0.9790427627548376
+    },
+    {
+      "accept_threshold": 55.0,
+      "reject_threshold": 15.0,
+      "pass": 202582,
+      "quarantine": 9612,
+      "reject": 0,
+      "missing": 0,
+      "retention_among_scored": 0.9547018294579489
+    },
+    {
+      "accept_threshold": 55.0,
+      "reject_threshold": 20.0,
+      "pass": 202582,
+      "quarantine": 9597,
+      "reject": 15,
+      "missing": 0,
+      "retention_among_scored": 0.9547018294579489
+    },
+    {
+      "accept_threshold": 55.0,
+      "reject_threshold": 25.0,
+      "pass": 202582,
+      "quarantine": 9504,
+      "reject": 108,
+      "missing": 0,
+      "retention_among_scored": 0.9547018294579489
+    },
+    {
+      "accept_threshold": 55.0,
+      "reject_threshold": 30.0,
+      "pass": 202582,
+      "quarantine": 9349,
+      "reject": 263,
+      "missing": 0,
+      "retention_among_scored": 0.9547018294579489
+    },
+    {
+      "accept_threshold": 55.0,
+      "reject_threshold": 35.0,
+      "pass": 202582,
+      "quarantine": 9064,
+      "reject": 548,
+      "missing": 0,
+      "retention_among_scored": 0.9547018294579489
+    },
+    {
+      "accept_threshold": 60.0,
+      "reject_threshold": 15.0,
+      "pass": 190254,
+      "quarantine": 21940,
+      "reject": 0,
+      "missing": 0,
+      "retention_among_scored": 0.8966040510099249
+    },
+    {
+      "accept_threshold": 60.0,
+      "reject_threshold": 20.0,
+      "pass": 190254,
+      "quarantine": 21925,
+      "reject": 15,
+      "missing": 0,
+      "retention_among_scored": 0.8966040510099249
+    },
+    {
+      "accept_threshold": 60.0,
+      "reject_threshold": 25.0,
+      "pass": 190254,
+      "quarantine": 21832,
+      "reject": 108,
+      "missing": 0,
+      "retention_among_scored": 0.8966040510099249
+    },
+    {
+      "accept_threshold": 60.0,
+      "reject_threshold": 30.0,
+      "pass": 190254,
+      "quarantine": 21677,
+      "reject": 263,
+      "missing": 0,
+      "retention_among_scored": 0.8966040510099249
+    },
+    {
+      "accept_threshold": 60.0,
+      "reject_threshold": 35.0,
+      "pass": 190254,
+      "quarantine": 21392,
+      "reject": 548,
+      "missing": 0,
+      "retention_among_scored": 0.8966040510099249
+    }
+  ],
+  "per_source_retention_at_policy_thresholds": [
+    {
+      "source_id": "artemis_imagesafari",
+      "rows": 135623,
+      "scored": 135623,
+      "pass": 134123,
+      "quarantine": 1419,
+      "reject": 81,
+      "missing": 0,
+      "retention_among_scored": 0.9889399290680784
+    },
+    {
+      "source_id": "agrifield40k_pool",
+      "rows": 39963,
+      "scored": 39963,
+      "pass": 39798,
+      "quarantine": 164,
+      "reject": 1,
+      "missing": 0,
+      "retention_among_scored": 0.9958711808422791
+    },
+    {
+      "source_id": "agrifm_ref58",
+      "rows": 23205,
+      "scored": 23205,
+      "pass": 23199,
+      "quarantine": 6,
+      "reject": 0,
+      "missing": 0,
+      "retention_among_scored": 0.9997414350355527
+    },
+    {
+      "source_id": "agrifm_ref11",
+      "rows": 5899,
+      "scored": 5899,
+      "pass": 5468,
+      "quarantine": 414,
+      "reject": 17,
+      "missing": 0,
+      "retention_among_scored": 0.9269367689438888
+    },
+    {
+      "source_id": "applebbch81",
+      "rows": 1838,
+      "scored": 1838,
+      "pass": 1805,
+      "quarantine": 33,
+      "reject": 0,
+      "missing": 0,
+      "retention_among_scored": 0.9820457018498367
+    },
+    {
+      "source_id": "sesame_weed",
+      "rows": 1300,
+      "scored": 1300,
+      "pass": 1300,
+      "quarantine": 0,
+      "reject": 0,
+      "missing": 0,
+      "retention_among_scored": 1.0
+    },
+    {
+      "source_id": "agrifm_ref20",
+      "rows": 1081,
+      "scored": 1081,
+      "pass": 1050,
+      "quarantine": 31,
+      "reject": 0,
+      "missing": 0,
+      "retention_among_scored": 0.971322849213691
+    },
+    {
+      "source_id": "agrifm_ref6",
+      "rows": 900,
+      "scored": 900,
+      "pass": 896,
+      "quarantine": 4,
+      "reject": 0,
+      "missing": 0,
+      "retention_among_scored": 0.9955555555555555
+    },
+    {
+      "source_id": "agrifm_ref7",
+      "rows": 829,
+      "scored": 829,
+      "pass": 783,
+      "quarantine": 37,
+      "reject": 9,
+      "missing": 0,
+      "retention_among_scored": 0.9445114595898673
+    },
+    {
+      "source_id": "agrifm_ref1",
+      "rows": 670,
+      "scored": 670,
+      "pass": 665,
+      "quarantine": 5,
+      "reject": 0,
+      "missing": 0,
+      "retention_among_scored": 0.9925373134328358
+    },
+    {
+      "source_id": "agrifm_ref90",
+      "rows": 520,
+      "scored": 520,
+      "pass": 516,
+      "quarantine": 4,
+      "reject": 0,
+      "missing": 0,
+      "retention_among_scored": 0.9923076923076923
+    },
+    {
+      "source_id": "agrifm_ref8",
+      "rows": 251,
+      "scored": 251,
+      "pass": 251,
+      "quarantine": 0,
+      "reject": 0,
+      "missing": 0,
+      "retention_among_scored": 1.0
+    },
+    {
+      "source_id": "agrifm_ref9",
+      "rows": 115,
+      "scored": 115,
+      "pass": 99,
+      "quarantine": 16,
+      "reject": 0,
+      "missing": 0,
+      "retention_among_scored": 0.8608695652173913
+    }
+  ],
+  "accepted_composition": {
+    "physical_source_id": {
+      "artemis_imagesafari": 111762,
+      "agrifield40k_pool": 18242,
+      "agrifm_ref58": 15386,
+      "applebbch81": 1383,
+      "agrifm_ref11": 382,
+      "agrifm_ref9": 84,
+      "agrifm_ref1": 40
+    },
+    "crop": {
+      "common-bean": 36283,
+      "unknown": 35519,
+      "sorghum": 22169,
+      "potato": 11152,
+      "cowpea": 7197,
+      "pearl-millet": 7010,
+      "groundnut": 4476,
+      "pigeon-pea": 4375,
+      "african-yam": 4349,
+      "banana": 4047,
+      "finger-millet": 2972,
+      "rice": 2099,
+      "sweet-potato": 1850,
+      "wheat": 721,
+      "maize": 697,
+      "cassava": 682,
+      "soybean": 644,
+      "chickpea": 550,
+      "lentil": 487
+    },
+    "country": {
+      "unknown": 99187,
+      "UGA": 15852,
+      "COL": 13793,
+      "USA": 13032,
+      "TZA": 5415
+    },
+    "farm_id": {
+      "ciat-arusha": 15452,
+      "ciat-palmira": 13793,
+      "ciat-kawanda": 13251,
+      "cimmyt-kiboko": 13051,
+      "csu-fort-collins": 13032,
+      "cip-nairobi": 11342,
+      "cimmyt-senegal": 9134,
+      "cimmyt-kibos": 7072,
+      "iita-osogbo": 4349,
+      "iita-kampala": 3970,
+      "naro-namulonge": 2601,
+      "africa-rice-ci": 2093,
+      "qed-lilongwe": 1511,
+      "cimmyt-njoro": 554,
+      "iita-kano": 466,
+      "iita-nambala": 77,
+      "csir-ghana": 6,
+      "africa-rice-ibadan": 6
+    },
+    "group_tier": {
+      "OFFICIAL_GROUP": 111760,
+      "DOCUMENTED_PATH_GROUP": 19625,
+      "WEAK_PROXY": 15892,
+      "UNKNOWN_GROUP": 2
+    }
+  },
+  "diversity": {
+    "source_hhi": 0.602196714779906,
+    "source_entropy_bits": 0.7698536831499858,
+    "crop_hhi": 0.15621046876348316,
+    "country_hhi": 0.48308970570660037
+  },
+  "sampling_profiles": {
+    "natural": {
+      "artemis_imagesafari": 113826.81848736072,
+      "agrifield40k_pool": 18579.023486036705,
+      "agrifm_ref58": 15670.258488990285,
+      "applebbch81": 1408.5511172672275,
+      "agrifm_ref11": 389.0575031063492,
+      "agrifm_ref9": 85.55191167783595,
+      "agrifm_ref1": 40.73900556087426
+    },
+    "capped_60pct": {
+      "artemis_imagesafari": 90000.0,
+      "agrifield40k_pool": 18579.023486036705,
+      "agrifm_ref58": 15670.258488990285,
+      "applebbch81": 1408.5511172672275,
+      "agrifm_ref11": 389.0575031063492,
+      "agrifm_ref9": 85.55191167783595,
+      "agrifm_ref1": 40.73900556087426
+    },
+    "balanced": {
+      "artemis_imagesafari": 21428.571428571428,
+      "agrifield40k_pool": 21428.571428571428,
+      "agrifm_ref58": 21428.571428571428,
+      "applebbch81": 21428.571428571428,
+      "agrifm_ref11": 21428.571428571428,
+      "agrifm_ref9": 21428.571428571428,
+      "agrifm_ref1": 21428.571428571428
+    }
+  }
+}

@@ -16,3 +16,15 @@ data/corpus_v2/work/
 data/corpus_v2/download_manifest.csv
 data/corpus_v2/*.tmp
 data/corpus_v2/*_manifest.csv
+
+# Stage 5D derived data: per-image ledgers, published CSVs and caches live
+# outside Git.  The manifest, policy, sources.csv, sampling profiles and the
+# small reports stay versioned.
+data/corpus_v3/images/
+data/corpus_v3/derived_iqa/
+data/corpus_v3/R3v2_strict_rgb_train.csv
+data/corpus_v3/R3v2_strict_rgb_val.csv
+data/corpus_v3/quarantine_reasons.csv
+data/corpus_v3/near_duplicate_decisions.csv
+data/corpus_v3/holdout_hash_index.csv
+data/corpus_v3_rebuild/

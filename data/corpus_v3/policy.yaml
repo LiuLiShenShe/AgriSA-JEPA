@@ -1,0 +1,106 @@
+# Stage 5D corpus policy.  This file is the ONLY source of truth for every
+# threshold that appears in a Stage 5D decision.  The build tool loads it and
+# fails loudly if a threshold is missing or self-contradictory.
+#
+# Unlike the Stage 5C policy, each metric declares its scale and direction
+# explicitly, so the "0.35 in YAML vs 45.0 in code" class of bug cannot recur.
+version: stage5d-policy-v2
+created: '2026-10-25'
+owner: agrisa-jepa
+supersedes: stage5c-policy-v1
+notes: >-
+  Stage 5C declared iqa.accept_min 0.35 / reject_max 0.22 in this file while
+  src/registry/stage5c_freeze.py used 45.0 / 25.0.  pyIQA MUSIQ emits a 0-100
+  score, so the YAML values were never in force.  The Stage 5D policy states
+  the measured scale and the thresholds that were actually applied, and keeps
+  NIQE out of the admission gate (see quality.iqa.metrics.niqe.role).
+
+paths:
+  # Logical dataset root.  The physical location is supplied by the caller
+  # (--data-root or AGRI_DATA_ROOT) so no machine path is baked into a report.
+  data_root: STAGE5D_ROOT
+  raw: raw
+  archives: archives
+  artemis_index: artemis/remote_index.csv
+  agrifield_samples: /data/datasets/AgriField-40K/all_samples.csv
+
+quality:
+  basic:
+    min_short_side: 224
+    laplacian_var_min: 35.0
+    tenengrad_min: 25.0
+    dark_mean_max: 22.0
+    bright_mean_min: 238.0
+    entropy_min: 2.6
+    extreme_aspect_ratio_max: 8.0
+    blank_pixel_fraction_max: 0.85
+    near_threshold_band: 0.15
+    quarantine_on_conflict: true
+  iqa:
+    missing_score_action: QUARANTINE
+    metrics:
+      musiq:
+        # Measured: pyIQA 0.1.16 with musiq_koniq_ckpt-e95806b9.pth, scored on
+        # images resized to <= 512 px short side.  Observed corpus range
+        # 15.8-78.9, so the documented 0-100 range is confirmed empirically.
+        direction: higher_is_better
+        score_range: [0.0, 100.0]
+        accept_threshold: 45.0
+        reject_threshold: 25.0
+        role: GATE
+        model: musiq
+        model_sha256: e95806b9eae5f3814c410f574ba8e552362bd5bc63d758ed5b97860f5d6185aa
+        scale_evidence: >-
+          reports/stage5d_threshold_trace.md; observed min/max over 212,194
+          scored images in data/corpus_v2/images/*_qc.csv
+      niqe:
+        # Measured: pyIQA 0.1.16, niqe_modelparameters.mat.  Lower is better.
+        # Stage 5C measured NIQE on 5 sources only and never used it in the
+        # admission decision.  Stage 5D records it as DIAGNOSTIC_ONLY: it is
+        # stored and reported, never a gate, until its coverage is complete.
+        direction: lower_is_better
+        score_range: [0.0, 100.0]
+        accept_threshold: 8.0
+        reject_threshold: 12.0
+        role: DIAGNOSTIC_ONLY
+        model: niqe
+        model_sha256: fa2aa4d12dd9595c3fb6bf8b4e1a15c79d5d1469238d0901c88dead195be578d
+        scale_evidence: >-
+          observed min/max 3.3-5.7 over 3,776 scored images in Stage 5C;
+          coverage is 1.8% of the corpus so it cannot be a gate
+
+domain:
+  field_label_set: [FIELD_IN_SITU, ORCHARD_IN_SITU]
+  excluded_labels: [PROTECTED_CULTIVATION, CONTROLLED_LAB, UAV_AERIAL, SATELLITE_REMOTE]
+  # UNKNOWN is neither accepted nor rejected: it is quarantined.
+  quarantine_labels: [UNKNOWN]
+
+modality:
+  # Only images with documented visible-RGB evidence enter R3v2_strict_rgb.
+  accept_status: [VISIBLE_RGB_EVIDENCED]
+  quarantine_status: [UNKNOWN_MODALITY]
+  reject_status: [NOT_VISIBLE_RGB]
+
+groups:
+  salt: agrisa-stage5d-groups-v1
+  val_fraction: 0.15
+  # Unknown-group images never join the group-disjoint validation set.
+  unknown_group_split: TRAIN_ONLY_GROUP_UNKNOWN
+
+dedup:
+  phash_max_distance: 8
+  dhash_max_distance: 6
+  confirm_phash_max: 4
+  aspect_tolerance: 0.02
+  giant_cluster_threshold: 300
+  embedding_cosine_min: 0.98
+  use_embeddings: true
+
+holdout:
+  source_ids: [phenobench, gwhd_2021, plantdoc, minneapple,
+               roboflow_disease_detection, roboflow_crop_detection, plantseg,
+               multiclass_weeds, gwhd_instance_seg, deepweeds, growliflower,
+               cropandweed]
+
+target:
+  r3v2_strict_images: 147285

@@ -1,0 +1,82 @@
+{
+  "rows": 243694,
+  "exact_duplicates": {
+    "images_removed": 9384,
+    "by_source": {
+      "agrifm_ref58": 7803,
+      "sesame_weed": 1300,
+      "agrifm_ref57": 261,
+      "agrifm_ref1": 12,
+      "agrifield40k_pool": 8
+    },
+    "representative_rule": "highest laplacian variance, then largest pixel area, then lexicographic image_id; deterministic and independent of row order"
+  },
+  "near_duplicates": {
+    "candidate_pairs": 82474,
+    "confirmed_pairs": 15806,
+    "uncertain_pairs": 66668,
+    "cross_source_pairs": 2188,
+    "cross_split_pairs": 375,
+    "cross_split_pairs_both_accepted": 0,
+    "cross_split_note": "a pair leaks a split only if both endpoints survived into the published files; pairs where one endpoint was removed are counted here but carry no leakage",
+    "cross_holdout_pairs": 0,
+    "confirmation_rules": [
+      "multi_hash_agreement"
+    ],
+    "cluster_size_distribution": {
+      "2": 9201,
+      "3-5": 404,
+      "6-10": 161,
+      "11-50": 51,
+      ">50": 0
+    },
+    "largest_cluster": 36,
+    "giant_cluster_threshold": 300,
+    "giant_clusters_detected": 0,
+    "note": "pHash/dHash neighbourhoods alone never delete an image; a pair is confirmed only when both hashes agree and the DINOv2 cosine is >= 0.98.  Uncertain candidates stay in QUARANTINE."
+  },
+  "holdout": {
+    "holdout_hash_index": {
+      "datasets": {
+        "phenobench": 13767,
+        "gwhd_2021": 6515
+      },
+      "rows": 20282,
+      "cache": "/fj/jepa-\u4e8c\u7ef4\u56fe\u50cf\u4efb\u52a1/data/corpus_v3/holdout_hash_index.csv"
+    },
+    "source_level": {
+      "registered_holdout_sources": [
+        "gwhd_2021",
+        "phenobench"
+      ],
+      "present_in_master_sources": []
+    },
+    "prefix_level": {
+      "agrifield_pool_upstream_counts": {},
+      "phenobench_prefixed_images_in_pool": 9606,
+      "phenobench_prefixed_by_split_dir": {
+        "train": 7703,
+        "val": 1903
+      },
+      "phenobench_flagged_by_old_ledger": 7703,
+      "phenobench_actually_blocked_by_stage5d": 9606
+    },
+    "file_level": {
+      "old_r3_phenobench_prefixed_images": 1864,
+      "old_r3_exact_hash_matches": 0,
+      "old_r3_near_hash_matches": 37,
+      "new_master_exact_hash_matches": 0,
+      "new_master_near_hash_matches": 11
+    },
+    "not_verifiable_here": [
+      "plantdoc",
+      "minneapple",
+      "plantseg",
+      "multiclass_weeds",
+      "growliflower",
+      "cropandweed",
+      "deepweeds",
+      "roboflow_*"
+    ]
+  }
+}

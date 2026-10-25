@@ -1,0 +1,8 @@
+{
+  "R3v2_strict_rgb": 169326,
+  "train": 147279,
+  "val": 22047,
+  "status": "AUTO_VALIDATED",
+  "target_exceeded": true,
+  "funnel_conserved": true
+}

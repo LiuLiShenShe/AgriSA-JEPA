@@ -1,0 +1,287 @@
+{
+  "git": {
+    "branch": "agri-stage5d-corpus-validation",
+    "head": "2867e7f4b09814c268612e893c34216506cbe55e",
+    "remote_head_recorded_by_stage5c": "2867e7f4b09814c268612e893c34216506cbe55e",
+    "status_short": [
+      "M .gitignore",
+      "?? CLAUDE.md",
+      "?? data/corpus_v3/",
+      "?? reports/stage5d_assets_preflight.json",
+      "?? reports/stage5d_assets_preflight.md",
+      "?? reports/stage5d_build_summary.json",
+      "?? reports/stage5d_dataset_card.md",
+      "?? reports/stage5d_dataset_composition.csv",
+      "?? reports/stage5d_dataset_composition.md",
+      "?? reports/stage5d_duplicate_audit.json",
+      "?? reports/stage5d_duplicate_audit.md",
+      "?? reports/stage5d_figures/",
+      "?? reports/stage5d_final_report.md",
+      "?? reports/stage5d_funnel_mismatches.csv",
+      "?? reports/stage5d_funnel_table.csv",
+      "?? reports/stage5d_gates.json",
+      "?? reports/stage5d_groups_and_splits.csv",
+      "?? reports/stage5d_groups_and_splits.json",
+      "?? reports/stage5d_groups_and_splits.md",
+      "?? reports/stage5d_groups_split.csv",
+      "?? reports/stage5d_holdout_evidence.json",
+      "?? reports/stage5d_holdout_evidence.md",
+      "?? reports/stage5d_legacy_funnel_reconciliation.json",
+      "?? reports/stage5d_legacy_funnel_reconciliation.md",
+      "?? reports/stage5d_loader_smoke.json",
+      "?? reports/stage5d_metadata_coverage.csv",
+      "?? reports/stage5d_metadata_coverage.md",
+      "?? reports/stage5d_modality_audit.json",
+      "?? reports/stage5d_modality_audit.md",
+      "?? reports/stage5d_qc_calibration.csv",
+      "?? reports/stage5d_qc_policy_diff.md",
+      "?? reports/stage5d_rebuild_check.json",
+      "?? reports/stage5d_source_balance.csv",
+      "?? reports/stage5d_source_composition.csv",
+      "?? reports/stage5d_synthetic_qc.csv",
+      "?? reports/stage5d_synthetic_qc.json",
+      "?? reports/stage5d_threshold_sensitivity.json",
+      "?? reports/stage5d_threshold_trace.json",
+      "?? reports/stage5d_threshold_trace.md",
+      "?? src/registry/stage5d_dedup.py",
+      "?? src/registry/stage5d_funnel.py",
+      "?? src/registry/stage5d_gates.py",
+      "?? src/registry/stage5d_group_policy.py",
+      "?? src/registry/stage5d_metadata.py",
+      "?? src/registry/stage5d_metadata_schema.py",
+      "?? src/registry/stage5d_modality.py",
+      "?? src/registry/stage5d_qc_policy.py",
+      "?? src/registry/stage5d_qc_validation.py",
+      "?? tests/test_stage5d_corpus.py",
+      "?? tools/stage5d_audit_score_scales.py",
+      "?? tools/stage5d_build_corpus.py",
+      "?? tools/stage5d_compute_missing_iqa.py",
+      "?? tools/stage5d_final_report.py",
+      "?? tools/stage5d_generate_tables.py",
+      "?? tools/stage5d_holdout_audit.py",
+      "?? tools/stage5d_loader_smoke.py",
+      "?? tools/stage5d_preflight.py",
+      "?? tools/stage5d_publish_materials.py",
+      "?? tools/stage5d_rebuild_check.py",
+      "?? tools/stage5d_reconcile_funnel.py",
+      "?? tools/stage5d_run_all.sh",
+      "?? tools/stage5d_sampling_profiles.py",
+      "?? tools/stage5d_sensitivity.py",
+      "?? tools/stage5d_synthetic_qc.py",
+      "?? tools/stage5d_validate_modality.py"
+    ],
+    "branches": [
+      "agri-stage1                         df6093a [origin/agri-stage1] Stage 1: audit AgriField and validate I-JEPA",
+      "  agri-stage2                         06c353c [origin/agri-stage2] Stage 2 data audit: show multiple example original IDs per prefix",
+      "  agri-stage2c                        c20a731 Stage 2C: bounded-step budget, mid-epoch resume, leakage checks, pilot",
+      "  agri-stage2d                        83928f6 [origin/agri-stage2d] Stage 2D + Stage 3A: v1 split repair and PhenoBench downstream probe",
+      "  agri-stage3b-4a                     6b14222 [origin/agri-stage3b-4a] Stage 3B/4A: complete C1/C3 to 2000 updates, full PhenoBench matrix, uv env",
+      "  agri-stage4b                        45a00b5 [origin/agri-stage4b] Stage 4B: mask geometry diagnosis, geometry-controlled sampler, 500-step pilots",
+      "  agri-stage5a                        540e683 [origin/agri-stage5a] Stage 5A: GWHD 2021 detection A/B results (4 runs, 2 seeds) and final registries",
+      "  agri-stage5b-field-corpus           5c413ca [origin/agri-stage5b-field-corpus] Stage 5B: label every registry v2 row and add coverage test",
+      "  agri-stage5c-agrifm147k-auto-corpus 2867e7f [origin/agri-stage5c-agrifm147k-auto-corpus] Stage 5C: record the code-and-report commit SHA in the reports",
+      "* agri-stage5d-corpus-validation      2867e7f Stage 5C: record the code-and-report commit SHA in the reports",
+      "  main                                c20a731 [origin/main] Stage 2C: bounded-step budget, mid-epoch resume, leakage checks, pilot"
+    ]
+  },
+  "environment": {
+    "python": "/fj/jepa-\u4e8c\u7ef4\u56fe\u50cf\u4efb\u52a1/.venv-uv/bin/python",
+    "python_version": "3.13.12",
+    "virtualenv": "/fj/jepa-\u4e8c\u7ef4\u56fe\u50cf\u4efb\u52a1/.venv-uv",
+    "cuda": "torch 2.9.1+cu128, cuda 12.8, available=True",
+    "gpus": [
+      "NVIDIA RTX A6000",
+      "NVIDIA RTX A6000"
+    ],
+    "disk_total_gb": 2014.0,
+    "disk_free_gb": 445.7,
+    "conda_detected": false
+  },
+  "data_root": "/data/datasets/Stage5C",
+  "data_root_exists": true,
+  "raw_roots": {
+    "agrifm_ref1": {
+      "path": "/data/datasets/Stage5C/raw/agrifm_ref1",
+      "files": 1680
+    },
+    "agrifm_ref11": {
+      "path": "/data/datasets/Stage5C/raw/agrifm_ref11",
+      "files": 5900
+    },
+    "agrifm_ref20": {
+      "path": "/data/datasets/Stage5C/raw/agrifm_ref20",
+      "files": 1081
+    },
+    "agrifm_ref57": {
+      "path": "/data/datasets/Stage5C/raw/agrifm_ref57",
+      "files": 31500
+    },
+    "agrifm_ref58": {
+      "path": "/data/datasets/Stage5C/raw/agrifm_ref58",
+      "files": 35849
+    },
+    "agrifm_ref6": {
+      "path": "/data/datasets/Stage5C/raw/agrifm_ref6",
+      "files": 901
+    },
+    "agrifm_ref7": {
+      "path": "/data/datasets/Stage5C/raw/agrifm_ref7",
+      "files": 830
+    },
+    "agrifm_ref8": {
+      "path": "/data/datasets/Stage5C/raw/agrifm_ref8",
+      "files": 252
+    },
+    "agrifm_ref9": {
+      "path": "/data/datasets/Stage5C/raw/agrifm_ref9",
+      "files": 233
+    },
+    "agrifm_ref90": {
+      "path": "/data/datasets/Stage5C/raw/agrifm_ref90",
+      "files": 1561
+    },
+    "artemis_imagesafari": {
+      "path": "/data/datasets/Stage5C/raw/artemis_imagesafari",
+      "files": 135655
+    },
+    "perennial_plants": {
+      "path": "/data/datasets/Stage5C/raw/perennial_plants",
+      "files": 799
+    }
+  },
+  "assets": {
+    "R0_agrifm35_source_pool_manifest.csv": {
+      "exists": true,
+      "bytes": 115276824,
+      "sha256": "8cbd124525d43dd28e00cbd4e4f903f7da6b4fc78390599f1386e03f8c31ae7b"
+    },
+    "R1_agrifm147_rebuild_manifest.csv": {
+      "exists": true,
+      "bytes": 24157373,
+      "sha256": "fdb0aab21080269a9707d839748d37040fa99eebbaf5fa59978fa748f41324d9"
+    },
+    "R2_field_strict_manifest.csv": {
+      "exists": true,
+      "bytes": 8662021,
+      "sha256": "3d0519cf849948ad6a1ad6b1cb3f21947c6e495844ff549614e30e8c384928de"
+    },
+    "R3_field_extended_manifest.csv": {
+      "exists": true,
+      "bytes": 87803200,
+      "sha256": "ce32e5c819d0c1e4d4cf6a9866176415f9c2e911638be449c1f9aef7526aaf71"
+    },
+    "images/artemis_imagesafari.csv": {
+      "exists": true,
+      "bytes": 119926547,
+      "sha256": "5167fc62ec2a02b53bc29f95fdcdc3f68080f0418d4571ff325c94cd378d7ac3"
+    },
+    "images/artemis_imagesafari_qc.csv": {
+      "exists": true,
+      "bytes": 122209670,
+      "sha256": "75b3816a11c068e60a9fa880f0098470fe606d7b5d1c1353090060757ee54091"
+    },
+    "images/agrifm_ref11.csv": {
+      "exists": true,
+      "bytes": 4268165,
+      "sha256": "136e4cb51a417772779ade963ebac8784225f2999218ac23fcbd0afe7878998f"
+    },
+    "images/agrifm_ref11_qc.csv": {
+      "exists": true,
+      "bytes": 4369548,
+      "sha256": "5bcb513a4faba78609a0139c9e99d579d03e624fc36076b02c72a5aa2c490675"
+    },
+    "images/agrifm_ref58.csv": {
+      "exists": true,
+      "bytes": 15808573,
+      "sha256": "68a7764c6d88ea0248fd9289466cbd3a81237c2bfe1b263350e3079c09a8e582"
+    },
+    "images/agrifm_ref58_qc.csv": {
+      "exists": true,
+      "bytes": 16199419,
+      "sha256": "2c2cd76575f0d42813c6a9ad09ad5845910d5783b2ad8dd8c70e4fdde41b2de5"
+    },
+    "images/agrifield40k_pool.csv": {
+      "exists": true,
+      "bytes": 28601294,
+      "sha256": "0463ecedfcfdaebd85101ec1f9fd78b739dbdee4824a4d50cdeb075f66cc97f4"
+    },
+    "images/agrifield40k_pool_qc.csv": {
+      "exists": true,
+      "bytes": 29275953,
+      "sha256": "6a4e632ee1745c3f2d3d99d372f32e5a994d4092d43efac604d2c251f6ee6530"
+    },
+    "R0_agrifm35_source_pool_manifest.json": {
+      "exists": true,
+      "bytes": 1772,
+      "sha256": "3df8e80ccd5a500ca9be194ea56c7f274cb7796cef48edb9b37dcb6486d35a8e"
+    },
+    "R1_agrifm147_rebuild_manifest.json": {
+      "exists": true,
+      "bytes": 1607,
+      "sha256": "b414224a9dc7b3d5b12104de342e7f79431ed3e1af537416dc7884b58cf4f3e5"
+    },
+    "R2_field_strict_manifest.json": {
+      "exists": true,
+      "bytes": 1376,
+      "sha256": "16780dc9f89c1dd8653724d6441650e02b033726299b28c03dd26f480090daa5"
+    },
+    "R3_field_extended_manifest.json": {
+      "exists": true,
+      "bytes": 1493,
+      "sha256": "f01c148d9e108140510ddba4cef2a3f6fff7fe131c7981febc1bb3bf1a48bee9"
+    },
+    "policy.yaml": {
+      "exists": true,
+      "bytes": 2272,
+      "sha256": "45379ed1a669edb64778b97c1e9dd59ba9f3d8d5983418f642a2542b437a565c"
+    },
+    "artemis/remote_index.csv": {
+      "exists": true,
+      "bytes": 1862148285,
+      "sha256": "8ad734602cd6434075ae5151545052cfa458248653ff7f6983d5dfbdda78a253"
+    }
+  },
+  "stage5c_claimed_hashes": {
+    "R0_agrifm35_source_pool_manifest": {
+      "policy_sha256": "45379ed1a669edb64778b97c1e9dd59ba9f3d8d5983418f642a2542b437a565c",
+      "csv_sha256": "5067581537f0be63c6d864002eddb911f2eacabe06c8f28ee4b6008a8a79ba54",
+      "manifest_csv_sha256": "8cbd124525d43dd28e00cbd4e4f903f7da6b4fc78390599f1386e03f8c31ae7b"
+    },
+    "R1_agrifm147_rebuild_manifest": {
+      "policy_sha256": "45379ed1a669edb64778b97c1e9dd59ba9f3d8d5983418f642a2542b437a565c",
+      "csv_sha256": "1da92de3ff9ace402161841adb349e21c62887272cd050ed266966102e64f212",
+      "manifest_csv_sha256": "fdb0aab21080269a9707d839748d37040fa99eebbaf5fa59978fa748f41324d9"
+    },
+    "R2_field_strict_manifest": {
+      "policy_sha256": "45379ed1a669edb64778b97c1e9dd59ba9f3d8d5983418f642a2542b437a565c",
+      "csv_sha256": "7c00a5ee114eee24efe1f63ac5cde1aec8c9620b1ee5ee56363c583c5808077a",
+      "manifest_csv_sha256": "3d0519cf849948ad6a1ad6b1cb3f21947c6e495844ff549614e30e8c384928de"
+    },
+    "R3_field_extended_manifest": {
+      "policy_sha256": "45379ed1a669edb64778b97c1e9dd59ba9f3d8d5983418f642a2542b437a565c",
+      "csv_sha256": "a3d4e0ea843619bc84f5babad6bfafc7e535ae702f70a9239032d15c3deff118",
+      "manifest_csv_sha256": "ce32e5c819d0c1e4d4cf6a9866176415f9c2e911638be449c1f9aef7526aaf71"
+    }
+  },
+  "path_hygiene": {
+    "legacy_absolute_paths": [
+      {
+        "file": "R0_agrifm35_source_pool_manifest.json",
+        "manifest_csv": "/fj/jepa-\u4e8c\u7ef4\u56fe\u50cf\u4efb\u52a1/data/corpus_v2/R0_agrifm35_source_pool_manifest.csv"
+      },
+      {
+        "file": "R1_agrifm147_rebuild_manifest.json",
+        "manifest_csv": "/fj/jepa-\u4e8c\u7ef4\u56fe\u50cf\u4efb\u52a1/data/corpus_v2/R1_agrifm147_rebuild_manifest.csv"
+      },
+      {
+        "file": "R2_field_strict_manifest.json",
+        "manifest_csv": "/fj/jepa-\u4e8c\u7ef4\u56fe\u50cf\u4efb\u52a1/data/corpus_v2/R2_field_strict_manifest.csv"
+      },
+      {
+        "file": "R3_field_extended_manifest.json",
+        "manifest_csv": "/fj/jepa-\u4e8c\u7ef4\u56fe\u50cf\u4efb\u52a1/data/corpus_v2/R3_field_extended_manifest.csv"
+      }
+    ],
+    "stage5d_policy": "relative_path + logical data root (AGRI_DATA_ROOT / --data-root)"
+  }
+}
