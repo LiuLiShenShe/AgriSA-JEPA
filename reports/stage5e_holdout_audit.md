@@ -30,3 +30,4 @@
 - PlantDoc 本次真实取得并哈希了 2,579 张图像（约 1.0 GB 归档），是唯一在本阶段从"来源级"提升到"文件级"的 holdout。
 - 其余 holdout 的阻塞原因逐条记录在 `stage5e_holdout_evidence.json` 的 `registry` 字段（403 / DNS 失败 / 需要登录 / 需要账号），不做任何绕过。
 - pHash 候选一律标记为 `CANDIDATE_REQUIRES_REVIEW`，不自动删除，需要嵌入确认后才可定论。
+- Stage 5E.1 复核后 14 个 pHash 候选全部定论（2 个 `RESAMPLED_COPY_SAME_CONTENT`、12 个 `HASH_COLLISION_DIFFERENT_IMAGE`），`holdout_crossmatch.csv` 的 `conclusion` 列已回填为 `VERDICT_*`，不再存在 pending 候选。

@@ -103,6 +103,16 @@
     "target_margin": 22039,
     "note": "scale property only; it never overrides licence, QC, holdout or split gates"
   },
+  "pretraining_basis": {
+    "corpus_accepted_count": 169324,
+    "pretraining_train_count": 147277,
+    "pretraining_validation_count": 22047,
+    "val_participates_in_optimizer_updates": false,
+    "target_comparison_basis": "corpus_accepted_count",
+    "target_comparison_basis_note": "Agri-147K (147,285) is compared with the total accepted corpus. The count that actually participates in Stage 6 optimizer updates is pretraining_train_count, which is 8 images smaller. Any paper claim about the pretraining training set must use pretraining_train_count.",
+    "pretraining_train_vs_target": -8,
+    "corpus_accepted_vs_target": 22039
+  },
   "conservation": {
     "ledger_rows": 243694,
     "stage5e_accepted": 169324,

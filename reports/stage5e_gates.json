@@ -1,88 +1,112 @@
 {
-  "status": "READY_FOR_CONTROLLED_PRETRAINING",
+  "status": "CONDITIONAL",
   "failed_gates": [],
-  "unknown_gates": [],
+  "unknown_gates": [
+    "licence_evidence_backed",
+    "pool_upstream_licence_resolved"
+  ],
   "gates": {
     "legacy_files_unchanged": {
       "description": "Stage 5C/5D manifests, policies, ledgers and reports are byte-identical",
       "blocking": true,
       "status": "PASS",
       "evidence": {
-        "checked": 15,
+        "checked": 10,
         "results": [
           {
-            "passed": true,
-            "evidence": "data/corpus_v2/policy.yaml: identical to Stage 5D HEAD"
+            "path": "data/corpus_v2/policy.yaml",
+            "unchanged": true
           },
           {
-            "passed": true,
-            "evidence": "data/corpus_v2/R0_agrifm35_source_pool_manifest.json: identical to Stage 5D HEAD"
+            "path": "data/corpus_v3/policy.yaml",
+            "unchanged": true
           },
           {
-            "passed": true,
-            "evidence": "data/corpus_v2/R1_agrifm147_rebuild_manifest.json: identical to Stage 5D HEAD"
+            "path": "data/corpus_v3/R3v2_strict_rgb_manifest.json",
+            "unchanged": true
           },
           {
-            "passed": true,
-            "evidence": "data/corpus_v2/R2_field_strict_manifest.json: identical to Stage 5D HEAD"
+            "path": "data/corpus_v3/R3v2_strict_rgb_train.csv",
+            "unchanged": true
           },
           {
-            "passed": true,
-            "evidence": "data/corpus_v2/R3_field_extended_manifest.json: identical to Stage 5D HEAD"
+            "path": "data/corpus_v3/R3v2_strict_rgb_val.csv",
+            "unchanged": true
           },
           {
-            "passed": true,
-            "evidence": "data/corpus_v2/sources.csv: identical to Stage 5D HEAD"
+            "path": "data/corpus_v3/holdout_hash_index.csv",
+            "unchanged": true
           },
           {
-            "passed": true,
-            "evidence": "data/corpus_v3/policy.yaml: identical to Stage 5D HEAD"
+            "path": "reports/stage5d_acceptance_report.md",
+            "unchanged": true
           },
           {
-            "passed": true,
-            "evidence": "data/corpus_v3/R3v2_strict_rgb_manifest.json: identical to Stage 5D HEAD"
+            "path": "reports/stage5d_gates.json",
+            "unchanged": true
           },
           {
-            "passed": true,
-            "evidence": "data/corpus_v3/R3v2_strict_rgb_train.csv: identical to Stage 5D HEAD"
+            "path": "reports/stage5d_holdout_evidence.json",
+            "unchanged": true
           },
           {
-            "passed": true,
-            "evidence": "data/corpus_v3/R3v2_strict_rgb_val.csv: identical to Stage 5D HEAD"
-          },
-          {
-            "passed": true,
-            "evidence": "data/corpus_v3/holdout_hash_index.csv: identical to Stage 5D HEAD"
-          },
-          {
-            "passed": true,
-            "evidence": "reports/stage5d_acceptance_report.md: identical to Stage 5D HEAD"
-          },
-          {
-            "passed": true,
-            "evidence": "reports/stage5d_gates.json: identical to Stage 5D HEAD"
-          },
-          {
-            "passed": true,
-            "evidence": "reports/stage5d_holdout_evidence.json: identical to Stage 5D HEAD"
-          },
-          {
-            "passed": true,
-            "evidence": "reports/stage5d_dataset_card.md: identical to Stage 5D HEAD"
+            "path": "reports/stage5d_dataset_card.md",
+            "unchanged": true
           }
         ]
       }
     },
     "licence_evidence_backed": {
-      "description": "every accepted source has a research-use decision with an archived official document whose SHA-256 still matches",
+      "description": "every accepted source carries an explicit evidence grade; archived grades re-hash correctly and no accepted source is silently treated as evidence-backed",
       "blocking": true,
-      "status": "PASS",
+      "status": "UNRESOLVED",
       "evidence": {
         "problems": [],
         "sources": 8,
         "sources_reaudited_with_archived_evidence": 4,
         "sources_carried_forward_from_stage5d_registry": 4,
-        "note": "Only the four sources the Stage 5D report flagged as licence-unverified were re-audited against a freshly archived official document. The others cite the Stage 5D registry row."
+        "grade_counts": {
+          "UNRESOLVED": 1,
+          "OFFICIAL_EVIDENCE_ARCHIVED_AND_HASHED": 4,
+          "REGISTRY_URL_ONLY": 1,
+          "CARRIED_FORWARD_WITH_PRIOR_EVIDENCE": 1
+        },
+        "accepted_images_by_grade": {
+          "UNRESOLVED": 21416,
+          "OFFICIAL_EVIDENCE_ARCHIVED_AND_HASHED": 15892,
+          "REGISTRY_URL_ONLY": 1746,
+          "CARRIED_FORWARD_WITH_PRIOR_EVIDENCE": 130270
+        },
+        "sources_not_evidence_backed": [
+          "agrifield40k_pool",
+          "applebbch81"
+        ],
+        "note": "Only the four sources flagged licence-unverified in Stage 5D have a freshly archived official response; the rest cite prior artifacts and are graded in stage5e1_licence_evidence.json. A source graded REGISTRY_URL_ONLY or UNRESOLVED keeps this gate unresolved."
+      }
+    },
+    "pool_upstream_licence_resolved": {
+      "description": "every accepted upstream dataset behind agrifield40k_pool has a confirmed identity and an upstream-level licence basis, not merely the pool CC-BY label",
+      "blocking": true,
+      "status": "UNRESOLVED",
+      "evidence": {
+        "unresolved_upstreams": [
+          "GrassClover",
+          "Maize-Weed",
+          "RumexLeaves",
+          "SesameWeed",
+          "VCD",
+          "WE3DS"
+        ],
+        "upstreams_with_accepted_images": 11,
+        "upstreams_unresolved": 6,
+        "accepted_images_unresolved": 6120,
+        "train_images_unresolved": 5174,
+        "pool_license": {
+          "stage5d_registry": "CC-BY-4.0",
+          "agrifield40k_paper_table1": "CC-BY-SA-4.0",
+          "note": "The Stage 5D registry row says CC-BY-4.0; the AgriField-40K paper (arXiv:2608.07984, Table 1 and Section 3) says CC-BY-SA-4.0. The discrepancy is reported, not silently resolved. Either way it is a pool-level label for the compilation."
+        },
+        "rule": "A pool-level CC-BY label is a statement about the compilation, not proof that the pool maintainer could relicense third-party images. Creative Commons' guidance is that a licence only grants the rights the licensor is able to grant, and third-party material may need separate permission. That is the general principle used here; each upstream is graded on its own evidence, without extending it into a specific legal conclusion."
       }
     },
     "licence_unresolved_not_trained": {
@@ -95,13 +119,15 @@
       }
     },
     "train_and_redistribution_independent": {
-      "description": "train eligibility and redistribution eligibility are separate fields and neither derives from the other",
+      "description": "train eligibility and redistribution eligibility are separate, non-null fields and neither derives from the other",
       "blocking": true,
       "status": "PASS",
       "evidence": {
         "distinct_train_values": 1,
         "distinct_redistribution_values": 1,
-        "at_least_one_source_where_they_differ": false
+        "images_where_the_two_fields_differ": 0,
+        "problems": [],
+        "note": "Both fields are present and non-empty. The real corpus does not exhibit both independent corners (train only / redistribute only), so logical independence is established by the synthetic unit tests, not by a real row."
       }
     },
     "holdout_file_level_reported": {
@@ -122,11 +148,23 @@
           "roboflow_crop_detection",
           "gwhd_instance_seg"
         ],
-        "falsely_passed": []
+        "problems": []
+      }
+    },
+    "holdout_candidate_verdicts_one_to_one": {
+      "description": "every pHash candidate is matched one-to-one to a recorded verdict; no duplicate or orphan candidate ids",
+      "blocking": true,
+      "status": "PASS",
+      "evidence": {
+        "candidates": 14,
+        "reviewed": 14,
+        "one_to_one": true,
+        "problems": [],
+        "near_candidates_still_pending_review": 0
       }
     },
     "holdout_confirmed_hits_blocked": {
-      "description": "confirmed exact-duplicate holdout hits are absent from the training manifest, and near-duplicate candidates are flagged for review",
+      "description": "confirmed exact-duplicate holdout hits are absent from the training manifest, and reviewed near-duplicate candidates are no longer pending",
       "blocking": true,
       "status": "PASS",
       "evidence": {
@@ -143,7 +181,7 @@
           "agrifield40k_pool:a5e3f9e21eb9dc95"
         ],
         "leaked_into_train_manifest": [],
-        "near_candidates_still_pending_review": 14
+        "near_candidates_still_pending_review": 0
       }
     },
     "evaluation_scope_declared": {
@@ -214,6 +252,46 @@
         "per_source_conserved": true
       }
     },
+    "pretraining_count_basis_declared": {
+      "description": "the manifest separates corpus accepted count from the count actually used for optimizer updates and states which one is compared with Agri-147K",
+      "blocking": true,
+      "status": "PASS",
+      "evidence": {
+        "pretraining_basis": {
+          "corpus_accepted_count": 169324,
+          "pretraining_train_count": 147277,
+          "pretraining_validation_count": 22047,
+          "val_participates_in_optimizer_updates": false,
+          "target_comparison_basis": "corpus_accepted_count",
+          "target_comparison_basis_note": "Agri-147K (147,285) is compared with the total accepted corpus. The count that actually participates in Stage 6 optimizer updates is pretraining_train_count, which is 8 images smaller. Any paper claim about the pretraining training set must use pretraining_train_count.",
+          "pretraining_train_vs_target": -8,
+          "corpus_accepted_vs_target": 22039
+        },
+        "problems": [],
+        "target_images": 147285
+      }
+    },
+    "sampling_cap_unit_consistent": {
+      "description": "the formal capped profile declares one cap unit (physical source or upstream) and its budget arithmetic agrees with that unit",
+      "blocking": true,
+      "status": "PASS",
+      "evidence": {
+        "cap_unit": "physical_source_id",
+        "capped_info": {
+          "cap_share": 0.5,
+          "cap_exposure": 75000.0,
+          "capped_sources": [
+            "artemis_imagesafari"
+          ],
+          "unfulfilled_exposure": 38828.364238815295,
+          "budget_filled": false,
+          "note": "Surplus exposure from capped sources is deliberately NOT redistributed to other sources; doing so would change their natural share."
+        },
+        "capped_exposure_total": 111171.6357611847,
+        "epoch_length": 150000,
+        "problems": []
+      }
+    },
     "rebuild_deterministic": {
       "description": "the same ledger and policy rebuild the same manifest with the same hashes",
       "blocking": true,
@@ -234,13 +312,13 @@
           },
           "R3v3_license_verified_manifest.json": {
             "identical": true,
-            "original_sha256": "3612dce810e6a0bf89937d2bd7608f66a1a0da95fbf40800eb35410dd79aa647",
-            "rebuilt_sha256": "3612dce810e6a0bf89937d2bd7608f66a1a0da95fbf40800eb35410dd79aa647"
+            "original_sha256": "40e212aa0a0047568b1e171a1acc5d1e5dbca61e72ef9de1f3a9f5e6fbc23cc6",
+            "rebuilt_sha256": "40e212aa0a0047568b1e171a1acc5d1e5dbca61e72ef9de1f3a9f5e6fbc23cc6"
           },
           "R3v3_license_verified_sampling_profiles.json": {
             "identical": true,
-            "original_sha256": "42aa12d4936c6f632a943f0dd0a3a6fcc6bcc81206ae027b5d9e6835aefb30b6",
-            "rebuilt_sha256": "42aa12d4936c6f632a943f0dd0a3a6fcc6bcc81206ae027b5d9e6835aefb30b6"
+            "original_sha256": "91fb23ef5366fa163264a48cdf7c6613769816df751a9695ea9caa284833c505",
+            "rebuilt_sha256": "91fb23ef5366fa163264a48cdf7c6613769816df751a9695ea9caa284833c505"
           },
           "R3v3_license_verified_composition.json": {
             "identical": true,
@@ -312,32 +390,75 @@
         }
       }
     },
+    "tracked_local_only_declared": {
+      "description": "the report distinguishes Git-tracked artifacts from local-only large indexes and never lists an ignored file as tracked",
+      "blocking": true,
+      "status": "PASS",
+      "evidence": {
+        "tracked": [
+          "data/corpus_v4/R3v3_license_verified_manifest.json",
+          "data/corpus_v4/R3v3_license_verified_sampling_profiles.json",
+          "data/corpus_v4/R3v3_license_verified_composition.json",
+          "reports/stage5e_holdout_evidence.json",
+          "reports/stage5e_holdout_coverage.csv",
+          "reports/stage5e_holdout_audit.md",
+          "reports/stage5e_hash_collision_review.json",
+          "reports/stage5e_license_audit.json"
+        ],
+        "ignored_local_only": [
+          "data/corpus_v4/R3v3_license_verified_train.csv",
+          "data/corpus_v4/R3v3_license_verified_val.csv",
+          "data/corpus_v4/R3v3_license_verified_quarantine.csv",
+          "data/corpus_v4/R3v3_license_verified_exclusions.csv",
+          "data/corpus_v4/holdout_file_index.csv",
+          "data/corpus_v4/holdout_crossmatch.csv"
+        ],
+        "local_only_not_ignored": [
+          "reports/stage5e1_licence_evidence.json",
+          "reports/stage5e1_pool_upstream_licence_audit.csv",
+          "reports/stage5e1_pool_upstream_licence_audit.json",
+          "reports/stage5e1_gates.json",
+          "reports/stage5e1_summary.json",
+          "reports/stage5e1_evidence_reconciliation.md"
+        ],
+        "problems": [],
+        "artifact_manifest": "reports/stage5e1_artifacts.json"
+      }
+    },
+    "r3v3_membership_unchanged": {
+      "description": "the Stage 5E.1 evidence repair did not change the R3v3 train/val bytes",
+      "blocking": true,
+      "status": "PASS",
+      "evidence": {
+        "train_sha256": "9fa34adb36810a5b0d13109761c60892bd9068f27c8f95a48e728146c1a6be08",
+        "expected_train_sha256": "9fa34adb36810a5b0d13109761c60892bd9068f27c8f95a48e728146c1a6be08",
+        "val_sha256": "f4670232237c8017ffb213e739446fce05a0661cbe18315097b1dba214c40686",
+        "expected_val_sha256": "f4670232237c8017ffb213e739446fce05a0661cbe18315097b1dba214c40686",
+        "note": "Stage 5E.1 repairs evidence, not membership. R3v3 bytes are unchanged; a membership change would require a new corpus version, never an in-place edit."
+      }
+    },
     "optimizer_updates_zero": {
       "description": "this stage ran no JEPA/Adapter forward, backward or optimizer step",
       "blocking": true,
       "status": "PASS",
       "evidence": {
-        "stage5e_files_scanned": 13,
+        "stage5e_files_scanned": 19,
         "training_constructs_found": [],
-        "patterns_checked": [
-          "adapter_call",
-          "backward_call",
-          "criterion_call",
-          "optimizer_constructor",
-          "parameter_step",
-          "torch_optim_import",
-          "train_module_import"
-        ],
         "jepa_optimizer_updates": 0,
         "adapter_optimizer_updates": 0,
         "downstream_probe_runs": 0,
-        "note": "negative evidence: no Stage 5E file contains an optimizer constructor, backward call, parameter step, training-module import, adapter or criterion invocation"
+        "note": "negative evidence: no Stage 5E/5E.1 file contains an optimizer constructor, backward call, parameter step, training-module import, adapter or criterion invocation"
       }
     }
   },
   "status_meaning": {
     "READY_FOR_CONTROLLED_PRETRAINING": "all blocking gates passed with evidence",
-    "CONDITIONAL": "builds and conserves, but a blocking gate is unresolved; the unresolved gate must be listed in the report",
+    "CONDITIONAL": "builds and conserves, but at least one blocking gate is unresolved; every unresolved gate is listed in the report",
     "BLOCKED": "a blocking gate failed; the corpus must not be used"
+  },
+  "stage": "Stage 5E (regenerated by Stage 5E.1 reconciliation)",
+  "r3v3_sha256": {
+    "train": "9fa34adb36810a5b0d13109761c60892bd9068f27c8f95a48e728146c1a6be08",
+    "val": "f4670232237c8017ffb213e739446fce05a0661cbe18315097b1dba214c40686"
   }
 }

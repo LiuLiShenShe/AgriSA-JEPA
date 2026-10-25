@@ -30,20 +30,26 @@ GATES: List[tuple] = [
     ('legacy_files_unchanged',
      'Stage 5C/5D manifests, policies, ledgers and reports are byte-identical', True),
     ('licence_evidence_backed',
-     'every accepted source has a research-use decision with an archived official '
-     'document whose SHA-256 still matches', True),
+     'every accepted source carries an explicit evidence grade; archived grades re-hash '
+     'correctly and no accepted source is silently treated as evidence-backed', True),
+    ('pool_upstream_licence_resolved',
+     'every accepted upstream dataset behind agrifield40k_pool has a confirmed identity and '
+     'an upstream-level licence basis, not merely the pool CC-BY label', True),
     ('licence_unresolved_not_trained',
      'no source with UNRESOLVED or NOT_PERMITTED research use appears in the '
      'training manifest', True),
     ('train_and_redistribution_independent',
-     'train eligibility and redistribution eligibility are separate fields and '
+     'train eligibility and redistribution eligibility are separate, non-null fields and '
      'neither derives from the other', True),
     ('holdout_file_level_reported',
      'every registered holdout reports a real index status; no unreachable '
      'dataset is marked as passing', True),
+    ('holdout_candidate_verdicts_one_to_one',
+     'every pHash candidate is matched one-to-one to a recorded verdict; no duplicate or '
+     'orphan candidate ids', True),
     ('holdout_confirmed_hits_blocked',
      'confirmed exact-duplicate holdout hits are absent from the training '
-     'manifest, and near-duplicate candidates are flagged for review', True),
+     'manifest, and reviewed near-duplicate candidates are no longer pending', True),
     ('evaluation_scope_declared',
      'the evaluation plan names exactly the holdouts with file-level evidence and '
      'explicitly excludes the rest; no unindexed benchmark is treated as usable', True),
@@ -55,6 +61,12 @@ GATES: List[tuple] = [
      'are inherited from Stage 5D without modification', True),
     ('counts_conserved',
      'ledger rows equal accepted plus excluded, globally and per source', True),
+    ('pretraining_count_basis_declared',
+     'the manifest separates corpus accepted count from the count actually used for '
+     'optimizer updates and states which one is compared with Agri-147K', True),
+    ('sampling_cap_unit_consistent',
+     'the formal capped profile declares one cap unit (physical source or upstream) and '
+     'its budget arithmetic agrees with that unit', True),
     ('rebuild_deterministic',
      'the same ledger and policy rebuild the same manifest with the same hashes', True),
     ('sampling_exposure_only',
@@ -62,13 +74,24 @@ GATES: List[tuple] = [
     ('composition_from_manifest',
      'source share, HHI and entropy are computed from the new manifest, not '
      'copied from a previous report', True),
+    ('tracked_local_only_declared',
+     'the report distinguishes Git-tracked artifacts from local-only large indexes and '
+     'never lists an ignored file as tracked', True),
+    ('r3v3_membership_unchanged',
+     'the Stage 5E.1 evidence repair did not change the R3v3 train/val bytes', True),
     ('optimizer_updates_zero',
      'this stage ran no JEPA/Adapter forward, backward or optimizer step', True),
 ]
 
 
 def evaluate(checks: Dict[str, Dict[str, object]]) -> Dict[str, object]:
-    """``checks`` maps gate key -> {'passed': bool, 'evidence': {...}}."""
+    """``checks`` maps gate key -> {'passed': bool, 'evidence': {...}}.
+
+    A check may additionally set ``'status'`` to ``PASS``, ``FAIL`` or
+    ``UNRESOLVED``.  ``UNRESOLVED`` means "the evidence needed to decide is not
+    available"; it makes a blocking gate hold the overall status at
+    ``CONDITIONAL`` rather than silently passing it.
+    """
     results: Dict[str, Dict[str, object]] = {}
     failed: List[str] = []
     unresolved: List[str] = []
@@ -80,12 +103,17 @@ def evaluate(checks: Dict[str, Dict[str, object]]) -> Dict[str, object]:
             if blocking:
                 unresolved.append(key)
             continue
-        passed = bool(check.get('passed'))
-        status = 'PASS' if passed else 'FAIL'
+        explicit = check.get('status')
+        if explicit in ('PASS', 'FAIL', 'UNRESOLVED'):
+            status = str(explicit)
+        else:
+            status = 'PASS' if bool(check.get('passed')) else 'FAIL'
         results[key] = {'description': description, 'blocking': blocking,
                         'status': status, 'evidence': check.get('evidence')}
-        if not passed and blocking:
+        if status == 'FAIL' and blocking:
             failed.append(key)
+        elif status == 'UNRESOLVED' and blocking:
+            unresolved.append(key)
     if failed:
         status = STATUS_BLOCKED
     elif unresolved:
@@ -96,8 +124,7 @@ def evaluate(checks: Dict[str, Dict[str, object]]) -> Dict[str, object]:
             'gates': results,
             'status_meaning': {
                 STATUS_READY: 'all blocking gates passed with evidence',
-                STATUS_CONDITIONAL: ('builds and conserves, but a blocking gate is '
-                                     'unresolved; the unresolved gate must be listed in '
-                                     'the report'),
+                STATUS_CONDITIONAL: ('builds and conserves, but at least one blocking gate is '
+                                     'unresolved; every unresolved gate is listed in the report'),
                 STATUS_BLOCKED: 'a blocking gate failed; the corpus must not be used',
             }}

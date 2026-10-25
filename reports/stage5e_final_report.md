@@ -6,8 +6,8 @@
 - 父提交：`c57e27196f5c974d35e0e3de29625242d792521f`
 - Stage 5D 基线：`05a56a0988531130289d0dd4fea6df7f3657e039`
 - Stage 5C 历史基线：`2867e7f4b09814c268612e893c34216506cbe55e`
-- **最终状态：READY_FOR_CONTROLLED_PRETRAINING**
-- 门禁：14/14 通过
+- **最终状态：CONDITIONAL**（Stage 5E 原判 READY 已被 Stage 5E.1 更正，见 `reports/stage5e1_evidence_reconciliation.md`）
+- 门禁：19/20 PASS，未决 `['pool_upstream_licence_resolved']`
 
 ## 1. 历史文件是否保持不变
 
@@ -220,3 +220,21 @@ JEPA optimizer updates = **0**，Adapter optimizer updates = **0**，新下游 p
 3. `agrifield40k_pool` 的 CC-BY-4.0 是池级声明，逐图上游许可未逐一复核。
 4. 自动 QC 对噪声/JPEG/色偏/遮挡不敏感，本阶段未改进。
 5. 许可证据是发布方官方端点声明，未做版权链条的独立法律核验。
+
+
+
+
+
+---
+
+## 更正说明（Stage 5E.1，2026-10-25）
+
+本文件由 Stage 5E.1 重新生成。以下 Stage 5E 结论已被真实文件推翻或降级：
+
+- `near_candidates_still_pending_review = 14` → **0**：14 个候选全部有裁决，旧值来自 crossmatch CSV 未回填 verdict。
+- `licence_evidence_backed` 的"每个来源都有归档官方文件" → 只有 4 个新归档，1 个继承、1 个仅 URL、1 个（pool）逐上游未决。
+- `target_exceeded = True / +22,039` 是按 accepted 计算；实际 Stage 6 训练集 147,277 张，比 147,285 **少 8 张**。
+- PlantDoc 的"下载未完成"记录已过时：2,579 张真实解码并哈希。
+- PhenoBench/GWHD 的 `decoded = 0` 是 pandas StringDtype 写入 bug，修复后 decoded = 全部。
+- "入 Git 的产物"表把 6 个 local-only 大文件列为已入库，实际只有 3 个 JSON 被 Git 跟踪。
+- 最终状态降为 **CONDITIONAL**。

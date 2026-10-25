@@ -1,5 +1,8 @@
 {
   "note": "profiles decide exposure frequency only; the entity set, the split and the number of independent images are unchanged from Stage 5D",
+  "cap_unit": "physical_source_id",
+  "official_profile": "by_source",
+  "cap_unit_note": "Capping is applied to physical_source_id. The upstream-level profile is an analysis view; Artemis and Image Safari are separate upstream archives but one merged physical source, so capping them separately would let the merged source exceed the cap.",
   "epoch_length": 150000,
   "cap_share": 0.5,
   "train_total": 147277,
@@ -218,6 +221,7 @@
       "profiles_change_exposure_only": true
     }
   },
+  "by_upstream_designation": "analysis_only_not_the_formal_cap",
   "reproducibility": {
     "by_source": {
       "entity_count": 147277,

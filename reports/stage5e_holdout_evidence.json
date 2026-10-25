@@ -2,18 +2,18 @@
   "index": {
     "path": "/fj/jepa-二维图像任务/data/corpus_v4/holdout_file_index.csv",
     "rows": 22861,
-    "sha256": "1580a9abeb43fcf2b90b32362beafa14a9a8ebafb463cb9f646f1ee6f52ddf67",
+    "sha256": "abe5748eb6e918ab8e5a9bbe24e025bf5163b8099ee18891256ecdec7845767f",
     "per_dataset": {
       "gwhd_2021": {
         "files": 6515,
-        "decoded": 0,
+        "decoded": 6515,
         "with_raw_hash": 6515,
         "with_pixel_hash": 6515,
         "with_phash": 6515
       },
       "phenobench": {
         "files": 13767,
-        "decoded": 0,
+        "decoded": 13767,
         "with_raw_hash": 13767,
         "with_pixel_hash": 13767,
         "with_phash": 13767
@@ -26,7 +26,7 @@
         "with_phash": 2579
       }
     },
-    "note": "Pixel hashes are computed on decoded RGB pixels (no resize). Legacy phenobench/gwhd rows carry a file hash only; their pixel_sha256 is empty and is reported as such, not backfilled."
+    "note": "Pixel hashes are computed on decoded RGB pixels (no resize). PhenoBench/GWHD 2021 rows start from the Stage 5D file-hash cache; their pixel hash, dimensions, format and mode are recomputed here from the real bytes and the decode status reports the result."
   },
   "crossmatch": {
     "path": "/fj/jepa-二维图像任务/data/corpus_v4/holdout_crossmatch.csv",
@@ -92,12 +92,12 @@
       "licence_evidence_url": "https://github.com/pratikkayal/PlantDoc-Dataset/blob/master/LICENSE.txt",
       "access_url": "https://codeload.github.com/pratikkayal/PlantDoc-Dataset/tar.gz/refs/heads/master",
       "status": "FILE_LEVEL_INDEXED",
-      "observed": "HTTP 200, ~997 MB tarball; full download not completed in this session",
+      "observed": "tarball downloaded and extracted; 2,579 images decoded and hashed from real image bytes",
       "images_expected": "2,579",
       "files_indexed": 2579,
       "files_hashed": 2579,
       "content_verified": true,
-      "notes": "Tree API returned 2,579 image blobs with per-file git blob SHA and size, but a git blob SHA is not a content hash. A partial download reached ~968 MB without completing, so no image bytes were hashed.",
+      "notes": "Stage 5E first observed a GitHub Tree API blob list (2,579 blobs) while the tarball download was incomplete; a git blob SHA is not a content hash, so that listing was never treated as file-level evidence. The full download later completed and every image was decoded and hashed here.",
       "mirror_urls": "https://universe.roboflow.com/ (redirects; 403 to automated requests)"
     },
     {

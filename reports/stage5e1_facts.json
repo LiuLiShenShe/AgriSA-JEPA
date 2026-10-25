@@ -1,0 +1,174 @@
+{
+  "per_dataset": {
+    "gwhd_2021": {
+      "files": 6515,
+      "decoded": 6515,
+      "with_raw_hash": 6515,
+      "with_pixel_hash": 6515,
+      "with_phash": 6515
+    },
+    "phenobench": {
+      "files": 13767,
+      "decoded": 13767,
+      "with_raw_hash": 13767,
+      "with_pixel_hash": 13767,
+      "with_phash": 13767
+    },
+    "plantdoc": {
+      "files": 2579,
+      "decoded": 2579,
+      "with_raw_hash": 2579,
+      "with_pixel_hash": 2579,
+      "with_phash": 2579
+    }
+  },
+  "crossmatch": {
+    "candidates_matched": 14,
+    "near_candidates_still_pending_review": 0,
+    "path": "/fj/jepa-二维图像任务/data/corpus_v4/holdout_crossmatch.csv",
+    "sha256": "6a1fc06c52a184d8d972020a35a3d727808f0a8e057298abe11ba87532e083b4"
+  },
+  "licence": {
+    "grades": {
+      "agrifield40k_pool": "UNRESOLVED",
+      "agrifm_ref1": "OFFICIAL_EVIDENCE_ARCHIVED_AND_HASHED",
+      "agrifm_ref11": "OFFICIAL_EVIDENCE_ARCHIVED_AND_HASHED",
+      "agrifm_ref58": "OFFICIAL_EVIDENCE_ARCHIVED_AND_HASHED",
+      "agrifm_ref9": "OFFICIAL_EVIDENCE_ARCHIVED_AND_HASHED",
+      "applebbch81": "REGISTRY_URL_ONLY",
+      "artemis_imagesafari": "CARRIED_FORWARD_WITH_PRIOR_EVIDENCE"
+    },
+    "evidence_backed_sources": [
+      "agrifm_ref1",
+      "agrifm_ref11",
+      "agrifm_ref58",
+      "agrifm_ref9",
+      "artemis_imagesafari"
+    ],
+    "newly_archived_sources": [
+      "agrifm_ref1",
+      "agrifm_ref11",
+      "agrifm_ref58",
+      "agrifm_ref9"
+    ],
+    "carried_forward_sources": [
+      "artemis_imagesafari"
+    ],
+    "registry_url_only_sources": [
+      "applebbch81"
+    ],
+    "unresolved_sources": [
+      "agrifield40k_pool"
+    ],
+    "gate_semantics": "A source may be admitted to training only when its research-use status is VERIFIED or RESTRICTED. The evidence grade describes how strong the *documentary basis* is and never upgrades a status on its own. Any accepted source without evidence-backed grade keeps the Stage 6 status at CONDITIONAL."
+  },
+  "counts": {
+    "ledger_rows": 243694,
+    "accepted": 169324,
+    "train": 147277,
+    "val": 22047,
+    "pretraining_train_count": 147277,
+    "pretraining_validation_count": 22047,
+    "agri147k_target": 147285,
+    "pretraining_train_minus_target": -8,
+    "accepted_minus_target": 22039
+  },
+  "pool_summary": {
+    "upstreams_with_accepted_images": 11,
+    "upstreams_carried_forward": 5,
+    "upstreams_unresolved": 6,
+    "accepted_images_carried_forward": 15296,
+    "accepted_images_unresolved": 6120,
+    "train_images_carried_forward": 13066,
+    "train_images_unresolved": 5174,
+    "unresolved_upstreams": [
+      "GrassClover",
+      "Maize-Weed",
+      "RumexLeaves",
+      "SesameWeed",
+      "VCD",
+      "WE3DS"
+    ]
+  },
+  "sources": [
+    {
+      "source_id": "agrifield40k_pool",
+      "grade": "UNRESOLVED",
+      "evidence_file": "data/source_registry.json",
+      "evidence_sha256": "5123726d5c9198a6c50209d338dd645bb32650408fc7d4737af3d267a52843d0",
+      "basis": "graded per upstream dataset; see pool_upstream_audit",
+      "checked_this_stage": false,
+      "notes": "Pool is split per upstream. 6 upstreams unresolved with 6120 accepted (5174 train) images.",
+      "accepted_images": 21416,
+      "train_images": 18240,
+      "affected_accepted_images": 21416,
+      "affected_train_images": 18240
+    },
+    {
+      "source_id": "agrifm_ref1",
+      "grade": "OFFICIAL_EVIDENCE_ARCHIVED_AND_HASHED",
+      "evidence_file": "reports/stage5e_evidence/agrifm_ref1_kaggle_api_voglinio_wheat-dataset-original.json",
+      "evidence_sha256": "c37c9bd8c127b1fffa446ef472f9327b96f3bd442b27db78b166cd2bb3d8e744",
+      "basis": "official publisher endpoint archived during Stage 5E",
+      "checked_this_stage": true,
+      "notes": "",
+      "accepted_images": 40,
+      "train_images": 40
+    },
+    {
+      "source_id": "agrifm_ref11",
+      "grade": "OFFICIAL_EVIDENCE_ARCHIVED_AND_HASHED",
+      "evidence_file": "reports/stage5e_evidence/agrifm_ref11_kaggle_api_zzzzqi_maize-phenology-images-acquired-using-ndvi-camera.json",
+      "evidence_sha256": "387feb3de135191f5a25cbc689c2a2176cd94f393d55931c25bf25671145917a",
+      "basis": "official publisher endpoint archived during Stage 5E",
+      "checked_this_stage": true,
+      "notes": "",
+      "accepted_images": 382,
+      "train_images": 382
+    },
+    {
+      "source_id": "agrifm_ref58",
+      "grade": "OFFICIAL_EVIDENCE_ARCHIVED_AND_HASHED",
+      "evidence_file": "reports/stage5e_evidence/agrifm_ref58_harvard_dataverse_TCKVEW_api.json",
+      "evidence_sha256": "3bd6dfd42e67988a2c115ba90d7b402a35649b5bf13c4e93ff9640e711f3b9cd",
+      "basis": "official publisher endpoint archived during Stage 5E",
+      "checked_this_stage": true,
+      "notes": "",
+      "accepted_images": 15386,
+      "train_images": 15386
+    },
+    {
+      "source_id": "agrifm_ref9",
+      "grade": "OFFICIAL_EVIDENCE_ARCHIVED_AND_HASHED",
+      "evidence_file": "reports/stage5e_evidence/agrifm_ref9_kaggle_api_nicolaasregnier_pinotnoirgrapes.json",
+      "evidence_sha256": "a97510fbc417c53a385eff10508c4e0adb8192114fc82e3f6436a5392fdcfc56",
+      "basis": "official publisher endpoint archived during Stage 5E",
+      "checked_this_stage": true,
+      "notes": "",
+      "accepted_images": 84,
+      "train_images": 84
+    },
+    {
+      "source_id": "applebbch81",
+      "grade": "REGISTRY_URL_ONLY",
+      "evidence_file": "data/corpus_v3/sources.csv",
+      "evidence_sha256": "b12aa1584822e7ffcb4c562a6d55ce8d61cf5709b71af5bd6d628acdb57187e7",
+      "basis": "Stage 5D row: license_evidence = Kaggle dataset page licence field",
+      "checked_this_stage": false,
+      "notes": "The licence module's evidence_url is the generic \"https://github.com/\" placeholder, not a dataset-specific record. No archived official body exists, so this stage cannot claim to have re-verified it.",
+      "accepted_images": 1746,
+      "train_images": 1383
+    },
+    {
+      "source_id": "artemis_imagesafari",
+      "grade": "CARRIED_FORWARD_WITH_PRIOR_EVIDENCE",
+      "evidence_file": "data/corpus_v3/sources.csv",
+      "evidence_sha256": "b12aa1584822e7ffcb4c562a6d55ce8d61cf5709b71af5bd6d628acdb57187e7",
+      "basis": "Stage 5D row: license_evidence = AWS Open Data registry licence field",
+      "checked_this_stage": false,
+      "notes": "The AWS Open Data registry page was not re-fetched in Stage 5E.1; the Stage 5D row is hashed and carried forward verbatim.",
+      "accepted_images": 130270,
+      "train_images": 111762
+    }
+  ]
+}

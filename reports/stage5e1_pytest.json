@@ -1,0 +1,13 @@
+{
+  "passed": 709,
+  "failed": 0,
+  "skipped": 7,
+  "errors": 0,
+  "skip_reasons": {
+    "AGRISA_VITH_CHECKPOINT is not set to a readable checkpoint": 4,
+    "AGRISA_VITH_CHECKPOINT not set": 1,
+    "AGRISA_PHENOBENCH is not set to a PhenoBench root": 2
+  },
+  "rule": "skipped is never counted as passed",
+  "command": ".venv-uv/bin/python -m pytest tests/ -q"
+}

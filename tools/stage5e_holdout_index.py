@@ -152,11 +152,16 @@ def enrich_legacy_rows(frame: pd.DataFrame) -> pd.DataFrame:
                 if str(frame.at[row_index, 'phash']).strip() == '':
                     frame.at[row_index, 'phash'] = phash64(image)
                 frame.at[row_index, 'dhash'] = dhash64(image)
-            frame.at[row_index, 'width'] = width
-            frame.at[row_index, 'height'] = height
+            # pandas 3.x stores these columns as StringDtype; assigning a raw
+            # int raises "Invalid value ... for dtype 'str'".  Cast explicitly
+            # so a successful decode is not recorded as a decode failure.
+            frame.at[row_index, 'width'] = str(width)
+            frame.at[row_index, 'height'] = str(height)
+            frame.at[row_index, 'bytes'] = str(path.stat().st_size)
             frame.at[row_index, 'format'] = fmt or ''
             frame.at[row_index, 'mode'] = mode or ''
             frame.at[row_index, 'decode_ok'] = 'true'
+            frame.at[row_index, 'decode_error'] = ''
         except Exception as exc:  # noqa: BLE001
             frame.at[row_index, 'decode_ok'] = 'false'
             frame.at[row_index, 'decode_error'] = f'{type(exc).__name__}: {exc}'
@@ -332,8 +337,9 @@ def main() -> int:
             'sha256': sha256_file(index_path),
             'per_dataset': per_dataset,
             'note': ('Pixel hashes are computed on decoded RGB pixels (no resize). '
-                     'Legacy phenobench/gwhd rows carry a file hash only; their '
-                     'pixel_sha256 is empty and is reported as such, not backfilled.'),
+                     'PhenoBench/GWHD 2021 rows start from the Stage 5D file-hash cache; '
+                     'their pixel hash, dimensions, format and mode are recomputed here from '
+                     'the real bytes and the decode status reports the result.'),
         },
         'crossmatch': {
             'path': str(crossmatch_path),
@@ -426,6 +432,9 @@ def main() -> int:
         '- 其余 holdout 的阻塞原因逐条记录在 `stage5e_holdout_evidence.json` 的 `registry` 字段'
         '（403 / DNS 失败 / 需要登录 / 需要账号），不做任何绕过。',
         '- pHash 候选一律标记为 `CANDIDATE_REQUIRES_REVIEW`，不自动删除，需要嵌入确认后才可定论。',
+        '- Stage 5E.1 复核后 14 个 pHash 候选全部定论（2 个 `RESAMPLED_COPY_SAME_CONTENT`、'
+        '12 个 `HASH_COLLISION_DIFFERENT_IMAGE`），`holdout_crossmatch.csv` 的 `conclusion` '
+        '列已回填为 `VERDICT_*`，不再存在 pending 候选。',
     ]
     (reports / 'stage5e_holdout_audit.md').write_text(
         '\n'.join(lines) + '\n', encoding='utf-8')

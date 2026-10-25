@@ -268,12 +268,23 @@ def test_no_exact_hash_match_between_holdout_and_corpus():
 
 
 def test_near_candidates_are_flagged_not_deleted():
+    """Candidates stay reported and carry a verdict; none is auto-deleted.
+
+    Stage 5E.1 changed the ``conclusion`` vocabulary: a reviewed candidate is
+    ``VERDICT_<verdict>`` instead of ``CANDIDATE_REQUIRES_REVIEW``, because the
+    old value made a fully reviewed set of 14 candidates look like 14 pending
+    reviews.  What must still hold is that every candidate is present, that a
+    non-``NOT_RUN`` confirmation exists, and that nothing is deleted.
+    """
     cross = pd.read_csv(ROOT / 'data/corpus_v4/holdout_crossmatch.csv', dtype=str)
-    candidates = cross[cross['conclusion'] == 'CANDIDATE_REQUIRES_REVIEW']
-    assert len(candidates) > 0
-    assert (candidates['embedding_confirmed'] == 'NOT_RUN').all()
-    # None of them is claimed to be a duplicate.
-    assert not (cross['conclusion'].astype(str).str.contains('CONFIRMED', na=False)).any()
+    candidates = cross[cross['conclusion'].astype(str).str.startswith(('VERDICT_',
+                                                                      'CANDIDATE'))]
+    assert len(candidates) == 14
+    assert (candidates['embedding_confirmed'] != 'NOT_RUN').all()
+    # A "resampled copy" verdict is a finding, not a deletion: the row is kept.
+    assert not (cross['conclusion'].astype(str).str.contains('DELETED', na=False)).any()
+    review = json.loads((ROOT / 'reports/stage5e_hash_collision_review.json').read_text())
+    assert 'Nothing was deleted' in review['rule']
 
 
 def test_zero_hits_is_not_reported_as_proven_no_leakage():

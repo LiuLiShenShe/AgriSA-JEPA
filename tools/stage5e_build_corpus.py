@@ -159,12 +159,24 @@ def main() -> int:
     sampling_path.write_text(json.dumps({
         'note': ('profiles decide exposure frequency only; the entity set, the split and '
                  'the number of independent images are unchanged from Stage 5D'),
+        # Stage 5E.1: the formal cap is defined on the physical source, because
+        # that is the unit that carries licence/provenance and the unit that is
+        # actually over-represented (artemis_imagesafari is one merged physical
+        # source of Artemis + Image Safari).  Upstream-level capping is reported
+        # for analysis only and is never used to support a claim.
+        'cap_unit': 'physical_source_id',
+        'official_profile': 'by_source',
+        'cap_unit_note': ('Capping is applied to physical_source_id. The upstream-level '
+                          'profile is an analysis view; Artemis and Image Safari are separate '
+                          'upstream archives but one merged physical source, so capping them '
+                          'separately would let the merged source exceed the cap.'),
         'epoch_length': EPOCH_LENGTH,
         'cap_share': CAP_SHARE,
         'train_total': int(len(train)),
         'accepted_total': int(len(accepted)),
         'by_source': source_profiles,
         'by_upstream_dataset': upstream_profiles,
+        'by_upstream_designation': 'analysis_only_not_the_formal_cap',
         'reproducibility': repro,
     }, indent=2, ensure_ascii=False), encoding='utf-8')
 
@@ -210,6 +222,25 @@ def main() -> int:
             'target_margin': int(len(accepted)) - TARGET_IMAGES,
             'note': ('scale property only; it never overrides licence, QC, holdout or split '
                      'gates'),
+        },
+        # Stage 5E.1: the two denominators are stated explicitly.  Stage 6 JEPA
+        # optimizer updates see the *train* split only; the validation split is
+        # never fed to the optimizer.  A claim of the form "the images actually
+        # used for pretraining exceed Agri-147K" must be made against
+        # ``pretraining_train_count`` and must not silently fold in val.
+        'pretraining_basis': {
+            'corpus_accepted_count': int(len(accepted)),
+            'pretraining_train_count': int(len(train)),
+            'pretraining_validation_count': int(len(val)),
+            'val_participates_in_optimizer_updates': False,
+            'target_comparison_basis': 'corpus_accepted_count',
+            'target_comparison_basis_note': (
+                'Agri-147K (147,285) is compared with the total accepted corpus. '
+                'The count that actually participates in Stage 6 optimizer updates is '
+                'pretraining_train_count, which is 8 images smaller. Any paper claim about '
+                'the pretraining training set must use pretraining_train_count.'),
+            'pretraining_train_vs_target': int(len(train)) - TARGET_IMAGES,
+            'corpus_accepted_vs_target': int(len(accepted)) - TARGET_IMAGES,
         },
         'conservation': cons,
         # Paths are recorded relative to the *output* directory, not to the

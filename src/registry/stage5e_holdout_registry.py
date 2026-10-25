@@ -116,12 +116,14 @@ ENTITIES: List[HoldoutEntity] = [
         official_url='https://github.com/pratikkayal/PlantDoc-Dataset',
         licence_evidence_url='https://github.com/pratikkayal/PlantDoc-Dataset/blob/master/LICENSE.txt',
         access_url='https://codeload.github.com/pratikkayal/PlantDoc-Dataset/tar.gz/refs/heads/master',
-        status=UNRESOLVED_FILE_LEVEL,
-        observed='HTTP 200, ~997 MB tarball; full download not completed in this session',
+        status=FILE_LEVEL_INDEXED,
+        observed=('tarball downloaded and extracted; 2,579 images decoded and hashed from real '
+                  'image bytes'),
         images_expected='2,579',
-        notes=('Tree API returned 2,579 image blobs with per-file git blob SHA and size, but a git '
-               'blob SHA is not a content hash. A partial download reached ~968 MB without '
-               'completing, so no image bytes were hashed.'),
+        notes=('Stage 5E first observed a GitHub Tree API blob list (2,579 blobs) while the '
+               'tarball download was incomplete; a git blob SHA is not a content hash, so that '
+               'listing was never treated as file-level evidence. The full download later '
+               'completed and every image was decoded and hashed here.'),
         mirror_urls=['https://universe.roboflow.com/ (redirects; 403 to automated requests)'],
     ),
     HoldoutEntity(
