@@ -2,8 +2,8 @@
 
 - 生成本报告时代码与产物的提交：`9d43b51a174652dec722bc2183f98915602f1eb9`
 - 分支：`agri-stage5e-final-corpus-gate`
-- 生成产物时的 HEAD：`c57e27196f5c974d35e0e3de29625242d792521f`（报告本身随记录提交入库，因此阅读时的 HEAD 会再前进一个提交）
-- 父提交：`9d43b51a174652dec722bc2183f98915602f1eb9`
+- 生成产物时的 HEAD：`8606e0959066a3a19c80c740ada7b302621b259b`（报告本身随记录提交入库，因此阅读时的 HEAD 会再前进一个提交）
+- 父提交：`c57e27196f5c974d35e0e3de29625242d792521f`
 - Stage 5D 基线：`05a56a0988531130289d0dd4fea6df7f3657e039`
 - Stage 5C 历史基线：`2867e7f4b09814c268612e893c34216506cbe55e`
 - **最终状态：READY_FOR_CONTROLLED_PRETRAINING**
