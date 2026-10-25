@@ -1,8 +1,8 @@
 {
   "stage": "Stage 5E",
   "branch": "agri-stage5e-final-corpus-gate",
-  "head": "9d43b51a174652dec722bc2183f98915602f1eb9",
-  "head_parent": "05a56a0988531130289d0dd4fea6df7f3657e039",
+  "head": "c57e27196f5c974d35e0e3de29625242d792521f",
+  "head_parent": "9d43b51a174652dec722bc2183f98915602f1eb9",
   "stage5d_head": "05a56a0988531130289d0dd4fea6df7f3657e039",
   "stage5c_head": "2867e7f4b09814c268612e893c34216506cbe55e",
   "status": "READY_FOR_CONTROLLED_PRETRAINING",

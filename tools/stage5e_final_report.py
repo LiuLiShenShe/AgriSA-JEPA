@@ -165,7 +165,8 @@ def main() -> int:
         '',
         f'- 生成本报告时代码与产物的提交：`{pipeline_commit}`',
         f'- 分支：`{summary["branch"]}`',
-        f'- HEAD：`{summary["head"]}`',
+        f'- 生成产物时的 HEAD：`{summary["head"]}`（报告本身随记录提交入库，'
+        '因此阅读时的 HEAD 会再前进一个提交）',
         f'- 父提交：`{summary["head_parent"]}`',
         f'- Stage 5D 基线：`{summary["stage5d_head"]}`',
         f'- Stage 5C 历史基线：`{summary["stage5c_head"]}`',
