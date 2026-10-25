@@ -156,9 +156,14 @@ def main() -> int:
     max_source = max(by_source.items(), key=lambda item: item[1]) if by_source else ('', 0)
 
     lines: List[str] = []
+    commit_file = reports / 'stage5e_pipeline_commit.txt'
+    pipeline_commit = (commit_file.read_text().strip() if commit_file.exists()
+                       else summary['head'])
+    summary['pipeline_commit'] = pipeline_commit
     lines += [
         '# Stage 5E 最终报告 — R3v3_license_verified',
         '',
+        f'- 生成本报告时代码与产物的提交：`{pipeline_commit}`',
         f'- 分支：`{summary["branch"]}`',
         f'- HEAD：`{summary["head"]}`',
         f'- 父提交：`{summary["head_parent"]}`',

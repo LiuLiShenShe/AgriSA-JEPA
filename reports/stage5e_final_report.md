@@ -1,8 +1,9 @@
 # Stage 5E 最终报告 — R3v3_license_verified
 
+- 生成本报告时代码与产物的提交：`9d43b51a174652dec722bc2183f98915602f1eb9`
 - 分支：`agri-stage5e-final-corpus-gate`
-- HEAD：`05a56a0988531130289d0dd4fea6df7f3657e039`
-- 父提交：`9e9bcfa0749e6256cba0af67cf3d07675d1c1250`
+- HEAD：`9d43b51a174652dec722bc2183f98915602f1eb9`
+- 父提交：`05a56a0988531130289d0dd4fea6df7f3657e039`
 - Stage 5D 基线：`05a56a0988531130289d0dd4fea6df7f3657e039`
 - Stage 5C 历史基线：`2867e7f4b09814c268612e893c34216506cbe55e`
 - **最终状态：READY_FOR_CONTROLLED_PRETRAINING**
