@@ -1,0 +1,131 @@
+{
+  "version": "R3v3_license_verified",
+  "derived_from": {
+    "stage5d_manifest": "data/corpus_v3/R3v2_strict_rgb_manifest.json",
+    "stage5d_ledger_dir": "data/corpus_v3/images",
+    "policy": "data/corpus_v3/policy.yaml",
+    "policy_sha256": "f89e1a4515c4f7353618c73da77bebf77d1b78e570266a4349177f7fd2bfbc97"
+  },
+  "status": "STAGE5E_AUDITED",
+  "status_meaning": "Stage 5E only re-decided licence research-use. Quality, modality, domain, dedup, holdout and split rules are inherited verbatim from Stage 5D; nothing was relaxed to reach the target size.",
+  "counts": {
+    "ledger_rows": 243694,
+    "accepted": 169324,
+    "train": 147277,
+    "train_only_group_unknown": 2,
+    "val": 22047,
+    "quarantined_or_excluded": 74370,
+    "licence_excluded_research_use": 0
+  },
+  "by_source": {
+    "artemis_imagesafari": 130270,
+    "agrifield40k_pool": 21416,
+    "agrifm_ref58": 15386,
+    "applebbch81": 1746,
+    "agrifm_ref11": 382,
+    "agrifm_ref9": 84,
+    "agrifm_ref1": 40
+  },
+  "by_upstream_dataset": {
+    "ImageSafari": 74494,
+    "Artemis": 55774,
+    "agrifm_ref58": 15386,
+    "LUCASVision": 11177,
+    "VCD": 2159,
+    "AppleBBCH81": 1746,
+    "WE3DS": 1520,
+    "VegAnn": 1483,
+    "iNatWeeds": 1312,
+    "SesameWeed": 943,
+    "RumexLeaves": 809,
+    "ACRECropWeed": 790,
+    "RadishWheat": 534,
+    "GrassClover": 434,
+    "agrifm_ref11": 382,
+    "Maize-Weed": 255,
+    "agrifm_ref9": 84,
+    "agrifm_ref1": 40,
+    "unknown": 2
+  },
+  "by_domain": {
+    "FIELD_IN_SITU": 167494,
+    "ORCHARD_IN_SITU": 1830
+  },
+  "by_crop": {
+    "common-bean": 41809,
+    "unknown": 39056,
+    "sorghum": 27031,
+    "potato": 13930,
+    "cowpea": 8271,
+    "pearl-millet": 7158,
+    "groundnut": 5094,
+    "african-yam": 5091,
+    "pigeon-pea": 4874,
+    "banana": 4367,
+    "finger-millet": 3404,
+    "rice": 2371,
+    "sweet-potato": 2210,
+    "chickpea": 789,
+    "lentil": 785,
+    "cassava": 780,
+    "wheat": 778,
+    "soybean": 776,
+    "maize": 750
+  },
+  "by_country": {
+    "unknown": 113550,
+    "UGA": 18598,
+    "COL": 15415,
+    "USA": 15393,
+    "TZA": 6368
+  },
+  "by_modality": {
+    "RGB_VISIBLE": 169324
+  },
+  "by_group_tier": {
+    "OFFICIAL_GROUP": 130268,
+    "DOCUMENTED_PATH_GROUP": 23162,
+    "WEAK_PROXY": 15892,
+    "UNKNOWN_GROUP": 2
+  },
+  "by_research_use_status": {
+    "agrifield40k_pool": "VERIFIED_RESEARCH_USE",
+    "agrifm_ref1": "VERIFIED_RESEARCH_USE",
+    "agrifm_ref11": "VERIFIED_RESEARCH_USE",
+    "agrifm_ref58": "VERIFIED_RESEARCH_USE",
+    "agrifm_ref9": "RESTRICTED_RESEARCH_USE",
+    "applebbch81": "VERIFIED_RESEARCH_USE",
+    "artemis_imagesafari": "VERIFIED_RESEARCH_USE"
+  },
+  "target": {
+    "target_images": 147285,
+    "target_exceeded": true,
+    "target_margin": 22039,
+    "note": "scale property only; it never overrides licence, QC, holdout or split gates"
+  },
+  "conservation": {
+    "ledger_rows": 243694,
+    "stage5e_accepted": 169324,
+    "stage5e_excluded": 74370,
+    "accepted_plus_excluded": 243694,
+    "conserved": true,
+    "per_source_conserved": true
+  },
+  "train_csv": "R3v3_license_verified_train.csv",
+  "val_csv": "R3v3_license_verified_val.csv",
+  "train_csv_sha256": "9fa34adb36810a5b0d13109761c60892bd9068f27c8f95a48e728146c1a6be08",
+  "val_csv_sha256": "f4670232237c8017ffb213e739446fce05a0661cbe18315097b1dba214c40686",
+  "sampling_profiles": "R3v3_license_verified_sampling_profiles.json",
+  "concentration": {
+    "composition_denominator": 169324,
+    "composition_source_hhi": 0.6162703112664262,
+    "composition_source_entropy": 0.7478446792715387,
+    "composition_upstream_hhi": 0.31525485571399164,
+    "max_source_share": 0.7693534289291536,
+    "sampling_denominator": 147277,
+    "sampling_source_hhi": 0.6022097065099115,
+    "sampling_source_entropy": 0.7698357740879206,
+    "sampling_upstream_hhi": 0.30910298039336126,
+    "sampling_upstream_entropy": 1.5030431495696357
+  }
+}

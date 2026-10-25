@@ -28,3 +28,18 @@ data/corpus_v3/quarantine_reasons.csv
 data/corpus_v3/near_duplicate_decisions.csv
 data/corpus_v3/holdout_hash_index.csv
 data/corpus_v3_rebuild/
+
+# Stage 5E derived data: same rule as Stage 5D.  The manifest, sampling
+# profiles, composition and the small reports stay versioned; the large
+# per-image CSVs and the holdout file index stay on disk and are recorded
+# with their SHA-256 in reports/stage5e_final_report.md.
+data/corpus_v4/R3v3_license_verified_train.csv
+data/corpus_v4/R3v3_license_verified_val.csv
+data/corpus_v4/R3v3_license_verified_quarantine.csv
+data/corpus_v4/R3v3_license_verified_exclusions.csv
+data/corpus_v4/holdout_file_index.csv
+data/corpus_v4/holdout_crossmatch.csv
+
+# Stage 5E downloaded holdout material.  The file-level index and its hashes are
+# versioned; the image bytes are not (they are third-party datasets).
+data/holdout_raw/

@@ -1,0 +1,243 @@
+{
+  "note": "profiles decide exposure frequency only; the entity set, the split and the number of independent images are unchanged from Stage 5D",
+  "epoch_length": 150000,
+  "cap_share": 0.5,
+  "train_total": 147277,
+  "accepted_total": 169324,
+  "by_source": {
+    "epoch_length": 150000,
+    "cap_share": 0.5,
+    "capped_info": {
+      "cap_share": 0.5,
+      "cap_exposure": 75000.0,
+      "capped_sources": [
+        "artemis_imagesafari"
+      ],
+      "unfulfilled_exposure": 38828.364238815295,
+      "budget_filled": false,
+      "note": "Surplus exposure from capped sources is deliberately NOT redistributed to other sources; doing so would change their natural share."
+    },
+    "counts": {
+      "artemis_imagesafari": 111762,
+      "agrifield40k_pool": 18240,
+      "agrifm_ref58": 15386,
+      "applebbch81": 1383,
+      "agrifm_ref11": 382,
+      "agrifm_ref9": 84,
+      "agrifm_ref1": 40
+    },
+    "share": {
+      "artemis_imagesafari": 0.758855761592102,
+      "agrifield40k_pool": 0.12384825872335803,
+      "agrifm_ref58": 0.10446980859197295,
+      "applebbch81": 0.009390468301228298,
+      "agrifm_ref11": 0.0025937519096668185,
+      "agrifm_ref9": 0.0005703538230680962,
+      "agrifm_ref1": 0.0002715970586038553
+    },
+    "entity_hhi": 0.6022097065099115,
+    "entity_entropy": 0.7698357740879206,
+    "exposure": {
+      "natural": {
+        "artemis_imagesafari": 113828.3642388153,
+        "agrifield40k_pool": 18577.238808503706,
+        "agrifm_ref58": 15670.471288795943,
+        "applebbch81": 1408.5702451842446,
+        "agrifm_ref11": 389.06278645002277,
+        "agrifm_ref9": 85.55307346021442,
+        "agrifm_ref1": 40.7395587905783
+      },
+      "capped": {
+        "artemis_imagesafari": 75000.0,
+        "agrifield40k_pool": 18577.238808503706,
+        "agrifm_ref58": 15670.471288795943,
+        "applebbch81": 1408.5702451842446,
+        "agrifm_ref11": 389.06278645002277,
+        "agrifm_ref9": 85.55307346021442,
+        "agrifm_ref1": 40.7395587905783
+      },
+      "balanced": {
+        "artemis_imagesafari": 21428.571428571428,
+        "agrifield40k_pool": 21428.571428571428,
+        "agrifm_ref58": 21428.571428571428,
+        "applebbch81": 21428.571428571428,
+        "agrifm_ref11": 21428.571428571428,
+        "agrifm_ref9": 21428.571428571428,
+        "agrifm_ref1": 21428.571428571428
+      }
+    },
+    "exposure_hhi": {
+      "natural": 0.6022097065099115,
+      "capped": 0.5030953298685861,
+      "balanced": 0.14285714285714285
+    },
+    "exposure_entropy": {
+      "natural": 0.7698357740879204,
+      "capped": 0.9242341620430816,
+      "balanced": 1.945910149055313
+    },
+    "invariants": {
+      "entity_count_unchanged": 147277,
+      "source_count_unchanged": 7,
+      "profiles_change_exposure_only": true
+    }
+  },
+  "by_upstream_dataset": {
+    "epoch_length": 150000,
+    "cap_share": 0.5,
+    "capped_info": {
+      "cap_share": 0.5,
+      "cap_exposure": 75000.0,
+      "capped_sources": [],
+      "unfulfilled_exposure": 0.0,
+      "budget_filled": true,
+      "note": "Surplus exposure from capped sources is deliberately NOT redistributed to other sources; doing so would change their natural share."
+    },
+    "counts": {
+      "ImageSafari": 63668,
+      "Artemis": 48092,
+      "agrifm_ref58": 15386,
+      "LUCASVision": 9459,
+      "VCD": 1802,
+      "AppleBBCH81": 1383,
+      "WE3DS": 1312,
+      "VegAnn": 1264,
+      "iNatWeeds": 1105,
+      "ACRECropWeed": 790,
+      "SesameWeed": 782,
+      "RumexLeaves": 683,
+      "RadishWheat": 448,
+      "agrifm_ref11": 382,
+      "GrassClover": 375,
+      "Maize-Weed": 220,
+      "agrifm_ref9": 84,
+      "agrifm_ref1": 40,
+      "unknown": 2
+    },
+    "share": {
+      "ImageSafari": 0.4323010381797565,
+      "Artemis": 0.32654114355941527,
+      "agrifm_ref58": 0.10446980859197295,
+      "LUCASVision": 0.06422591443334669,
+      "VCD": 0.012235447490103682,
+      "AppleBBCH81": 0.009390468301228298,
+      "WE3DS": 0.008908383522206454,
+      "VegAnn": 0.008582467051881829,
+      "iNatWeeds": 0.007502868743931503,
+      "ACRECropWeed": 0.005364041907426143,
+      "SesameWeed": 0.005309722495705372,
+      "RumexLeaves": 0.0046375197756608295,
+      "RadishWheat": 0.0030418870563631794,
+      "agrifm_ref11": 0.0025937519096668185,
+      "GrassClover": 0.0025462224244111437,
+      "Maize-Weed": 0.0014937838223212042,
+      "agrifm_ref9": 0.0005703538230680962,
+      "agrifm_ref1": 0.0002715970586038553,
+      "unknown": 1.3579852930192766e-05
+    },
+    "entity_hhi": 0.30910298039336126,
+    "entity_entropy": 1.5030431495696357,
+    "exposure": {
+      "natural": {
+        "ImageSafari": 64845.15572696348,
+        "Artemis": 48981.17153391229,
+        "agrifm_ref58": 15670.471288795943,
+        "LUCASVision": 9633.887165002003,
+        "VCD": 1835.3171235155523,
+        "AppleBBCH81": 1408.5702451842446,
+        "WE3DS": 1336.2575283309682,
+        "VegAnn": 1287.3700577822742,
+        "iNatWeeds": 1125.4303115897255,
+        "ACRECropWeed": 804.6062861139214,
+        "SesameWeed": 796.4583743558057,
+        "RumexLeaves": 695.6279663491244,
+        "RadishWheat": 456.28305845447693,
+        "agrifm_ref11": 389.06278645002277,
+        "GrassClover": 381.93336366167154,
+        "Maize-Weed": 224.06757334818064,
+        "agrifm_ref9": 85.55307346021442,
+        "agrifm_ref1": 40.7395587905783,
+        "unknown": 2.036977939528915
+      },
+      "capped": {
+        "ImageSafari": 64845.15572696348,
+        "Artemis": 48981.17153391229,
+        "agrifm_ref58": 15670.471288795943,
+        "LUCASVision": 9633.887165002003,
+        "VCD": 1835.3171235155523,
+        "AppleBBCH81": 1408.5702451842446,
+        "WE3DS": 1336.2575283309682,
+        "VegAnn": 1287.3700577822742,
+        "iNatWeeds": 1125.4303115897255,
+        "ACRECropWeed": 804.6062861139214,
+        "SesameWeed": 796.4583743558057,
+        "RumexLeaves": 695.6279663491244,
+        "RadishWheat": 456.28305845447693,
+        "agrifm_ref11": 389.06278645002277,
+        "GrassClover": 381.93336366167154,
+        "Maize-Weed": 224.06757334818064,
+        "agrifm_ref9": 85.55307346021442,
+        "agrifm_ref1": 40.7395587905783,
+        "unknown": 2.036977939528915
+      },
+      "balanced": {
+        "ImageSafari": 7894.736842105263,
+        "Artemis": 7894.736842105263,
+        "agrifm_ref58": 7894.736842105263,
+        "LUCASVision": 7894.736842105263,
+        "VCD": 7894.736842105263,
+        "AppleBBCH81": 7894.736842105263,
+        "WE3DS": 7894.736842105263,
+        "VegAnn": 7894.736842105263,
+        "iNatWeeds": 7894.736842105263,
+        "ACRECropWeed": 7894.736842105263,
+        "SesameWeed": 7894.736842105263,
+        "RumexLeaves": 7894.736842105263,
+        "RadishWheat": 7894.736842105263,
+        "agrifm_ref11": 7894.736842105263,
+        "GrassClover": 7894.736842105263,
+        "Maize-Weed": 7894.736842105263,
+        "agrifm_ref9": 7894.736842105263,
+        "agrifm_ref1": 7894.736842105263,
+        "unknown": 7894.736842105263
+      }
+    },
+    "exposure_hhi": {
+      "natural": 0.30910298039336126,
+      "capped": 0.30910298039336126,
+      "balanced": 0.05263157894736843
+    },
+    "exposure_entropy": {
+      "natural": 1.5030431495696357,
+      "capped": 1.5030431495696357,
+      "balanced": 2.94443897916644
+    },
+    "invariants": {
+      "entity_count_unchanged": 147277,
+      "source_count_unchanged": 19,
+      "profiles_change_exposure_only": true
+    }
+  },
+  "reproducibility": {
+    "by_source": {
+      "entity_count": 147277,
+      "counts_identical_to_input": true,
+      "exposure_budget": {
+        "natural": 150000.0,
+        "capped": 111171.6357611847,
+        "balanced": 150000.0
+      },
+      "entity_count_preserved": true
+    },
+    "by_upstream": {
+      "entity_count": 147277,
+      "counts_identical_to_input": true,
+      "exposure_budget": {
+        "natural": 150000.0,
+        "capped": 150000.0,
+        "balanced": 150000.0
+      },
+      "entity_count_preserved": true
+    }
+  }
+}

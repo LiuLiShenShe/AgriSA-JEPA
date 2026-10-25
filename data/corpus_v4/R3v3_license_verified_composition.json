@@ -1,0 +1,104 @@
+{
+  "accepted": 169324,
+  "train": 147277,
+  "val": 22047,
+  "by_source": {
+    "artemis_imagesafari": 130270,
+    "agrifield40k_pool": 21416,
+    "agrifm_ref58": 15386,
+    "applebbch81": 1746,
+    "agrifm_ref11": 382,
+    "agrifm_ref9": 84,
+    "agrifm_ref1": 40
+  },
+  "by_upstream_dataset": {
+    "ImageSafari": 74494,
+    "Artemis": 55774,
+    "agrifm_ref58": 15386,
+    "LUCASVision": 11177,
+    "VCD": 2159,
+    "AppleBBCH81": 1746,
+    "WE3DS": 1520,
+    "VegAnn": 1483,
+    "iNatWeeds": 1312,
+    "SesameWeed": 943,
+    "RumexLeaves": 809,
+    "ACRECropWeed": 790,
+    "RadishWheat": 534,
+    "GrassClover": 434,
+    "agrifm_ref11": 382,
+    "Maize-Weed": 255,
+    "agrifm_ref9": 84,
+    "agrifm_ref1": 40,
+    "unknown": 2
+  },
+  "by_domain": {
+    "FIELD_IN_SITU": 167494,
+    "ORCHARD_IN_SITU": 1830
+  },
+  "by_crop": {
+    "common-bean": 41809,
+    "unknown": 39056,
+    "sorghum": 27031,
+    "potato": 13930,
+    "cowpea": 8271,
+    "pearl-millet": 7158,
+    "groundnut": 5094,
+    "african-yam": 5091,
+    "pigeon-pea": 4874,
+    "banana": 4367,
+    "finger-millet": 3404,
+    "rice": 2371,
+    "sweet-potato": 2210,
+    "chickpea": 789,
+    "lentil": 785,
+    "cassava": 780,
+    "wheat": 778,
+    "soybean": 776,
+    "maize": 750
+  },
+  "by_country": {
+    "unknown": 113550,
+    "UGA": 18598,
+    "COL": 15415,
+    "USA": 15393,
+    "TZA": 6368
+  },
+  "by_modality": {
+    "RGB_VISIBLE": 169324
+  },
+  "by_group_tier": {
+    "OFFICIAL_GROUP": 130268,
+    "DOCUMENTED_PATH_GROUP": 23162,
+    "WEAK_PROXY": 15892,
+    "UNKNOWN_GROUP": 2
+  },
+  "by_research_use_status": {
+    "agrifield40k_pool": "VERIFIED_RESEARCH_USE",
+    "agrifm_ref1": "VERIFIED_RESEARCH_USE",
+    "agrifm_ref11": "VERIFIED_RESEARCH_USE",
+    "agrifm_ref58": "VERIFIED_RESEARCH_USE",
+    "agrifm_ref9": "RESTRICTED_RESEARCH_USE",
+    "applebbch81": "VERIFIED_RESEARCH_USE",
+    "artemis_imagesafari": "VERIFIED_RESEARCH_USE"
+  },
+  "unknown_fractions": {
+    "crop": 0.23065838274550565,
+    "country": 0.6706078287779641
+  },
+  "sampling": {
+    "natural_hhi": 0.6022097065099115,
+    "capped_hhi": 0.5030953298685861,
+    "balanced_hhi": 0.14285714285714285,
+    "capped_info": {
+      "cap_share": 0.5,
+      "cap_exposure": 75000.0,
+      "capped_sources": [
+        "artemis_imagesafari"
+      ],
+      "unfulfilled_exposure": 38828.364238815295,
+      "budget_filled": false,
+      "note": "Surplus exposure from capped sources is deliberately NOT redistributed to other sources; doing so would change their natural share."
+    }
+  }
+}

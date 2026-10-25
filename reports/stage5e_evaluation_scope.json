@@ -1,0 +1,68 @@
+{
+  "evaluation_eligible": [
+    "phenobench",
+    "gwhd_2021",
+    "plantdoc"
+  ],
+  "excluded_from_evaluation": [
+    {
+      "dataset_id": "minneapple",
+      "status": "BLOCKED_HOST_REJECTED",
+      "reason": "HTTP 403 from conservancy.umn.edu (automated request refused)"
+    },
+    {
+      "dataset_id": "plantseg",
+      "status": "BLOCKED_AUTH",
+      "reason": "HTTP 403 -> redirect to gitlab.com/users/sign_in (repository requires sign-in)"
+    },
+    {
+      "dataset_id": "deepweeds",
+      "status": "UNRESOLVED_FILE_LEVEL",
+      "reason": "README reachable (200); images hosted on Google Drive, request timed out"
+    },
+    {
+      "dataset_id": "growliflower",
+      "status": "BLOCKED_NETWORK",
+      "reason": "zenodo.org connection refused (curl exit 7)"
+    },
+    {
+      "dataset_id": "cropandweed",
+      "status": "UNRESOLVED_FILE_LEVEL",
+      "reason": "image tars 2.98 GB each (4 shards); annotations tar downloaded"
+    },
+    {
+      "dataset_id": "multiclass_weeds",
+      "status": "BLOCKED_HOST_REJECTED",
+      "reason": "figshare landing page HTTP 202; api.figshare.com HTTP 403 to automated requests"
+    },
+    {
+      "dataset_id": "roboflow_disease_detection",
+      "status": "UNRESOLVED_FILE_LEVEL",
+      "reason": "public.roboflow.com redirected to universe.roboflow.com (403)"
+    },
+    {
+      "dataset_id": "roboflow_crop_detection",
+      "status": "UNRESOLVED_FILE_LEVEL",
+      "reason": "universe.roboflow.com HTTP 403 to automated requests"
+    },
+    {
+      "dataset_id": "gwhd_instance_seg",
+      "status": "UNRESOLVED_FILE_LEVEL",
+      "reason": "universe.roboflow.com HTTP 403 to automated requests"
+    }
+  ],
+  "rule": "a downstream benchmark is eligible only if its image bytes were indexed and cross-checked against the pretraining corpus",
+  "consequence": "Stage 6 evaluation is limited to the eligible set; using an excluded dataset requires obtaining its bytes first, then re-running the cross-check",
+  "pretraining_blocking_datasets": [
+    "minneapple",
+    "plantseg",
+    "deepweeds",
+    "growliflower",
+    "cropandweed",
+    "multiclass_weeds",
+    "roboflow_disease_detection",
+    "roboflow_crop_detection",
+    "gwhd_instance_seg"
+  ],
+  "note": "Exclusion is a scope statement, not evidence that these datasets are free of overlap. The training corpus is screened against them at source and upstream identity level only."
+}

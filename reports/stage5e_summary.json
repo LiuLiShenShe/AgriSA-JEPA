@@ -1,0 +1,267 @@
+{
+  "stage": "Stage 5E",
+  "branch": "agri-stage5e-final-corpus-gate",
+  "head": "05a56a0988531130289d0dd4fea6df7f3657e039",
+  "head_parent": "9e9bcfa0749e6256cba0af67cf3d07675d1c1250",
+  "stage5d_head": "05a56a0988531130289d0dd4fea6df7f3657e039",
+  "stage5c_head": "2867e7f4b09814c268612e893c34216506cbe55e",
+  "status": "READY_FOR_CONTROLLED_PRETRAINING",
+  "gates_passed": 14,
+  "gates_total": 14,
+  "failed_gates": [],
+  "unknown_gates": [],
+  "counts": {
+    "ledger_rows": 243694,
+    "accepted": 169324,
+    "train": 147277,
+    "train_only_group_unknown": 2,
+    "val": 22047,
+    "quarantined_or_excluded": 74370,
+    "licence_excluded_research_use": 0
+  },
+  "by_source": {
+    "artemis_imagesafari": 130270,
+    "agrifield40k_pool": 21416,
+    "agrifm_ref58": 15386,
+    "applebbch81": 1746,
+    "agrifm_ref11": 382,
+    "agrifm_ref9": 84,
+    "agrifm_ref1": 40
+  },
+  "by_upstream_dataset": {
+    "ImageSafari": 74494,
+    "Artemis": 55774,
+    "agrifm_ref58": 15386,
+    "LUCASVision": 11177,
+    "VCD": 2159,
+    "AppleBBCH81": 1746,
+    "WE3DS": 1520,
+    "VegAnn": 1483,
+    "iNatWeeds": 1312,
+    "SesameWeed": 943,
+    "RumexLeaves": 809,
+    "ACRECropWeed": 790,
+    "RadishWheat": 534,
+    "GrassClover": 434,
+    "agrifm_ref11": 382,
+    "Maize-Weed": 255,
+    "agrifm_ref9": 84,
+    "agrifm_ref1": 40,
+    "unknown": 2
+  },
+  "by_domain": {
+    "FIELD_IN_SITU": 167494,
+    "ORCHARD_IN_SITU": 1830
+  },
+  "by_research_use_status": {
+    "agrifield40k_pool": "VERIFIED_RESEARCH_USE",
+    "agrifm_ref1": "VERIFIED_RESEARCH_USE",
+    "agrifm_ref11": "VERIFIED_RESEARCH_USE",
+    "agrifm_ref58": "VERIFIED_RESEARCH_USE",
+    "agrifm_ref9": "RESTRICTED_RESEARCH_USE",
+    "applebbch81": "VERIFIED_RESEARCH_USE",
+    "artemis_imagesafari": "VERIFIED_RESEARCH_USE"
+  },
+  "target": {
+    "target_images": 147285,
+    "target_exceeded": true,
+    "target_margin": 22039,
+    "note": "scale property only; it never overrides licence, QC, holdout or split gates"
+  },
+  "concentration": {
+    "composition_denominator": 169324,
+    "composition_source_hhi": 0.6162703112664262,
+    "composition_source_entropy": 0.7478446792715387,
+    "composition_upstream_hhi": 0.31525485571399164,
+    "max_source_share": 0.7693534289291536,
+    "sampling_denominator": 147277,
+    "sampling_source_hhi": 0.6022097065099115,
+    "sampling_source_entropy": 0.7698357740879206,
+    "sampling_upstream_hhi": 0.30910298039336126,
+    "sampling_upstream_entropy": 1.5030431495696357
+  },
+  "conservation": {
+    "ledger_rows": 243694,
+    "stage5e_accepted": 169324,
+    "stage5e_excluded": 74370,
+    "accepted_plus_excluded": 243694,
+    "conserved": true,
+    "per_source_conserved": true
+  },
+  "licence": {
+    "audited_sources": [
+      "agrifm_ref1",
+      "agrifm_ref58",
+      "agrifm_ref11",
+      "agrifm_ref9"
+    ],
+    "accepted_images_in_four": 15892,
+    "train_eligible_in_four": 15892,
+    "excluded_from_training": 0,
+    "verified_research_use_images": 15808,
+    "restricted_research_use_images": 84
+  },
+  "holdout": {
+    "index_rows": 22861,
+    "per_dataset": {
+      "gwhd_2021": {
+        "files": 6515,
+        "decoded": 0,
+        "with_raw_hash": 6515,
+        "with_pixel_hash": 6515,
+        "with_phash": 6515
+      },
+      "phenobench": {
+        "files": 13767,
+        "decoded": 0,
+        "with_raw_hash": 13767,
+        "with_pixel_hash": 13767,
+        "with_phash": 13767
+      },
+      "plantdoc": {
+        "files": 2579,
+        "decoded": 2579,
+        "with_raw_hash": 2579,
+        "with_pixel_hash": 2579,
+        "with_phash": 2579
+      }
+    },
+    "exact_raw_hash_hits": 0,
+    "exact_pixel_hash_hits": 0,
+    "near_hash_candidates": 14,
+    "content_verified": [
+      "phenobench",
+      "gwhd_2021",
+      "plantdoc"
+    ],
+    "not_content_verified": [
+      "minneapple",
+      "plantseg",
+      "deepweeds",
+      "growliflower",
+      "cropandweed",
+      "multiclass_weeds",
+      "roboflow_disease_detection",
+      "roboflow_crop_detection",
+      "gwhd_instance_seg"
+    ],
+    "status_code_by_entity": {
+      "phenobench": "FILE_LEVEL_INDEXED",
+      "gwhd_2021": "FILE_LEVEL_INDEXED",
+      "plantdoc": "FILE_LEVEL_INDEXED",
+      "minneapple": "BLOCKED_HOST_REJECTED",
+      "plantseg": "BLOCKED_AUTH",
+      "deepweeds": "UNRESOLVED_FILE_LEVEL",
+      "growliflower": "BLOCKED_NETWORK",
+      "cropandweed": "UNRESOLVED_FILE_LEVEL",
+      "multiclass_weeds": "BLOCKED_HOST_REJECTED",
+      "roboflow_disease_detection": "UNRESOLVED_FILE_LEVEL",
+      "roboflow_crop_detection": "UNRESOLVED_FILE_LEVEL",
+      "gwhd_instance_seg": "UNRESOLVED_FILE_LEVEL"
+    }
+  },
+  "evaluation_scope": {
+    "eligible": [
+      "phenobench",
+      "gwhd_2021",
+      "plantdoc"
+    ],
+    "excluded": [
+      "minneapple",
+      "plantseg",
+      "deepweeds",
+      "growliflower",
+      "cropandweed",
+      "multiclass_weeds",
+      "roboflow_disease_detection",
+      "roboflow_crop_detection",
+      "gwhd_instance_seg"
+    ]
+  },
+  "sampling": {
+    "epoch_length": 150000,
+    "cap_share": 0.5,
+    "train_total": 147277,
+    "exposure_hhi": {
+      "natural": 0.6022097065099115,
+      "capped": 0.5030953298685861,
+      "balanced": 0.14285714285714285
+    },
+    "capped_info": {
+      "cap_share": 0.5,
+      "cap_exposure": 75000.0,
+      "capped_sources": [
+        "artemis_imagesafari"
+      ],
+      "unfulfilled_exposure": 38828.364238815295,
+      "budget_filled": false,
+      "note": "Surplus exposure from capped sources is deliberately NOT redistributed to other sources; doing so would change their natural share."
+    },
+    "reproducibility": {
+      "by_source": {
+        "entity_count": 147277,
+        "counts_identical_to_input": true,
+        "exposure_budget": {
+          "natural": 150000.0,
+          "capped": 111171.6357611847,
+          "balanced": 150000.0
+        },
+        "entity_count_preserved": true
+      },
+      "by_upstream": {
+        "entity_count": 147277,
+        "counts_identical_to_input": true,
+        "exposure_budget": {
+          "natural": 150000.0,
+          "capped": 150000.0,
+          "balanced": 150000.0
+        },
+        "entity_count_preserved": true
+      }
+    }
+  },
+  "artifacts": {
+    "data/corpus_v4/R3v3_license_verified_train.csv": {
+      "sha256": "9fa34adb36810a5b0d13109761c60892bd9068f27c8f95a48e728146c1a6be08",
+      "bytes": 101699231
+    },
+    "data/corpus_v4/R3v3_license_verified_val.csv": {
+      "sha256": "f4670232237c8017ffb213e739446fce05a0661cbe18315097b1dba214c40686",
+      "bytes": 15630460
+    },
+    "data/corpus_v4/R3v3_license_verified_manifest.json": {
+      "sha256": "3612dce810e6a0bf89937d2bd7608f66a1a0da95fbf40800eb35410dd79aa647",
+      "bytes": 3894
+    },
+    "data/corpus_v4/R3v3_license_verified_sampling_profiles.json": {
+      "sha256": "42aa12d4936c6f632a943f0dd0a3a6fcc6bcc81206ae027b5d9e6835aefb30b6",
+      "bytes": 8009
+    },
+    "data/corpus_v4/holdout_file_index.csv": {
+      "sha256": "1580a9abeb43fcf2b90b32362beafa14a9a8ebafb463cb9f646f1ee6f52ddf67",
+      "bytes": 8400869
+    },
+    "data/corpus_v4/holdout_crossmatch.csv": {
+      "sha256": "c50267598f2c1eedff14b493db7534cd4a908436154a2d90207d0bdd422c9dde",
+      "bytes": 3394
+    },
+    "reports/stage5e_license_audit.json": {
+      "sha256": "053605516690587c8082e5c4e37ec2c1b193c922d66f5d5adb7cc7566e86204c",
+      "bytes": 16060
+    },
+    "reports/stage5e_holdout_evidence.json": {
+      "sha256": "160f90d5109e32bf015e40e5909930b9f38b2c3048f1521b27cf6a69f32a8efb",
+      "bytes": 12757
+    },
+    "reports/stage5e_gates.json": {
+      "sha256": "c26b5a1b6cdb74f56e8feb62efb5a91d44ba47790af3a863fcbd5fa5cf853a3d",
+      "bytes": 12716
+    }
+  },
+  "optimizer_updates": {
+    "jepa": 0,
+    "adapter": 0,
+    "downstream_probe": 0
+  },
+  "stage6_allowed": true
+}
