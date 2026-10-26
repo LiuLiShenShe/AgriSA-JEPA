@@ -9,11 +9,19 @@
 执行分支：
   agri-stage6-controlled-pretraining
 
-最终 commit SHA（本地 HEAD）：
+**代码 / 配置 / 测试 / 报告提交（本阶段实质内容）：**
   5f02c86c4d3fa7389da1d5f4abbc16b6c4f0500d
 
-远端 HEAD（git ls-remote origin agri-stage6-controlled-pretraining）：
-  5f02c86c4d3fa7389da1d5f4abbc16b6c4f0500d
+**记录本文件的元数据提交：**
+  d31e9ec2356374ecc7260d7b38371e762ac798d0
+  （仅新增 `reports/stage6_commit.txt`；不改动任何代码）
+
+远端 HEAD 在元数据提交推送后为：
+  d31e9ec2356374ecc7260d7b38371e762ac798d0
+
+如果之后还有提交（例如再次更新本文件），它们同样只改本文件；
+以 `git rev-parse HEAD` / `git ls-remote origin agri-stage6-controlled-pretraining`
+的实时输出为准，代码提交始终是 `5f02c86c4d3fa7389da1d5f4abbc16b6c4f0500d`。
 
 是否合并 main / force push：否。
 是否重置/删除/覆盖用户未提交文件：否（CLAUDE.md 等保留未动）。
