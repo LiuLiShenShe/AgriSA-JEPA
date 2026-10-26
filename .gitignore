@@ -43,3 +43,8 @@ data/corpus_v4/holdout_crossmatch.csv
 # Stage 5E downloaded holdout material.  The file-level index and its hashes are
 # versioned; the image bytes are not (they are third-party datasets).
 data/holdout_raw/
+
+# Stage 6 derived training data: the R3v3 training view, its NVMe mirror and
+# the per-run source-exposure ledgers are all derived and recorded by SHA-256
+# in reports/.  The frozen R3v3 CSVs remain ignored above.
+data/stage6/

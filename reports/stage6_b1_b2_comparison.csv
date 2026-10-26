@@ -1,0 +1,3 @@
+arm,run_dir,sampling_mode,optimizer_steps_total,micro_steps_total,csv_rows,loss_first,loss_last,loss_min,loss_max,peak_memory_mib,step_time_ms_mean,emitted_samples,hhi,entropy,max_share,max_source,optimizer_steps_per_epoch
+B1,/fj/jepa-二维图像任务/runs/stage6_b1_natural_2000,natural,2000,15996,15996,0.19038,0.12885,0.09998,0.2039,23355.33984375,276.31644414086225,255936,0.6018294175302173,0.7702830748713404,0.7585529194798699,artemis_imagesafari,1151
+B2,/fj/jepa-二维图像任务/runs/stage6_b2_capped_no_backfill_2000,profile_capped,2000,15992,15992,0.19415,0.12195,0.10219,0.20303,23355.33984375,291.85121879868836,255872,0.5030854219919451,0.9242986107618288,0.6746263756878439,artemis_imagesafari,869

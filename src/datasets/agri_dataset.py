@@ -229,8 +229,20 @@ def make_agrifield40k(
     max_samples: Optional[int] = None,
     augmentation_seed: Optional[int] = None,
     image_cache_dir: Optional[str | os.PathLike[str]] = None,
+    sampler_spec: Optional[dict] = None,
 ):
-    """Build an I-JEPA-compatible loader from an audited manifest."""
+    """Build an I-JEPA-compatible loader from an audited manifest.
+
+    ``sampler_spec`` selects the exposure sampler:
+
+    * ``None`` or ``{'mode': 'natural'}`` -- the pre-existing
+      ``DistributedSampler`` behaviour (uniform shuffling of the manifest);
+    * ``{'mode': 'profile_capped', ...}`` -- the Stage 5E.1 no-backfill
+      physical-source capped profile (see :mod:`src.datasets.stage6_sampling`).
+
+    The sampled *set* of images is unchanged by either mode; only exposure
+    frequency differs.
+    """
     dataset = AgriFieldDataset(
         manifest_path=manifest_path,
         transform=transform,
@@ -240,14 +252,35 @@ def make_agrifield40k(
         augmentation_seed=augmentation_seed,
         image_cache_dir=image_cache_dir,
     )
-    sampler = torch.utils.data.distributed.DistributedSampler(
-        dataset=dataset,
-        num_replicas=world_size,
-        rank=rank,
-        shuffle=(split == "train"),
-        seed=seed,
-        drop_last=drop_last,
-    )
+    mode = (sampler_spec or {}).get('mode', 'natural')
+    if mode == 'natural':
+        sampler = torch.utils.data.distributed.DistributedSampler(
+            dataset=dataset,
+            num_replicas=world_size,
+            rank=rank,
+            shuffle=(split == "train"),
+            seed=seed,
+            drop_last=drop_last,
+        )
+    elif mode == 'profile_capped':
+        if world_size != 1:
+            raise ValueError('profile_capped sampling currently requires world_size == 1')
+        # -- local import keeps stage6_sampling optional for other datasets
+        from src.datasets.stage6_sampling import (
+            ProfileExposureSampler,
+            index_sources_from_rows,
+        )
+        sampler = ProfileExposureSampler(
+            index_sources=index_sources_from_rows(dataset.samples),
+            epoch_length=int(sampler_spec.get('epoch_length', 150_000)),
+            cap_share=float(sampler_spec.get('cap_share', 0.5)),
+            capped_sources=tuple(sampler_spec.get(
+                'capped_sources', ('artemis_imagesafari',))),
+            seed=int(sampler_spec.get('seed', seed)),
+        )
+    else:
+        raise ValueError(f'Unknown data.sampling.mode {mode!r}; expected '
+                         f"'natural' or 'profile_capped'")
     generator = torch.Generator()
     generator.manual_seed(seed + rank)
     loader = DataLoader(

@@ -19,6 +19,7 @@ except Exception:
 
 import copy
 import hashlib
+import json
 import logging
 import os
 import random
@@ -408,10 +409,11 @@ def main(args, resume_preempt=False):
         color_jitter=color_jitter)
 
     # -- init data-loaders/samplers
+    sampling_spec = args['data'].get('sampling')
     if dataset_name == 'agrifield40k':
         if not manifest_path:
             raise ValueError('data.manifest is required for dataset=agrifield40k')
-        _, unsupervised_loader, unsupervised_sampler = make_agrifield40k(
+        dataset, unsupervised_loader, unsupervised_sampler = make_agrifield40k(
             transform=transform,
             batch_size=batch_size,
             collator=mask_collator,
@@ -426,7 +428,8 @@ def main(args, resume_preempt=False):
             seed=data_seed,
             max_samples=max_samples,
             augmentation_seed=augmentation_seed,
-            image_cache_dir=image_cache_dir)
+            image_cache_dir=image_cache_dir,
+            sampler_spec=sampling_spec)
     elif dataset_name == 'imagenet1k':
         _, unsupervised_loader, unsupervised_sampler = make_imagenet1k(
             transform=transform,
@@ -475,7 +478,8 @@ def main(args, resume_preempt=False):
         num_epochs=num_epochs,
         ipe_scale=ipe_scale,
         use_bfloat16=use_bfloat16,
-        total_steps=total_optimizer_steps)
+        total_steps=total_optimizer_steps,
+        warmup_steps_override=args['optimization'].get('warmup_steps'))
     encoder = DistributedDataParallel(encoder, static_graph=True)
     predictor = DistributedDataParallel(predictor, static_graph=True)
     target_encoder = DistributedDataParallel(target_encoder)
@@ -541,6 +545,19 @@ def main(args, resume_preempt=False):
 
     optimizer_steps_at_start = optimizer_steps
     micro_steps_at_start = micro_steps
+
+    # -- Stage 6 realised source-exposure ledger. It records the sample_id of
+    #    every micro-batch the loop actually consumes, so source counts are
+    #    measured from the emitted stream rather than inferred from the config.
+    source_ledger = None
+    if dataset_name == 'agrifield40k' and args['data'].get('record_source_exposure'):
+        from src.datasets.source_ledger import SourceExposureLedger
+        sample_to_source = {str(row['sample_id']): str(row['physical_source_id'])
+                            for row in dataset.samples}
+        source_ledger = SourceExposureLedger(
+            os.path.join(folder, 'source_exposure_ledger.csv'),
+            sample_to_source,
+            part=f'{optimizer_steps_at_start}')
     # -- live progress bookkeeping.  Wall-clock only: it never touches the
     #    schedule, the RNG, the optimizer or the checkpoint contents.  It only
     #    feeds the PROGRESS log line so a run can be watched in real time.
@@ -874,6 +891,12 @@ def main(args, resume_preempt=False):
                         torch.cuda.max_memory_allocated() / 1024.**3,
                         _ms, (_now - _run_start_time) / 60.0, _eta / 60.0)
 
+            # -- realised source exposure for this consumed micro-batch
+            if source_ledger is not None:
+                source_ledger.record(
+                    epoch=epoch, itr=itr, micro_step=micro_steps,
+                    optimizer_step=optimizer_steps, sample_ids=udata[1])
+
             # -- Logging.  This runs BEFORE the budget/interrupt break below, so
             #    the micro-step that performs the final optimizer update of a
             #    budgeted run is still recorded in the CSV.  Stage 2D fixed the
@@ -949,6 +972,8 @@ def main(args, resume_preempt=False):
                 epoch if resume_in_epoch else min(epoch + 1, epoch_limit),
                 epoch_itr=how_many if resume_in_epoch else 0,
                 epoch_start_state=epoch_start_state if resume_in_epoch else None)
+        if source_ledger is not None:
+            source_ledger.flush()
         if budget_reached:
             break
 
@@ -1012,6 +1037,25 @@ def main(args, resume_preempt=False):
                                  else {'mask_mode': 'random'}),
             'saved_step_snapshots': saved_snapshots,
         }
+        # -- sampling provenance: what the loader actually emitted, and (for the
+        #    capped arm) the integer allocation the sampler targeted
+        sampling_spec = args['data'].get('sampling') or {'mode': 'natural'}
+        verification['sampling_mode'] = sampling_spec.get('mode', 'natural')
+        if hasattr(unsupervised_sampler, 'describe'):
+            sampling_description = unsupervised_sampler.describe()
+            verification['sampling_profile'] = sampling_description
+            with open(os.path.join(folder, 'stage6_sampling.json'), 'w') as handle:
+                json.dump(sampling_description, handle, indent=2, ensure_ascii=False)
+        else:
+            verification['sampling_profile'] = {
+                'mode': 'natural',
+                'sampler': type(unsupervised_sampler).__name__,
+                'seed': data_seed,
+                'dataset_rows': len(dataset),
+                'batches_per_epoch': ipe,
+            }
+        if source_ledger is not None:
+            verification['realised_source_exposure'] = source_ledger.summary()
         # -- with worker processes the collator lives in the workers, so the
         #    main-process counters stay at zero; say so instead of implying
         #    that no target block was ever guided.

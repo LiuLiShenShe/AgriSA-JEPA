@@ -1,0 +1,93 @@
+{
+  "arm": "B1",
+  "run_dir": "/fj/jepa-二维图像任务/runs/stage6_b1_natural_2000",
+  "inputs": [
+    {
+      "role": "manifest",
+      "path": "/fj/jepa-二维图像任务/data/stage6/stage6_r3v3_train_view_nvme.csv",
+      "bytes": 99717545,
+      "sha256": "26c55431c63791d4f7d427d432840c21aa47a717a5daadbb5990a68a546f71f2"
+    },
+    {
+      "role": "pretrained_checkpoint",
+      "path": "/data/checkpoints/ijepa/IN1K-vit.h.14-300e.pth.tar",
+      "bytes": 10358004345,
+      "sha256": "0382013c481743e9ccea89f970bc6c6aa126aa19a62127500d6e672a641aae22"
+    },
+    {
+      "role": "config_dumped_by_run",
+      "path": "/fj/jepa-二维图像任务/runs/stage6_b1_natural_2000/params-ijepa.yaml",
+      "bytes": 1659,
+      "sha256": "e4e8d7ff20c06694938b0d31130daa0dfe7e53128594d9eec3f7a26485b43a74"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "/fj/jepa-二维图像任务/runs/stage6_b1_natural_2000/jepa-step1000.pth.tar",
+      "bytes": 10358217748,
+      "sha256": "d724ec25ca669146865915e608f926831b00cd90b563cb6a656a1990d5b973e9"
+    },
+    {
+      "path": "/fj/jepa-二维图像任务/runs/stage6_b1_natural_2000/jepa-step1500.pth.tar",
+      "bytes": 10358217748,
+      "sha256": "41ce8ad4b1ade8111c427ce355162a63c5965232406766049af2c42bc7b0cdd3"
+    },
+    {
+      "path": "/fj/jepa-二维图像任务/runs/stage6_b1_natural_2000/jepa-step2000.pth.tar",
+      "bytes": 10358217748,
+      "sha256": "a9cdf29ec45a9fb9b50fd028197fb01bc6f2c4a33f9cc04ec312d0e08c35d4a2"
+    },
+    {
+      "path": "/fj/jepa-二维图像任务/runs/stage6_b1_natural_2000/jepa-step500.pth.tar",
+      "bytes": 10358215189,
+      "sha256": "821f5f227a8373241cf28f2cb0b983134abad869c0c1a12ef47b233a5e2fb53c"
+    },
+    {
+      "path": "/fj/jepa-二维图像任务/runs/stage6_b1_natural_2000/jepa-encoder-step1000.pth",
+      "bytes": 2523203535,
+      "sha256": "79b72ac3db0cabb13e2e48973362824023885cc4bb38873c1833ab991d743f26"
+    },
+    {
+      "path": "/fj/jepa-二维图像任务/runs/stage6_b1_natural_2000/jepa-encoder-step1500.pth",
+      "bytes": 2523203535,
+      "sha256": "4650948c174ca2ea9e924d59329295725e8426659ac64c52cf92d0868d7f7a33"
+    },
+    {
+      "path": "/fj/jepa-二维图像任务/runs/stage6_b1_natural_2000/jepa-encoder-step2000.pth",
+      "bytes": 2523203535,
+      "sha256": "19796cebc65e29a07eafd7222f5a642d4ef9f28c33f2e4f4f2b65e34a2bfde6b"
+    },
+    {
+      "path": "/fj/jepa-二维图像任务/runs/stage6_b1_natural_2000/jepa-encoder-step500.pth",
+      "bytes": 2523203140,
+      "sha256": "1ff4a8fba226bd181bb9835790e851cbba74d4b3a63d08068bec168843b35b93"
+    },
+    {
+      "path": "/fj/jepa-二维图像任务/runs/stage6_b1_natural_2000/jepa-latest.pth.tar",
+      "bytes": 10358212822,
+      "sha256": "42606f16f7aa6d3e92a45b5b6356edf0a231dff232956a56e9c92b835ceb5fc1"
+    },
+    {
+      "path": "/fj/jepa-二维图像任务/runs/stage6_b1_natural_2000/jepa_r0.csv",
+      "bytes": 590419,
+      "sha256": "e4fc7961a27e0b3036d2d6a06c047012ff78fa6642f2ec1b08bc3806ab439dfb"
+    },
+    {
+      "path": "/fj/jepa-二维图像任务/runs/stage6_b1_natural_2000/training_verification.yaml",
+      "bytes": 2814,
+      "sha256": "7176bc6ab7384d437b0b7047948d9870d912b897f629a33e10d49281936a1552"
+    },
+    {
+      "path": "/fj/jepa-二维图像任务/runs/stage6_b1_natural_2000/source_exposure_ledger.csv",
+      "bytes": 19055467,
+      "sha256": "240ff7170d9881fa44cedd026104bee0887c57a4982c4e74bc868813578d2507"
+    },
+    {
+      "path": "/fj/jepa-二维图像任务/runs/stage6_b1_natural_2000/source_exposure_ledger.summary.json",
+      "bytes": 1560,
+      "sha256": "7fd6618dd00405e5aaf2b24f060bb60299266779f0d049455d8d863192eccd2e"
+    }
+  ],
+  "output_bytes_total": 61903545260,
+  "note": "sha256 computed from the bytes on disk at manifest-build time"
+}

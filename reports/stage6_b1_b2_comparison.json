@@ -1,0 +1,574 @@
+{
+  "arms": {
+    "B1": {
+      "arm": "B1",
+      "run_dir": "/fj/jepa-二维图像任务/runs/stage6_b1_natural_2000",
+      "params": {
+        "data": {
+          "augmentation_seed": 20261026,
+          "batch_size": 16,
+          "color_jitter_strength": 0.0,
+          "crop_scale": [
+            0.3,
+            1.0
+          ],
+          "crop_size": 224,
+          "dataset": "agrifield40k",
+          "image_cache_dir": null,
+          "image_folder": ".",
+          "manifest": "data/stage6/stage6_r3v3_train_view_nvme.csv",
+          "manifest_sha256": "26c55431c63791d4f7d427d432840c21aa47a717a5daadbb5990a68a546f71f2",
+          "max_samples": null,
+          "num_workers": 0,
+          "pin_mem": true,
+          "record_source_exposure": true,
+          "root_path": null,
+          "sampling": {
+            "mode": "natural"
+          },
+          "seed": 20261026,
+          "split": "train",
+          "use_color_distortion": false,
+          "use_gaussian_blur": false,
+          "use_horizontal_flip": false
+        },
+        "logging": {
+          "folder": "runs/stage6_b1_natural_2000",
+          "write_tag": "jepa"
+        },
+        "mask": {
+          "allow_overlap": false,
+          "aspect_ratio": [
+            0.75,
+            1.5
+          ],
+          "enc_mask_scale": [
+            0.85,
+            1.0
+          ],
+          "min_keep": 10,
+          "mode": "random",
+          "num_enc_masks": 1,
+          "num_pred_masks": 4,
+          "patch_size": 14,
+          "pred_mask_scale": [
+            0.15,
+            0.2
+          ]
+        },
+        "meta": {
+          "activation_checkpointing": false,
+          "arm": "B1",
+          "arm_label": "natural",
+          "copy_data": false,
+          "load_checkpoint": false,
+          "model_name": "vit_huge",
+          "patch_size": 14,
+          "pred_depth": 12,
+          "pred_emb_dim": 384,
+          "pretrained_checkpoint": "/data/checkpoints/ijepa/IN1K-vit.h.14-300e.pth.tar",
+          "pretrained_sha256": "0382013c481743e9ccea89f970bc6c6aa126aa19a62127500d6e672a641aae22",
+          "read_checkpoint": null,
+          "stage": "stage6_controlled_pretraining",
+          "use_bfloat16": true,
+          "use_sdpa": true
+        },
+        "optimization": {
+          "ema": [
+            0.996,
+            1.0
+          ],
+          "epochs": 24,
+          "final_lr": 1e-06,
+          "final_weight_decay": 0.4,
+          "grad_accum": 8,
+          "ipe_scale": 1.0,
+          "lr": 0.0002,
+          "max_optimizer_steps": 2000,
+          "save_at_optimizer_steps": [
+            500,
+            1000,
+            1500,
+            2000
+          ],
+          "start_lr": 1e-05,
+          "stop_after_epoch": null,
+          "warmup": 0.05,
+          "warmup_steps": 100,
+          "weight_decay": 0.04
+        }
+      },
+      "verification": {
+        "activation_checkpointing": false,
+        "batch_size": 16,
+        "checkpoint": "runs/stage6_b1_natural_2000/jepa-latest.pth.tar",
+        "checkpoint_epoch": 24,
+        "crop_size": 224,
+        "dataset": "agrifield40k",
+        "ema_formula_verified": true,
+        "encoder_updated": true,
+        "git_commit": "7ec8a6b694e6ee66ac3c7027c3cb0d6c924cb981",
+        "grad_accum": 8,
+        "hardware": {
+          "cuda_version": "12.8",
+          "device_type": "cuda",
+          "name": "NVIDIA RTX A6000",
+          "torch_version": "2.9.1+cu128",
+          "total_memory_mib": 48541.4375,
+          "visible_device_index": 0,
+          "world_visible_devices": 1
+        },
+        "interrupt_after_optimizer_steps": null,
+        "loss_finite": true,
+        "loss_first": 0.19038286805152893,
+        "loss_last": 0.12884588539600372,
+        "manifest_sha256": "26c55431c63791d4f7d427d432840c21aa47a717a5daadbb5990a68a546f71f2",
+        "mask_diagnostics": {
+          "mask_mode": "random"
+        },
+        "mask_mode": "random",
+        "max_optimizer_steps": 2000,
+        "micro_steps_this_run": 15996,
+        "micro_steps_total": 15996,
+        "model_name": "vit_huge",
+        "optimizer_steps_per_epoch": 1151,
+        "optimizer_steps_this_run": 2000,
+        "optimizer_steps_total": 2000,
+        "patch_size": 14,
+        "peak_memory_mib": 23355.33984375,
+        "pred_depth": 12,
+        "pred_emb_dim": 384,
+        "predictor_updated": true,
+        "pretrained_init": {
+          "encoder_keys_loaded": 389,
+          "predictor_inherited": true,
+          "predictor_keys_loaded": 152,
+          "sha256": "0382013c481743e9ccea89f970bc6c6aa126aa19a62127500d6e672a641aae22",
+          "source": "/data/checkpoints/ijepa/IN1K-vit.h.14-300e.pth.tar",
+          "target_encoder_keys_loaded": 389
+        },
+        "realised_source_exposure": {
+          "counts": {
+            "agrifield40k_pool": 31800,
+            "agrifm_ref1": 68,
+            "agrifm_ref11": 666,
+            "agrifm_ref58": 26712,
+            "agrifm_ref9": 139,
+            "applebbch81": 2410,
+            "artemis_imagesafari": 194141
+          },
+          "entropy": 0.7702830748713404,
+          "hhi": 0.6018294175302173,
+          "max_share": 0.7585529194798699,
+          "max_source": "artemis_imagesafari",
+          "part": "0",
+          "samples": 255936,
+          "shares": {
+            "agrifield40k_pool": 0.12424981245311328,
+            "agrifm_ref1": 0.0002656914228557139,
+            "agrifm_ref11": 0.002602213053263316,
+            "agrifm_ref58": 0.10436984246061515,
+            "agrifm_ref9": 0.0005431045261315329,
+            "applebbch81": 0.009416416604151039,
+            "artemis_imagesafari": 0.7585529194798699
+          },
+          "total": 255936
+        },
+        "sampling_mode": "natural",
+        "sampling_profile": {
+          "batches_per_epoch": 9204,
+          "dataset_rows": 147277,
+          "mode": "natural",
+          "sampler": "DistributedSampler",
+          "seed": 20261026
+        },
+        "saved_step_snapshots": [
+          {
+            "encoder": "runs/stage6_b1_natural_2000/jepa-encoder-step500.pth",
+            "full": "runs/stage6_b1_natural_2000/jepa-step500.pth.tar",
+            "step": 500
+          },
+          {
+            "encoder": "runs/stage6_b1_natural_2000/jepa-encoder-step1000.pth",
+            "full": "runs/stage6_b1_natural_2000/jepa-step1000.pth.tar",
+            "step": 1000
+          },
+          {
+            "encoder": "runs/stage6_b1_natural_2000/jepa-encoder-step1500.pth",
+            "full": "runs/stage6_b1_natural_2000/jepa-step1500.pth.tar",
+            "step": 1500
+          },
+          {
+            "encoder": "runs/stage6_b1_natural_2000/jepa-encoder-step2000.pth",
+            "full": "runs/stage6_b1_natural_2000/jepa-step2000.pth.tar",
+            "step": 2000
+          }
+        ],
+        "split": "train",
+        "step_time_ms_last": 386.1646728515625,
+        "step_time_ms_mean": 276.31644414086225,
+        "total_optimizer_steps_horizon": 2000,
+        "use_sdpa": true
+      },
+      "csv_rows": 15996,
+      "loss_first": 0.19038,
+      "loss_last": 0.12885,
+      "loss_min": 0.09998,
+      "loss_max": 0.2039,
+      "csv_time_ms_mean": 273.2389972493123,
+      "progress_lines": 2000,
+      "ledger": {
+        "total": 255936,
+        "counts": {
+          "agrifield40k_pool": 31800,
+          "agrifm_ref1": 68,
+          "agrifm_ref11": 666,
+          "agrifm_ref58": 26712,
+          "agrifm_ref9": 139,
+          "applebbch81": 2410,
+          "artemis_imagesafari": 194141
+        },
+        "shares": {
+          "agrifield40k_pool": 0.12424981245311328,
+          "agrifm_ref1": 0.0002656914228557139,
+          "agrifm_ref11": 0.002602213053263316,
+          "agrifm_ref58": 0.10436984246061515,
+          "agrifm_ref9": 0.0005431045261315329,
+          "applebbch81": 0.009416416604151039,
+          "artemis_imagesafari": 0.7585529194798699
+        },
+        "hhi": 0.6018294175302173,
+        "entropy": 0.7702830748713404,
+        "max_share": 0.7585529194798699,
+        "max_source": "artemis_imagesafari",
+        "per_sample_rows": 255936,
+        "sources": 7
+      }
+    },
+    "B2": {
+      "arm": "B2",
+      "run_dir": "/fj/jepa-二维图像任务/runs/stage6_b2_capped_no_backfill_2000",
+      "params": {
+        "data": {
+          "augmentation_seed": 20261026,
+          "batch_size": 16,
+          "color_jitter_strength": 0.0,
+          "crop_scale": [
+            0.3,
+            1.0
+          ],
+          "crop_size": 224,
+          "dataset": "agrifield40k",
+          "image_cache_dir": null,
+          "image_folder": ".",
+          "manifest": "data/stage6/stage6_r3v3_train_view_nvme.csv",
+          "manifest_sha256": "26c55431c63791d4f7d427d432840c21aa47a717a5daadbb5990a68a546f71f2",
+          "max_samples": null,
+          "num_workers": 0,
+          "pin_mem": true,
+          "record_source_exposure": true,
+          "root_path": null,
+          "sampling": {
+            "backfill": false,
+            "cap_share": 0.5,
+            "cap_unit": "physical_source_id",
+            "capped_sources": [
+              "artemis_imagesafari"
+            ],
+            "epoch_length": 150000,
+            "mode": "profile_capped",
+            "official_profile": "by_source",
+            "profile": "data/corpus_v4/R3v3_license_verified_sampling_profiles.json",
+            "profile_sha256": "91fb23ef5366fa163264a48cdf7c6613769816df751a9695ea9caa284833c505",
+            "seed": 20261026
+          },
+          "seed": 20261026,
+          "split": "train",
+          "use_color_distortion": false,
+          "use_gaussian_blur": false,
+          "use_horizontal_flip": false
+        },
+        "logging": {
+          "folder": "runs/stage6_b2_capped_no_backfill_2000",
+          "write_tag": "jepa"
+        },
+        "mask": {
+          "allow_overlap": false,
+          "aspect_ratio": [
+            0.75,
+            1.5
+          ],
+          "enc_mask_scale": [
+            0.85,
+            1.0
+          ],
+          "min_keep": 10,
+          "mode": "random",
+          "num_enc_masks": 1,
+          "num_pred_masks": 4,
+          "patch_size": 14,
+          "pred_mask_scale": [
+            0.15,
+            0.2
+          ]
+        },
+        "meta": {
+          "activation_checkpointing": false,
+          "arm": "B2",
+          "arm_label": "capped_no_backfill",
+          "copy_data": false,
+          "load_checkpoint": false,
+          "model_name": "vit_huge",
+          "patch_size": 14,
+          "pred_depth": 12,
+          "pred_emb_dim": 384,
+          "pretrained_checkpoint": "/data/checkpoints/ijepa/IN1K-vit.h.14-300e.pth.tar",
+          "pretrained_sha256": "0382013c481743e9ccea89f970bc6c6aa126aa19a62127500d6e672a641aae22",
+          "read_checkpoint": null,
+          "stage": "stage6_controlled_pretraining",
+          "use_bfloat16": true,
+          "use_sdpa": true
+        },
+        "optimization": {
+          "ema": [
+            0.996,
+            1.0
+          ],
+          "epochs": 24,
+          "final_lr": 1e-06,
+          "final_weight_decay": 0.4,
+          "grad_accum": 8,
+          "ipe_scale": 1.0,
+          "lr": 0.0002,
+          "max_optimizer_steps": 2000,
+          "save_at_optimizer_steps": [
+            500,
+            1000,
+            1500,
+            2000
+          ],
+          "start_lr": 1e-05,
+          "stop_after_epoch": null,
+          "warmup": 0.05,
+          "warmup_steps": 100,
+          "weight_decay": 0.04
+        }
+      },
+      "verification": {
+        "activation_checkpointing": false,
+        "batch_size": 16,
+        "checkpoint": "runs/stage6_b2_capped_no_backfill_2000/jepa-latest.pth.tar",
+        "checkpoint_epoch": 24,
+        "crop_size": 224,
+        "dataset": "agrifield40k",
+        "ema_formula_verified": true,
+        "encoder_updated": true,
+        "git_commit": "7ec8a6b694e6ee66ac3c7027c3cb0d6c924cb981",
+        "grad_accum": 8,
+        "hardware": {
+          "cuda_version": "12.8",
+          "device_type": "cuda",
+          "name": "NVIDIA RTX A6000",
+          "torch_version": "2.9.1+cu128",
+          "total_memory_mib": 48534.1875,
+          "visible_device_index": 0,
+          "world_visible_devices": 1
+        },
+        "interrupt_after_optimizer_steps": null,
+        "loss_finite": true,
+        "loss_first": 0.1941462606191635,
+        "loss_last": 0.12195254117250443,
+        "manifest_sha256": "26c55431c63791d4f7d427d432840c21aa47a717a5daadbb5990a68a546f71f2",
+        "mask_diagnostics": {
+          "mask_mode": "random"
+        },
+        "mask_mode": "random",
+        "max_optimizer_steps": 2000,
+        "micro_steps_this_run": 15992,
+        "micro_steps_total": 15992,
+        "model_name": "vit_huge",
+        "optimizer_steps_per_epoch": 869,
+        "optimizer_steps_this_run": 2000,
+        "optimizer_steps_total": 2000,
+        "patch_size": 14,
+        "peak_memory_mib": 23355.33984375,
+        "pred_depth": 12,
+        "pred_emb_dim": 384,
+        "predictor_updated": true,
+        "pretrained_init": {
+          "encoder_keys_loaded": 389,
+          "predictor_inherited": true,
+          "predictor_keys_loaded": 152,
+          "sha256": "0382013c481743e9ccea89f970bc6c6aa126aa19a62127500d6e672a641aae22",
+          "source": "/data/checkpoints/ijepa/IN1K-vit.h.14-300e.pth.tar",
+          "target_encoder_keys_loaded": 389
+        },
+        "realised_source_exposure": {
+          "counts": {
+            "agrifield40k_pool": 42756,
+            "agrifm_ref1": 95,
+            "agrifm_ref11": 895,
+            "agrifm_ref58": 36067,
+            "agrifm_ref9": 198,
+            "applebbch81": 3243,
+            "artemis_imagesafari": 172618
+          },
+          "entropy": 0.9242986107618288,
+          "hhi": 0.5030854219919451,
+          "max_share": 0.6746263756878439,
+          "max_source": "artemis_imagesafari",
+          "part": "0",
+          "samples": 255872,
+          "shares": {
+            "agrifield40k_pool": 0.16709917458729365,
+            "agrifm_ref1": 0.00037127938969484743,
+            "agrifm_ref11": 0.0034978426713356678,
+            "agrifm_ref58": 0.14095719734867435,
+            "agrifm_ref9": 0.000773824412206103,
+            "applebbch81": 0.012674305902951476,
+            "artemis_imagesafari": 0.6746263756878439
+          },
+          "total": 255872
+        },
+        "sampling_mode": "profile_capped",
+        "sampling_profile": {
+          "backfill": false,
+          "budget_filled": false,
+          "cap_share": 0.5,
+          "capped_exposure": {
+            "agrifield40k_pool": 18577.238808503706,
+            "agrifm_ref1": 40.7395587905783,
+            "agrifm_ref11": 389.06278645002277,
+            "agrifm_ref58": 15670.471288795943,
+            "agrifm_ref9": 85.55307346021442,
+            "applebbch81": 1408.5702451842446,
+            "artemis_imagesafari": 75000.0
+          },
+          "capped_sources": [
+            "artemis_imagesafari"
+          ],
+          "capped_total_exposure": 111171.6357611847,
+          "epoch_length": 150000,
+          "integer_allocation": {
+            "agrifield40k_pool": 18577,
+            "agrifm_ref1": 41,
+            "agrifm_ref11": 389,
+            "agrifm_ref58": 15670,
+            "agrifm_ref9": 86,
+            "applebbch81": 1409,
+            "artemis_imagesafari": 75000
+          },
+          "integer_epoch_total": 111172,
+          "manifest_counts": {
+            "agrifield40k_pool": 18240,
+            "agrifm_ref1": 40,
+            "agrifm_ref11": 382,
+            "agrifm_ref58": 15386,
+            "agrifm_ref9": 84,
+            "applebbch81": 1383,
+            "artemis_imagesafari": 111762
+          },
+          "mode": "profile_capped",
+          "natural_exposure": {
+            "agrifield40k_pool": 18577.238808503706,
+            "agrifm_ref1": 40.7395587905783,
+            "agrifm_ref11": 389.06278645002277,
+            "agrifm_ref58": 15670.471288795943,
+            "agrifm_ref9": 85.55307346021442,
+            "applebbch81": 1408.5702451842446,
+            "artemis_imagesafari": 113828.3642388153
+          },
+          "seed": 20261026,
+          "unfulfilled_exposure": 38828.364238815295
+        },
+        "saved_step_snapshots": [
+          {
+            "encoder": "runs/stage6_b2_capped_no_backfill_2000/jepa-encoder-step500.pth",
+            "full": "runs/stage6_b2_capped_no_backfill_2000/jepa-step500.pth.tar",
+            "step": 500
+          },
+          {
+            "encoder": "runs/stage6_b2_capped_no_backfill_2000/jepa-encoder-step1000.pth",
+            "full": "runs/stage6_b2_capped_no_backfill_2000/jepa-step1000.pth.tar",
+            "step": 1000
+          },
+          {
+            "encoder": "runs/stage6_b2_capped_no_backfill_2000/jepa-encoder-step1500.pth",
+            "full": "runs/stage6_b2_capped_no_backfill_2000/jepa-step1500.pth.tar",
+            "step": 1500
+          },
+          {
+            "encoder": "runs/stage6_b2_capped_no_backfill_2000/jepa-encoder-step2000.pth",
+            "full": "runs/stage6_b2_capped_no_backfill_2000/jepa-step2000.pth.tar",
+            "step": 2000
+          }
+        ],
+        "split": "train",
+        "step_time_ms_last": 389.1065368652344,
+        "step_time_ms_mean": 291.85121879868836,
+        "total_optimizer_steps_horizon": 2000,
+        "use_sdpa": true
+      },
+      "csv_rows": 15992,
+      "loss_first": 0.19415,
+      "loss_last": 0.12195,
+      "loss_min": 0.10219,
+      "loss_max": 0.20303,
+      "csv_time_ms_mean": 294.1415707853927,
+      "progress_lines": 2000,
+      "ledger": {
+        "total": 255872,
+        "counts": {
+          "agrifield40k_pool": 42756,
+          "agrifm_ref1": 95,
+          "agrifm_ref11": 895,
+          "agrifm_ref58": 36067,
+          "agrifm_ref9": 198,
+          "applebbch81": 3243,
+          "artemis_imagesafari": 172618
+        },
+        "shares": {
+          "agrifield40k_pool": 0.16709917458729365,
+          "agrifm_ref1": 0.00037127938969484743,
+          "agrifm_ref11": 0.0034978426713356678,
+          "agrifm_ref58": 0.14095719734867435,
+          "agrifm_ref9": 0.000773824412206103,
+          "applebbch81": 0.012674305902951476,
+          "artemis_imagesafari": 0.6746263756878439
+        },
+        "hhi": 0.5030854219919451,
+        "entropy": 0.9242986107618288,
+        "max_share": 0.6746263756878439,
+        "max_source": "artemis_imagesafari",
+        "per_sample_rows": 255872,
+        "sources": 7
+      }
+    }
+  },
+  "profile_nominal_capped_exposure": {
+    "artemis_imagesafari": 75000.0,
+    "agrifield40k_pool": 18577.238808503706,
+    "agrifm_ref58": 15670.471288795943,
+    "applebbch81": 1408.5702451842446,
+    "agrifm_ref11": 389.06278645002277,
+    "agrifm_ref9": 85.55307346021442,
+    "agrifm_ref1": 40.7395587905783
+  },
+  "profile_integer_allocation": {
+    "agrifield40k_pool": 18577,
+    "agrifm_ref1": 41,
+    "agrifm_ref11": 389,
+    "agrifm_ref58": 15670,
+    "agrifm_ref9": 86,
+    "applebbch81": 1409,
+    "artemis_imagesafari": 75000
+  },
+  "profile_info": {
+    "cap_exposure": 75000.0,
+    "unfulfilled_exposure": 38828.364238815295,
+    "budget_filled": false,
+    "backfill": false
+  },
+  "non_sampling_mismatches": [],
+  "protocol_ok": true
+}

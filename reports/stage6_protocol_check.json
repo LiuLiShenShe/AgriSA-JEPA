@@ -1,0 +1,91 @@
+{
+  "configs": {
+    "B1": "/fj/jepa-二维图像任务/configs/stage6_b1_natural_2000.yaml",
+    "B2": "/fj/jepa-二维图像任务/configs/stage6_b2_capped_no_backfill_2000.yaml"
+  },
+  "allowed_different": [
+    "data.sampling.backfill",
+    "data.sampling.cap_share",
+    "data.sampling.cap_unit",
+    "data.sampling.capped_sources",
+    "data.sampling.epoch_length",
+    "data.sampling.mode",
+    "data.sampling.official_profile",
+    "data.sampling.profile",
+    "data.sampling.profile_sha256",
+    "logging.folder",
+    "meta.arm",
+    "meta.arm_label"
+  ],
+  "must_match": [
+    "data.augmentation_seed",
+    "data.batch_size",
+    "data.color_jitter_strength",
+    "data.crop_scale",
+    "data.crop_size",
+    "data.image_cache_dir",
+    "data.manifest",
+    "data.manifest_sha256",
+    "data.max_samples",
+    "data.num_workers",
+    "data.pin_mem",
+    "data.record_source_exposure",
+    "data.root_path",
+    "data.seed",
+    "data.split",
+    "data.use_color_distortion",
+    "data.use_gaussian_blur",
+    "data.use_horizontal_flip",
+    "mask.allow_overlap",
+    "mask.aspect_ratio",
+    "mask.enc_mask_scale",
+    "mask.min_keep",
+    "mask.mode",
+    "mask.num_enc_masks",
+    "mask.num_pred_masks",
+    "mask.patch_size",
+    "mask.pred_mask_scale",
+    "meta.activation_checkpointing",
+    "meta.load_checkpoint",
+    "meta.model_name",
+    "meta.patch_size",
+    "meta.pred_depth",
+    "meta.pred_emb_dim",
+    "meta.pretrained_checkpoint",
+    "meta.pretrained_sha256",
+    "meta.read_checkpoint",
+    "meta.use_bfloat16",
+    "meta.use_sdpa",
+    "optimization.ema",
+    "optimization.epochs",
+    "optimization.final_lr",
+    "optimization.final_weight_decay",
+    "optimization.grad_accum",
+    "optimization.interrupt_after_optimizer_steps",
+    "optimization.ipe_scale",
+    "optimization.lr",
+    "optimization.max_optimizer_steps",
+    "optimization.save_at_optimizer_steps",
+    "optimization.start_lr",
+    "optimization.stop_after_epoch",
+    "optimization.warmup",
+    "optimization.warmup_steps",
+    "optimization.weight_decay"
+  ],
+  "frozen_inputs": {
+    "train_csv": {
+      "path": "/fj/jepa-二维图像任务/data/corpus_v4/R3v3_license_verified_train.csv",
+      "sha256": "9fa34adb36810a5b0d13109761c60892bd9068f27c8f95a48e728146c1a6be08"
+    },
+    "val_csv": {
+      "path": "/fj/jepa-二维图像任务/data/corpus_v4/R3v3_license_verified_val.csv",
+      "sha256": "f4670232237c8017ffb213e739446fce05a0661cbe18315097b1dba214c40686"
+    },
+    "pretrained_checkpoint": {
+      "path": "/data/checkpoints/ijepa/IN1K-vit.h.14-300e.pth.tar",
+      "sha256": "0382013c481743e9ccea89f970bc6c6aa126aa19a62127500d6e672a641aae22"
+    }
+  },
+  "problems": [],
+  "ok": true
+}

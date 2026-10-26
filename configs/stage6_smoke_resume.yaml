@@ -1,0 +1,104 @@
+# Stage 6 -- real-image smoke / resume verification (NOT a result arm)
+#
+# Purpose: prove that the Stage 6 pipeline runs on real R3v3 train images and
+# that a mid-epoch interruption resumes exactly, before any budget is spent on
+# the B1/B2 comparison.
+#
+#   part 1  : 10 optimizer updates, then `interrupt_after_optimizer_steps`
+#             (a PURE interruption point -- it does not change the schedule
+#             horizon, so the 20-update schedule is defined once, here).
+#   part 2  : resume from the checkpoint and continue to the same 20-update
+#             budget.
+#
+# The smoke run uses the CAPPED sampler (the more complex path) but its numbers
+# are NOT part of the B1/B2 results and are never reported as such.
+meta:
+  stage: stage6_controlled_pretraining_smoke
+  arm: SMOKE
+  arm_label: smoke_resume
+  model_name: vit_huge
+  patch_size: 14
+  pred_depth: 12
+  pred_emb_dim: 384
+  load_checkpoint: false
+  read_checkpoint: null
+  pretrained_checkpoint: /data/checkpoints/ijepa/IN1K-vit.h.14-300e.pth.tar
+  pretrained_sha256: 0382013c481743e9ccea89f970bc6c6aa126aa19a62127500d6e672a641aae22
+  copy_data: false
+  use_bfloat16: true
+  use_sdpa: true
+  activation_checkpointing: false
+data:
+  dataset: agrifield40k
+  manifest: data/stage6/stage6_r3v3_train_view_nvme.csv
+  manifest_sha256: 26c55431c63791d4f7d427d432840c21aa47a717a5daadbb5990a68a546f71f2
+  split: train
+  seed: 20261026
+  augmentation_seed: 20261026
+  batch_size: 16
+  color_jitter_strength: 0.0
+  crop_scale:
+  - 0.3
+  - 1.0
+  crop_size: 224
+  image_folder: .
+  image_cache_dir: null
+  num_workers: 0
+  pin_mem: true
+  root_path: null
+  use_color_distortion: false
+  use_gaussian_blur: false
+  use_horizontal_flip: false
+  max_samples: null
+  sampling:
+    mode: profile_capped
+    profile: data/corpus_v4/R3v3_license_verified_sampling_profiles.json
+    profile_sha256: 91fb23ef5366fa163264a48cdf7c6613769816df751a9695ea9caa284833c505
+    official_profile: by_source
+    cap_unit: physical_source_id
+    epoch_length: 150000
+    cap_share: 0.5
+    capped_sources:
+    - artemis_imagesafari
+    backfill: false
+    seed: 20261026
+  record_source_exposure: true
+mask:
+  mode: random
+  allow_overlap: false
+  aspect_ratio:
+  - 0.75
+  - 1.5
+  enc_mask_scale:
+  - 0.85
+  - 1.0
+  min_keep: 10
+  num_enc_masks: 1
+  num_pred_masks: 4
+  patch_size: 14
+  pred_mask_scale:
+  - 0.15
+  - 0.2
+optimization:
+  ema:
+  - 0.996
+  - 1.0
+  epochs: 24
+  stop_after_epoch: null
+  # -- the single schedule horizon for BOTH parts of the smoke test
+  max_optimizer_steps: 20
+  save_at_optimizer_steps: []
+  final_lr: 1.0e-06
+  final_weight_decay: 0.4
+  ipe_scale: 1.0
+  lr: 0.0002
+  start_lr: 1.0e-05
+  warmup: 0.05
+  warmup_steps: 2  # smoke-only: 10% of the 20-update smoke horizon
+  weight_decay: 0.04
+  grad_accum: 8
+  # -- part 1 stops here. Overridden to `null` for the resumed part 2.
+  interrupt_after_optimizer_steps: 10
+logging:
+  folder: runs/stage6_smoke_resume
+  write_tag: jepa
