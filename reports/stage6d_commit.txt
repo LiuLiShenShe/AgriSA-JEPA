@@ -1,0 +1,36 @@
+# Stage 6D — 提交与远端 HEAD 记录
+
+执行前远端基线（`git ls-remote` 核实）：
+  269709114e0b8b87f057234ebf7e455fc0e9fca7   (origin/agri-stage6c-phenobench-eval)
+
+执行前本地 HEAD：
+  269709114e0b8b87f057234ebf7e455fc0e9fca7
+
+执行分支：
+  agri-stage6d-pretrain-seed-replication（从上述基线新建）
+
+**代码 / 配置 / 测试 / 报告提交（本阶段实质内容）：**
+  3ee47d7027348b80de4d22ae6a324699c52e8647
+
+**记录本文件的元数据提交：**
+  见 `git log -1 --format=%H -- reports/stage6d_commit.txt`（提交后写入，避免自指）
+
+远端 HEAD（推送后以 `git ls-remote origin agri-stage6d-pretrain-seed-replication` 为准）：
+  以实时输出为准；代码提交始终是 `3ee47d7027348b80de4d22ae6a324699c52e8647`。
+
+如果之后还有提交（例如回填远端 HEAD 或更新运行记录），它们同样只改本文件或报告；
+以 `git rev-parse HEAD` / `git ls-remote origin agri-stage6d-pretrain-seed-replication`
+的实时输出为准。
+
+是否合并 main / force push：否。
+是否重置/删除/覆盖用户未提交文件：否（`CLAUDE.md` 等保留未动）。
+
+提交内容：仅 Stage 6D 代码 / 配置 / 测试 / 报告；不含原始图像、预测 PNG 大批量文件、
+特征缓存、checkpoint 或 runs/（`runs/` 已在 `.gitignore`）。
+
+## 未执行项
+
+- 4 个新 run 的 2,000-update 预训练：**未执行**（物理 GPU1 被外部进程占用）。
+- 新 checkpoint 的 PhenoBench probe：**未执行**。
+- 新结果统计：**未执行**。
+- 本文件与报告中的 `not_started` / `not_executed` 记录是真实的阻塞状态，不是结果。
