@@ -1,0 +1,420 @@
+{
+  "generated_by": "tools/compare_stage6c_phenobench.py",
+  "code_commit": "f057721530d687fc37cba864106b39f484298ca5",
+  "data": {
+    "dataset": "PhenoBench",
+    "version": "v1.1.0",
+    "root": "/data/datasets/PhenoBench/PhenoBench-v110",
+    "manifest": "/fj/jepa-二维图像任务/reports/phenobench_file_manifest.sha256.txt",
+    "manifest_sha256": "13fa2810d9fe87c2d65b2dc5b7c7e8ac55e31812aee44af21aea98da8e98bd5d",
+    "train_images": 1407,
+    "val_images": 772,
+    "evaluated_images": 772,
+    "test_split_used": false
+  },
+  "inputs": {
+    "A": {
+      "result_json": "/fj/jepa-二维图像任务/runs/stage3a_phenobench/armA/result.json",
+      "result_json_sha256": "54e0a0f6b28a73ff3305d32d82e1565c714913874663b54337d78e9bee43dd6f",
+      "checkpoint": "/data/checkpoints/ijepa/IN1K-vit.h.14-300e.pth.tar",
+      "checkpoint_sha256_expected": "0382013c481743e9ccea89f970bc6c6aa126aa19a62127500d6e672a641aae22",
+      "checkpoint_sha256_recorded": "0382013c481743e9ccea89f970bc6c6aa126aa19a62127500d6e672a641aae22",
+      "checkpoint_sha256_on_disk": "0382013c481743e9ccea89f970bc6c6aa126aa19a62127500d6e672a641aae22",
+      "role": "official I-JEPA ViT-H/14, no agricultural continued pretraining",
+      "arm_label": "official_i-jepa_vith14",
+      "continued_training": "none",
+      "pretraining_data_version": null
+    },
+    "B1": {
+      "result_json": "/fj/jepa-二维图像任务/runs/stage6c_phenobench/B1_natural/result.json",
+      "result_json_sha256": "61d588a45efaa8c2f827c27734c5214483ec00ea1d86016bc6eed1250767cddb",
+      "checkpoint": "runs/stage6_b1_natural_2000/jepa-encoder-step2000.pth",
+      "checkpoint_sha256_expected": "19796cebc65e29a07eafd7222f5a642d4ef9f28c33f2e4f4f2b65e34a2bfde6b",
+      "checkpoint_sha256_recorded": "19796cebc65e29a07eafd7222f5a642d4ef9f28c33f2e4f4f2b65e34a2bfde6b",
+      "checkpoint_sha256_on_disk": "19796cebc65e29a07eafd7222f5a642d4ef9f28c33f2e4f4f2b65e34a2bfde6b",
+      "role": "Stage 6 natural sampling, 2000 optimizer updates",
+      "arm_label": "stage6c_b1_natural",
+      "continued_training": "2000 optimizer updates; official I-JEPA objective; natural source sampling",
+      "pretraining_data_version": "R3v3_license_verified train; 147277 images; audit status CONDITIONAL"
+    },
+    "B2": {
+      "result_json": "/fj/jepa-二维图像任务/runs/stage6c_phenobench/B2_capped/result.json",
+      "result_json_sha256": "2cc28e0c233ba076164f46e40532e73104c7babb3945c1c00f3bf2ec557f7acb",
+      "checkpoint": "runs/stage6_b2_capped_no_backfill_2000/jepa-encoder-step2000.pth",
+      "checkpoint_sha256_expected": "6e7a83c9156e556757016145fb804e2b67e7b94f5e8b45bda4ffd24cb5975a62",
+      "checkpoint_sha256_recorded": "6e7a83c9156e556757016145fb804e2b67e7b94f5e8b45bda4ffd24cb5975a62",
+      "checkpoint_sha256_on_disk": "6e7a83c9156e556757016145fb804e2b67e7b94f5e8b45bda4ffd24cb5975a62",
+      "role": "Stage 6 capped no-backfill sampling, 2000 optimizer updates",
+      "arm_label": "stage6c_b2_capped_no_backfill",
+      "continued_training": "2000 optimizer updates; official I-JEPA objective; Stage 5E.1 physical-source capped no-backfill profile",
+      "pretraining_data_version": "R3v3_license_verified train; 147277 images; audit status CONDITIONAL"
+    }
+  },
+  "predictions": {
+    "A": {
+      "0": {
+        "predictions_dir": "runs/stage3a_phenobench/armA/seed0/predictions/semantics",
+        "n_predictions": 772,
+        "expected_n_predictions": 772,
+        "manifest_sha256": "be11a890f01628c4f91147726671858f4786cba217bb8e8f8814ebe6e8de4d72",
+        "official_stdout": "runs/stage3a_phenobench/armA/seed0/phenobench_eval_stdout.txt"
+      },
+      "1": {
+        "predictions_dir": "runs/stage3a_phenobench/armA/seed1/predictions/semantics",
+        "n_predictions": 772,
+        "expected_n_predictions": 772,
+        "manifest_sha256": "2b851218c0c153fd6b8e91204581f0d2a1e266b54deaadcdb6c53e21da0b7049",
+        "official_stdout": "runs/stage3a_phenobench/armA/seed1/phenobench_eval_stdout.txt"
+      },
+      "2": {
+        "predictions_dir": "runs/stage3a_phenobench/armA/seed2/predictions/semantics",
+        "n_predictions": 772,
+        "expected_n_predictions": 772,
+        "manifest_sha256": "a3109a0b0db86f11f112d3bce9184f6e62d81503f381d78e57af87d7848a0c0f",
+        "official_stdout": "runs/stage3a_phenobench/armA/seed2/phenobench_eval_stdout.txt"
+      }
+    },
+    "B1": {
+      "0": {
+        "predictions_dir": "runs/stage6c_phenobench/B1_natural/seed0/predictions/semantics",
+        "n_predictions": 772,
+        "expected_n_predictions": 772,
+        "manifest_sha256": "53be58aba3bcb50783bfc0c1082ab17c9ff3961ea7487d42407a8c5f9d1cada4",
+        "official_stdout": "runs/stage6c_phenobench/B1_natural/seed0/phenobench_eval_stdout.txt"
+      },
+      "1": {
+        "predictions_dir": "runs/stage6c_phenobench/B1_natural/seed1/predictions/semantics",
+        "n_predictions": 772,
+        "expected_n_predictions": 772,
+        "manifest_sha256": "32936201cd37baa04fc5dab3bf3316887559307efebe344cc6e0c93768f088eb",
+        "official_stdout": "runs/stage6c_phenobench/B1_natural/seed1/phenobench_eval_stdout.txt"
+      },
+      "2": {
+        "predictions_dir": "runs/stage6c_phenobench/B1_natural/seed2/predictions/semantics",
+        "n_predictions": 772,
+        "expected_n_predictions": 772,
+        "manifest_sha256": "83bbd774995a14066d75a5a5f4ad5dfc8483bfe5f3016b49ce2f21f6a8660704",
+        "official_stdout": "runs/stage6c_phenobench/B1_natural/seed2/phenobench_eval_stdout.txt"
+      }
+    },
+    "B2": {
+      "0": {
+        "predictions_dir": "runs/stage6c_phenobench/B2_capped/seed0/predictions/semantics",
+        "n_predictions": 772,
+        "expected_n_predictions": 772,
+        "manifest_sha256": "8ca1749e9067bb8ac1e53eb8855256c1cd219a1cffd903f18ad975ea2760b833",
+        "official_stdout": "runs/stage6c_phenobench/B2_capped/seed0/phenobench_eval_stdout.txt"
+      },
+      "1": {
+        "predictions_dir": "runs/stage6c_phenobench/B2_capped/seed1/predictions/semantics",
+        "n_predictions": 772,
+        "expected_n_predictions": 772,
+        "manifest_sha256": "bbb6e126e6b0c980b2fe2c4d7f57122c0ba16e02178ce5370b22e694a4f53aa6",
+        "official_stdout": "runs/stage6c_phenobench/B2_capped/seed1/phenobench_eval_stdout.txt"
+      },
+      "2": {
+        "predictions_dir": "runs/stage6c_phenobench/B2_capped/seed2/predictions/semantics",
+        "n_predictions": 772,
+        "expected_n_predictions": 772,
+        "manifest_sha256": "c6e034157ef357549487ea0b7d20bf28085d6ed48554073c759cb19ab7b66240",
+        "official_stdout": "runs/stage6c_phenobench/B2_capped/seed2/phenobench_eval_stdout.txt"
+      }
+    }
+  },
+  "protocol": {
+    "backbone": "ViT-H/14, frozen, 224x224 tiles, 16x16 tokens, embed 1280",
+    "head": "Linear(1280 -> 3) over patch tokens, nearest upsample x14",
+    "tiling": "overlapping 224x224, stride 200, 5x5 per 1024 image, no padding, every pixel covered, overlaps logit-averaged",
+    "optimizer": "AdamW",
+    "lr": 0.001,
+    "weight_decay": 0.0,
+    "epochs": 10,
+    "batch_size": 32,
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "loss": "patch cross-entropy, exact equivalent of nearest-upsampled pixel CE",
+    "train_images": 1407,
+    "val_images": 772
+  },
+  "probe_parameters": 3843,
+  "seed_semantics": "seeds 0/1/2 are three probe-training seeds on one pretraining checkpoint per arm; they do not estimate pretraining variance",
+  "metric_sources": {
+    "crop": "official phenobench-eval --task semantics",
+    "weed": "official phenobench-eval --task semantics",
+    "mIoU": "official phenobench-eval --task semantics",
+    "soil": "self-implemented IoU accumulator (official evaluator does not print a soil line)"
+  },
+  "tolerance_pp": 0.01,
+  "max_abs_self_official_difference_pp": 0.005,
+  "trivial_all_soil_baseline": {
+    "val_images": 772,
+    "pixel_counts_by_id": {
+      "0": 727889307,
+      "1": 66418271,
+      "2": 4088634,
+      "3": 10916383,
+      "4": 188077
+    },
+    "soil_fraction_percent": 89.9183,
+    "all_soil_miou_percent": 29.9728,
+    "recorded_reference_percent": 29.97,
+    "matches_recorded_reference": true
+  },
+  "arms": {
+    "A": {
+      "per_seed": [
+        {
+          "seed": 0,
+          "soil": 97.6186,
+          "crop": 81.66,
+          "weed": 38.72,
+          "mIoU": 72.67,
+          "train_updates": 11000,
+          "train_seconds": 73.5,
+          "final_train_loss": 0.06438193713116917,
+          "peak_gpu_memory_mib": 117.5
+        },
+        {
+          "seed": 1,
+          "soil": 97.6104,
+          "crop": 81.46,
+          "weed": 38.74,
+          "mIoU": 72.6,
+          "train_updates": 11000,
+          "train_seconds": 71.0,
+          "final_train_loss": 0.0643533535023149,
+          "peak_gpu_memory_mib": 117.5
+        },
+        {
+          "seed": 2,
+          "soil": 97.5964,
+          "crop": 81.25,
+          "weed": 30.48,
+          "mIoU": 69.78,
+          "train_updates": 11000,
+          "train_seconds": 95.8,
+          "final_train_loss": 0.06439897055215418,
+          "peak_gpu_memory_mib": 117.5
+        }
+      ],
+      "mean": {
+        "soil": 97.6085,
+        "crop": 81.4567,
+        "weed": 35.98,
+        "mIoU": 71.6833
+      },
+      "std": {
+        "soil": 0.0092,
+        "crop": 0.1674,
+        "weed": 3.8891,
+        "mIoU": 1.3462
+      }
+    },
+    "B1": {
+      "per_seed": [
+        {
+          "seed": 0,
+          "soil": 97.6899,
+          "crop": 82.35,
+          "weed": 40.35,
+          "mIoU": 73.46,
+          "train_updates": 11000,
+          "train_seconds": 77.6,
+          "final_train_loss": 0.06096327930169912,
+          "peak_gpu_memory_mib": 2639.3
+        },
+        {
+          "seed": 1,
+          "soil": 97.6937,
+          "crop": 82.29,
+          "weed": 40.53,
+          "mIoU": 73.5,
+          "train_updates": 11000,
+          "train_seconds": 75.9,
+          "final_train_loss": 0.06090424764194468,
+          "peak_gpu_memory_mib": 2639.3
+        },
+        {
+          "seed": 2,
+          "soil": 97.6757,
+          "crop": 82.01,
+          "weed": 35.12,
+          "mIoU": 71.6,
+          "train_updates": 11000,
+          "train_seconds": 63.2,
+          "final_train_loss": 0.060976139543407255,
+          "peak_gpu_memory_mib": 2639.3
+        }
+      ],
+      "mean": {
+        "soil": 97.6864,
+        "crop": 82.2167,
+        "weed": 38.6667,
+        "mIoU": 72.8533
+      },
+      "std": {
+        "soil": 0.0077,
+        "crop": 0.1482,
+        "weed": 2.5089,
+        "mIoU": 0.8864
+      }
+    },
+    "B2": {
+      "per_seed": [
+        {
+          "seed": 0,
+          "soil": 97.6951,
+          "crop": 82.37,
+          "weed": 40.21,
+          "mIoU": 73.43,
+          "train_updates": 11000,
+          "train_seconds": 104.1,
+          "final_train_loss": 0.060583796293899025,
+          "peak_gpu_memory_mib": 2639.3
+        },
+        {
+          "seed": 1,
+          "soil": 97.6913,
+          "crop": 82.15,
+          "weed": 39.95,
+          "mIoU": 73.27,
+          "train_updates": 11000,
+          "train_seconds": 103.9,
+          "final_train_loss": 0.060501507998317716,
+          "peak_gpu_memory_mib": 2639.3
+        },
+        {
+          "seed": 2,
+          "soil": 97.6763,
+          "crop": 82.16,
+          "weed": 33.87,
+          "mIoU": 71.23,
+          "train_updates": 11000,
+          "train_seconds": 107.8,
+          "final_train_loss": 0.060592746188693335,
+          "peak_gpu_memory_mib": 2639.3
+        }
+      ],
+      "mean": {
+        "soil": 97.6876,
+        "crop": 82.2267,
+        "weed": 38.01,
+        "mIoU": 72.6433
+      },
+      "std": {
+        "soil": 0.0081,
+        "crop": 0.1014,
+        "weed": 2.9293,
+        "mIoU": 1.0015
+      }
+    }
+  },
+  "deltas": {
+    "B1-A": {
+      "per_seed": [
+        {
+          "seed": 0,
+          "soil": 0.0713,
+          "crop": 0.69,
+          "weed": 1.63,
+          "mIoU": 0.79
+        },
+        {
+          "seed": 1,
+          "soil": 0.0833,
+          "crop": 0.83,
+          "weed": 1.79,
+          "mIoU": 0.9
+        },
+        {
+          "seed": 2,
+          "soil": 0.0793,
+          "crop": 0.76,
+          "weed": 4.64,
+          "mIoU": 1.82
+        }
+      ],
+      "mean": {
+        "soil": 0.0779,
+        "crop": 0.76,
+        "weed": 2.6867,
+        "mIoU": 1.17
+      }
+    },
+    "B2-A": {
+      "per_seed": [
+        {
+          "seed": 0,
+          "soil": 0.0765,
+          "crop": 0.71,
+          "weed": 1.49,
+          "mIoU": 0.76
+        },
+        {
+          "seed": 1,
+          "soil": 0.0809,
+          "crop": 0.69,
+          "weed": 1.21,
+          "mIoU": 0.67
+        },
+        {
+          "seed": 2,
+          "soil": 0.0799,
+          "crop": 0.91,
+          "weed": 3.39,
+          "mIoU": 1.45
+        }
+      ],
+      "mean": {
+        "soil": 0.0791,
+        "crop": 0.77,
+        "weed": 2.03,
+        "mIoU": 0.96
+      }
+    },
+    "B2-B1": {
+      "per_seed": [
+        {
+          "seed": 0,
+          "soil": 0.0052,
+          "crop": 0.02,
+          "weed": -0.14,
+          "mIoU": -0.03
+        },
+        {
+          "seed": 1,
+          "soil": -0.0024,
+          "crop": -0.14,
+          "weed": -0.58,
+          "mIoU": -0.23
+        },
+        {
+          "seed": 2,
+          "soil": 0.0006,
+          "crop": 0.15,
+          "weed": -1.25,
+          "mIoU": -0.37
+        }
+      ],
+      "mean": {
+        "soil": 0.0012,
+        "crop": 0.01,
+        "weed": -0.6567,
+        "mIoU": -0.21
+      }
+    }
+  },
+  "guardrails": [
+    "No p-value is reported; three probe seeds do not estimate pretraining-seed variance.",
+    "Each arm has exactly one pretraining checkpoint, so B2-B1 is exploratory until independent pretraining seeds exist.",
+    "Differences are not called significant; small or inconsistent directions are reported as mixed/uncertain.",
+    "No test-split images and no test-split tuning were used."
+  ],
+  "output_files_sha256": {
+    "reports/stage6c_phenobench_comparison.csv": "098e970c1c0d34be10618f7699f85ee8b4554fe2986f64020a26cbd5aac3e247",
+    "reports/stage6c_phenobench_comparison.md": "cf076774fd4be4e811113d4d627ca8e01b8ea0ae53b6d967bee7b3e56bbb717e"
+  }
+}
