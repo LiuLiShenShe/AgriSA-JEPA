@@ -1,0 +1,121 @@
+{
+  "schema_version": "stage6d_protocol_check/v1",
+  "ok": true,
+  "problems": [],
+  "historical_seed": 20261026,
+  "pairs": [
+    {
+      "pair_id": "P1",
+      "seed": 20261027
+    },
+    {
+      "pair_id": "P2",
+      "seed": 20261028
+    }
+  ],
+  "runs": [
+    {
+      "arm": "B1",
+      "seed": 20261027,
+      "pair_id": "P1",
+      "run_id": "stage6d_b1_natural_seed20261027",
+      "config": "configs/stage6d_b1_natural_seed20261027.yaml",
+      "config_sha256": "083e359a0ae8607a06178b12be3ece1fed1536a7251dd1e05321fa584ed917c0",
+      "output_dir": "/data/agrisa_jepa_runs/stage6d/stage6d_b1_natural_seed20261027",
+      "sampling_mode": "natural"
+    },
+    {
+      "arm": "B2",
+      "seed": 20261027,
+      "pair_id": "P1",
+      "run_id": "stage6d_b2_capped_no_backfill_seed20261027",
+      "config": "configs/stage6d_b2_capped_no_backfill_seed20261027.yaml",
+      "config_sha256": "1c003ef6fc81fe8c043d099792236d96f9ffc23fd6920b0722dbb2afb6fea1da",
+      "output_dir": "/data/agrisa_jepa_runs/stage6d/stage6d_b2_capped_no_backfill_seed20261027",
+      "sampling_mode": "profile_capped"
+    },
+    {
+      "arm": "B1",
+      "seed": 20261028,
+      "pair_id": "P2",
+      "run_id": "stage6d_b1_natural_seed20261028",
+      "config": "configs/stage6d_b1_natural_seed20261028.yaml",
+      "config_sha256": "62227857b1a081ede96516993865e4095ed91e26b610cb67d97519a3600e157c",
+      "output_dir": "/data/agrisa_jepa_runs/stage6d/stage6d_b1_natural_seed20261028",
+      "sampling_mode": "natural"
+    },
+    {
+      "arm": "B2",
+      "seed": 20261028,
+      "pair_id": "P2",
+      "run_id": "stage6d_b2_capped_no_backfill_seed20261028",
+      "config": "configs/stage6d_b2_capped_no_backfill_seed20261028.yaml",
+      "config_sha256": "2eebb2e6a854e5f9b2fbd8e7fa00c18ff1f64be3c5883a7599b1bf6092935427",
+      "output_dir": "/data/agrisa_jepa_runs/stage6d/stage6d_b2_capped_no_backfill_seed20261028",
+      "sampling_mode": "profile_capped"
+    }
+  ],
+  "frozen_inputs": {
+    "files": {
+      "train_csv": {
+        "path": "data/corpus_v4/R3v3_license_verified_train.csv",
+        "expected_sha256": "9fa34adb36810a5b0d13109761c60892bd9068f27c8f95a48e728146c1a6be08",
+        "actual_sha256": "9fa34adb36810a5b0d13109761c60892bd9068f27c8f95a48e728146c1a6be08",
+        "ok": true
+      },
+      "val_csv": {
+        "path": "data/corpus_v4/R3v3_license_verified_val.csv",
+        "expected_sha256": "f4670232237c8017ffb213e739446fce05a0661cbe18315097b1dba214c40686",
+        "actual_sha256": "f4670232237c8017ffb213e739446fce05a0661cbe18315097b1dba214c40686",
+        "ok": true
+      },
+      "sampling_profile": {
+        "path": "data/corpus_v4/R3v3_license_verified_sampling_profiles.json",
+        "expected_sha256": "91fb23ef5366fa163264a48cdf7c6613769816df751a9695ea9caa284833c505",
+        "actual_sha256": "91fb23ef5366fa163264a48cdf7c6613769816df751a9695ea9caa284833c505",
+        "ok": true
+      },
+      "train_view": {
+        "path": "data/stage6/stage6_r3v3_train_view_nvme.csv",
+        "expected_sha256": "26c55431c63791d4f7d427d432840c21aa47a717a5daadbb5990a68a546f71f2",
+        "actual_sha256": "26c55431c63791d4f7d427d432840c21aa47a717a5daadbb5990a68a546f71f2",
+        "ok": true
+      }
+    },
+    "problems": []
+  },
+  "allowed_changes_from_stage6": [
+    "data.augmentation_seed",
+    "data.augmentation_seed",
+    "data.sampling.seed",
+    "data.seed",
+    "data.seed",
+    "logging.folder",
+    "logging.folder",
+    "meta.pair_id",
+    "meta.pair_id",
+    "meta.pretraining_seed",
+    "meta.pretraining_seed",
+    "meta.run_id",
+    "meta.run_id",
+    "meta.stage",
+    "meta.stage"
+  ],
+  "pair_allowed_different": [
+    "data.sampling.backfill",
+    "data.sampling.cap_share",
+    "data.sampling.cap_unit",
+    "data.sampling.capped_sources",
+    "data.sampling.epoch_length",
+    "data.sampling.mode",
+    "data.sampling.official_profile",
+    "data.sampling.profile",
+    "data.sampling.profile_sha256",
+    "data.sampling.seed",
+    "logging.folder",
+    "meta.arm",
+    "meta.arm_label",
+    "meta.run_id"
+  ],
+  "hash_large_pretrained": false
+}

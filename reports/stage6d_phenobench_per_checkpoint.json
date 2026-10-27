@@ -1,0 +1,12 @@
+{
+  "schema_version": "stage6d_phenobench_per_checkpoint/v1",
+  "status": "not_executed",
+  "reason": "Stage 6D produced no new pretraining checkpoints because physical GPU1 is occupied by an external process (PID 2594918, /fj/Agro-JEPA, 14912 MiB, 100%). No PhenoBench probe was run for a Stage 6D checkpoint.",
+  "pretraining_runs_status": "reports/stage6d_pretraining_runs.json",
+  "historical_reference": "reports/stage6d_historical_reference.json",
+  "required_inputs": [
+    "four completed Stage 6D checkpoints (B1/B2 x two paired seeds)",
+    "three probe runs per checkpoint (seeds 0/1/2) on PhenoBench val 772"
+  ],
+  "note": "This file intentionally contains no Stage 6D metrics. It must not be read as a Stage 6D result; the only measured PhenoBench numbers in the repository remain the Stage 6C historical ones."
+}

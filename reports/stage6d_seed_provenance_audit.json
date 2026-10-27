@@ -1,0 +1,217 @@
+{
+  "schema_version": "stage6d_seed_provenance_audit/v1",
+  "stage": "6D",
+  "audit_date": "2026-10-27",
+  "audit_branch": "agri-stage6d-pretrain-seed-replication",
+  "branch_base": "agri-stage6c-phenobench-eval",
+  "branch_base_head": "269709114e0b8b87f057234ebf7e455fc0e9fca7",
+  "git": {
+    "repo_root": "/fj/jepa-二维图像任务",
+    "pre_audit_branch": "agri-stage6c-phenobench-eval",
+    "pre_audit_local_head": "269709114e0b8b87f057234ebf7e455fc0e9fca7",
+    "remote_head_same_branch": "269709114e0b8b87f057234ebf7e455fc0e9fca7",
+    "local_matches_remote": true,
+    "untracked_files": ["CLAUDE.md"],
+    "force_push": false,
+    "reset_or_clean": false,
+    "merge_main": false
+  },
+  "frozen_inputs": {
+    "pretrained_checkpoint": {
+      "path": "/data/checkpoints/ijepa/IN1K-vit.h.14-300e.pth.tar",
+      "bytes": 10358004345,
+      "sha256": "0382013c481743e9ccea89f970bc6c6aa126aa19a62127500d6e672a641aae22",
+      "verified_on_disk_2026_10_27": true
+    },
+    "stage6_train_view_manifest": {
+      "path": "data/stage6/stage6_r3v3_train_view_nvme.csv",
+      "rows": 147277,
+      "sha256": "26c55431c63791d4f7d427d432840c21aa47a717a5daadbb5990a68a546f71f2",
+      "verified_on_disk_2026_10_27": true
+    },
+    "r3v3_train_csv": {
+      "path": "data/corpus_v4/R3v3_license_verified_train.csv",
+      "sha256": "9fa34adb36810a5b0d13109761c60892bd9068f27c8f95a48e728146c1a6be08",
+      "source": "reports/stage6_protocol_check.json"
+    },
+    "r3v3_val_csv": {
+      "path": "data/corpus_v4/R3v3_license_verified_val.csv",
+      "sha256": "f4670232237c8017ffb213e739446fce05a0661cbe18315097b1dba214c40686",
+      "source": "reports/stage6_protocol_check.json"
+    },
+    "sampling_profile": {
+      "path": "data/corpus_v4/R3v3_license_verified_sampling_profiles.json",
+      "sha256": "91fb23ef5366fa163264a48cdf7c6613769816df751a9695ea9caa284833c505",
+      "source": "reports/stage6_run_manifest_b2.json"
+    },
+    "phenobench_manifest": {
+      "path": "reports/phenobench_file_manifest.sha256.txt",
+      "sha256": "13fa2810d9fe87c2d65b2dc5b7c7e8ac55e31812aee44af21aea98da8e98bd5d",
+      "verified_on_disk_2026_10_27": true
+    }
+  },
+  "environment_at_audit": {
+    "python": "3.13.16",
+    "torch": "2.9.1+cu128",
+    "numpy": "2.4.6",
+    "gitignore_excludes_runs": true,
+    "gpus": [
+      {"physical_index": 0, "name": "NVIDIA RTX A6000", "memory_total_mib": 49140, "memory_used_mib": 280, "utilization_percent": 0},
+      {"physical_index": 1, "name": "NVIDIA RTX A6000", "memory_total_mib": 49140, "memory_used_mib": 14912, "utilization_percent": 100, "occupied_by_external_project": true, "pid": 2594918, "cwd": "/fj/Agro-JEPA", "cmd": "python3 agro_jepa/train/train_s4b2_full.py --config agro_jepa/config/s4b2_full_train.yaml --condition b2_no_time --seed 1 --epochs 14 --output-dir external_data/s4b2_runs/b2_no_time/seed1"}
+    ],
+    "disk": {
+      "root_filesystem": {"mount": "/", "device": "/dev/nvme0n1p2", "size": "1.9T", "used": "1.6T", "available": "187G"},
+      "data_filesystem": {"mount": "/data", "device": "/dev/sda1", "size": "3.6T", "used": "2.9T", "available": "584G"}
+    }
+  },
+  "historical_runs": {
+    "B1": {
+      "arm_label": "natural",
+      "run_dir": "runs/stage6_b1_natural_2000",
+      "config": "configs/stage6_b1_natural_2000.yaml",
+      "config_sha256": "52e4478c5b6c375f89476007954a2cbe72ac227ffb91c6e6d184f23bc77657db",
+      "params_dump_sha256": "e4e8d7ff20c06694938b0d31130daa0dfe7e53128594d9eec3f7a26485b43a74",
+      "training_verification_sha256": "7176bc6ab7384d437b0b7047948d9870d912b897f629a33e10d49281936a1552",
+      "jepa_r0_csv_sha256": "e4fc7961a27e0b3036d2d6a06c047012ff78fa6642f2ec1b08bc3806ab439dfb",
+      "checkpoint_step2000_encoder": "runs/stage6_b1_natural_2000/jepa-encoder-step2000.pth",
+      "checkpoint_step2000_encoder_sha256": "19796cebc65e29a07eafd7222f5a642d4ef9f28c33f2e4f4f2b65e34a2bfde6b",
+      "optimizer_steps_total": 2000,
+      "micro_steps_total": 15996,
+      "optimizer_steps_per_epoch": 1151,
+      "seed": {"data_seed": 20261026, "augmentation_seed": 20261026, "sampling_seed": null},
+      "recorded_git_commit": "7ec8a6b694e6ee66ac3c7027c3cb0d6c924cb981",
+      "recorded_visible_device_index": 0,
+      "physical_gpu_uniquely_determined": false,
+      "run_start_mtime": "2026-10-26T15:12",
+      "step2000_mtime": "2026-10-26T19:44",
+      "wall_clock_minutes": 269.6,
+      "peak_memory_mib": 23355.33984375,
+      "loss_finite": true,
+      "source_exposure_samples": 255936
+    },
+    "B2": {
+      "arm_label": "capped_no_backfill",
+      "run_dir": "runs/stage6_b2_capped_no_backfill_2000",
+      "config": "configs/stage6_b2_capped_no_backfill_2000.yaml",
+      "config_sha256": "f0d5fd7bdc6f11a0e4a4103f610aaf3d8e8556dd5e17cf211d93193879b63b01",
+      "params_dump_sha256": "cfed80f099a47a6c9fe95170ba020515a9785a349b428de71a7fa610e8940ebc",
+      "training_verification_sha256": "c2bd3da59803767be0bc4c2addbee2f59d28243e4d4a36757635e4a5f0fd2f3a",
+      "jepa_r0_csv_sha256": "ee9662f70ff88c3d9e55c33a7581ac38f3200827fa1b6545a47c5e10e7fb8d6a",
+      "checkpoint_step2000_encoder": "runs/stage6_b2_capped_no_backfill_2000/jepa-encoder-step2000.pth",
+      "checkpoint_step2000_encoder_sha256": "6e7a83c9156e556757016145fb804e2b67e7b94f5e8b45bda4ffd24cb5975a62",
+      "optimizer_steps_total": 2000,
+      "micro_steps_total": 15992,
+      "optimizer_steps_per_epoch": 869,
+      "seed": {"data_seed": 20261026, "augmentation_seed": 20261026, "sampling_seed": 20261026},
+      "recorded_git_commit": "7ec8a6b694e6ee66ac3c7027c3cb0d6c924cb981",
+      "recorded_visible_device_index": 0,
+      "physical_gpu_uniquely_determined": false,
+      "run_start_mtime": "2026-10-26T15:16",
+      "step2000_mtime": "2026-10-26T19:48",
+      "wall_clock_minutes": 269.3,
+      "peak_memory_mib": 23355.33984375,
+      "loss_finite": true,
+      "source_exposure_samples": 255872
+    }
+  },
+  "seed_wiring": [
+    {"process": "python_random", "seed_field": "data.seed", "seed_value_historical": 20261026, "code": "src/train.py:194", "controlled": true},
+    {"process": "numpy_global", "seed_field": "data.seed", "seed_value_historical": 20261026, "code": "src/train.py:195", "controlled": true},
+    {"process": "torch_cpu", "seed_field": "data.seed", "seed_value_historical": 20261026, "code": "src/train.py:196", "controlled": true},
+    {"process": "torch_cuda_all_visible", "seed_field": "data.seed", "seed_value_historical": 20261026, "code": "src/train.py:198", "controlled": true},
+    {"process": "natural_sampler_order", "seed_field": "data.seed", "seed_value_historical": 20261026, "code": "src/datasets/agri_dataset.py:257-263", "controlled": true},
+    {"process": "dataloader_generator", "seed_field": "data.seed + rank", "seed_value_historical": 20261026, "code": "src/datasets/agri_dataset.py:284-285", "controlled": true},
+    {"process": "capped_sampler_order", "seed_field": "data.sampling.seed", "seed_value_historical": 20261026, "code": "src/datasets/stage6_sampling.py:200-210", "controlled": true},
+    {"process": "mask_block_size", "seed_field": "per-batch counter (not data.seed)", "seed_value_historical": null, "code": "src/masks/multiblock.py:125-127", "controlled": true, "note": "deterministic from batch index; identical across arms"},
+    {"process": "mask_block_position", "seed_field": "global torch RNG (data.seed)", "seed_value_historical": 20261026, "code": "src/masks/multiblock.py:89-90", "controlled": true},
+    {"process": "image_augmentation", "seed_field": "data.augmentation_seed", "seed_value_historical": 20261026, "code": "src/datasets/agri_dataset.py:173-175,199-206", "controlled": true, "note": "deliberately decoupled from data.seed"},
+    {"process": "model_dropout_droppath", "seed_field": null, "seed_value_historical": null, "code": "src/models/vision_transformer.py:257-259,372-374", "controlled": false, "note": "rates are 0.0; no stochastic forward"},
+    {"process": "model_weight_init", "seed_field": "data.seed", "seed_value_historical": 20261026, "code": "src/helper.py:76-84; src/train.py:309,334", "controlled": true, "note": "overwritten by official checkpoint"},
+    {"process": "dataloader_workers", "seed_field": "not applicable", "seed_value_historical": null, "code": "src/datasets/agri_dataset.py:19-24", "controlled": false, "note": "num_workers=0"}
+  ],
+  "code_provenance": {
+    "historical_recorded_git_commit": "7ec8a6b694e6ee66ac3c7027c3cb0d6c924cb981",
+    "historical_recorded_git_commit_contains_stage6_sampling": false,
+    "stage6_code_commit": "5f02c86c4d3fa7389da1d5f4abbc16b6c4f0500d",
+    "stage6_code_commit_time": "2026-10-26T21:50:39+08:00",
+    "runs_finished_before_code_commit": true,
+    "runs_used_uncommitted_working_tree": true,
+    "post_hoc_committed_files_byte_identical_to_current": true,
+    "post_hoc_byte_identical_files": {
+      "src/datasets/stage6_sampling.py": "5d8f490cd331b6d4ce9ac388560e0b99646e8a2ed9c14e2310b8106fd06cd251",
+      "src/datasets/agri_dataset.py": "dadc876176e7599773b03ffa26645df164135ac3633898342d4118aaebfe96b0",
+      "src/train.py": "08ba3e5394fd054444285fbee5fe5e13d7a71badcd0c7084c11a6f961074092e",
+      "src/datasets/source_ledger.py": "4ae591bbc1aa0345cdcde21adfc684ab4e759c59ab08cc78025547e9247e9a44"
+    },
+    "run_artifacts_record_code_file_hash": false,
+    "verdict": "inferred_from_byte_identical_post_hoc_commit",
+    "is_cryptographically_pinned": false
+  },
+  "hardware_provenance": {
+    "verification_records_visible_device_index": 0,
+    "physical_gpu_uniquely_determined": false,
+    "preflight_note": "reports/stage6_preflight.md records that GPU1 was occupied by external processes during smoke and that the user authorized GPU0 for smoke and early runs",
+    "affects_rng_protocol": false
+  },
+  "verdict": {
+    "seed_is_recorded": true,
+    "seed_scope_controlled": true,
+    "historical_checkpoint_counts_as_independent_pretraining_replicate": true,
+    "historical_checkpoint_caveat": "code provenance inferred from byte-identical post-hoc commit; physical GPU not uniquely determined",
+    "rule_tier": "tier_1_seed_scope_evidence_sufficient",
+    "new_runs_required_per_arm": 2,
+    "total_checkpoints_per_arm_primary": 3,
+    "sensitivity_subset_checkpoints_per_arm": 2,
+    "probe_seeds_are_not_pretraining_replicates": true
+  },
+  "new_runs_plan": {
+    "pairs": [
+      {"pair_id": "P1", "seed": 20261027, "B1_run_id": "stage6d_b1_natural_seed20261027", "B2_run_id": "stage6d_b2_capped_no_backfill_seed20261027", "traceable": true, "in_primary": true, "in_sensitivity": true},
+      {"pair_id": "P2", "seed": 20261028, "B1_run_id": "stage6d_b1_natural_seed20261028", "B2_run_id": "stage6d_b2_capped_no_backfill_seed20261028", "traceable": true, "in_primary": true, "in_sensitivity": true},
+      {"pair_id": "P0_historical", "seed": 20261026, "B1_run_id": "stage6_b1_natural_2000", "B2_run_id": "stage6_b2_capped_no_backfill_2000", "traceable": false, "in_primary": true, "in_sensitivity": false}
+    ],
+    "seed_propagation": ["data.seed", "data.augmentation_seed", "data.sampling.seed (B2 only)"],
+    "same_seed_across_arms_in_pair": true,
+    "seed_differs_across_pairs": true,
+    "run_storage": "/data/agrisa_jepa_runs/stage6d/<run_id>",
+    "run_storage_reason": "root filesystem has 187G free; each run is ~58G; /data has 584G free",
+    "optimizer_updates_per_run": 2000,
+    "init_from_official_checkpoint": true,
+    "resume_from_agricultural_checkpoint": false,
+    "probe_seeds": [0, 1, 2],
+    "probe_split": "val",
+    "probe_val_images": 772
+  },
+  "blockers": [
+    {"type": "gpu", "detail": "GPU1 occupied by external project PID 2594918 (14912 MiB, 100%)", "authorized_to_use_gpu0": false, "training_executed": false},
+    {"type": "disk", "detail": "root filesystem 187G free; 4 new runs ~232G", "mitigation": "/data has 584G free"},
+    {"type": "no_new_checkpoints", "detail": "pretraining not executed; Phase 4/5 cannot produce new results", "fabricated_results": false}
+  ],
+  "evidence_paths": [
+    "configs/stage6_b1_natural_2000.yaml",
+    "configs/stage6_b2_capped_no_backfill_2000.yaml",
+    "runs/stage6_b1_natural_2000/params-ijepa.yaml",
+    "runs/stage6_b2_capped_no_backfill_2000/params-ijepa.yaml",
+    "runs/stage6_b1_natural_2000/training_verification.yaml",
+    "runs/stage6_b2_capped_no_backfill_2000/training_verification.yaml",
+    "runs/stage6_b1_natural_2000/console.log",
+    "runs/stage6_b2_capped_no_backfill_2000/console.log",
+    "runs/stage6_b1_natural_2000/source_exposure_ledger.summary.json",
+    "runs/stage6_b2_capped_no_backfill_2000/source_exposure_ledger.summary.json",
+    "runs/stage6_b2_capped_no_backfill_2000/stage6_sampling.json",
+    "reports/stage6_run_manifest_b1.json",
+    "reports/stage6_run_manifest_b2.json",
+    "reports/stage6_protocol_check.json",
+    "reports/stage6_preflight.md",
+    "reports/stage6_b1_natural_results.md",
+    "reports/stage6_b2_capped_results.md",
+    "reports/stage6_final_report.md",
+    "reports/stage6c_phenobench_comparison.json",
+    "src/train.py",
+    "src/datasets/agri_dataset.py",
+    "src/datasets/stage6_sampling.py",
+    "src/masks/multiblock.py",
+    "src/models/vision_transformer.py",
+    "src/helper.py"
+  ]
+}

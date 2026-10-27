@@ -179,3 +179,30 @@ def cache_key(label: str, checkpoint_sha256: str) -> str:
     re-trained arm can never silently reuse another arm's features.
     """
     return f'{label}__{checkpoint_sha256[:16]}'
+
+
+#: Version tag for the Stage 6D probe protocol.  Bump only with a documented
+#: protocol change, never to make a stale cache match.
+STAGE6D_PROTOCOL_VERSION = 'stage6d-phenobench-linear-probe-v1'
+
+
+def stage6d_probe_key(run_id: str, checkpoint_sha256: str,
+                      phenobench_manifest_sha256: str, probe_seed: int,
+                      protocol_version: str = STAGE6D_PROTOCOL_VERSION) -> str:
+    """Stage 6D probe cache key.
+
+    Unlike :func:`cache_key`, this keeps the **full** checkpoint SHA and binds
+    the PhenoBench manifest, the protocol version and the probe seed.  Feature
+    tensors themselves do not depend on the probe seed, but the protocol asks
+    the key to bind it so a per-seed result can never be served from another
+    seed's record.
+    """
+    if not checkpoint_sha256 or len(checkpoint_sha256) != 64:
+        raise ValueError(f'checkpoint_sha256 must be a full 64-hex SHA, got '
+                         f'{checkpoint_sha256!r}')
+    if not phenobench_manifest_sha256 or len(phenobench_manifest_sha256) != 64:
+        raise ValueError(f'phenobench_manifest_sha256 must be a full 64-hex SHA, got '
+                         f'{phenobench_manifest_sha256!r}')
+    return (f'{run_id}__ckpt_{checkpoint_sha256}'
+            f'__pb_{phenobench_manifest_sha256}'
+            f'__v{protocol_version}__seed{int(probe_seed)}')

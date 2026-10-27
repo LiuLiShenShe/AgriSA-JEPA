@@ -1,0 +1,42 @@
+{
+  "schema_version": "stage6d_comparison_manifest/v1",
+  "phenobench_manifest_sha256": "13fa2810d9fe87c2d65b2dc5b7c7e8ac55e31812aee44af21aea98da8e98bd5d",
+  "protocol_version": "stage6d-phenobench-linear-probe-v1",
+  "probe_seeds": [
+    0,
+    1,
+    2
+  ],
+  "entries": [
+    {
+      "arm": "A",
+      "run_id": "A_official",
+      "pair_id": "",
+      "seed": 0,
+      "traceable": true,
+      "result": "runs/stage3a_phenobench/armA/result.json",
+      "checkpoint": "/data/checkpoints/ijepa/IN1K-vit.h.14-300e.pth.tar",
+      "checkpoint_sha256": "0382013c481743e9ccea89f970bc6c6aa126aa19a62127500d6e672a641aae22"
+    },
+    {
+      "arm": "B1",
+      "run_id": "stage6_b1_natural_2000",
+      "pair_id": "P0_historical",
+      "seed": 20261026,
+      "traceable": false,
+      "result": "runs/stage6c_phenobench/B1_natural/result.json",
+      "checkpoint": "runs/stage6_b1_natural_2000/jepa-encoder-step2000.pth",
+      "checkpoint_sha256": "19796cebc65e29a07eafd7222f5a642d4ef9f28c33f2e4f4f2b65e34a2bfde6b"
+    },
+    {
+      "arm": "B2",
+      "run_id": "stage6_b2_capped_no_backfill_2000",
+      "pair_id": "P0_historical",
+      "seed": 20261026,
+      "traceable": false,
+      "result": "runs/stage6c_phenobench/B2_capped/result.json",
+      "checkpoint": "runs/stage6_b2_capped_no_backfill_2000/jepa-encoder-step2000.pth",
+      "checkpoint_sha256": "6e7a83c9156e556757016145fb804e2b67e7b94f5e8b45bda4ffd24cb5975a62"
+    }
+  ]
+}

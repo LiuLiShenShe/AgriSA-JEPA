@@ -1,0 +1,13 @@
+run_id,arm,pair_id,seed,probe_seed,soil_iou,crop_iou,weed_iou,miou,status
+stage6d_b1_natural_seed20261027,B1,P1,20261027,0,,,,,not_executed
+stage6d_b1_natural_seed20261027,B1,P1,20261027,1,,,,,not_executed
+stage6d_b1_natural_seed20261027,B1,P1,20261027,2,,,,,not_executed
+stage6d_b1_natural_seed20261028,B1,P2,20261028,0,,,,,not_executed
+stage6d_b1_natural_seed20261028,B1,P2,20261028,1,,,,,not_executed
+stage6d_b1_natural_seed20261028,B1,P2,20261028,2,,,,,not_executed
+stage6d_b2_capped_no_backfill_seed20261027,B2,P1,20261027,0,,,,,not_executed
+stage6d_b2_capped_no_backfill_seed20261027,B2,P1,20261027,1,,,,,not_executed
+stage6d_b2_capped_no_backfill_seed20261027,B2,P1,20261027,2,,,,,not_executed
+stage6d_b2_capped_no_backfill_seed20261028,B2,P2,20261028,0,,,,,not_executed
+stage6d_b2_capped_no_backfill_seed20261028,B2,P2,20261028,1,,,,,not_executed
+stage6d_b2_capped_no_backfill_seed20261028,B2,P2,20261028,2,,,,,not_executed

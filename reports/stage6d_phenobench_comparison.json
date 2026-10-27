@@ -1,0 +1,28 @@
+{
+  "schema_version": "stage6d_phenobench_comparison/v1",
+  "status": "not_executed",
+  "reason": "Stage 6D pretraining and PhenoBench probes were not executed: physical GPU1 is occupied by an external process (PID 2594918, /fj/Agro-JEPA, 14912 MiB, 100%), and the project instruction permits only GPU1. The root filesystem also has 187 G free versus ~232 G needed for four new runs, so new run output is redirected to /data (584 G free).",
+  "primary_unit": "pretraining checkpoint",
+  "probe_seed_role": "within-checkpoint downstream head-training variance; never counted as an independent pretraining replicate",
+  "planned": {
+    "checkpoints_per_arm": 3,
+    "new_checkpoints_per_arm": 2,
+    "historical_checkpoints_per_arm": 1,
+    "probe_seeds": [0, 1, 2],
+    "val_images": 772,
+    "pairs": [
+      {"pair_id": "P0_historical", "seed": 20261026, "traceable": false},
+      {"pair_id": "P1", "seed": 20261027, "traceable": true},
+      {"pair_id": "P2", "seed": 20261028, "traceable": true}
+    ]
+  },
+  "new_checkpoints_completed": 0,
+  "new_probe_runs_completed": 0,
+  "historical_reference": {
+    "path": "reports/stage6d_historical_reference.json",
+    "note": "This is a re-aggregation of the Stage 6C historical results with the Stage 6D tool; it is NOT a Stage 6D replication result.",
+    "B1_minus_A_mIoU": 1.17,
+    "B2_minus_A_mIoU": 0.96
+  },
+  "note": "This file intentionally contains no Stage 6D metrics. Do not read it as a result."
+}
