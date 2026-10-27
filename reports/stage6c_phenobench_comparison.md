@@ -1,6 +1,6 @@
 # Stage 6C — PhenoBench A / B1 / B2 冻结线性探针比较
 
-- 代码 commit：`f057721530d687fc37cba864106b39f484298ca5`
+- 代码 commit：`42c1a2558eca166dad2fd42b56a9e3a3d314f7ce`
 - 数据版本：v1.1.0，val 评价图像：772
 - 数据清单 SHA-256：`13fa2810d9fe87c2d65b2dc5b7c7e8ac55e31812aee44af21aea98da8e98bd5d`
 - 自实现与官方指标最大偏差：0.005000 pp (容差 0.01 pp)

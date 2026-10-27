@@ -131,8 +131,9 @@
 
 - 分支：`agri-stage6c-phenobench-eval`（从 `agri-stage6-controlled-pretraining`
   HEAD `f0577215…` 切出）。
-- 本阶段最终 commit SHA：见提交后的 `git rev-parse HEAD`（提交时记录于
-  `reports/stage6c_phenobench_comparison.json` 与 `reports/stage6c_commit.txt`）。
+- 本阶段代码/测试/报告 commit：`42c1a2558eca166dad2fd42b56a9e3a3d314f7ce`。
+- 元数据 commit 与远端 HEAD：见 `reports/stage6c_commit.txt` 的实时记录
+  （后续更新只改本文件/比较产物，不改代码）。
 - 远端 HEAD（执行前核实）：`f057721530d687fc37cba864106b39f484298ca5`（与本地一致）。
 - 工作树状态：保留未跟踪的 `CLAUDE.md` 及其他用户未提交文件；新增代码/测试/报告
   已提交并 push；`runs/` 下原始图像、预测 PNG、特征缓存、checkpoint 按 `.gitignore`

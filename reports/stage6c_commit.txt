@@ -1,0 +1,37 @@
+# Stage 6C — 提交与远端 HEAD 记录
+
+执行前远端基线（origin，`git ls-remote` 核实）：
+  f057721530d687fc37cba864106b39f484298ca5   (origin/agri-stage6-controlled-pretraining)
+
+执行前本地 HEAD：
+  f057721530d687fc37cba864106b39f484298ca5
+
+执行分支：
+  agri-stage6c-phenobench-eval（从上述基线新建）
+
+**代码 / 测试 / 报告提交（本阶段实质内容）：**
+  42c1a2558eca166dad2fd42b56a9e3a3d314f7ce
+
+**记录比较产物与本文件的元数据提交：**
+  见下方“元数据提交”一节（该提交只改比较产物与本文件，不改代码）。
+
+远端 HEAD（推送后以 `git ls-remote origin agri-stage6c-phenobench-eval` 为准）：
+  见下方“远端 HEAD”一节。
+
+如果之后还有提交（例如再次更新本文件），它们同样只改本文件或比较产物；
+以 `git rev-parse HEAD` / `git ls-remote origin agri-stage6c-phenobench-eval`
+的实时输出为准，代码提交始终是 `42c1a2558eca166dad2fd42b56a9e3a3d314f7ce`。
+
+是否合并 main / force push：否。
+是否重置/删除/覆盖用户未提交文件：否（`CLAUDE.md` 等保留未动）。
+
+提交内容：仅 Stage 6C 代码 / 测试 / 报告；不含原始图像、预测 PNG 大批量文件、
+特征缓存、checkpoint 或 runs/（`runs/` 已在 `.gitignore`）。
+
+## 元数据提交
+
+（推送后补记）
+
+## 远端 HEAD
+
+（推送后补记）
