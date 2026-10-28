@@ -261,21 +261,45 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         run_id = str(run['run_id'])
         cfg_path = config_path_for(arm, seed)
         run_dir = Path(run['output_dir'])
-        if run_dir.exists() and any(run_dir.iterdir()):
+
+        # -- re-check before EVERY run: the external project may reclaim GPU1
+        #    between replicates, and the worktree must still be clean so the
+        #    code commit recorded by each run is real.
+        guard_run = preflight(args.device, args.min_free_mib,
+                              args.max_utilization_percent, args.allow_dirty)
+        (run_dir).mkdir(parents=True, exist_ok=True)
+        (run_dir / 'stage6d_pre_run_guard.json').write_text(
+            json.dumps(guard_run, indent=2, ensure_ascii=False) + '\n',
+            encoding='utf-8')
+        if guard_run['problems']:
+            print(f'REFUSING to start {run_id}:', file=sys.stderr)
+            for problem in guard_run['problems']:
+                print(f'  - {problem}', file=sys.stderr)
+            records.append({
+                'arm': arm, 'run_id': run_id, 'pair_id': run['pair_id'],
+                'seed': seed, 'status': 'blocked', 'returncode': None,
+                'wall_clock_minutes': 0.0, 'started_at': now_utc(),
+                'finished_at': now_utc(), 'config': str(cfg_path.relative_to(ROOT)),
+                'config_sha256': sha256_file(cfg_path),
+                'output_dir': str(run_dir), 'checkpoint_sha256': None,
+                'failure_reason': 'pre-run guard: ' + '; '.join(guard_run['problems']),
+            })
+            break
+        if run_dir.exists() and any(child.name != 'stage6d_pre_run_guard.json'
+                                    for child in run_dir.iterdir()):
             print(f'REFUSING: output dir not empty: {run_dir}', file=sys.stderr)
             return 1
-        run_dir.mkdir(parents=True, exist_ok=True)
 
         launch = {
             'schema_version': 'stage6d_launch/v1',
             'started_at': now_utc(),
-            'git_head': guard['git_head'],
-            'git_status_porcelain': guard['git_status_porcelain'],
+            'git_head': guard_run['git_head'],
+            'git_status_porcelain': guard_run['git_status_porcelain'],
             'config': str(cfg_path.relative_to(ROOT)),
             'config_sha256': sha256_file(cfg_path),
             'arm': arm, 'run_id': run_id, 'pair_id': run['pair_id'],
             'seed': seed,
-            'physical_gpu': gpu_report(args.device),
+            'physical_gpu': guard_run['physical_gpu'],
             'command': [sys.executable, 'main.py', '--fname',
                         str(cfg_path.relative_to(ROOT)), '--devices', f'cuda:{args.device}'],
         }
