@@ -139,4 +139,41 @@ git status --porcelain
 | 历史 Stage 6C 结果复用核验 | **已执行** | `stage6d_comparison_manifest.json`；3 个历史 arm 通过 SHA/seed/772 预测校验 |
 | 聚合工具真实数据回归 | **已执行** | `stage6d_historical_reference.*` 复现 B1−A +1.17、B2−A +0.96 |
 
-**结论**：Phase 0/1/2 与可离线验证的代码/测试已完成；Phase 3/4/5 因 GPU1 被外部进程占用而**未执行**。需用户决定：等待 GPU1 释放，或显式授权改用 GPU0（Stage 6 有先例，但本轮提示词要求先报告）。
+**结论（初版）**：Phase 0/1/2 与可离线验证的代码/测试已完成；Phase 3/4/5 因 GPU1 被外部进程占用而**未执行**。需用户决定：等待 GPU1 释放，或显式授权改用 GPU0（Stage 6 有先例，但本轮提示词要求先报告）。
+
+---
+
+## 7. 执行中的真实阻塞（2026-10-28 更新，实测）
+
+GPU1 于 2026-10-28 释放后，已启动 Phase 3 预训练编排器（`tools/run_stage6d_pretraining --execute --device 1`，HEAD `bc7c50a`）。首个 run `stage6d_b1_natural_seed20261027` **失败（returncode 1，约 9.1 分钟）**，其余 3 个 run 按"失败即停止"规则未启动。失败根因：
+
+- 训练加载 manifest 中第一张图即 `FileNotFoundError`：`data/stage6/images/artemis_imagesafari/.../dbe01aea...jpg` 不存在。
+- 实测：`data/stage6/images/` **整个目录已被删除**，manifest 中 147,277 条绝对路径 **100% 缺失**（路径来源 `stage6_r3v3_train_view_nvme.csv`，SHA `26c55431…`）。
+- 该 `images/` 是 `tools/stage6_mirror_images.py` 生成的 NVMe 字节级镜像（132 GB，源为 `stage6_r3v3_train_view.csv` 的 `source_path`）；历史 Stage 6 run 用同一冻结 manifest 跑通，说明镜像是在 Stage 6 训练后、Stage 6D 启动前这段时间内被外部清理删除的。
+- 源图本身完好（`/data/datasets/...` 下抽查各 `physical_source_id` 的 `source_path` 均 `exists=True`）。
+
+处置：用仓库自带 `tools/stage6_mirror_images.py` **按原样重建字节级镜像**（逐文件 SHA-256 比对 `raw_sha256`，重构出的 manifest 必须仍等于 `26c55431…`；否则立即停止）。重建期间 `/` 空闲空间 175 G > 132 G（足够）。重建完成前不得重跑 Phase 3。
+
+- 冻结 manifest（`data/stage6/stage6_r3v3_train_view_nvme.csv`，`26c55431…`）已在重建**启动前**备份至 `/data/agrisa_jepa_runs/stage6d/backup_manifest/`，用于事后核对脚本未篡改路径/顺序。
+- 不修改冻结 manifest 的任何内容；不伪造任何训练/校验值。
+
+### 7.1 镜像重建结果（2026-10-28，实测）
+
+- 重建命令：`.venv/bin/python -m tools.stage6_mirror_images`
+- 结果：`mirrored 147277 files, 132.0 GB, 4066.9s`
+- 重构出的 `data/stage6/stage6_r3v3_train_view_nvme.csv` SHA-256 = `26c55431c63791d4f7d427d432840c21aa47a717a5daadbb5990a68a546f71f2`，与冻结值**逐字节一致**；文件数 147,277，与重建前备份一致。
+- 重建 JSON（`stage6_r3v3_train_view_nvme.json`）与备份的唯一差异是 `elapsed_seconds`（4066.9 vs 192.8），其余字段（含 `out_csv_sha256`）一致；冻结对象是 CSV，不受影响。
+- 重建后 `/` 可用约 52 G（98% 已用），但 4 个新 run 均写入 `/data`，不占根盘。
+
+### 7.2 新的 GPU1 阻塞（2026-10-28，实测）
+
+镜像恢复后，物理 GPU1 再次被外部项目占用：
+
+```
+PID 719784  user=test  cwd=/fj/Agro-JEPA
+cmd=python3 -u tools/s4b3_test_e2.py --config agro_jepa/config/s4b3_official_test.yaml --batch-size 512 --num-workers 16
+GPU1: 17,384 MiB / 49,140 MiB, 100% util
+```
+
+按约束：**不杀进程、不换 GPU0、不伪造结果**。等待 GPU1 真正空闲（物理显存占用降到近 0）后再启动 Phase 3；编排器每 run 前也会再查一次（free ≥ 30,000 MiB 且 util ≤ 5%）。
+

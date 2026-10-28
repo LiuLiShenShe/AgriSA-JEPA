@@ -95,7 +95,7 @@
 
 ---
 
-## 6. Phase 3 独立预训练：未执行
+## 6. Phase 3 独立预训练：**已启动，首个 run 失败，正重建数据后重跑**
 
 - 计划：4 个新 run，每个 2,000 optimizer updates，从官方 checkpoint 重新初始化（`load_checkpoint=false`，`pretrained_sha256=0382013c…`），使用冻结 train view manifest。
 - 编排器：`tools/run_stage6d_pretraining.py`，已实现并 `--dry-run` 通过；硬门禁包括：
@@ -105,8 +105,13 @@
   - 每 run 独立目录，输出目录非空则拒绝；
   - 每 run 后核验 2,000 updates、loss finite、manifest SHA、初始化 SHA、checkpoint、来源 ledger、seed 传播、`git_commit` 一致性；
   - 失败即停止，不静默继续。
-- **实际未启动任何训练**。未产生 `optimizer_steps_total`、checkpoint SHA、耗时、显存等新数据。
-- `reports/stage6d_pretraining_runs.json/csv` 只有 `status=not_started` 的计划记录，没有伪造实测值。
+- **2026-10-28 实际执行**：GPU1 释放后启动编排器（HEAD `bc7c50a`）。首个 run `stage6d_b1_natural_seed20261027`（seed 20261027，P1）**失败（returncode 1，约 9.1 分钟）**，其余 3 个 run 按"失败即停止"规则**未启动**。
+- **失败根因（实测，非猜测）**：冻结 manifest `data/stage6/stage6_r3v3_train_view_nvme.csv`（`26c55431…`）指向的 NVMe 镜像目录 `data/stage6/images/` **已被整个删除**；147,277 条绝对路径 100% 缺失。训练在第一个 batch 即撞 `FileNotFoundError`。源图（`source_path` → `/data/datasets/...`）抽查完好，确认是被外部清理删除了本地镜像而非源数据丢失。
+- **处置**：用仓库自带 `tools/stage6_mirror_images.py` 按原样重建字节级镜像（逐文件 SHA-256 比对 `raw_sha256`；重构出的 manifest 必须仍等于 `26c55431…`，否则立即停止）。冻结 manifest 已在重建启动前备份至 `/data/agrisa_jepa_runs/stage6d/backup_manifest/`，用于事后核对脚本未改动路径/顺序/成员。重建完成（约 132 GB）后，重跑 Phase 3 全部 4 个 run。
+- 当前 `reports/stage6d_pretraining_runs.json/csv` 含 1 条 `failed` + 3 条 `not_started`，是真实状态，**未伪造**任何 `completed` 或指标值。
+- 不修改冻结 manifest；不伪造任何训练/校验值。
+- **镜像重建结果（2026-10-28）**：`mirrored 147277 files, 132.0 GB, 4066.9s`；重构 CSV SHA-256 = `26c55431…`，与冻结值逐字节一致；JSON 仅 `elapsed_seconds` 不同。冻结 manifest 未变。
+- **新阻塞**：镜像恢复后 GPU1 再次被外部项目 `/fj/Agro-JEPA`（PID 719784，17,384 MiB / 100%）占用；按约束不杀进程、不换 GPU0，等待其真正空闲后再启动 Phase 3。
 
 ---
 
