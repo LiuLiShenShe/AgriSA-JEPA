@@ -177,3 +177,12 @@ GPU1: 17,384 MiB / 49,140 MiB, 100% util
 
 按约束：**不杀进程、不换 GPU0、不伪造结果**。等待 GPU1 真正空闲（物理显存占用降到近 0）后再启动 Phase 3；编排器每 run 前也会再查一次（free ≥ 30,000 MiB 且 util ≤ 5%）。
 
+### 7.3 用户显式授权改用 GPU0（2026-10-28）
+
+- 在 GPU1 持续被外部项目占用、镜像已恢复的情况下，用户于 2026-10-28 明确指示「用 gpu0」。
+- 这是对项目 `CLAUDE.md`「只允许使用GPU1」的**显式、单次授权偏离**；本阶段据此在物理 **GPU0** 上执行 Phase 3/4。
+- 记录方式：每个 run 的 `stage6d_launch.json` / `stage6d_pre_run_guard.json` 会记录实际物理 GPU（`physical_index: 0`）及其 UUID；报告与最终结果中明确标注本阶段使用 GPU0。
+- 不杀外部进程、不改项目 `CLAUDE.md`、不影响历史 Stage 6/6C 产物。
+- 启动前实测 GPU0：287 MiB / 49,140 MiB，0% util；`/data` 余约 555 GB（4 个 run 约需 232 GB）。
+
+

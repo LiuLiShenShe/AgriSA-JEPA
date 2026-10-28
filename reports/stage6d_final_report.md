@@ -112,6 +112,7 @@
 - 不修改冻结 manifest；不伪造任何训练/校验值。
 - **镜像重建结果（2026-10-28）**：`mirrored 147277 files, 132.0 GB, 4066.9s`；重构 CSV SHA-256 = `26c55431…`，与冻结值逐字节一致；JSON 仅 `elapsed_seconds` 不同。冻结 manifest 未变。
 - **新阻塞**：镜像恢复后 GPU1 再次被外部项目 `/fj/Agro-JEPA`（PID 719784，17,384 MiB / 100%）占用；按约束不杀进程、不换 GPU0，等待其真正空闲后再启动 Phase 3。
+- **用户显式授权改用 GPU0（2026-10-28）**：用户明确指示「用 gpu0」。这是对项目 `CLAUDE.md`「只允许使用GPU1」的显式单次授权偏离；Phase 3/4 据此在物理 GPU0（287 MiB / 0% util）执行，每个 run 的 launch/guard 文件记录 `physical_index: 0` 与 GPU UUID。未杀外部进程、未改 `CLAUDE.md`、未影响历史产物。
 
 ---
 
