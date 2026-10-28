@@ -1,5 +1,5 @@
 run_id,arm,pair_id,seed,status,optimizer_steps_total,micro_steps_total,manifest_sha256,checkpoint_sha256,git_commit,wall_clock_minutes,peak_memory_mib,output_dir,failure_reason
-stage6d_b1_natural_seed20261027,B1,P1,20261027,failed,,,,,,9.1,,/data/agrisa_jepa_runs/stage6d/stage6d_b1_natural_seed20261027,training exited 1
+stage6d_b1_natural_seed20261027,B1,P1,20261027,completed,2000,15996,26c55431c63791d4f7d427d432840c21aa47a717a5daadbb5990a68a546f71f2,1dc10ab68ab48b7e4de0bfa0cd444a1328d0104589484e4454d36cbe5f389106,a660be83d4bb995ca7479a8767c9ea5fba48aa94,278.3,23255.36,/data/agrisa_jepa_runs/stage6d/stage6d_b1_natural_seed20261027,
 stage6d_b1_natural_seed20261028,B1,P2,20261028,not_started,,,,,,,,/data/agrisa_jepa_runs/stage6d/stage6d_b1_natural_seed20261028,
 stage6d_b2_capped_no_backfill_seed20261027,B2,P1,20261027,not_started,,,,,,,,/data/agrisa_jepa_runs/stage6d/stage6d_b2_capped_no_backfill_seed20261027,
 stage6d_b2_capped_no_backfill_seed20261028,B2,P2,20261028,not_started,,,,,,,,/data/agrisa_jepa_runs/stage6d/stage6d_b2_capped_no_backfill_seed20261028,
