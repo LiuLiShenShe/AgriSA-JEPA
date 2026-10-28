@@ -32,7 +32,8 @@
 | 基线分支 | `agri-stage6c-phenobench-eval` |
 | 基线 HEAD（本地=远端） | `269709114e0b8b87f057234ebf7e455fc0e9fca7` |
 | Stage 6D 分支 | `agri-stage6d-pretrain-seed-replication` |
-| Stage 6D 代码/配置/测试/报告提交 | `3ee47d7027348b80de4d22ae6a324699c52e8647` |
+| Stage 6D 初始代码/配置/测试/报告提交 | `3ee47d7027348b80de4d22ae6a324699c52e8647` |
+| Stage 6D 最终代码提交（每个 run 前重查 GPU1；训练实际使用） | `54df24e3ce49db59ebf43affbc2f959f39f28eb2` |
 | Stage 6D 元数据提交 | 见 `reports/stage6d_commit.txt` |
 | 远端 HEAD | 以 `git ls-remote origin agri-stage6d-pretrain-seed-replication` 的实时输出为准 |
 | 是否 force push / reset / clean / 合并 main | 否 |

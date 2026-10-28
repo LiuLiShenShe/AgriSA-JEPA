@@ -9,8 +9,11 @@
 执行分支：
   agri-stage6d-pretrain-seed-replication（从上述基线新建）
 
-**代码 / 配置 / 测试 / 报告提交（本阶段实质内容）：**
+**初始代码 / 配置 / 测试 / 报告提交：**
   3ee47d7027348b80de4d22ae6a324699c52e8647
+
+**后续代码修正（每个 run 前重新检查 GPU1 与干净工作树；训练实际使用）：**
+  54df24e3ce49db59ebf43affbc2f959f39f28eb2
 
 **记录本文件的元数据提交：**
   见 `git log -1 --format=%H -- reports/stage6d_commit.txt`（提交后写入，避免自指）

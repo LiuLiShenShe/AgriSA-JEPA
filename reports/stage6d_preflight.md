@@ -16,7 +16,8 @@
 | 基线远端 HEAD | `269709114e0b8b87f057234ebf7e455fc0e9fca7` | `git ls-remote origin agri-stage6c-phenobench-eval` |
 | 本地/远端一致 | 是 | 实测 |
 | 新建分支 | `agri-stage6d-pretrain-seed-replication` | 实测 |
-| Stage 6D 代码/配置/测试/报告提交 | `3ee47d7027348b80de4d22ae6a324699c52e8647` | `git rev-parse HEAD`（提交后） |
+| Stage 6D 初始代码/配置/测试/报告提交 | `3ee47d7027348b80de4d22ae6a324699c52e8647` | `git rev-parse HEAD`（提交后） |
+| Stage 6D 最终代码提交（每 run 前重查 GPU1） | `54df24e3ce49db59ebf43affbc2f959f39f28eb2` | `git rev-parse HEAD`（提交后） |
 | 未跟踪用户文件 | `CLAUDE.md`（内容：`不允许使用conda`、`只允许使用GPU1`） | 实测，保留未改 |
 | force push / reset / clean / 合并 main | 否 | 未执行 |
 
