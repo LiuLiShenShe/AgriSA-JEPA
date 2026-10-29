@@ -9,31 +9,29 @@
 执行分支：
   agri-stage6d-pretrain-seed-replication（从上述基线新建）
 
-**初始代码 / 配置 / 测试 / 报告提交：**
-  3ee47d7027348b80de4d22ae6a324699c52e8647
+**提交链：**
+- `3ee47d7027348b80de4d22ae6a324699c52e8647` 初始代码/配置/测试/报告
+- `54df24e3ce49db59ebf43affbc2f959f39f28eb2` 每 run 前重查 GPU1 与干净工作树
+- `bc7c50a976139bb2207ffebfbdc05a8b564ba050` 记录代码提交 SHA / 阻塞 / 远端约定
+- `31f6873b64d24433069c552199bf40c3eeb380fa` 记录镜像缺失失败、镜像重建、GPU1 再次占用
+- `a660be83d4bb995ca7479a8767c9ea5fba48aa94` 记录用户显式授权 GPU0
+- `8a9d50a34f366480e5575375512cf0b89793b685` 回填 run 1 完成记录
+- `2ffaffbc83d76a48899385e90781b516b859ff55` 记录 4/4 预训练完成与 checkpoint SHA
 
-**后续代码修正（每个 run 前重新检查 GPU1 与干净工作树；训练实际使用）：**
-  54df24e3ce49db59ebf43affbc2f959f39f28eb2
-
-**记录本文件的元数据提交：**
+**本文件与最终结果（Phase 3–6 报告、逐 checkpoint/比较/敏感性结果）的提交：**
   见 `git log -1 --format=%H -- reports/stage6d_commit.txt`（提交后写入，避免自指）
 
-远端 HEAD（推送后以 `git ls-remote origin agri-stage6d-pretrain-seed-replication` 为准）：
-  以实时输出为准；代码提交始终是 `3ee47d7027348b80de4d22ae6a324699c52e8647`。
-
-如果之后还有提交（例如回填远端 HEAD 或更新运行记录），它们同样只改本文件或报告；
-以 `git rev-parse HEAD` / `git ls-remote origin agri-stage6d-pretrain-seed-replication`
-的实时输出为准。
+远端 HEAD：
+  以 `git ls-remote origin agri-stage6d-pretrain-seed-replication` 的实时输出为准。
 
 是否合并 main / force push：否。
 是否重置/删除/覆盖用户未提交文件：否（`CLAUDE.md` 等保留未动）。
+是否提交 checkpoint / 原图 / 特征缓存 / runs/：否。
 
-提交内容：仅 Stage 6D 代码 / 配置 / 测试 / 报告；不含原始图像、预测 PNG 大批量文件、
-特征缓存、checkpoint 或 runs/（`runs/` 已在 `.gitignore`）。
+## 执行结果摘要
 
-## 未执行项
-
-- 4 个新 run 的 2,000-update 预训练：**未执行**（物理 GPU1 被外部进程占用）。
-- 新 checkpoint 的 PhenoBench probe：**未执行**。
-- 新结果统计：**未执行**。
-- 本文件与报告中的 `not_started` / `not_executed` 记录是真实的阻塞状态，不是结果。
+- 预训练：4/4 completed（B1/B2 × seed 20261027/20261028），各 2,000 optimizer updates。
+- probe：4 checkpoint × probe seeds 0/1/2，PhenoBench val 772。
+- 主分析：B1−A mIoU +1.2889 pp，B2−A +1.2400 pp。
+- 仅可追溯敏感性：B1−A +1.3484 pp，B2−A +1.3800 pp。
+- B1 vs B2：配对差均值 +0.0316 pp，小于 run 间波动，不能区分。

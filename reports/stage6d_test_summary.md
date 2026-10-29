@@ -83,7 +83,7 @@ assert False == True
 - `git diff --check`：通过（无空白错误）。
 - 未提交原始图像、预测 PNG 大批量文件、特征缓存或 checkpoint（`runs/` 已在 `.gitignore`）。
 - 未修改历史 Stage 3A/4A/4B/5A/5E.1/6/6C 报告。
-- 未执行训练或 probe；本文件不声称任何新结果。
+- 本文件的测试结果产生于代码定稿时；此后 Phase 3/4/5 的实际训练与 probe 结果见 `reports/stage6d_final_report.md`。定向测试在结果生成后再次运行仍为 25 passed。
 
 ## 6. 结论
 

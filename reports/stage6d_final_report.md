@@ -1,27 +1,25 @@
-# Stage 6D — 执行报告（截至 2026-10-27）
+# Stage 6D — 执行报告（2026-10-29 完成）
 
-> 本文件是**执行报告**，不是计划书。所有未实际执行的步骤都在正文与文末明确标注。
-> 本阶段没有产生任何新的预训练 checkpoint 或新的 PhenoBench probe 结果。
+> 本文件是**执行报告**，不是计划书。所有数字均来自本机实测的 checkpoint、probe 结果与统计工具输出。
+> 未实际执行的步骤已在正文明确标注（本阶段没有未执行的必需步骤）。
 
 ---
 
 ## 1. 执行摘要
 
-| 项目 | 状态 |
+| 阶段 | 状态 |
 |---|---|
 | Phase 0 Git/环境/历史协议核验 | **已完成** |
 | Phase 1 预训练 seed 来源审计 | **已完成**（`reports/stage6d_seed_provenance_audit.{md,json}`） |
-| Phase 2 冻结预注册协议 | **已完成**（`reports/stage6d_protocol.md`） |
-| Stage 6D 配置生成与协议检查 | **已完成**（4 个配置，`ok=true`） |
-| Stage 6D 代码/工具/测试 | **已完成**（未提交，见 §2） |
-| Phase 3 独立预训练（4 个新 run） | **未执行**（GPU1 被外部进程占用） |
-| Phase 4 PhenoBench probe | **未执行**（无新 checkpoint；GPU 阻塞） |
-| Phase 5 新结果统计 | **未执行**（无新结果） |
-| Phase 7 代码/配置/报告 Git 交付 | 代码/报告已就绪；提交/推送见 §2 |
-| 历史 Stage 6C 结果复用核验 | **已完成**（SHA/seed/772 预测校验通过） |
-| 聚合工具真实数据回归 | **已完成**（复现 B1−A +1.17、B2−A +0.96） |
+| Phase 2 冻结预注册协议 | **已完成**（`reports/stage6d_protocol.md`；4 配置 `ok=true`） |
+| Phase 3 独立预训练（4 个新 run） | **已完成**（4/4，2,000 updates each，逐个核验） |
+| Phase 4 PhenoBench probe（4 checkpoint × seeds 0/1/2） | **已完成**（12 个 probe 结果，官方评价器 + 自实现交叉核验） |
+| Phase 5 跨 checkpoint 统计 | **已完成**（主分析 + 仅可追溯敏感性） |
+| Phase 6 解释 | **已完成**（见 §8） |
+| 新测试 / 全量测试 | **已完成**（定向 25 passed；全量 797 passed / 7 skipped / 1 既有失败） |
+| Git 交付 | 报告/结果已提交并推送；未合并 main、未 force push |
 
-**核心结论**：Stage 6D 的审计、协议、配置、代码与测试已完成；由于物理 GPU1 被另一个项目的训练进程占用（项目约束只允许 GPU1），2,000-update 预训练与下游 probe **未执行**。因此本报告**不能**回答“正迁移信号能否在独立预训练 seed 下重复”，也不能声称 B1/B2 稳定优于 A。
+**核心结论（描述性）**：Stage 6D 的 4 个新预训练 checkpoint（B1/B2 × 2 个新配对 seed）**全部**在 PhenoBench val 772 上高于官方 I-JEPA baseline A；3 个 B1 checkpoint 方向一致，2 个仅新增可追溯 B1 checkpoint 也一致为正。B1 与 B2 的差异小于 run 间波动，**不能区分**。该结果与 Stage 6C 的初步正迁移方向一致，并在独立预训练 seed 下重复。
 
 ---
 
@@ -29,119 +27,125 @@
 
 | 项目 | 值 |
 |---|---|
-| 基线分支 | `agri-stage6c-phenobench-eval` |
-| 基线 HEAD（本地=远端） | `269709114e0b8b87f057234ebf7e455fc0e9fca7` |
+| 基线分支 | `agri-stage6c-phenobench-eval`（HEAD `2697091…`） |
 | Stage 6D 分支 | `agri-stage6d-pretrain-seed-replication` |
-| Stage 6D 初始代码/配置/测试/报告提交 | `3ee47d7027348b80de4d22ae6a324699c52e8647` |
-| Stage 6D 最终代码提交（每个 run 前重查 GPU1；训练实际使用） | `54df24e3ce49db59ebf43affbc2f959f39f28eb2` |
-| Stage 6D 元数据提交 | 见 `reports/stage6d_commit.txt` |
-| 远端 HEAD | 以 `git ls-remote origin agri-stage6d-pretrain-seed-replication` 的实时输出为准 |
-| 是否 force push / reset / clean / 合并 main | 否 |
+| 初始代码/配置/测试/报告提交 | `3ee47d7…` |
+| 每个 run 前重查 GPU1 的编排器 | `54df24e…` |
+| 运行记录 / 事故记录 / run 1 记录 | `bc7c50a` → `31f6873` → `a660be8` → `8a9d50a` → `2ffaffb` |
+| 本报告与结果提交 | 以 `git log -1 --format=%H` 与 `git ls-remote origin agri-stage6d-pretrain-seed-replication` 实时输出为准 |
+| 是否 force push / reset / clean / 合并 main | **否** |
 | 用户未跟踪文件 | `CLAUDE.md` 保留未改 |
 
-提交内容仅代码、配置、测试与小报告；不含 checkpoint、原图、特征缓存或 `runs/`（`.gitignore` 已忽略）。
+提交内容仅代码、配置、测试与小报告；不含 checkpoint、原图、特征缓存或 `runs/`。
 
 ---
 
-## 3. Phase 0 核验（实测）
+## 3. Phase 0–2（核验与冻结）
 
-- 本地 HEAD 与 `git ls-remote origin agri-stage6c-phenobench-eval` 一致：`2697091…`。
-- 官方 I-JEPA 权重 SHA 重新计算一致：`0382013c…`（10,358,004,345 B）。
-- train view manifest SHA 一致：`26c55431…`，147,277 行。
-- R3v3 train/val CSV、sampling profile、PhenoBench manifest SHA 均与历史记录一致。
-- Python 3.13.16 / PyTorch 2.9.1+cu128；`phenobench-eval` CLI 可用；PhenoBench v1.1.0 存在。
-- GPU1 被外部项目 `/fj/Agro-JEPA` 的 PID 2594918 占用（14,912 MiB，100%）。
-- `/` 可用 187 G，`/data` 可用 584 G；单 Stage 6 run 产物约 58 G。
-
-详见 `reports/stage6d_preflight.md`。
+- 官方 I-JEPA 权重 SHA-256 `0382013c…`；train view manifest `26c55431…`（147,277 行）；PhenoBench manifest `13fa2810…`；R3v3 相关 CSV/采样 profile SHA 均与历史一致。
+- 审计结论：历史 B1/B2 的 `data.seed=20261026` 有充分证据控制训练随机性（Python/NumPy/Torch、sampler、DataLoader、mask；增强用独立记录的 `augmentation_seed`）；历史 checkpoint 计入**一个带 caveat 的重复**（代码在 run 时未提交；硬件只记录 `visible_device_index=0`）；敏感性口径排除历史 P0。
+- 新配对 seed：P1=`20261027`、P2=`20261028`；同 pair 的 B1/B2 同 seed；与历史 `20261026` 不冲突。
+- 4 个配置除 seed / arm / run 标识 / 输出目录外与 Stage 6 base 逐字段一致；`tools/check_stage6d_protocol.py`：`ok=true`。
 
 ---
 
-## 4. Phase 1 seed 来源审计结论
+## 4. Phase 3 独立预训练（4/4 完成）
 
-### 4.1 事实
+每个 run：从官方 I-JEPA checkpoint 重新初始化（`load_checkpoint=false`，`pretrained_sha256=0382013c…`），冻结 train view manifest `26c55431…`，2,000 optimizer updates，`grad_accum=8`，warmup 100，EMA/mask/optimizer/分辨率不変。
 
-- 历史 B1/B2 均记录 `data.seed=20261026`、`data.augmentation_seed=20261026`；B2 另记录 `data.sampling.seed=20261026`。
-- 代码逐行核验：`data.seed` 传入 Python/NumPy/PyTorch CPU/CUDA、natural `DistributedSampler`、DataLoader generator、mask 位置采样；capped sampler 用 `data.sampling.seed`；增强用独立但同样记录的 `augmentation_seed`。
-- 模型无 dropout/drop-path；权重由官方 checkpoint 覆盖；`num_workers=0`。
-- **结论**：seed 的“记录 + 作用范围”有充分证据，seed 确实控制训练随机性。
+| run | arm | pair | seed | 物理 GPU | optimizer updates | micro steps | loss_last | wall (min) | peak MiB | encoder step2000 SHA-256 |
+|---|---|---|---|---:|---|---:|---:|---:|---:|---:|---|
+| `stage6d_b1_natural_seed20261027` | B1 | P1 | 20261027 | GPU1¹ | 2000 | 15,996 | 0.1286 | 278.3 | 23,255 | `1dc10ab68ab48b7e4de0bfa0cd444a1328d0104589484e4454d36cbe5f389106` |
+| `stage6d_b2_capped_no_backfill_seed20261027` | B2 | P1 | 20261027 | GPU0² | 2000 | 15,992 | 0.1338 | 248.8 | 23,236 | `4df238c16a4945e416ab47edf0f37d2eaa94088e440f48777d569d2b71ddeab7` |
+| `stage6d_b1_natural_seed20261028` | B1 | P2 | 20261028 | GPU0² | 2000 | 15,996 | 0.1187 | 257.0 | 23,219 | `7e3cb0b67f1f53de720f5a705ef9960df7fd55f2568b4c3fd355ddf9cec82bae` |
+| `stage6d_b2_capped_no_backfill_seed20261028` | B2 | P2 | 20261028 | GPU0² | 2000 | 15,992 | 0.1314 | 248.8 | 23,219 | `1650db8c5a158fae3c730b84fb38d262bbdc1ea0be10c640c1639ad30cd76eb8` |
 
-### 4.2 两个 caveat
-
-1. **代码来源**：历史 run 记录 `git_commit=7ec8a6b`，但该 commit 不包含 `stage6_sampling.py`；正式 run（10-26 15:12–19:57）发生在 Stage 6 代码提交 `5f02c86`（10-26 21:50）之前，使用的是未提交工作树。提交后的 `src/`、`configs/` 与当前树逐字节一致，但 run 产物没有代码文件哈希，所以是“推断一致”，不是密码学钉住。
-2. **硬件来源**：`stage6_preflight.md` 记录 GPU1 被外部进程占用后经用户授权早期运行改用 GPU0；正式 run 只记录 `visible_device_index=0`，无法区分物理 GPU0/1。
-
-### 4.3 判定与运行数量
-
-- 历史 checkpoint 计入**一个带 caveat 的独立预训练重复**；每个 arm 新增 **2 个完全可追溯的配对 run**（共 4 个新 run）。
-- 主分析：每 arm 3 个 checkpoint（历史 1 + 新增 2）。
-- 预注册敏感性分析：只使用新增的 2 个可追溯 checkpoint/arm，排除历史 run。
-- 新配对 seed：`20261027`、`20261028`；同 pair 的 B1/B2 同 seed；新 run 同时设置 `data.seed`、`data.augmentation_seed`、（B2）`data.sampling.seed`。
-
-详见 `reports/stage6d_seed_provenance_audit.md` 与同名 `.json`。
+- 编码器/预测器/target encoder 均从官方权重加载（389/152/389 tensors）；`encoder_updated=true`、`predictor_updated=true`、EMA 公式核验通过。
+- `realised_source_exposure` 每个 run 均生成；B2 的 capped 采样 `max_share≈0.6746`（cap=0.5 在物理源粒度 + 无回填的整数 epoch 下实际略高，属协议已知行为）。
+- 所有 run 的 `manifest_sha256=26c55431…`、`pretrained_init.sha256=0382013c…`、loss finite、seed/增强/采样 seed 传播均核验通过。
+- ¹ Run 1 由先前部署的 GPU1 守护在 GPU1 短暂空闲时启动（11:05），已完成的计算未浪费；其 `git_commit=a660be8`（该 run 写入 verification 时的 HEAD）。
+- ² Run 2–4 依据用户 2026-10-28「用 gpu0」的显式授权在物理 GPU0 串行执行；`git_commit=8a9d50a`。
+- 失败与恢复过程（如实记录）：首个 run 曾因 `data/stage6/images/` 被外部删除而失败；随后用 `tools/stage6_mirror_images.py` 重建 147,277 文件 / 132 GB 字节级镜像，重构 manifest SHA 仍为 `26c55431…`，再重跑。详见 `reports/stage6d_preflight.md` §7。
 
 ---
 
-## 5. Phase 2 协议与配置
+## 5. Phase 4 PhenoBench 冻结 encoder 线性 probe（完成）
 
-- `reports/stage6d_protocol.md`：主要/次要终点、三臂定义、配对 seed、预训练协议、probe 协议、统计口径、判定逻辑、验收条件、阻塞记录。
-- 生成 4 个配置：
-  - `configs/stage6d_b1_natural_seed20261027.yaml`
-  - `configs/stage6d_b2_capped_no_backfill_seed20261027.yaml`
-  - `configs/stage6d_b1_natural_seed20261028.yaml`
-  - `configs/stage6d_b2_capped_no_backfill_seed20261028.yaml`
-- `tools/check_stage6d_protocol.py` 结果：`ok=true`，4 个 run，0 problems。逐字段断言除 seed/run 标识/输出目录外，其余与 Stage 6 base 一致。
-- B1/B2 同 pair 仅采样策略、arm 标识、run id、输出目录不同。
+协议与 Stage 6C 完全一致：ViT-H/14 冻结，224×224 tile、stride 200、5×5/图，`Linear(1280→3)`，AdamW/1e-3/0.0，10 epochs，batch 32，probe seeds 0/1/2；train 1,407 图、val 772 图；官方 `phenobench-eval` 与自实现 `IoUAccumulator` 交叉核验（容差 0.01 pp）；test 未参与。
+
+- 每个新 checkpoint 的 feature cache 绑定 `run_id|完整 checkpoint SHA|PhenoBench manifest SHA|protocol_version`。
+- 每个 probe 结果均核验：checkpoint SHA 一致、seeds `[0,1,2]`、val 772、每 seed 772 张 PNG、官方 stdout 存在、self/official 交叉核验 `agrees=true`。
+- 逐 checkpoint 明细：`reports/stage6d_phenobench_per_checkpoint.{json,csv}`。
 
 ---
 
-## 6. Phase 3 独立预训练：**已启动，首个 run 失败，正重建数据后重跑**
+## 6. Phase 5 统计（以预训练 checkpoint 为重复单位）
 
-- 计划：4 个新 run，每个 2,000 optimizer updates，从官方 checkpoint 重新初始化（`load_checkpoint=false`，`pretrained_sha256=0382013c…`），使用冻结 train view manifest。
-- 编排器：`tools/run_stage6d_pretraining.py`，已实现并 `--dry-run` 通过；硬门禁包括：
-  - 拒绝脏 tracked 工作树（要求先提交，避免重演 Stage 6 代码来源问题）；
-  - 记录 HEAD、完整 `git status`、配置 SHA、物理 GPU；
-  - 检查物理 GPU1 空闲内存与利用率，拒绝启动，不杀进程；
-  - 每 run 独立目录，输出目录非空则拒绝；
-  - 每 run 后核验 2,000 updates、loss finite、manifest SHA、初始化 SHA、checkpoint、来源 ledger、seed 传播、`git_commit` 一致性；
-  - 失败即停止，不静默继续。
-- **2026-10-28 实际执行**：GPU1 释放后启动编排器（HEAD `bc7c50a`）。首个 run `stage6d_b1_natural_seed20261027`（seed 20261027，P1）**失败（returncode 1，约 9.1 分钟）**，其余 3 个 run 按"失败即停止"规则**未启动**。
-- **失败根因（实测，非猜测）**：冻结 manifest `data/stage6/stage6_r3v3_train_view_nvme.csv`（`26c55431…`）指向的 NVMe 镜像目录 `data/stage6/images/` **已被整个删除**；147,277 条绝对路径 100% 缺失。训练在第一个 batch 即撞 `FileNotFoundError`。源图（`source_path` → `/data/datasets/...`）抽查完好，确认是被外部清理删除了本地镜像而非源数据丢失。
-- **处置**：用仓库自带 `tools/stage6_mirror_images.py` 按原样重建字节级镜像（逐文件 SHA-256 比对 `raw_sha256`；重构出的 manifest 必须仍等于 `26c55431…`，否则立即停止）。冻结 manifest 已在重建启动前备份至 `/data/agrisa_jepa_runs/stage6d/backup_manifest/`，用于事后核对脚本未改动路径/顺序/成员。重建完成（约 132 GB）后，重跑 Phase 3 全部 4 个 run。
-- 当前 `reports/stage6d_pretraining_runs.json/csv` 含 1 条 `failed` + 3 条 `not_started`，是真实状态，**未伪造**任何 `completed` 或指标值。
-- 不修改冻结 manifest；不伪造任何训练/校验值。
-- **镜像重建结果（2026-10-28）**：`mirrored 147277 files, 132.0 GB, 4066.9s`；重构 CSV SHA-256 = `26c55431…`，与冻结值逐字节一致；JSON 仅 `elapsed_seconds` 不同。冻结 manifest 未变。
-- **新阻塞**：镜像恢复后 GPU1 再次被外部项目 `/fj/Agro-JEPA`（PID 719784，17,384 MiB / 100%）占用；按约束不杀进程、不换 GPU0，等待其真正空闲后再启动 Phase 3。
-- **用户显式授权改用 GPU0（2026-10-28）**：用户明确指示「用 gpu0」。这是对项目 `CLAUDE.md`「只允许使用GPU1」的显式单次授权偏离；Phase 3/4 据此在物理 GPU0（287 MiB / 0% util）执行，每个 run 的 launch/guard 文件记录 `physical_index: 0` 与 GPU UUID。未杀外部进程、未改 `CLAUDE.md`、未影响历史产物。
+probe seed **不**计入预训练重复；每个 checkpoint 先对 3 个 probe seed 取均值，再跨 checkpoint 统计。
+
+### 6.1 主分析（每 arm 3 个 checkpoint：历史 P0 + 新 P1/P2）
+
+| arm | n | soil mean±std | crop mean±std | weed mean±std | mIoU mean±std |
+|---|---:|---|---|---|---|
+| A | 1 | 97.6085 | 81.4567 | 35.9800 | 71.6833 |
+| B1 | 3 | 97.6926±0.0062 | 82.2600±0.0500 | 38.9733±0.5407 | **72.9722±0.1996** |
+| B2 | 3 | 97.6922±0.0036 | 82.2567±0.0233 | 38.8144±0.5690 | **72.9233±0.1980** |
+
+相对 A：B1 **+1.2889 pp** mIoU（crop +0.8033，weed +2.9933）；B2 **+1.2400 pp**（crop +0.8000，weed +2.8344）。
+
+### 6.2 仅可追溯敏感性（排除历史 P0；每 arm 2 个 checkpoint）
+
+| arm | n | mIoU mean±std | Δ vs A |
+|---|---:|---|---:|
+| B1 | 2 | 73.0317±0.2217 | **+1.3484** |
+| B2 | 2 | 73.0633±0.0033 | **+1.3800** |
+
+### 6.3 逐 checkpoint（每个都是独立预训练重复）
+
+| arm | run | seed | traceable | mIoU (3 probe seeds) | Δ vs A |
+|---|---|---|---:|---|---:|
+| B1 | historical P0 | 20261026 | 否（caveat） | 72.8533 | +1.1700 |
+| B1 | seed20261027 | 20261027 | 是 | 72.8100 | +1.1267 |
+| B1 | seed20261028 | 20261028 | 是 | 73.2533 | +1.5700 |
+| B2 | historical P0 | 20261026 | 否（caveat） | 72.6433 | +0.9600 |
+| B2 | seed20261027 | 20261027 | 是 | 73.0600 | +1.3767 |
+| B2 | seed20261028 | 20261028 | 是 | 73.0667 | +1.3834 |
+
+### 6.4 配对 B1/B2（同 seed，仅新增 pair）
+
+| pair | seed | mIoU B2−B1 |
+|---|---:|---:|
+| P1 | 20261027 | +0.2500 |
+| P2 | 20261028 | −0.1867 |
+| 均值 | — | **+0.0316** |
+
+跨 pair 的 B2−B1 符号翻转；|均值| 0.03 pp 远小于 run 间波动（跨 checkpoint std ≈0.20 pp）。
 
 ---
 
-## 7. Phase 4 PhenoBench 冻结 encoder 线性 probe：未执行
+## 7. 与 Stage 6C 的一致性
 
-- 计划：每个新 checkpoint × probe seeds 0/1/2；val 772；官方评价器 + 自实现土壤 IoU 交叉核验；test 不参与。
-- 编排器：`tools/run_stage6d_probe.py`，已实现并 `--dry-run` / `--manifest-only` 通过；包含 checkpoint SHA 校验、缓存绑定、772 预测/官方 stdout 校验、预测 manifest。
-- **实际未运行 probe**。`reports/stage6d_phenobench_per_checkpoint.{json,csv}` 只有 `status=not_executed` 占位，不含任何指标。
+Stage 6C（历史单 seed 结果）：B1−A mIoU **+1.17**、B2−A **+0.96**。
+Stage 6D 主分析：B1−A **+1.29**、B2−A **+1.24**；敏感性口径 **+1.35 / +1.38**。
+方向一致，量级相近；Stage 6D 的 4 个新 checkpoint 单独看也全部为正。
 
 ---
 
-## 8. Phase 5 统计：未执行；历史参考已验证工具
+## 8. Phase 6 解释（按冻结协议）
 
-- 统计工具：`tools/stage6d_compare.py`，以 **checkpoint** 为重复单位，逐 checkpoint 计算 3-seed 均值、跨 checkpoint mean±std、相对 A 差值、配对 B1/B2 差值与跨 pair 汇总，并支持 `--traceable-only` 敏感性口径。
-- 用真实 Stage 6C 结果做数值回归（`reports/stage6d_historical_reference.{md,json}`）：
-  - B1 − A：mIoU **+1.17 pp**，Crop +0.76 pp，Weed +2.69 pp；
-  - B2 − A：mIoU **+0.96 pp**，Crop +0.77 pp，Weed +2.03 pp。
-  与 Stage 6C 报告一致，说明聚合工具没有口径漂移。
-- **这不是 Stage 6D 新结果**，不能用于回答 Stage 6D 的可重复性问题。
-- `reports/stage6d_phenobench_comparison.{json,csv,md}` 明确标注 `not_executed` / `historical_reference_only`，不含新指标。
+1. **是否支持继续投入**：是（描述性）。3 个 B1 checkpoint（含 2 个仅新增可追溯 checkpoint）方向一致为正，且每个单独高于 A；B2 同样一致为正。
+2. **B1 vs B2**：**不能区分**。配对差均值 +0.03 pp，且两个 pair 符号相反；差异 < run 间波动。
+3. **不是 p 值结论**：只有 3 个（敏感性 2 个）预训练重复/arm，按预注册协议只做描述性统计，不做小样本显著性检验。
+4. **不能声称**：不能从本阶段声称 SOTA、首次发现或普适性；A 只有 1 个官方 checkpoint，没有 A 的预训练 seed 重复。
+5. **诚实边界**：历史 P0 有代码/硬件 caveat；新 run 跨 GPU0/GPU1；PhenoBench 只做 val，未用 test。
 
 ---
 
 ## 9. 测试
 
-- Stage 6D 定向测试：`tests/test_stage6d_seed_replication.py`，**25 passed**（config 生成/只改允许字段/seed 配对与唯一性、协议字段冻结、缓存键绑定、checkpoint 均值、跨 checkpoint 统计不混淆 probe seed、配对 B1/B2、失败/缺失拒绝、历史与敏感性子集、probe 校验、比较工具真实数据）。
-- 全量测试：**797 passed / 7 skipped / 1 failed**（938.53 s）。相对 Stage 6C 基线（772/7/1），新增 25 个测试全部通过。
-- 既有历史失败 `tests/test_stage5e1_evidence.py::test_artifact_manifest_agrees_with_git` 未修、未删、未放宽；与 Stage 6/6C 完全相同。
-- `git diff --check`：通过。
+- 定向：`tests/test_stage6d_seed_replication.py` **25 passed**（3.08 s）。
+- 全量（Stage 6D 代码定稿后执行）：**797 passed / 7 skipped / 1 failed**（938.53 s）；唯一失败是既有 `tests/test_stage5e1_evidence.py::test_artifact_manifest_agrees_with_git`，与 Stage 6/6C 相同，未修/未放宽。
+- `git diff --check`：通过；`tools/check_stage6d_protocol.py`：`ok=true`，4 runs，0 problems。
 - 详见 `reports/stage6d_test_summary.md`。
 
 ---
@@ -151,61 +155,57 @@
 | 产物 | 状态 |
 |---|---|
 | `reports/stage6d_seed_provenance_audit.md` / `.json` | 已生成 |
-| `reports/stage6d_protocol.md` | 已生成 |
-| `reports/stage6d_preflight.md` | 已生成 |
-| `reports/stage6d_config_plan.json` | 已生成 |
-| `reports/stage6d_protocol_check.json` | 已生成（ok=true） |
-| `reports/stage6d_pretraining_runs.json` / `.csv` | 已生成，`not_started` |
-| `reports/stage6d_phenobench_per_checkpoint.json` / `.csv` | 已生成，`not_executed` |
-| `reports/stage6d_phenobench_comparison.md` / `.csv` / `.json` | 已生成，`not_executed` / 历史参考 |
-| `reports/stage6d_comparison_manifest.json` | 已生成（A + 历史 B1/B2；新 run 待补） |
-| `reports/stage6d_historical_reference.md` / `.json` | 已生成（工具回归） |
-| `reports/stage6d_test_summary.md` | 待全量测试完成后生成 |
-| `configs/stage6d_*.yaml` | 4 个已生成 |
-| `tools/stage6d_build_configs.py` | 已实现 |
-| `tools/check_stage6d_protocol.py` | 已实现 |
-| `tools/stage6d_compare.py` | 已实现 |
-| `tools/run_stage6d_pretraining.py` | 已实现，dry-run 通过 |
-| `tools/run_stage6d_probe.py` | 已实现，dry-run/manifest-only 通过 |
+| `reports/stage6d_protocol.md` | 已生成（冻结） |
+| `reports/stage6d_preflight.md` | 已生成（含失败/镜像重建/GPU 授权记录） |
+| `reports/stage6d_config_plan.json` / `stage6d_protocol_check.json` | 已生成（ok=true） |
+| `reports/stage6d_pretraining_runs.json` / `.csv` | **4/4 completed，含 checkpoint SHA** |
+| `reports/stage6d_phenobench_per_checkpoint.json` / `.csv` | **已生成，7 个 checkpoint 实测** |
+| `reports/stage6d_phenobench_comparison.json` / `.md` | **已生成（主分析）** |
+| `reports/stage6d_phenobench_sensitivity.json` / `.md` | **已生成（仅可追溯）** |
+| `reports/stage6d_comparison_manifest.json` | 已生成（7 entries） |
+| `reports/stage6d_historical_reference.md` / `.json` | 工具回归（保留） |
+| `reports/stage6d_test_summary.md` | 已生成 |
+| `configs/stage6d_*.yaml` | 4 个 |
+| `tools/stage6d_*.py` | 已实现并实际使用 |
 | `tests/test_stage6d_seed_replication.py` | 25 passed |
-| 新预训练 checkpoint / probe 结果 | **未产生** |
+| 新预训练 checkpoint | 4 个（在 `/data/agrisa_jepa_runs/stage6d/`，未入 git） |
+| 新 probe 结果 | 12 个（4 checkpoint × 3 seeds） |
 
 ---
 
-## 11. 阻塞与需要用户决定
+## 11. 阻塞与偏离（如实记录）
 
-| 阻塞 | 事实 | 需要 |
-|---|---|---|
-| GPU1 被外部项目占用 | PID 2594918，`/fj/Agro-JEPA`，14,912 MiB，100% | 等待释放；或**显式授权改用 GPU0**（Stage 6 有先例；本轮提示词要求先报告） |
-| 根盘空间不足 | `/` 187 G vs 4 个新 run 约 232 G | 已默认把新 run 写到 `/data`（584 G）；若坚持写在仓库 `runs/`，需减少 checkpoint 保留或清理空间 |
-| 历史代码来源 caveat | run 时未提交；无代码哈希 | 已在主分析标 caveat，并提供“仅新增 run”的敏感性口径 |
+| 项 | 事实 |
+|---|---|
+| 首个 run 失败 | `data/stage6/images/` 被外部删除；已按字节重建（147,277 文件 / 132 GB），manifest SHA 不变，重跑成功 |
+| GPU1 被外部占用 | `/fj/Agro-JEPA` 多次占用；未杀进程、未改其项目 |
+| 改用 GPU0 | 用户 2026-10-28 显式授权「用 gpu0」；run 2–4 在 GPU0，run 1 在 GPU1（竞态已启动） |
+| 历史 P0 caveat | 代码在 run 时未提交；硬件只记录相对可见索引；主分析保留、敏感性排除 |
+| 磁盘 | 未删除任何用户/项目文件；`/` 空间紧张时仅做只读检查 |
 
-**不会做的事**：杀外部进程、未经授权改 GPU0、伪造 seed/结果、覆盖历史产物、声称训练已完成。
+**不会做的事**：杀外部进程、伪造 seed/结果、覆盖历史产物、声称训练/评价已完成而实际未完成。
 
 ---
 
 ## 12. Stage 6D 验收条件逐项
 
 - [x] 已审计现有 seed 来源，并明确历史运行能否计入重复（可计入，带 caveat；敏感性分析排除）。
-- [ ] B1/B2 达到规则规定的可核验独立预训练运行数（**未执行**）。
-- [ ] 所有新 run 从官方 I-JEPA 初始化（**未执行**）。
-- [ ] 每个新 run 完成 2,000 optimizer updates（**未执行**）。
-- [ ] 数据 manifest、初始化权重、配置与 checkpoint 均有完整 SHA-256（配置/输入已核验；新 checkpoint **未产生**）。
-- [ ] 每个新 checkpoint 完成 3 个 probe seeds 的 PhenoBench val 评价（**未执行**）。
+- [x] B1/B2 达到规则规定的可核验独立预训练运行数（每 arm 3 个 checkpoint：历史 1 + 新增 2）。
+- [x] 所有新 run 从官方 I-JEPA 初始化（`pretrained_sha256=0382013c…`）。
+- [x] 每个新 run 完成 2,000 optimizer updates。
+- [x] 数据 manifest、初始化权重、配置与 checkpoint 均有完整 SHA-256。
+- [x] 每个新 checkpoint 完成 3 个 probe seeds 的 PhenoBench val 评价（772 图，官方+自实现交叉核验）。
 - [x] A baseline 的复用来源和 SHA 核验通过。
-- [x] 统计以预训练 checkpoint 为主要重复单位（工具与测试已实现）。
+- [x] 统计以预训练 checkpoint 为主要重复单位。
 - [x] 未使用 test split，未事后修改协议。
-- [ ] 新增测试通过（定向 25 passed；全量待完成）；历史失败如实记录。
-- [ ] 报告与代码可追溯，远端分支已核实（待提交/推送）。
+- [x] 新增测试通过（25 passed）；既有历史失败如实记录。
+- [x] 报告与代码可追溯，远端分支已核实。
 
 ---
 
-## 13. 下一步
+## 13. 下一步建议
 
-1. **用户决定 GPU**：等待 GPU1 释放，或授权 GPU0。
-2. 提交 Stage 6D 代码/配置/测试/报告，确保工作树干净。
-3. 运行 `tools/run_stage6d_pretraining --execute --device <n>`，逐 run 核验。
-4. 运行 `tools/run_stage6d_probe --execute --device <n>`，生成 12 个新 probe 结果（4 checkpoint × 3 seeds）。
-5. 运行 `tools/stage6d_compare`（主分析 + 敏感性），生成逐 checkpoint 与跨 run 报告。
-6. 按 §12 逐项勾选，更新本报告与 `stage6d_test_summary.md`。
-7. 只有在多个独立 B1 checkpoint 方向基本一致时，才讨论“支持进一步投入”；否则如实报告不稳定/mixed result。
+1. 若要提高 B1/B2 区分的把握，需要**更多独立预训练 seed**（当前每 arm 3 个 checkpoint，配对差被 run 间波动淹没）；本阶段不足以区分采样策略。
+2. 若要检验普适性，应在**独立下游数据集**上重复同一冻结 probe，而不是继续在同一下游上调参。
+3. 历史 P0 的代码/硬件 caveat 无法事后修复；后续阶段应继续"先提交、再启动"（本阶段已做到 run 2–4）。
+4. A 目前只有 1 个官方 checkpoint；若要把 A 也当作随机变量，需要对 A 做多次初始化/评估。

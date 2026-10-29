@@ -1,44 +1,40 @@
 # Stage 6D — PhenoBench 跨预训练运行比较
 
-> 状态：**未执行**（not_executed）。
-> 原因：物理 GPU1 被外部进程（PID 2594918，`/fj/Agro-JEPA`）占用（14,912 MiB，100%），项目约束只允许 GPU1；且根盘仅余 187 G，4 个新 run 约需 232 G。本文件不含任何 Stage 6D 实测指标。
+检查点数：A=1 B1=3 B2=3
 
-## 主重复单位
+## 每臂跨 checkpoint 汇总（预训练为重复单位）
 
-- **预训练 checkpoint**（不是 probe seed）。
-- 同一 checkpoint 的 3 个 probe seed（0/1/2）只衡量下游 head 训练方差，绝不冒充独立预训练重复。
+| arm | n | soil mean±std | crop mean±std | weed mean±std | mIoU mean±std |
+|---|---:|---|---|---|---|
+| A | 1 | 97.6085±0.0 | 81.4567±0.0 | 35.98±0.0 | 71.6833±0.0 |
+| B1 | 3 | 97.6926±0.0062 | 82.26±0.05 | 38.9733±0.5407 | 72.9722±0.1996 |
+| B2 | 3 | 97.6922±0.0036 | 82.2567±0.0233 | 38.8144±0.569 | 72.9233±0.198 |
 
-## 计划（预注册）
+## 相对 A 差值（每臂跨 checkpoint 均值）
 
-| arm | checkpoint 数（主分析） | 其中新增可追溯 | 历史带 caveat |
+### B1_minus_A
+
+| 指标 | A mean | arm mean | 差值 (pp) |
 |---|---:|---:|---:|
-| A | 1（复用 Stage 6C） | 0 | 0 |
-| B1 | 3 | 2 | 1 |
-| B2 | 3 | 2 | 1 |
+| soil | 97.6085 | 97.6926 | 0.0841 |
+| crop | 81.4567 | 82.26 | 0.8033 |
+| weed | 35.98 | 38.9733 | 2.9933 |
+| mIoU | 71.6833 | 72.9722 | 1.2889 |
 
-- 配对 seed：P0(历史) = 20261026、P1 = 20261027、P2 = 20261028。
-- 每 checkpoint × probe seeds 0/1/2；val 772 张；test 不参与。
+### B2_minus_A
 
-## 历史参考（仅工具回归，不是 Stage 6D 结果）
+| 指标 | A mean | arm mean | 差值 (pp) |
+|---|---:|---:|---:|
+| soil | 97.6085 | 97.6922 | 0.0837 |
+| crop | 81.4567 | 82.2567 | 0.8 |
+| weed | 35.98 | 38.8144 | 2.8344 |
+| mIoU | 71.6833 | 72.9233 | 1.24 |
 
-`reports/stage6d_historical_reference.json` 用 Stage 6D 聚合工具重算了 Stage 6C 的三臂结果作为数值回归基线：
+## 配对 B1/B2（同 seed，仅新增 pair）
 
-| arm | mIoU mean | B1/B2 − A mIoU |
-|---|---:|---:|
-| A | 71.68 | — |
-| B1 | 72.85 | +1.17 |
-| B2 | 72.64 | +0.96 |
+| pair | seed | crop B2−B1 | weed B2−B1 | mIoU B2−B1 |
+|---|---:|---:|---:|---:|
+| P1 | 20261027 | 0.05 | 0.68 | 0.25 |
+| P2 | 20261028 | -0.07 | -0.5 | -0.1867 |
 
-## 待执行步骤
-
-1. GPU1 空闲且工作树干净后：`.venv/bin/python -m tools.run_stage6d_pretraining --execute --device 1`
-2. probe：`.venv/bin/python -m tools.run_stage6d_probe --execute --device 1`
-3. 统计：`tools/stage6d_compare --manifest reports/stage6d_comparison_manifest.json --out-prefix reports/stage6d_phenobench_comparison`
-4. 敏感性（仅新增）：`tools/stage6d_compare ... --traceable-only --out-prefix reports/stage6d_phenobench_sensitivity`
-
-## 判定逻辑（预注册，不依赖事后阈值）
-
-- 支持进一步投入：多个独立 B1 checkpoint 相对 A 的 mIoU 改善方向基本一致，非单个异常 run 驱动。
-- 结果不确定：方向不一致、跨 run 波动 ≥ 平均收益，或改善主要来自单个 run。
-- 不支持短预算稳定收益：多数独立 run 未优于 A。
-- B1 vs B2：仅用配对比较；差异小于运行间波动或类别方向不一致 → 结论“无法区分”。
+跨 pair 均值 B2−B1：soil -0.0011，crop -0.01，weed 0.09，mIoU 0.0316

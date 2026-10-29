@@ -1,12 +1,412 @@
 {
   "schema_version": "stage6d_phenobench_per_checkpoint/v1",
-  "status": "not_executed",
-  "reason": "Stage 6D produced no new pretraining checkpoints because physical GPU1 is occupied by an external process (PID 2594918, /fj/Agro-JEPA, 14912 MiB, 100%). No PhenoBench probe was run for a Stage 6D checkpoint.",
-  "pretraining_runs_status": "reports/stage6d_pretraining_runs.json",
-  "historical_reference": "reports/stage6d_historical_reference.json",
-  "required_inputs": [
-    "four completed Stage 6D checkpoints (B1/B2 x two paired seeds)",
-    "three probe runs per checkpoint (seeds 0/1/2) on PhenoBench val 772"
+  "status": "executed",
+  "protocol_version": "stage6d-phenobench-linear-probe-v1",
+  "phenobench_manifest_sha256": "13fa2810d9fe87c2d65b2dc5b7c7e8ac55e31812aee44af21aea98da8e98bd5d",
+  "probe_seeds": [
+    0,
+    1,
+    2
   ],
-  "note": "This file intentionally contains no Stage 6D metrics. It must not be read as a Stage 6D result; the only measured PhenoBench numbers in the repository remain the Stage 6C historical ones."
+  "a_reference": {
+    "soil": 97.6085,
+    "crop": 81.4567,
+    "weed": 35.98,
+    "mIoU": 71.6833
+  },
+  "checkpoints": [
+    {
+      "arm": "A",
+      "run_id": "A_official",
+      "pair_id": "",
+      "pretraining_seed": 0,
+      "traceable": true,
+      "checkpoint_sha256": "0382013c481743e9ccea89f970bc6c6aa126aa19a62127500d6e672a641aae22",
+      "result": "runs/stage3a_phenobench/armA/result.json",
+      "probe_seeds": [
+        0,
+        1,
+        2
+      ],
+      "soil": {
+        "mean": 97.6085,
+        "std": 0.0092,
+        "values": [
+          97.6186,
+          97.6104,
+          97.5964
+        ]
+      },
+      "crop": {
+        "mean": 81.4567,
+        "std": 0.1674,
+        "values": [
+          81.66,
+          81.46,
+          81.25
+        ]
+      },
+      "weed": {
+        "mean": 35.98,
+        "std": 3.8891,
+        "values": [
+          38.72,
+          38.74,
+          30.48
+        ]
+      },
+      "mIoU": {
+        "mean": 71.6833,
+        "std": 1.3462,
+        "values": [
+          72.67,
+          72.6,
+          69.78
+        ]
+      },
+      "delta_vs_A": {
+        "soil": 0.0,
+        "crop": 0.0,
+        "weed": 0.0,
+        "mIoU": 0.0
+      }
+    },
+    {
+      "arm": "B1",
+      "run_id": "stage6_b1_natural_2000",
+      "pair_id": "P0_historical",
+      "pretraining_seed": 20261026,
+      "traceable": false,
+      "checkpoint_sha256": "19796cebc65e29a07eafd7222f5a642d4ef9f28c33f2e4f4f2b65e34a2bfde6b",
+      "result": "runs/stage6c_phenobench/B1_natural/result.json",
+      "probe_seeds": [
+        0,
+        1,
+        2
+      ],
+      "soil": {
+        "mean": 97.6864,
+        "std": 0.0077,
+        "values": [
+          97.6899,
+          97.6937,
+          97.6757
+        ]
+      },
+      "crop": {
+        "mean": 82.2167,
+        "std": 0.1482,
+        "values": [
+          82.35,
+          82.29,
+          82.01
+        ]
+      },
+      "weed": {
+        "mean": 38.6667,
+        "std": 2.5089,
+        "values": [
+          40.35,
+          40.53,
+          35.12
+        ]
+      },
+      "mIoU": {
+        "mean": 72.8533,
+        "std": 0.8864,
+        "values": [
+          73.46,
+          73.5,
+          71.6
+        ]
+      },
+      "delta_vs_A": {
+        "soil": 0.0779,
+        "crop": 0.76,
+        "weed": 2.6867,
+        "mIoU": 1.17
+      }
+    },
+    {
+      "arm": "B2",
+      "run_id": "stage6_b2_capped_no_backfill_2000",
+      "pair_id": "P0_historical",
+      "pretraining_seed": 20261026,
+      "traceable": false,
+      "checkpoint_sha256": "6e7a83c9156e556757016145fb804e2b67e7b94f5e8b45bda4ffd24cb5975a62",
+      "result": "runs/stage6c_phenobench/B2_capped/result.json",
+      "probe_seeds": [
+        0,
+        1,
+        2
+      ],
+      "soil": {
+        "mean": 97.6876,
+        "std": 0.0081,
+        "values": [
+          97.6951,
+          97.6913,
+          97.6763
+        ]
+      },
+      "crop": {
+        "mean": 82.2267,
+        "std": 0.1014,
+        "values": [
+          82.37,
+          82.15,
+          82.16
+        ]
+      },
+      "weed": {
+        "mean": 38.01,
+        "std": 2.9293,
+        "values": [
+          40.21,
+          39.95,
+          33.87
+        ]
+      },
+      "mIoU": {
+        "mean": 72.6433,
+        "std": 1.0015,
+        "values": [
+          73.43,
+          73.27,
+          71.23
+        ]
+      },
+      "delta_vs_A": {
+        "soil": 0.0791,
+        "crop": 0.77,
+        "weed": 2.03,
+        "mIoU": 0.96
+      }
+    },
+    {
+      "arm": "B1",
+      "run_id": "stage6d_b1_natural_seed20261027",
+      "pair_id": "P1",
+      "pretraining_seed": 20261027,
+      "traceable": true,
+      "checkpoint_sha256": "1dc10ab68ab48b7e4de0bfa0cd444a1328d0104589484e4454d36cbe5f389106",
+      "result": "/data/agrisa_jepa_runs/stage6d/phenobench/stage6d_b1_natural_seed20261027/result.json",
+      "probe_seeds": [
+        0,
+        1,
+        2
+      ],
+      "soil": {
+        "mean": 97.6902,
+        "std": 0.0057,
+        "values": [
+          97.6867,
+          97.6982,
+          97.6857
+        ]
+      },
+      "crop": {
+        "mean": 82.2333,
+        "std": 0.1078,
+        "values": [
+          82.35,
+          82.26,
+          82.09
+        ]
+      },
+      "weed": {
+        "mean": 38.52,
+        "std": 2.875,
+        "values": [
+          41.74,
+          39.06,
+          34.76
+        ]
+      },
+      "mIoU": {
+        "mean": 72.81,
+        "std": 0.993,
+        "values": [
+          73.92,
+          73.0,
+          71.51
+        ]
+      },
+      "delta_vs_A": {
+        "soil": 0.0817,
+        "crop": 0.7766,
+        "weed": 2.54,
+        "mIoU": 1.1267
+      }
+    },
+    {
+      "arm": "B1",
+      "run_id": "stage6d_b1_natural_seed20261028",
+      "pair_id": "P2",
+      "pretraining_seed": 20261028,
+      "traceable": true,
+      "checkpoint_sha256": "7e3cb0b67f1f53de720f5a705ef9960df7fd55f2568b4c3fd355ddf9cec82bae",
+      "result": "/data/agrisa_jepa_runs/stage6d/phenobench/stage6d_b1_natural_seed20261028/result.json",
+      "probe_seeds": [
+        0,
+        1,
+        2
+      ],
+      "soil": {
+        "mean": 97.7011,
+        "std": 0.0011,
+        "values": [
+          97.7021,
+          97.7016,
+          97.6996
+        ]
+      },
+      "crop": {
+        "mean": 82.33,
+        "std": 0.1122,
+        "values": [
+          82.48,
+          82.21,
+          82.3
+        ]
+      },
+      "weed": {
+        "mean": 39.7333,
+        "std": 2.2477,
+        "values": [
+          41.48,
+          41.16,
+          36.56
+        ]
+      },
+      "mIoU": {
+        "mean": 73.2533,
+        "std": 0.7633,
+        "values": [
+          73.89,
+          73.69,
+          72.18
+        ]
+      },
+      "delta_vs_A": {
+        "soil": 0.0926,
+        "crop": 0.8733,
+        "weed": 3.7533,
+        "mIoU": 1.57
+      }
+    },
+    {
+      "arm": "B2",
+      "run_id": "stage6d_b2_capped_no_backfill_seed20261027",
+      "pair_id": "P1",
+      "pretraining_seed": 20261027,
+      "traceable": true,
+      "checkpoint_sha256": "4df238c16a4945e416ab47edf0f37d2eaa94088e440f48777d569d2b71ddeab7",
+      "result": "/data/agrisa_jepa_runs/stage6d/phenobench/stage6d_b2_capped_no_backfill_seed20261027/result.json",
+      "probe_seeds": [
+        0,
+        1,
+        2
+      ],
+      "soil": {
+        "mean": 97.6926,
+        "std": 0.0075,
+        "values": [
+          97.6964,
+          97.6994,
+          97.6821
+        ]
+      },
+      "crop": {
+        "mean": 82.2833,
+        "std": 0.0858,
+        "values": [
+          82.39,
+          82.28,
+          82.18
+        ]
+      },
+      "weed": {
+        "mean": 39.2,
+        "std": 2.5829,
+        "values": [
+          40.23,
+          41.72,
+          35.65
+        ]
+      },
+      "mIoU": {
+        "mean": 73.06,
+        "std": 0.8829,
+        "values": [
+          73.44,
+          73.9,
+          71.84
+        ]
+      },
+      "delta_vs_A": {
+        "soil": 0.0841,
+        "crop": 0.8266,
+        "weed": 3.22,
+        "mIoU": 1.3767
+      }
+    },
+    {
+      "arm": "B2",
+      "run_id": "stage6d_b2_capped_no_backfill_seed20261028",
+      "pair_id": "P2",
+      "pretraining_seed": 20261028,
+      "traceable": true,
+      "checkpoint_sha256": "1650db8c5a158fae3c730b84fb38d262bbdc1ea0be10c640c1639ad30cd76eb8",
+      "result": "/data/agrisa_jepa_runs/stage6d/phenobench/stage6d_b2_capped_no_backfill_seed20261028/result.json",
+      "probe_seeds": [
+        0,
+        1,
+        2
+      ],
+      "soil": {
+        "mean": 97.6965,
+        "std": 0.0066,
+        "values": [
+          97.7015,
+          97.7007,
+          97.6872
+        ]
+      },
+      "crop": {
+        "mean": 82.26,
+        "std": 0.1268,
+        "values": [
+          82.42,
+          82.25,
+          82.11
+        ]
+      },
+      "weed": {
+        "mean": 39.2333,
+        "std": 3.4618,
+        "values": [
+          42.71,
+          40.48,
+          34.51
+        ]
+      },
+      "mIoU": {
+        "mean": 73.0667,
+        "std": 1.1957,
+        "values": [
+          74.28,
+          73.48,
+          71.44
+        ]
+      },
+      "delta_vs_A": {
+        "soil": 0.088,
+        "crop": 0.8033,
+        "weed": 3.2533,
+        "mIoU": 1.3834
+      }
+    }
+  ],
+  "note": "Each checkpoint is one pretraining replicate. The three probe seeds are repeated probe fits on the same features; they are NOT pretraining replicates."
 }

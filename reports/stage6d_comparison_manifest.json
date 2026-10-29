@@ -37,6 +37,46 @@
       "result": "runs/stage6c_phenobench/B2_capped/result.json",
       "checkpoint": "runs/stage6_b2_capped_no_backfill_2000/jepa-encoder-step2000.pth",
       "checkpoint_sha256": "6e7a83c9156e556757016145fb804e2b67e7b94f5e8b45bda4ffd24cb5975a62"
+    },
+    {
+      "arm": "B1",
+      "run_id": "stage6d_b1_natural_seed20261027",
+      "pair_id": "P1",
+      "seed": 20261027,
+      "traceable": true,
+      "result": "/data/agrisa_jepa_runs/stage6d/phenobench/stage6d_b1_natural_seed20261027/result.json",
+      "checkpoint": "/data/agrisa_jepa_runs/stage6d/stage6d_b1_natural_seed20261027/jepa-encoder-step2000.pth",
+      "checkpoint_sha256": "1dc10ab68ab48b7e4de0bfa0cd444a1328d0104589484e4454d36cbe5f389106"
+    },
+    {
+      "arm": "B1",
+      "run_id": "stage6d_b1_natural_seed20261028",
+      "pair_id": "P2",
+      "seed": 20261028,
+      "traceable": true,
+      "result": "/data/agrisa_jepa_runs/stage6d/phenobench/stage6d_b1_natural_seed20261028/result.json",
+      "checkpoint": "/data/agrisa_jepa_runs/stage6d/stage6d_b1_natural_seed20261028/jepa-encoder-step2000.pth",
+      "checkpoint_sha256": "7e3cb0b67f1f53de720f5a705ef9960df7fd55f2568b4c3fd355ddf9cec82bae"
+    },
+    {
+      "arm": "B2",
+      "run_id": "stage6d_b2_capped_no_backfill_seed20261027",
+      "pair_id": "P1",
+      "seed": 20261027,
+      "traceable": true,
+      "result": "/data/agrisa_jepa_runs/stage6d/phenobench/stage6d_b2_capped_no_backfill_seed20261027/result.json",
+      "checkpoint": "/data/agrisa_jepa_runs/stage6d/stage6d_b2_capped_no_backfill_seed20261027/jepa-encoder-step2000.pth",
+      "checkpoint_sha256": "4df238c16a4945e416ab47edf0f37d2eaa94088e440f48777d569d2b71ddeab7"
+    },
+    {
+      "arm": "B2",
+      "run_id": "stage6d_b2_capped_no_backfill_seed20261028",
+      "pair_id": "P2",
+      "seed": 20261028,
+      "traceable": true,
+      "result": "/data/agrisa_jepa_runs/stage6d/phenobench/stage6d_b2_capped_no_backfill_seed20261028/result.json",
+      "checkpoint": "/data/agrisa_jepa_runs/stage6d/stage6d_b2_capped_no_backfill_seed20261028/jepa-encoder-step2000.pth",
+      "checkpoint_sha256": "1650db8c5a158fae3c730b84fb38d262bbdc1ea0be10c640c1639ad30cd76eb8"
     }
   ]
 }
