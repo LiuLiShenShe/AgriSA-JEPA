@@ -49,7 +49,7 @@ def _status(value, ok_text='完成', missing='未执行') -> str:
 
 def render_test_summary() -> str:
     lines = ['# Stage 7A — 测试结果汇总', '']
-    smoke = _load_json(RUN_ROOT / 'smoke_report.json')
+    smoke = _load_json(Path('/data/agrisa_jepa_runs/stage7a_smoke/smoke_report.json'))
     if smoke is None:
         lines.append('- smoke（中断/快照/恢复/继续）：**未执行**')
     else:
@@ -233,9 +233,12 @@ def _now() -> str:
 
 def main() -> int:
     R.mkdir(exist_ok=True)
-    (R / 'stage7a_test_summary.md').write_text(render_test_summary(), encoding='utf-8')
+    # test_summary.md is maintained alongside the run (it records the actual
+    # full-suite and smoke results); only (re)generate it if it is absent.
+    if not (R / 'stage7a_test_summary.md').is_file():
+        (R / 'stage7a_test_summary.md').write_text(render_test_summary(), encoding='utf-8')
     (R / 'stage7a_final_report.md').write_text(render_final_report(), encoding='utf-8')
-    print('wrote reports/stage7a_test_summary.md')
+    print('wrote reports/stage7a_test_summary.md (if absent)')
     print('wrote reports/stage7a_final_report.md')
     return 0
 
