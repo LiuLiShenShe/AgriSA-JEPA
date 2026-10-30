@@ -1,0 +1,103 @@
+{
+  "schema_version": "stage7a_protocol_check/v1",
+  "ok": true,
+  "problems": [],
+  "stage_name": "stage7a_20k_checkpoint_curve",
+  "run_id": "stage7a_b1_natural_50k",
+  "pair_id": "S7A",
+  "pretraining_seed": 20261029,
+  "base_config": "configs/stage6_b1_natural_2000.yaml",
+  "base_config_sha256": "52e4478c5b6c375f89476007954a2cbe72ac227ffb91c6e6d184f23bc77657db",
+  "stage1_config": "configs/stage7a_b1_natural_50k.yaml",
+  "stage1_config_sha256": "18f713d9c5ab6d905b6b5f65c7b680c7d630d7ab2730b62371d382be553950f5",
+  "stage2_config": "configs/stage7a_b1_natural_50k_resume.yaml",
+  "stage2_config_sha256": "d63fcf4223e9bc2e441b26f1d035e669f257ecb26d2c3539e5276f145f932f89",
+  "budget": {
+    "max_optimizer_steps": 50000,
+    "interrupt_after_optimizer_steps": 20000,
+    "save_at_optimizer_steps": [
+      10000,
+      20000,
+      50000
+    ],
+    "warmup_steps": 2500,
+    "epochs": 50,
+    "epochs_minimum": 44,
+    "optimizer_steps_per_epoch": 1151
+  },
+  "scheduler": {
+    "stage1": {
+      "horizon": 50000,
+      "warmup_steps": 2500,
+      "lr_T_max": 47500,
+      "wd_T_max": 50000,
+      "ema_steps": 50000,
+      "lr_reaches_final_at": 50000,
+      "wd_reaches_final_at": 50000,
+      "ema_reaches_1_at": 50000,
+      "consistent": true
+    },
+    "stage2": {
+      "horizon": 50000,
+      "warmup_steps": 2500,
+      "lr_T_max": 47500,
+      "wd_T_max": 50000,
+      "ema_steps": 50000,
+      "lr_reaches_final_at": 50000,
+      "wd_reaches_final_at": 50000,
+      "ema_reaches_1_at": 50000,
+      "consistent": true
+    }
+  },
+  "frozen_inputs": {
+    "files": {
+      "train_csv": {
+        "path": "data/corpus_v4/R3v3_license_verified_train.csv",
+        "expected_sha256": "9fa34adb36810a5b0d13109761c60892bd9068f27c8f95a48e728146c1a6be08",
+        "actual_sha256": "9fa34adb36810a5b0d13109761c60892bd9068f27c8f95a48e728146c1a6be08",
+        "ok": true
+      },
+      "val_csv": {
+        "path": "data/corpus_v4/R3v3_license_verified_val.csv",
+        "expected_sha256": "f4670232237c8017ffb213e739446fce05a0661cbe18315097b1dba214c40686",
+        "actual_sha256": "f4670232237c8017ffb213e739446fce05a0661cbe18315097b1dba214c40686",
+        "ok": true
+      },
+      "sampling_profile": {
+        "path": "data/corpus_v4/R3v3_license_verified_sampling_profiles.json",
+        "expected_sha256": "91fb23ef5366fa163264a48cdf7c6613769816df751a9695ea9caa284833c505",
+        "actual_sha256": "91fb23ef5366fa163264a48cdf7c6613769816df751a9695ea9caa284833c505",
+        "ok": true
+      },
+      "train_view": {
+        "path": "data/stage6/stage6_r3v3_train_view_nvme.csv",
+        "expected_sha256": "26c55431c63791d4f7d427d432840c21aa47a717a5daadbb5990a68a546f71f2",
+        "actual_sha256": "26c55431c63791d4f7d427d432840c21aa47a717a5daadbb5990a68a546f71f2",
+        "ok": true
+      }
+    },
+    "problems": []
+  },
+  "resume_read_checkpoint": "jepa-step20000.pth.tar",
+  "allowed_changes_from_stage6": [
+    "data.augmentation_seed",
+    "data.seed",
+    "logging.folder",
+    "meta.pair_id",
+    "meta.phase",
+    "meta.run_id",
+    "meta.stage",
+    "optimization.epochs",
+    "optimization.interrupt_after_optimizer_steps",
+    "optimization.max_optimizer_steps",
+    "optimization.save_at_optimizer_steps",
+    "optimization.warmup_steps"
+  ],
+  "allowed_resume_changes": [
+    "meta.load_checkpoint",
+    "meta.phase",
+    "meta.read_checkpoint",
+    "optimization.interrupt_after_optimizer_steps"
+  ],
+  "hash_large_pretrained": false
+}
