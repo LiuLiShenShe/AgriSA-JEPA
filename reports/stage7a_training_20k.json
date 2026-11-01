@@ -1,0 +1,102 @@
+{
+  "schema_version": "stage7a_training_record/v1",
+  "run_id": "stage7a_b1_natural_50k",
+  "git_commit": "166d49458ac2b5d625d1d71bc8a23db7e18a3399",
+  "config": "configs/stage7a_b1_natural_50k.yaml",
+  "config_sha256": "18f713d9c5ab6d905b6b5f65c7b680c7d630d7ab2730b62371d382be553950f5",
+  "phase": "stage1",
+  "physical_gpu": {
+    "physical_index": 1,
+    "uuid": "GPU-6836f890-98b2-5891-07ef-675c25199c65",
+    "name": "NVIDIA RTX A6000",
+    "memory_used_mib": 16,
+    "memory_total_mib": 49140,
+    "memory_free_mib": 49124,
+    "utilization_percent": 0
+  },
+  "started_at": "2026-10-30T10:49:55+00:00",
+  "finished_at": "2026-10-31T22:40:46+00:00",
+  "wall_clock_minutes": 2146.8,
+  "optimizer_steps_total": 20000,
+  "optimizer_steps_this_run": 20000,
+  "micro_steps_total": 159932,
+  "micro_steps_this_run": 159932,
+  "optimizer_steps_per_epoch": 1151,
+  "max_optimizer_steps": 50000,
+  "interrupt_after_optimizer_steps": 20000,
+  "total_optimizer_steps_horizon": 50000,
+  "loss_first": 0.17473632097244263,
+  "loss_last": 0.13525232672691345,
+  "loss_finite": true,
+  "ema_formula_verified": true,
+  "peak_memory_mib": 23474.6513671875,
+  "step_time_ms_mean": 264.41147024581943,
+  "manifest_sha256": "26c55431c63791d4f7d427d432840c21aa47a717a5daadbb5990a68a546f71f2",
+  "pretrained_init": {
+    "encoder_keys_loaded": 389,
+    "predictor_inherited": true,
+    "predictor_keys_loaded": 152,
+    "sha256": "0382013c481743e9ccea89f970bc6c6aa126aa19a62127500d6e672a641aae22",
+    "source": "/data/checkpoints/ijepa/IN1K-vit.h.14-300e.pth.tar",
+    "target_encoder_keys_loaded": 389
+  },
+  "hardware": {
+    "cuda_version": "12.8",
+    "device_type": "cuda",
+    "name": "NVIDIA RTX A6000",
+    "torch_version": "2.9.1+cu128",
+    "total_memory_mib": 48541.4375,
+    "visible_device_index": 0,
+    "world_visible_devices": 1
+  },
+  "sampling_profile": {
+    "batches_per_epoch": 9204,
+    "dataset_rows": 147277,
+    "mode": "natural",
+    "sampler": "DistributedSampler",
+    "seed": 20261029
+  },
+  "realised_source_exposure": {
+    "counts": {
+      "agrifield40k_pool": 316914,
+      "agrifm_ref1": 698,
+      "agrifm_ref11": 6636,
+      "agrifm_ref58": 267293,
+      "agrifm_ref9": 1466,
+      "applebbch81": 24020,
+      "artemis_imagesafari": 1941885
+    },
+    "entropy": 0.7698147608527589,
+    "hhi": 0.6022300817327654,
+    "max_share": 0.7588713484480905,
+    "max_source": "artemis_imagesafari",
+    "part": "0",
+    "samples": 2558912,
+    "shares": {
+      "agrifield40k_pool": 0.12384716629567566,
+      "agrifm_ref1": 0.00027277217817572467,
+      "agrifm_ref11": 0.0025932896481004426,
+      "agrifm_ref58": 0.10445572180676788,
+      "agrifm_ref9": 0.0005728997323862641,
+      "applebbch81": 0.00938680189080359,
+      "artemis_imagesafari": 0.7588713484480905
+    },
+    "total": 2558912
+  },
+  "saved_step_snapshots": [
+    {
+      "encoder": "/data/agrisa_jepa_runs/stage7a_b1_natural_50k/jepa-encoder-step10000.pth",
+      "full": "/data/agrisa_jepa_runs/stage7a_b1_natural_50k/jepa-step10000.pth.tar",
+      "step": 10000
+    },
+    {
+      "encoder": "/data/agrisa_jepa_runs/stage7a_b1_natural_50k/jepa-encoder-step20000.pth",
+      "full": "/data/agrisa_jepa_runs/stage7a_b1_natural_50k/jepa-step20000.pth.tar",
+      "step": 20000
+    }
+  ],
+  "checkpoint_10k_sha": "094b7d0d03b1358f8f22188b89ca366d91f510d9518eed473570fd5e7984d93e",
+  "checkpoint_20k_sha": "29cd7a5228ddc6c9e80212b494b215059ce090595d60ddbbab4725d5bc7b11cd",
+  "encoder_10k_sha": "ee8ce11eab1023f0a620eedf958ac39accdba1b816ce39ff25f76baa9254360f",
+  "encoder_20k_sha": "a66f1fa42dcdc44718c9e79cd89fe8930f7732a280bd1edfad2ad6e7d4e8d23f"
+}

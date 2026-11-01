@@ -1,0 +1,5 @@
+kind,phase,run_id,soil,crop,weed,mIoU,soil_delta,crop_delta,weed_delta,miou_delta,checkpoint_sha256
+reference,baseline,A_official,97.6085,81.4567,35.98,71.6833,,,,,0382013c481743e9ccea89f970bc6c6aa126aa19a62127500d6e672a641aae22
+reference,ref_2k_stage6d,stage6d_b1_natural_seed20261027_2k,97.6902,82.2333,38.52,72.81,,,,,1dc10ab68ab48b7e4de0bfa0cd444a1328d0104589484e4454d36cbe5f389106
+trajectory,step10k,stage7a_b1_natural_50k_10k,97.7342,82.3333,35.9867,72.0167,,,,,ee8ce11eab1023f0a620eedf958ac39accdba1b816ce39ff25f76baa9254360f
+trajectory,step20k,stage7a_b1_natural_50k_20k,97.7424,82.44,37.37,72.5167,0.0082,0.1067,1.3833,0.5,a66f1fa42dcdc44718c9e79cd89fe8930f7732a280bd1edfad2ad6e7d4e8d23f

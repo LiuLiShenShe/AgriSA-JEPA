@@ -1,6 +1,6 @@
 # Stage 7A — 最终验收报告
 
-> 生成时间（UTC）：2026-10-30T10:46:03+00:00
+> 生成时间（UTC）：2026-11-01T03:02:14+00:00
 
 ## 1. Git 基线
 
@@ -30,25 +30,61 @@
 
 | 阶段 | optimizer steps | micro steps | loss 首→末 | 峰值显存(MiB) | 耗时(小时) |
 |---|---|---|---|---|---|
-| 10k/20k（阶段1） | 未执行 | — | — | — | — |
+| 10k/20k（阶段1） | 20000 | 159932 | 0.1747→0.1353 | 23474.6513671875 | 35.78 |
 | 50k（阶段2） | 未执行 | — | — | — | — |
 
+- 阶段1 实测耗时：2146.8 分钟
 
 ## 5. Checkpoint 与 SHA-256
 
-（尚未记录）
+| 文件 | 大小(GB) | SHA-256 |
+|---|---|---|
+| jepa-step10000.pth.tar | 9.65 | `094b7d0d03b1358f8f22188b…` |
+| jepa-step20000.pth.tar | 9.65 | `29cd7a5228ddc6c9e80212b4…` |
+| jepa-encoder-step10000.pth | 2.35 | `ee8ce11eab1023f0a620eedf…` |
+| jepa-encoder-step20000.pth | 2.35 | `a66f1fa42dcdc44718c9e79c…` |
+| jepa-latest.pth.tar | 9.65 | `f8c8161bca4f4bca02eced56…` |
 
 ## 6. source exposure 实际分布
 
-（阶段1未执行，无实测曝光）
+- artemis_imagesafari：1941885（75.89%）
+- agrifield40k_pool：316914（12.38%）
+- agrifm_ref58：267293（10.45%）
+- applebbch81：24020（0.94%）
+- agrifm_ref11：6636（0.26%）
+- agrifm_ref9：1466（0.06%）
+- agrifm_ref1：698（0.03%）
+- 总样本：2558912；熵：0.7698147608527589；HHI：0.6022300817327654
 
 ## 7. PhenoBench 冻结 encoder probe
 
-（未执行：需要 10k/20k checkpoint）
+### 参考行
+
+- baseline（A）：soil 97.6085，crop 81.4567，weed 35.98，mIoU 71.6833
+- ref_2k_stage6d（B1）：soil 97.6902，crop 82.2333，weed 38.52，mIoU 72.81
+
+### 同轨迹
+
+- step10k：soil 97.7342，crop 82.3333，weed 35.9867，mIoU 72.0167
+- step20k：soil 97.7424，crop 82.44，weed 37.37，mIoU 72.5167
+- **决策：CONTINUE_TO_50k** — 20k is at least as good as 10k within tolerance and shows a clear positive signal; continue the same 50k schedule from the 20k checkpoint.
 
 ## 8. 是否继续到 50k
 
-（未执行）
+- 结论：**CONTINUE_TO_50k**
+- 理由：20k is at least as good as 10k within tolerance and shows a clear positive signal; continue the same 50k schedule from the 20k checkpoint.
+- training_verified：True
+- miou_20k_minus_10k：0.5
+- crop_20k_minus_10k：0.1067
+- weed_20k_minus_10k：1.3833
+- soil_20k_minus_10k：0.0082
+- miou_not_worse_than_minus_0_3：True
+- positive_signal：True
+- crop_and_weed_not_below_minus_1_0：True
+- cross_check_agrees：True
+- borderline：False
+- conflicting：False
+- thresholds：{'miou_drop_max': 0.3, 'miou_up_min': 0.2, 'crop_weed_up_min': 0.5, 'crop_weed_drop_max': 1.0}
 
 ## 9. 测试与偏离
 

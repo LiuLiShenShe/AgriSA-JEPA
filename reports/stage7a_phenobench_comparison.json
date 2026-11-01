@@ -1,0 +1,88 @@
+{
+  "schema_version": "stage7a_comparison/v1",
+  "include_50k": false,
+  "n_checkpoints": {
+    "A": 1,
+    "B1": 3
+  },
+  "reference": [
+    {
+      "phase": "baseline",
+      "run_id": "A_official",
+      "arm": "A",
+      "checkpoint_sha256": "0382013c481743e9ccea89f970bc6c6aa126aa19a62127500d6e672a641aae22",
+      "result": "runs/stage3a_phenobench/armA/result.json",
+      "soil": 97.6085,
+      "crop": 81.4567,
+      "weed": 35.98,
+      "mIoU": 71.6833
+    },
+    {
+      "phase": "ref_2k_stage6d",
+      "run_id": "stage6d_b1_natural_seed20261027_2k",
+      "arm": "B1",
+      "checkpoint_sha256": "1dc10ab68ab48b7e4de0bfa0cd444a1328d0104589484e4454d36cbe5f389106",
+      "result": "/data/agrisa_jepa_runs/stage6d/phenobench/stage6d_b1_natural_seed20261027/result.json",
+      "soil": 97.6902,
+      "crop": 82.2333,
+      "weed": 38.52,
+      "mIoU": 72.81
+    }
+  ],
+  "B1_trajectory": [
+    {
+      "phase": "step10k",
+      "run_id": "stage7a_b1_natural_50k_10k",
+      "checkpoint_sha256": "ee8ce11eab1023f0a620eedf958ac39accdba1b816ce39ff25f76baa9254360f",
+      "result": "/data/agrisa_jepa_runs/stage7a_b1_natural_50k/phenobench/stage7a_b1_natural_50k_10k/result.json",
+      "soil": 97.7342,
+      "crop": 82.3333,
+      "weed": 35.9867,
+      "mIoU": 72.0167
+    },
+    {
+      "phase": "step20k",
+      "run_id": "stage7a_b1_natural_50k_20k",
+      "checkpoint_sha256": "a66f1fa42dcdc44718c9e79cd89fe8930f7732a280bd1edfad2ad6e7d4e8d23f",
+      "result": "/data/agrisa_jepa_runs/stage7a_b1_natural_50k/phenobench/stage7a_b1_natural_50k_20k/result.json",
+      "soil": 97.7424,
+      "crop": 82.44,
+      "weed": 37.37,
+      "mIoU": 72.5167,
+      "soil_delta": 0.0082,
+      "crop_delta": 0.1067,
+      "weed_delta": 1.3833,
+      "mIoU_delta": 0.5
+    }
+  ],
+  "decision": {
+    "decision": "CONTINUE_TO_50k",
+    "checks": {
+      "training_verified": true,
+      "miou_20k_minus_10k": 0.5,
+      "crop_20k_minus_10k": 0.1067,
+      "weed_20k_minus_10k": 1.3833,
+      "soil_20k_minus_10k": 0.0082,
+      "miou_not_worse_than_minus_0_3": true,
+      "positive_signal": true,
+      "crop_and_weed_not_below_minus_1_0": true,
+      "cross_check_agrees": true,
+      "borderline": false,
+      "conflicting": false,
+      "thresholds": {
+        "miou_drop_max": 0.3,
+        "miou_up_min": 0.2,
+        "crop_weed_up_min": 0.5,
+        "crop_weed_drop_max": 1.0
+      }
+    },
+    "reason": "20k is at least as good as 10k within tolerance and shows a clear positive signal; continue the same 50k schedule from the 20k checkpoint.",
+    "problems": []
+  },
+  "entries": [
+    "runs/stage3a_phenobench/armA/result.json",
+    "/data/agrisa_jepa_runs/stage6d/phenobench/stage6d_b1_natural_seed20261027/result.json",
+    "/data/agrisa_jepa_runs/stage7a_b1_natural_50k/phenobench/stage7a_b1_natural_50k_10k/result.json",
+    "/data/agrisa_jepa_runs/stage7a_b1_natural_50k/phenobench/stage7a_b1_natural_50k_20k/result.json"
+  ]
+}

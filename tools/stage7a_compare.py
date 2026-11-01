@@ -48,6 +48,7 @@ ROOT = Path(__file__).resolve().parents[1]
 EXPECTED_SEEDS = [0, 1, 2]
 EXPECTED_VAL_IMAGES = 772
 METRICS = ('soil', 'crop', 'weed', 'mIoU')
+PROBE_SEEDS = EXPECTED_SEEDS
 
 
 def display_path(path: Path) -> str:
@@ -273,6 +274,68 @@ def build_payload(entries: Sequence[Mapping[str, object]],
     }
 
 
+PER_CHECKPOINT_ORDER = ('baseline', 'ref_2k_stage6d', 'step10k', 'step20k', 'step50k')
+
+
+def build_per_checkpoint(entries: Sequence[Mapping[str, object]],
+                         protocol_version: str, manifest_sha: str) -> Dict[str, object]:
+    """Per-checkpoint probe detail (mean / std / per-seed values), A-referenced.
+
+    Mirrors the ``stage6d_phenobench_per_checkpoint.json`` schema so the two
+    stages stay comparable: one entry per probed checkpoint, each metric as
+    ``{mean, std, values}`` over probe seeds, plus ``delta_vs_A`` and (for the
+    20k) ``delta_vs_10k`` so the pre-registered thresholds are traceable.
+    """
+    records = []
+    for entry in entries:
+        result = load_result(ROOT / entry['result'])
+        mean = checkpoint_mean_miou(result)
+        phase = str(entry.get('phase') or 'baseline')
+        rec: Dict[str, object] = {
+            'phase': phase,
+            'arm': str(entry['arm']),
+            'run_id': str(entry['run_id']),
+            'pair_id': str(entry.get('pair_id', '')),
+            'pretraining_seed': int(entry['seed']),
+            'traceable': bool(entry.get('traceable', True)),
+            'checkpoint': str(result.get('backbone_checkpoint')),
+            'checkpoint_sha256': str(result.get('backbone_checkpoint_sha256')),
+            'result': display_path(ROOT / entry['result']),
+            'probe_seeds': [int(s['seed']) for s in result.get('seeds', [])],
+        }
+        for metric in METRICS:
+            vals = [round(float(v), 4) for v in mean['_seed_values'][metric]]
+            rec[metric] = {
+                'mean': round(float(np.mean(vals)), 4),
+                'std': round(float(np.std(vals)), 4),
+                'values': vals,
+            }
+        records.append(rec)
+    records.sort(key=lambda r: PER_CHECKPOINT_ORDER.index(r['phase'])
+                 if r['phase'] in PER_CHECKPOINT_ORDER else 99)
+
+    baseline = next(r for r in records if r['phase'] == 'baseline')
+    tenk = next((r for r in records if r['phase'] == 'step10k'), None)
+    for rec in records:
+        rec['delta_vs_A'] = {m: round(rec[m]['mean'] - baseline[m]['mean'], 4)
+                             for m in METRICS}
+        if rec['phase'] == 'step20k' and tenk is not None:
+            rec['delta_vs_10k'] = {m: round(rec[m]['mean'] - tenk[m]['mean'], 4)
+                                   for m in METRICS}
+
+    return {
+        'schema_version': 'stage7a_phenobench_per_checkpoint/v1',
+        'status': 'executed',
+        'protocol_version': protocol_version,
+        'phenobench_manifest_sha256': manifest_sha,
+        'probe_seeds': list(PROBE_SEEDS),
+        'a_reference': {m: baseline[m]['mean'] for m in METRICS},
+        'checkpoints': records,
+        'note': ('同一 50k schedule 的中间快照（10k/20k）不是独立预训练 seed；'
+                 '20k→50k 用预定义规则决策。'),
+    }
+
+
 def write_markdown(payload: Dict[str, object], path: Path) -> None:
     lines = ['# Stage 7A — PhenoBench 预算曲线比较', '']
     traj = payload['B1_trajectory']
@@ -323,6 +386,8 @@ def main(argv: Sequence[str] | None = None) -> int:
                         default=ROOT / 'reports/stage7a_phenobench_comparison.csv')
     parser.add_argument('--out-md', type=Path,
                         default=ROOT / 'reports/stage7a_phenobench_comparison.md')
+    parser.add_argument('--out-per-checkpoint', type=Path,
+                        default=ROOT / 'reports/stage7a_phenobench_per_checkpoint.json')
     args = parser.parse_args(argv)
 
     manifest = json.loads(args.manifest.read_text(encoding='utf-8'))
@@ -330,6 +395,13 @@ def main(argv: Sequence[str] | None = None) -> int:
     args.out_json.parent.mkdir(parents=True, exist_ok=True)
     args.out_json.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + '\n',
                              encoding='utf-8')
+    per_checkpoint = build_per_checkpoint(
+        manifest['entries'],
+        protocol_version=str(manifest.get('protocol_version', '')),
+        manifest_sha=str(manifest.get('phenobench_manifest_sha256', '')))
+    args.out_per_checkpoint.parent.mkdir(parents=True, exist_ok=True)
+    args.out_per_checkpoint.write_text(
+        json.dumps(per_checkpoint, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
     args.out_md.parent.mkdir(parents=True, exist_ok=True)
     write_markdown(payload, args.out_md)
     # CSV: reference rows + one row per trajectory checkpoint
