@@ -1,0 +1,63 @@
+meta:
+  stage: stage3a_phenobench_semantics
+  arm: B
+  arm_label: agricultural_jepa_vith14_500step
+  backbone_checkpoint: runs/stage3_armB_pilot_500/jepa-latest.pth.tar
+  backbone_checkpoint_sha256: recorded in runs/stage3a_phenobench/armB/result.json
+  backbone_frozen: true
+  continued_training: 500 optimizer updates, standard I-JEPA objective, single RTX
+    A6000
+  pretraining_data_version: agrifield40k-v0 (PROVISIONAL)
+data:
+  dataset: phenobench
+  version: v1.1.0
+  root: /data/datasets/PhenoBench/PhenoBench-v110
+  train_split: train
+  eval_split: val
+  num_classes: 3
+  class_names:
+  - soil
+  - crop
+  - weed
+  partial_to_parent: true
+  image_size: 1024
+tiling:
+  tile_size: 224
+  stride: 200
+  n_tiles_per_axis: 5
+  overlap: true
+  overlap_pixels: 24
+  pad: false
+  fully_inside_only: true
+  covers_every_pixel: true
+  stitching: logit_average_over_overlaps
+  rule: n=ceil(size/tile)=5; stride=ceil((size-tile)/(n-1))=200; offsets 0,200,400,600,800
+probe:
+  architecture: linear
+  in_features: 1280
+  out_features: 3
+  upsample: nearest
+  upsample_factor: 14
+  optimizer: adamw
+  lr: 0.001
+  weight_decay: 0.0
+  batch_size: 32
+  epochs: 10
+  loss: pixel_cross_entropy_coverage_weighted
+  seeds:
+  - 0
+  - 1
+  - 2
+evaluation:
+  self_metric: per_class_iou_full_resolution_1024x1024
+  official_metric: phenobench-eval --task semantics
+  ignore_uncovered_border: false
+  prediction_format: uint8 PNG, ids 0/1/2, official filenames
+compute:
+  device: cuda:0
+  feature_batch_size: 16
+  use_bfloat16: true
+outputs:
+  cache_dir: runs/stage3a_phenobench/cache
+  out_dir: runs/stage3a_phenobench/armB
+  report: reports/phenobench_armB_results.md

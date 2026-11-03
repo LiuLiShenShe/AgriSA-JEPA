@@ -19,11 +19,13 @@ except Exception:
 
 import copy
 import hashlib
+import json
 import logging
 import os
 import random
 import subprocess
 import sys
+import time
 import yaml
 
 import numpy as np
@@ -34,6 +36,7 @@ import torch.nn.functional as F
 from torch.nn.parallel import DistributedDataParallel
 
 from src.masks.multiblock import MaskCollator as MBMaskCollator
+from src.masks.structure_guided import StructureGuidedMaskCollator
 from src.masks.utils import apply_masks
 from src.pretrained import init_from_pretrained, sha256_file
 from src.utils.distributed import (
@@ -185,6 +188,8 @@ def main(args, resume_preempt=False):
     manifest_path = args['data'].get('manifest')
     data_split = args['data'].get('split', 'train')
     data_seed = int(args['data'].get('seed', _GLOBAL_SEED))
+    # -- optional isolation of the augmentation RNG stream from the mask RNG
+    augmentation_seed = args['data'].get('augmentation_seed')
     max_samples = args['data'].get('max_samples')
     random.seed(data_seed)
     np.random.seed(data_seed)
@@ -240,6 +245,19 @@ def main(args, resume_preempt=False):
     start_lr = args['optimization']['start_lr']
     lr = args['optimization']['lr']
     final_lr = args['optimization']['final_lr']
+    # -- mid-run evaluation points.  A snapshot taken at step N is written
+    #    WITHOUT touching the schedule, the optimizer, the EMA or the mask
+    #    random state: it is a pure observation of the run at that step.
+    save_at_steps = args['optimization'].get('save_at_optimizer_steps') or []
+    save_at_steps = sorted({int(s) for s in save_at_steps})
+    if any(s < 1 for s in save_at_steps):
+        raise ValueError('optimization.save_at_optimizer_steps must all be >= 1')
+    if max_optimizer_steps is not None:
+        for s in save_at_steps:
+            if s > max_optimizer_steps:
+                raise ValueError(
+                    f'optimization.save_at_optimizer_steps contains {s}, which is beyond '
+                    f'max_optimizer_steps={max_optimizer_steps}')
     # -- gradient accumulation: micro-steps per optimizer update
     grad_accum = int(args['optimization'].get('grad_accum', 1))
     if grad_accum < 1:
@@ -274,14 +292,18 @@ def main(args, resume_preempt=False):
     if load_model:
         load_path = os.path.join(folder, r_file) if r_file is not None else latest_path
 
-    # -- make csv_logger
+    # -- make csv_logger.  A resumed run (load_model=True) appends to the
+    #    existing log so a run interrupted and then resumed keeps one continuous
+    #    CSV; a fresh run truncates it so a new experiment reusing this folder
+    #    can never silently inherit an older run's rows.
     csv_logger = CSVLogger(log_file,
                            ('%d', 'epoch'),
                            ('%d', 'itr'),
                            ('%.5f', 'loss'),
                            ('%.5f', 'mask-A'),
                            ('%.5f', 'mask-B'),
-                           ('%d', 'time (ms)'))
+                           ('%d', 'time (ms)'),
+                           append=bool(load_model))
 
     # -- init model
     encoder, predictor = init_model(
@@ -314,24 +336,69 @@ def main(args, resume_preempt=False):
             encoder=encoder,
             predictor=predictor,
             target_encoder=target_encoder,
-            device=device)
+            device=device,
+            sha256=pretrained_sha256,
+            trusted=bool(pretrained_sha256))
         logger.info(
             'Operation A: loaded %d encoder / %d predictor / %d target_encoder tensors',
             pretrained_report['encoder_keys_loaded'],
             pretrained_report['predictor_keys_loaded'],
             pretrained_report.get('target_encoder_keys_loaded'))
 
+    # -- optional memory-mapped image cache (see tools/build_image_cache.py).
+    #    It changes where the pixels are read from, never what they are.
+    image_cache_dir = args['data'].get('image_cache_dir')
+
     # -- make data transforms
-    mask_collator = MBMaskCollator(
-        input_size=crop_size,
-        patch_size=patch_size,
-        pred_mask_scale=pred_mask_scale,
-        enc_mask_scale=enc_mask_scale,
-        aspect_ratio=aspect_ratio,
-        nenc=num_enc_masks,
-        npred=num_pred_masks,
-        allow_overlap=allow_overlap,
-        min_keep=min_keep)
+    mask_mode = args['mask'].get('mode', 'random')
+    if mask_mode == 'random':
+        mask_collator = MBMaskCollator(
+            input_size=crop_size,
+            patch_size=patch_size,
+            pred_mask_scale=pred_mask_scale,
+            enc_mask_scale=enc_mask_scale,
+            aspect_ratio=aspect_ratio,
+            nenc=num_enc_masks,
+            npred=num_pred_masks,
+            allow_overlap=allow_overlap,
+            min_keep=min_keep)
+    elif mask_mode in ('structure_guided', 'geometry_controlled'):
+        # -- Stage 4A: identical geometry to the official collator, but the
+        #    TARGET BLOCK POSITION is drawn from a structure-weighted candidate
+        #    set.  The official collator itself is untouched and is still what
+        #    arm B uses.
+        # -- Stage 4B adds an optional overlap penalty (``geometry_beta``) and a
+        #    no-structure ``score_mode='uniform'`` arm (G0).  With
+        #    ``geometry_beta=0`` this is byte-for-byte the Stage 4A sampler.
+        prior_mode = args['mask'].get('prior_mode')
+        roll_shift = args['mask'].get('roll_shift', [8, 8])
+        mask_collator = StructureGuidedMaskCollator(
+            input_size=crop_size,
+            patch_size=patch_size,
+            pred_mask_scale=pred_mask_scale,
+            enc_mask_scale=enc_mask_scale,
+            aspect_ratio=aspect_ratio,
+            nenc=num_enc_masks,
+            npred=num_pred_masks,
+            allow_overlap=allow_overlap,
+            min_keep=min_keep,
+            prior_mode=prior_mode,
+            guidance_lambda=float(args['mask'].get('guidance_lambda', 0.0)),
+            geometry_beta=float(args['mask'].get('geometry_beta', 0.0)),
+            geometry_control=args['mask'].get('geometry_control', 'linear'),
+            score_mode=args['mask'].get(
+                'score_mode', 'prior' if prior_mode is not None else 'uniform'),
+            force_candidates=bool(args['mask'].get('force_candidates', False)),
+            num_candidates=int(args['mask'].get('num_candidates', 16)),
+            prior_device=(device if (device.type == 'cuda'
+                                     and int(args['data'].get('num_workers', 0)) == 0)
+                          else None),
+            base_seed=int(args['mask'].get('base_seed', data_seed)),
+            boundary_edge_weight=float(args['mask'].get('boundary_edge_weight', 0.5)),
+            roll_shift=(int(roll_shift[0]), int(roll_shift[1])))
+    else:
+        raise ValueError(f"Unknown mask.mode {mask_mode!r}; expected 'random', "
+                         f"'structure_guided' or 'geometry_controlled'")
 
     transform = make_transforms(
         crop_size=crop_size,
@@ -342,10 +409,11 @@ def main(args, resume_preempt=False):
         color_jitter=color_jitter)
 
     # -- init data-loaders/samplers
+    sampling_spec = args['data'].get('sampling')
     if dataset_name == 'agrifield40k':
         if not manifest_path:
             raise ValueError('data.manifest is required for dataset=agrifield40k')
-        _, unsupervised_loader, unsupervised_sampler = make_agrifield40k(
+        dataset, unsupervised_loader, unsupervised_sampler = make_agrifield40k(
             transform=transform,
             batch_size=batch_size,
             collator=mask_collator,
@@ -358,7 +426,10 @@ def main(args, resume_preempt=False):
             split=data_split,
             drop_last=True,
             seed=data_seed,
-            max_samples=max_samples)
+            max_samples=max_samples,
+            augmentation_seed=augmentation_seed,
+            image_cache_dir=image_cache_dir,
+            sampler_spec=sampling_spec)
     elif dataset_name == 'imagenet1k':
         _, unsupervised_loader, unsupervised_sampler = make_imagenet1k(
             transform=transform,
@@ -407,7 +478,8 @@ def main(args, resume_preempt=False):
         num_epochs=num_epochs,
         ipe_scale=ipe_scale,
         use_bfloat16=use_bfloat16,
-        total_steps=total_optimizer_steps)
+        total_steps=total_optimizer_steps,
+        warmup_steps_override=args['optimization'].get('warmup_steps'))
     encoder = DistributedDataParallel(encoder, static_graph=True)
     predictor = DistributedDataParallel(predictor, static_graph=True)
     target_encoder = DistributedDataParallel(target_encoder)
@@ -473,7 +545,29 @@ def main(args, resume_preempt=False):
 
     optimizer_steps_at_start = optimizer_steps
     micro_steps_at_start = micro_steps
+
+    # -- Stage 6 realised source-exposure ledger. It records the sample_id of
+    #    every micro-batch the loop actually consumes, so source counts are
+    #    measured from the emitted stream rather than inferred from the config.
+    source_ledger = None
+    if dataset_name == 'agrifield40k' and args['data'].get('record_source_exposure'):
+        from src.datasets.source_ledger import SourceExposureLedger
+        sample_to_source = {str(row['sample_id']): str(row['physical_source_id'])
+                            for row in dataset.samples}
+        source_ledger = SourceExposureLedger(
+            os.path.join(folder, 'source_exposure_ledger.csv'),
+            sample_to_source,
+            part=f'{optimizer_steps_at_start}')
+    # -- live progress bookkeeping.  Wall-clock only: it never touches the
+    #    schedule, the RNG, the optimizer or the checkpoint contents.  It only
+    #    feeds the PROGRESS log line so a run can be watched in real time.
+    _run_start_time = time.time()
+    _last_update_time = None
+    # -- a resumed run must not re-take a snapshot it already took
+    save_at_steps = [s for s in save_at_steps if s > optimizer_steps_at_start]
     ema_formula_verified = False
+    _current_momentum = float(ema[0])   # updated once per optimizer step
+    saved_snapshots = []
     first_loss = None
     last_loss = None
     if stop_after_epoch is not None and not (0 < stop_after_epoch <= num_epochs):
@@ -537,6 +631,70 @@ def main(args, resume_preempt=False):
             if (epoch + 1) % checkpoint_freq == 0:
                 torch.save(save_dict, save_path.format(epoch=f'{epoch + 1}'))
 
+    def save_step_snapshot(step):
+        """Write an evaluation snapshot at a specific optimizer-step count.
+
+        Two files are written:
+          * ``<tag>-step<N>.pth.tar`` -- the FULL training state (encoder,
+            predictor, target encoder, optimizer, scaler, schedules, RNG), so
+            the run can be resumed from that point;
+          * ``<tag>-encoder-step<N>.pth`` -- the encoder weights only, which is
+            all the downstream probe needs.
+
+        The snapshot is a pure observation: it does not advance the LR/WD/EMA
+        schedule, does not touch the optimizer, and does not consume any random
+        state.  The EMA momentum and the current LR/WD are recorded so the
+        snapshot can be audited.
+        """
+        if rank != 0:
+            return None
+        full_path = os.path.join(folder, f'{tag}-step{step}.pth.tar')
+        encoder_path = os.path.join(folder, f'{tag}-encoder-step{step}.pth')
+        snapshot = {
+            'encoder': encoder.state_dict(),
+            'predictor': predictor.state_dict(),
+            'target_encoder': target_encoder.state_dict(),
+            'opt': optimizer.state_dict(),
+            'scaler': None if scaler is None else scaler.state_dict(),
+            'epoch': epoch,
+            'epoch_itr': itr,
+            # a step snapshot is a full training state; keeping the epoch-start
+            # state makes it genuinely resumable, like `jepa-latest.pth.tar`
+            'epoch_start_state': epoch_start_state,
+            'loss': loss_meter.avg,
+            'optimizer_steps': int(step),
+            'micro_steps': micro_steps,
+            'grad_accum': grad_accum,
+            'config': args,
+            'hardware': hardware_report(device),
+            'git_commit': git_commit(),
+            'pretrained_init': None if pretrained_report is None else {
+                'source': pretrained_report['path'],
+                'sha256': pretrained_report['sha256'],
+            },
+            'lr_at_snapshot': _last_lr,
+            'weight_decay_at_snapshot': _last_wd,
+            'ema_momentum_at_snapshot': _current_momentum,
+            'rng_state': capture_rng_state(),
+            'loader_generator_state': unsupervised_loader.generator.get_state(),
+            'mask_collator_step': mask_collator._itr_counter.value,
+        }
+        if manifest_sha256 is not None:
+            snapshot['manifest_sha256'] = manifest_sha256
+        torch.save(snapshot, full_path)
+        torch.save({
+            'encoder': encoder.state_dict(),
+            'optimizer_steps': int(step),
+            'manifest_sha256': manifest_sha256,
+            'pretrained_init_sha256': (None if pretrained_report is None
+                                       else pretrained_report['sha256']),
+            'config': args,
+            'git_commit': git_commit(),
+        }, encoder_path)
+        logger.info('Saved evaluation snapshot at optimizer step %d -> %s',
+                    step, full_path)
+        return {'full': full_path, 'encoder': encoder_path}
+
     # -- micro-steps already consumed inside `start_epoch` by the resumed run
     epoch_itr_to_skip = 0
     if load_model:
@@ -552,6 +710,11 @@ def main(args, resume_preempt=False):
 
         # -- update distributed-data-loader epoch
         unsupervised_sampler.set_epoch(epoch)
+        # -- keep the per-sample augmentation seed in step with the epoch, so a
+        #    resumed run reproduces the same crops AND different arms see the
+        #    same crops (the augmentation RNG is isolated from the mask RNG).
+        if hasattr(unsupervised_loader.dataset, 'set_epoch'):
+            unsupervised_loader.dataset.set_epoch(epoch)
 
         loss_meter = AverageMeter()
         maskA_meter = AverageMeter()
@@ -611,7 +774,7 @@ def main(args, resume_preempt=False):
             maskB_meter.update(len(masks_pred[0][0]))
 
             def train_step():
-                nonlocal ema_formula_verified, _last_lr, _last_wd
+                nonlocal ema_formula_verified, _last_lr, _last_wd, _current_momentum
                 if do_update:
                     # -- LR/WD advance once per optimizer update, not per micro-step
                     _last_lr = scheduler.step()
@@ -684,6 +847,7 @@ def main(args, resume_preempt=False):
                     # Step 3. momentum update of target encoder
                     with torch.no_grad():
                         m = next(momentum_scheduler)
+                        _current_momentum = m
                         if not ema_formula_verified:
                             expected_target = target_before.mul(m).add_(
                                 (1. - m) * encoder_probe.detach())
@@ -710,21 +874,34 @@ def main(args, resume_preempt=False):
 
             if do_update:
                 optimizer_steps += 1
+                if rank == 0 and max_optimizer_steps is not None:
+                    _now = time.time()
+                    _done_this_run = optimizer_steps - optimizer_steps_at_start
+                    _rate = _done_this_run / max(_now - _run_start_time, 1e-9)
+                    _remaining = max(0, int(total_optimizer_steps) - optimizer_steps)
+                    _eta = _remaining / _rate if _rate > 0 else float('inf')
+                    _ms = (float('nan') if _last_update_time is None
+                           else (_now - _last_update_time) * 1000.0)
+                    _last_update_time = _now
+                    logger.info(
+                        'PROGRESS step=%d/%d loss=%.4f lr=%.2e wd=%.2e '
+                        'gpu=%.1fGB ms/step=%.0f elapsed=%.1fmin eta=%.1fmin',
+                        optimizer_steps, int(total_optimizer_steps), loss,
+                        _new_lr, _new_wd,
+                        torch.cuda.max_memory_allocated() / 1024.**3,
+                        _ms, (_now - _run_start_time) / 60.0, _eta / 60.0)
 
-            # -- exact optimizer-update budget, or a pure interruption point. When
-            #    reached, break out of the inner micro-step loop and let the epoch
-            #    loop's own check save + exit. The budget may fall mid-epoch; the
-            #    interruption point is meant to.
-            if max_optimizer_steps is not None and optimizer_steps >= max_optimizer_steps:
-                logger.info('Reached max_optimizer_steps=%d; stopping.' % max_optimizer_steps)
-                break
-            if interrupt_after is not None and optimizer_steps >= interrupt_after:
-                logger.info('Interrupted at interrupt_after_optimizer_steps=%d; '
-                            'saving and exiting (schedule horizon unchanged).'
-                            % interrupt_after)
-                break
+            # -- realised source exposure for this consumed micro-batch
+            if source_ledger is not None:
+                source_ledger.record(
+                    epoch=epoch, itr=itr, micro_step=micro_steps,
+                    optimizer_step=optimizer_steps, sample_ids=udata[1])
 
-            # -- Logging
+            # -- Logging.  This runs BEFORE the budget/interrupt break below, so
+            #    the micro-step that performs the final optimizer update of a
+            #    budgeted run is still recorded in the CSV.  Stage 2D fixed the
+            #    opposite order: the break used to fire first, so the last
+            #    update of every bounded run was silently missing from the log.
             def log_stats():
                 csv_logger.log(epoch + 1, itr, loss, maskA_meter.val, maskB_meter.val, etime)
                 if (itr % log_freq == 0) or np.isnan(loss) or np.isinf(loss):
@@ -755,6 +932,29 @@ def main(args, resume_preempt=False):
             if not np.isfinite(loss):
                 raise FloatingPointError(f'Non-finite loss at epoch={epoch + 1}, itr={itr}: {loss}')
 
+            # -- mid-run evaluation snapshot.  Checked AFTER the update, the EMA
+            #    step and the logging for this micro-step, so the snapshot is the
+            #    exact state the run reached at that update count.  It writes
+            #    files only; it does not touch the schedule or the RNG.
+            while save_at_steps and optimizer_steps >= save_at_steps[0]:
+                step = save_at_steps.pop(0)
+                result_paths = save_step_snapshot(step)
+                if result_paths:
+                    saved_snapshots.append({'step': step, **result_paths})
+
+            # -- exact optimizer-update budget, or a pure interruption point. When
+            #    reached, break out of the inner micro-step loop and let the epoch
+            #    loop's own check save + exit. The budget may fall mid-epoch; the
+            #    interruption point is meant to.
+            if max_optimizer_steps is not None and optimizer_steps >= max_optimizer_steps:
+                logger.info('Reached max_optimizer_steps=%d; stopping.' % max_optimizer_steps)
+                break
+            if interrupt_after is not None and optimizer_steps >= interrupt_after:
+                logger.info('Interrupted at interrupt_after_optimizer_steps=%d; '
+                            'saving and exiting (schedule horizon unchanged).'
+                            % interrupt_after)
+                break
+
         # -- if the exact budget or the interruption point was hit mid-epoch, save
         #    and leave the epoch loop
         budget_reached = (
@@ -772,6 +972,8 @@ def main(args, resume_preempt=False):
                 epoch if resume_in_epoch else min(epoch + 1, epoch_limit),
                 epoch_itr=how_many if resume_in_epoch else 0,
                 epoch_start_state=epoch_start_state if resume_in_epoch else None)
+        if source_ledger is not None:
+            source_ledger.flush()
         if budget_reached:
             break
 
@@ -829,7 +1031,43 @@ def main(args, resume_preempt=False):
                 'target_encoder_keys_loaded': pretrained_report.get('target_encoder_keys_loaded'),
                 'predictor_inherited': pretrained_report['predictor_inherited'],
             },
+            'mask_mode': mask_mode,
+            'mask_diagnostics': (mask_collator.diagnostics_summary()
+                                 if hasattr(mask_collator, 'diagnostics_summary')
+                                 else {'mask_mode': 'random'}),
+            'saved_step_snapshots': saved_snapshots,
         }
+        # -- sampling provenance: what the loader actually emitted, and (for the
+        #    capped arm) the integer allocation the sampler targeted
+        sampling_spec = args['data'].get('sampling') or {'mode': 'natural'}
+        verification['sampling_mode'] = sampling_spec.get('mode', 'natural')
+        if hasattr(unsupervised_sampler, 'describe'):
+            sampling_description = unsupervised_sampler.describe()
+            verification['sampling_profile'] = sampling_description
+            with open(os.path.join(folder, 'stage6_sampling.json'), 'w') as handle:
+                json.dump(sampling_description, handle, indent=2, ensure_ascii=False)
+        else:
+            verification['sampling_profile'] = {
+                'mode': 'natural',
+                'sampler': type(unsupervised_sampler).__name__,
+                'seed': data_seed,
+                'dataset_rows': len(dataset),
+                'batches_per_epoch': ipe,
+            }
+        if source_ledger is not None:
+            verification['realised_source_exposure'] = source_ledger.summary()
+        # -- with worker processes the collator lives in the workers, so the
+        #    main-process counters stay at zero; say so instead of implying
+        #    that no target block was ever guided.
+        _diag = verification.get('mask_diagnostics')
+        if isinstance(_diag, dict) and num_workers > 0 and mask_mode != 'random':
+            _diag['diagnostics_available'] = False
+            _diag['diagnostics_scope'] = 'main_process'
+            _diag['note'] = (
+                'num_workers > 0: the mask collator runs inside DataLoader '
+                'worker processes, so per-batch counters are not visible in the '
+                'main process. Mask placement statistics are measured offline '
+                'by tools/visualize_agri_masks.py on the same collator.')
         with open(os.path.join(folder, 'training_verification.yaml'), 'w') as verification_file:
             yaml.safe_dump(verification, verification_file)
 

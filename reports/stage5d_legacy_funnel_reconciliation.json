@@ -1,0 +1,116 @@
+{
+  "method": "re-ran the Stage 5C functions on the Stage 5C ledgers with the Stage 5C loader (including its mtime rule) and compared the funnel survivor set with the published manifest ids",
+  "loader_provenance": {
+    "agrifield40k_pool": {
+      "chosen": "agrifield40k_pool_qc.csv",
+      "enriched_exists": true,
+      "plain_exists": true
+    },
+    "agrifm_ref1": {
+      "chosen": "agrifm_ref1.csv",
+      "enriched_exists": true,
+      "plain_exists": true
+    },
+    "agrifm_ref11": {
+      "chosen": "agrifm_ref11_qc.csv",
+      "enriched_exists": true,
+      "plain_exists": true
+    },
+    "agrifm_ref20": {
+      "chosen": "agrifm_ref20_qc.csv",
+      "enriched_exists": true,
+      "plain_exists": true
+    },
+    "agrifm_ref57": {
+      "chosen": "agrifm_ref57.csv",
+      "enriched_exists": false,
+      "plain_exists": true
+    },
+    "agrifm_ref58": {
+      "chosen": "agrifm_ref58_qc.csv",
+      "enriched_exists": true,
+      "plain_exists": true
+    },
+    "agrifm_ref6": {
+      "chosen": "agrifm_ref6_qc.csv",
+      "enriched_exists": true,
+      "plain_exists": true
+    },
+    "agrifm_ref7": {
+      "chosen": "agrifm_ref7_qc.csv",
+      "enriched_exists": true,
+      "plain_exists": true
+    },
+    "agrifm_ref8": {
+      "chosen": "agrifm_ref8_qc.csv",
+      "enriched_exists": true,
+      "plain_exists": true
+    },
+    "agrifm_ref9": {
+      "chosen": "agrifm_ref9_qc.csv",
+      "enriched_exists": true,
+      "plain_exists": true
+    },
+    "agrifm_ref90": {
+      "chosen": "agrifm_ref90_qc.csv",
+      "enriched_exists": true,
+      "plain_exists": true
+    },
+    "applebbch81": {
+      "chosen": "applebbch81_qc.csv",
+      "enriched_exists": true,
+      "plain_exists": true
+    },
+    "artemis_imagesafari": {
+      "chosen": "artemis_imagesafari_qc.csv",
+      "enriched_exists": true,
+      "plain_exists": true
+    },
+    "sesame_weed": {
+      "chosen": "sesame_weed_qc.csv",
+      "enriched_exists": true,
+      "plain_exists": true
+    }
+  },
+  "r1_funnel_final": 60603,
+  "r2": {
+    "version": "R2",
+    "funnel_final": 20952,
+    "manifest_count": 20944,
+    "difference": 8,
+    "funnel_only": 8,
+    "manifest_only": 0,
+    "funnel_only_by_source": {
+      "agrifm_ref11": 8
+    },
+    "explanation": {
+      "qc_status_QUARANTINE": 8
+    }
+  },
+  "r3": {
+    "version": "R3",
+    "funnel_final": 178295,
+    "manifest_count": 177396,
+    "difference": 899,
+    "funnel_only": 899,
+    "manifest_only": 0,
+    "funnel_only_by_source": {
+      "artemis_imagesafari": 806,
+      "applebbch81": 52,
+      "agrifield40k_pool": 33,
+      "agrifm_ref11": 8
+    },
+    "explanation": {
+      "qc_status_QUARANTINE": 899,
+      "p0_rejected_but_not_a_funnel_step": 30,
+      "p0_BLURRY_APPROXIMATION": 30
+    }
+  },
+  "legacy_policy": {
+    "path": "data/corpus_v2/policy.yaml",
+    "sha256_actual": "45379ed1a669edb64778b97c1e9dd59ba9f3d8d5983418f642a2542b437a565c",
+    "sha256_recorded_in_manifests": "45379ed1a669edb64778b97c1e9dd59ba9f3d8d5983418f642a2542b437a565c",
+    "unchanged": true
+  },
+  "mismatch_rows": 907
+}

@@ -1,0 +1,27 @@
+version,step,input_images,excluded_this_step,remaining_images,reason
+R1,downloaded,64970,0,64970,on-disk file
+R1,decoded,64970,0,64970,PIL decode
+R1,paper_rules_p0,64970,3847,61123,paper-disclosed rules only
+R1,license,61123,0,61123,licence not blocked
+R1,holdout_archive,61123,520,60603,holdout / archive-only
+R1,strict_eligible,60603,0,60603,final strict set
+R2,downloaded,64970,0,64970,on-disk file
+R2,decoded,64970,0,64970,PIL decode
+R2,min_resolution,64970,428,64542,short side >= 224
+R2,basic_qc,64542,2811,61731,blur/exposure/blank
+R2,iqa,61731,30755,30976,MUSIQ + NIQE
+R2,domain,30976,2194,28782,field / orchard evidence
+R2,exact_dedup,28782,7801,20981,byte/pixel identity
+R2,near_dedup,20981,0,20981,confirmed collapse / uncertainty isolation
+R2,holdout_license_archive,20981,29,20952,holdout / licence / archive-only
+R2,strict_eligible,20952,0,20952,final strict set
+R3,downloaded,243694,0,243694,on-disk file
+R3,decoded,243694,0,243694,PIL decode
+R3,min_resolution,243694,428,243266,short side >= 224
+R3,basic_qc,243266,5892,237374,blur/exposure/blank
+R3,iqa,237374,31805,205569,MUSIQ + NIQE
+R3,domain,205569,10487,195082,field / orchard evidence
+R3,exact_dedup,195082,9109,185973,byte/pixel identity
+R3,near_dedup,185973,0,185973,confirmed collapse / uncertainty isolation
+R3,holdout_license_archive,185973,7678,178295,holdout / licence / archive-only
+R3,strict_eligible,178295,0,178295,final strict set

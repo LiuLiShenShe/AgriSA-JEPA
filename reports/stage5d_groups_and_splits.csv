@@ -1,0 +1,8 @@
+source,accepted,official_group_n,documented_path_group_n,weak_proxy_n,unknown_group_n,train,train_only_unknown,val,unknown_val_n,cross_known_groups,diagnostic_val
+artemis_imagesafari,130270,130268,0,0,2,111760,2,18508,0,0,20172
+agrifield40k_pool,21418,0,21418,0,0,18242,0,3176,0,0,3175
+agrifm_ref58,15386,0,0,15386,0,15386,0,0,0,0,0
+applebbch81,1746,0,1746,0,0,1383,0,363,0,0,256
+agrifm_ref11,382,0,0,382,0,382,0,0,0,0,0
+agrifm_ref9,84,0,0,84,0,84,0,0,0,0,0
+agrifm_ref1,40,0,0,40,0,40,0,0,0,0,0

@@ -1,0 +1,38 @@
+{
+  "source_manifest": "data/registry/ingested/weedcrop_stage5b_manifest.csv",
+  "label": "weedcrop",
+  "images_screened": 2822,
+  "threshold": 6,
+  "per_reference": {
+    "frozen_v1_train": {
+      "rows": 12567,
+      "exact": 0,
+      "phash_candidates": 0
+    },
+    "frozen_v1_val": {
+      "rows": 3025,
+      "exact": 0,
+      "phash_candidates": 0
+    },
+    "frozen_d1_train": {
+      "rows": 66851,
+      "exact": 0,
+      "phash_candidates": 0
+    },
+    "frozen_d1_val": {
+      "rows": 3025,
+      "exact": 0,
+      "phash_candidates": 0
+    },
+    "all_samples": {
+      "rows": 39963,
+      "exact": 0,
+      "phash_candidates": 0
+    }
+  },
+  "exact_matches": [],
+  "exact_match_count": 0,
+  "perceptual_candidates": [],
+  "perceptual_candidate_count": 0,
+  "note": "Perceptual candidates are screening evidence for human review, not a verdict; exact hash matches are blocking."
+}

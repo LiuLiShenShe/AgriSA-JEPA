@@ -1,0 +1,89 @@
+{
+  "generated_at_utc": "2026-10-23T14:32:07.245187+00:00",
+  "registry_rows": 63,
+  "independent_datasets": 59,
+  "same_physical_dataset_pairs": {
+    "rows": [
+      [
+        "agrifm_ref31",
+        "gwhd_2021"
+      ],
+      [
+        "agrifm_ref4",
+        "perennial_plants"
+      ],
+      [
+        "agrifm_ref79",
+        "ronin"
+      ],
+      [
+        "agrifm_ref88",
+        "phenobench"
+      ],
+      [
+        "weedcrop",
+        "ronin"
+      ]
+    ],
+    "count": 5
+  },
+  "source_domain_counts": {
+    "UNKNOWN": 13,
+    "FIELD_IN_SITU": 36,
+    "UAV_AERIAL": 5,
+    "CONTROLLED_LAB": 5,
+    "ORCHARD_IN_SITU": 3,
+    "PROTECTED_CULTIVATION": 1
+  },
+  "source_domain_counts_independent_only": {
+    "UNKNOWN": 12,
+    "FIELD_IN_SITU": 33,
+    "UAV_AERIAL": 5,
+    "CONTROLLED_LAB": 5,
+    "ORCHARD_IN_SITU": 3,
+    "PROTECTED_CULTIVATION": 1
+  },
+  "image_triage": {
+    "sources_triaged": [
+      "acre_crop_weed",
+      "applebbch81",
+      "inat_weeds",
+      "lucas_vision",
+      "plantvillage",
+      "radish_wheat",
+      "sesame_weed",
+      "sorghum_weed",
+      "vegann",
+      "weedcrop"
+    ],
+    "images_triaged": 400,
+    "suggested_domain_counts": {
+      "FIELD_IN_SITU": 329,
+      "UNKNOWN": 66,
+      "CONTROLLED_LAB": 1,
+      "PROTECTED_CULTIVATION": 4
+    },
+    "quality_gate": {
+      "true": 400
+    }
+  },
+  "admission_examples": {
+    "field_insitu_documented": [
+      true,
+      "admitted at candidate: FIELD_IN_SITU/official_documentation/high/reviewed"
+    ],
+    "controlled_lab": [
+      false,
+      "controlled/laboratory imagery is excluded from Field-D1"
+    ],
+    "unknown_none": [
+      false,
+      "an unverified acquisition domain never enters the main corpus"
+    ],
+    "model_only_at_freeze": [
+      false,
+      "evidence 'model_assisted_inspection' is not sufficient for a FREEZE row"
+    ]
+  },
+  "note": "Suggested domains come from image statistics plus filenames. They order the review queue; they are not expert confirmations."
+}

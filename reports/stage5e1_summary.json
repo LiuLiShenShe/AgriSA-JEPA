@@ -1,0 +1,163 @@
+{
+  "stage": "Stage 5E.1",
+  "branch": "agri-stage5e1-evidence-reconciliation",
+  "head_at_artifact_generation": "5e9bc985541d379b233bb818dcdfe755c5e81ec8",
+  "stage5e1_code_commit": "recorded in the commit that contains this report; the branch HEAD advances by that commit after the files are written",
+  "head_semantics": {
+    "head_at_artifact_generation": "the HEAD the tools ran on; every artifact in this stage was produced from it",
+    "stage5e1_code_commit": "the commit that contains the Stage 5E.1 tools, tests and regenerated artifacts",
+    "final_branch_head": "the code commit itself; reading the repository later shows a HEAD equal to it unless further commits are added"
+  },
+  "stage5e_commit": "5e9bc985541d379b233bb818dcdfe755c5e81ec8",
+  "stage5d_baseline": "05a56a0988531130289d0dd4fea6df7f3657e039",
+  "status": "CONDITIONAL",
+  "gates_passed": 18,
+  "gates_total": 20,
+  "gates_unresolved": [
+    "licence_evidence_backed",
+    "pool_upstream_licence_resolved"
+  ],
+  "gates_failed": [],
+  "counts": {
+    "ledger_rows": 243694,
+    "corpus_accepted_count": 169324,
+    "pretraining_train_count": 147277,
+    "pretraining_validation_count": 22047,
+    "target_images": 147285,
+    "pretraining_train_minus_target": -8,
+    "corpus_accepted_minus_target": 22039,
+    "target_comparison_basis": "corpus_accepted_count",
+    "pretraining_train_exceeds_target": false,
+    "evidence_backed_accepted_count": 161458,
+    "evidence_backed_train_count": 140720
+  },
+  "holdout": {
+    "per_dataset": {
+      "gwhd_2021": {
+        "files": 6515,
+        "decoded": 6515,
+        "with_raw_hash": 6515,
+        "with_pixel_hash": 6515,
+        "with_phash": 6515
+      },
+      "phenobench": {
+        "files": 13767,
+        "decoded": 13767,
+        "with_raw_hash": 13767,
+        "with_pixel_hash": 13767,
+        "with_phash": 13767
+      },
+      "plantdoc": {
+        "files": 2579,
+        "decoded": 2579,
+        "with_raw_hash": 2579,
+        "with_pixel_hash": 2579,
+        "with_phash": 2579
+      }
+    },
+    "index_rows": 22861,
+    "index_sha256": "abe5748eb6e918ab8e5a9bbe24e025bf5163b8099ee18891256ecdec7845767f",
+    "crossmatch_sha256": "6a1fc06c52a184d8d972020a35a3d727808f0a8e057298abe11ba87532e083b4",
+    "candidates_reviewed": 14,
+    "candidates_pending": 0,
+    "verdict_counts": {
+      "HASH_COLLISION_DIFFERENT_IMAGE": 12,
+      "RESAMPLED_COPY_SAME_CONTENT": 2
+    }
+  },
+  "licence": {
+    "grades": {
+      "agrifield40k_pool": "UNRESOLVED",
+      "agrifm_ref1": "OFFICIAL_EVIDENCE_ARCHIVED_AND_HASHED",
+      "agrifm_ref11": "OFFICIAL_EVIDENCE_ARCHIVED_AND_HASHED",
+      "agrifm_ref58": "OFFICIAL_EVIDENCE_ARCHIVED_AND_HASHED",
+      "agrifm_ref9": "OFFICIAL_EVIDENCE_ARCHIVED_AND_HASHED",
+      "applebbch81": "REGISTRY_URL_ONLY",
+      "artemis_imagesafari": "CARRIED_FORWARD_WITH_PRIOR_EVIDENCE"
+    },
+    "evidence_backed_sources": [
+      "agrifm_ref1",
+      "agrifm_ref11",
+      "agrifm_ref58",
+      "agrifm_ref9",
+      "artemis_imagesafari"
+    ],
+    "newly_archived_sources": [
+      "agrifm_ref1",
+      "agrifm_ref11",
+      "agrifm_ref58",
+      "agrifm_ref9"
+    ],
+    "carried_forward_sources": [
+      "artemis_imagesafari"
+    ],
+    "registry_url_only_sources": [
+      "applebbch81"
+    ],
+    "unresolved_sources": [
+      "agrifield40k_pool"
+    ],
+    "gate_semantics": "A source may be admitted to training only when its research-use status is VERIFIED or RESTRICTED. The evidence grade describes how strong the *documentary basis* is and never upgrades a status on its own. Any accepted source without evidence-backed grade keeps the Stage 6 status at CONDITIONAL."
+  },
+  "pool_upstreams": {
+    "upstreams_with_accepted_images": 11,
+    "upstreams_carried_forward": 5,
+    "upstreams_unresolved": 6,
+    "accepted_images_carried_forward": 15296,
+    "accepted_images_unresolved": 6120,
+    "train_images_carried_forward": 13066,
+    "train_images_unresolved": 5174,
+    "unresolved_upstreams": [
+      "GrassClover",
+      "Maize-Weed",
+      "RumexLeaves",
+      "SesameWeed",
+      "VCD",
+      "WE3DS"
+    ]
+  },
+  "sampling": {
+    "cap_unit": "physical_source_id",
+    "official_profile": "by_source",
+    "capped_exposure_total": 38828.364238815295,
+    "epoch_length": 150000
+  },
+  "optimizer_updates": {
+    "jepa": 0,
+    "adapter": 0,
+    "downstream_probe": 0
+  },
+  "tests": {
+    "passed": 709,
+    "failed": 0,
+    "skipped": 7,
+    "errors": 0,
+    "skip_reasons": {
+      "AGRISA_VITH_CHECKPOINT is not set to a readable checkpoint": 4,
+      "AGRISA_VITH_CHECKPOINT not set": 1,
+      "AGRISA_PHENOBENCH is not set to a PhenoBench root": 2
+    },
+    "rule": "skipped is never counted as passed",
+    "command": ".venv-uv/bin/python -m pytest tests/ -q"
+  },
+  "artifacts": {
+    "tracked": [
+      "data/corpus_v4/R3v3_license_verified_manifest.json",
+      "data/corpus_v4/R3v3_license_verified_sampling_profiles.json",
+      "data/corpus_v4/R3v3_license_verified_composition.json",
+      "reports/stage5e_holdout_evidence.json",
+      "reports/stage5e_holdout_coverage.csv",
+      "reports/stage5e_holdout_audit.md",
+      "reports/stage5e_hash_collision_review.json",
+      "reports/stage5e_license_audit.json"
+    ],
+    "ignored_local_only": [
+      "data/corpus_v4/R3v3_license_verified_train.csv",
+      "data/corpus_v4/R3v3_license_verified_val.csv",
+      "data/corpus_v4/R3v3_license_verified_quarantine.csv",
+      "data/corpus_v4/R3v3_license_verified_exclusions.csv",
+      "data/corpus_v4/holdout_file_index.csv",
+      "data/corpus_v4/holdout_crossmatch.csv"
+    ]
+  }
+}

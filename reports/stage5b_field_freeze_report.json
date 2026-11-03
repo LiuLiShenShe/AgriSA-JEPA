@@ -1,0 +1,51 @@
+{
+  "status": "CANDIDATE",
+  "images": {
+    "train": 15118,
+    "val": 3612,
+    "total": 18730
+  },
+  "sources": 8,
+  "max_source_share": 0.597064,
+  "source_entropy_bits": 2.013119,
+  "rows_pending_human_review": 3138,
+  "freeze_gate_passed": false,
+  "freeze_gate": {
+    "cross_split_groups_zero": true,
+    "human_review_complete": false,
+    "no_source_over_90pct": true
+  },
+  "new_sources": [
+    {
+      "source_id": "sesame_weed",
+      "images_in_manifest": 1300,
+      "images_after_exact_dedup": 1300,
+      "domain": "FIELD_IN_SITU",
+      "admitted_to_candidate": true,
+      "reason": "admitted at candidate: FIELD_IN_SITU/official_documentation/high/model_assisted_pending_human"
+    },
+    {
+      "source_id": "applebbch81",
+      "images_in_manifest": 1838,
+      "images_after_exact_dedup": 1838,
+      "domain": "ORCHARD_IN_SITU",
+      "admitted_to_candidate": true,
+      "reason": "admitted at candidate: ORCHARD_IN_SITU/official_documentation/high/model_assisted_pending_human"
+    }
+  ],
+  "blocked_sources": [
+    {
+      "source_id": "weedcrop",
+      "images_in_manifest": 2822,
+      "images_after_exact_dedup": 2822,
+      "domain": "UNKNOWN",
+      "admitted_to_candidate": false,
+      "reason": "an unverified acquisition domain never enters the main corpus",
+      "examples": 0
+    }
+  ],
+  "sha256": {
+    "agri-field-d1-candidate_train.csv": "6ba4ba172f09c7d6d38ac7d2ae771400af2f4ae6bb74b57e8ca401023c6ae437",
+    "agri-field-d1-candidate_val.csv": "db4054c5e68f119771a6facdd7cc15ad1b7f1842a5c6d118a94f8506457a23d6"
+  }
+}

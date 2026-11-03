@@ -1,0 +1,49 @@
+{
+  "augmentation_seed": 20261019,
+  "image_cache": "/home/test/agrisa_cache/agrifield40k-v1-train",
+  "num_workers_0": {
+    "identical_across_repeated_runs": true,
+    "first_batch_ids": [
+      "acw_rgb-2022-10-06-17-18-01",
+      "acw_rgb-2022-10-06-17-17-34",
+      "acw_rgb-2022-10-06-17-17-48",
+      "acw_rgb-2022-10-06-17-18-00",
+      "acw_rgb-2022-10-06-17-16-58",
+      "acw_rgb-2022-10-06-17-17-19",
+      "acw_rgb-2022-10-06-17-18-31",
+      "acw_rgb-2022-10-06-17-17-17"
+    ],
+    "pixel_sha": [
+      "97e6f277c4124a0a",
+      "bdd453075de53fa1",
+      "7a398ef5e49f664c",
+      "683b86e873211fbd",
+      "d88a7cb6f582f68a"
+    ],
+    "mask_enc_numel": [
+      760,
+      792,
+      728,
+      776,
+      784
+    ]
+  },
+  "num_workers_2": {
+    "sample_order_matches": true,
+    "augmented_pixels_match": true,
+    "mask_geometry_matches": false,
+    "mask_enc_numel": [
+      752,
+      688,
+      576,
+      784,
+      624
+    ],
+    "note": "The upstream collator seeds its block-size RNG from a counter it shares across workers; the increment order is not deterministic, so block sizes and the batch-wide min_keep truncation can differ. Sample order and augmented pixels still match exactly."
+  },
+  "cache_equivalence": {
+    "augmented_pixels_match_disk_decode": true,
+    "sample_order_matches": true
+  },
+  "reproducibility_level": "num_workers=0: sample order, augmented pixels and mask geometry are bit-reproducible across repeated runs; the image cache is pixel-equivalent to decoding the sources. Multi-worker loading is deliberately NOT used for the reported runs."
+}

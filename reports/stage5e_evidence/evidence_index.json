@@ -1,0 +1,22 @@
+{
+  "accessed_utc": "2026-10-25",
+  "note": "Access date recorded as the session date (UTC).",
+  "sources": {
+    "agrifm_ref58": {
+      "evidence_file": "reports/stage5e_evidence/agrifm_ref58_harvard_dataverse_TCKVEW_api.json",
+      "sha256": "3bd6dfd42e67988a2c115ba90d7b402a35649b5bf13c4e93ff9640e711f3b9cd"
+    },
+    "agrifm_ref1": {
+      "evidence_file": "reports/stage5e_evidence/agrifm_ref1_kaggle_api_voglinio_wheat-dataset-original.json",
+      "sha256": "c37c9bd8c127b1fffa446ef472f9327b96f3bd442b27db78b166cd2bb3d8e744"
+    },
+    "agrifm_ref9": {
+      "evidence_file": "reports/stage5e_evidence/agrifm_ref9_kaggle_api_nicolaasregnier_pinotnoirgrapes.json",
+      "sha256": "a97510fbc417c53a385eff10508c4e0adb8192114fc82e3f6436a5392fdcfc56"
+    },
+    "agrifm_ref11": {
+      "evidence_file": "reports/stage5e_evidence/agrifm_ref11_kaggle_api_zzzzqi_maize-phenology-images-acquired-using-ndvi-camera.json",
+      "sha256": "387feb3de135191f5a25cbc689c2a2176cd94f393d55931c25bf25671145917a"
+    }
+  }
+}

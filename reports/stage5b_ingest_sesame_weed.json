@@ -1,0 +1,682 @@
+{
+  "source_id": "sesame_weed",
+  "source_name": "Crop and Weed Detection Data with Bounding Boxes (Sesame)",
+  "root": "/data/datasets/Stage5B/sesame_weed/extracted/agri_data/data",
+  "license": "CC0-1.0",
+  "source_url": "https://www.kaggle.com/datasets/ravirajsinh45/crop-and-weed-detection-data-with-bounding-boxes",
+  "files_found": 1300,
+  "files_decoded": 1300,
+  "decode_failures": 0,
+  "decode_failure_examples": [],
+  "exact_duplicate_pairs": 0,
+  "exact_duplicate_examples": [],
+  "perceptual_candidate_pairs": 1547,
+  "perceptual_candidate_examples": [
+    {
+      "kind": "phash",
+      "distance": 0,
+      "a": "sesame_weed:agri_0_1009.jpeg",
+      "b": "sesame_weed:agri_0_4222.jpeg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 2,
+      "a": "sesame_weed:agri_0_1009.jpeg",
+      "b": "sesame_weed:agri_0_5967.jpeg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 2,
+      "a": "sesame_weed:agri_0_1009.jpeg",
+      "b": "sesame_weed:agri_0_6823.jpeg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 2,
+      "a": "sesame_weed:agri_0_1009.jpeg",
+      "b": "sesame_weed:agri_0_6977.jpeg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 4,
+      "a": "sesame_weed:agri_0_1017.jpeg",
+      "b": "sesame_weed:agri_0_3379.jpeg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 0,
+      "a": "sesame_weed:agri_0_1017.jpeg",
+      "b": "sesame_weed:agri_0_7585.jpeg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 0,
+      "a": "sesame_weed:agri_0_1018.jpeg",
+      "b": "sesame_weed:agri_0_1140.jpeg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 2,
+      "a": "sesame_weed:agri_0_1018.jpeg",
+      "b": "sesame_weed:agri_0_1258.jpeg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 2,
+      "a": "sesame_weed:agri_0_1018.jpeg",
+      "b": "sesame_weed:agri_0_5318.jpeg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 2,
+      "a": "sesame_weed:agri_0_1020.jpeg",
+      "b": "sesame_weed:agri_0_2136.jpeg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 2,
+      "a": "sesame_weed:agri_0_1020.jpeg",
+      "b": "sesame_weed:agri_0_3680.jpeg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 2,
+      "a": "sesame_weed:agri_0_1020.jpeg",
+      "b": "sesame_weed:agri_0_4846.jpeg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 2,
+      "a": "sesame_weed:agri_0_1020.jpeg",
+      "b": "sesame_weed:agri_0_9960.jpeg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 2,
+      "a": "sesame_weed:agri_0_1024.jpeg",
+      "b": "sesame_weed:agri_0_1784.jpeg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 2,
+      "a": "sesame_weed:agri_0_1024.jpeg",
+      "b": "sesame_weed:agri_0_4010.jpeg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 2,
+      "a": "sesame_weed:agri_0_1024.jpeg",
+      "b": "sesame_weed:agri_0_8518.jpeg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 4,
+      "a": "sesame_weed:agri_0_1028.jpeg",
+      "b": "sesame_weed:agri_0_6387.jpeg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "sesame_weed:agri_0_106.jpeg",
+      "b": "sesame_weed:agri_0_6679.jpeg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 2,
+      "a": "sesame_weed:agri_0_1068.jpeg",
+      "b": "sesame_weed:agri_0_7241.jpeg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 0,
+      "a": "sesame_weed:agri_0_1082.jpeg",
+      "b": "sesame_weed:agri_0_3471.jpeg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 0,
+      "a": "sesame_weed:agri_0_1083.jpeg",
+      "b": "sesame_weed:agri_0_3914.jpeg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 2,
+      "a": "sesame_weed:agri_0_110.jpeg",
+      "b": "sesame_weed:agri_0_5794.jpeg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 2,
+      "a": "sesame_weed:agri_0_1123.jpeg",
+      "b": "sesame_weed:agri_0_1221.jpeg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "sesame_weed:agri_0_1123.jpeg",
+      "b": "sesame_weed:agri_0_4214.jpeg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 2,
+      "a": "sesame_weed:agri_0_113.jpeg",
+      "b": "sesame_weed:agri_0_7459.jpeg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 4,
+      "a": "sesame_weed:agri_0_1130.jpeg",
+      "b": "sesame_weed:agri_0_4316.jpeg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 2,
+      "a": "sesame_weed:agri_0_1130.jpeg",
+      "b": "sesame_weed:agri_0_8618.jpeg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 2,
+      "a": "sesame_weed:agri_0_114.jpeg",
+      "b": "sesame_weed:agri_0_5270.jpeg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 2,
+      "a": "sesame_weed:agri_0_1140.jpeg",
+      "b": "sesame_weed:agri_0_1258.jpeg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 2,
+      "a": "sesame_weed:agri_0_1140.jpeg",
+      "b": "sesame_weed:agri_0_5318.jpeg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 2,
+      "a": "sesame_weed:agri_0_1146.jpeg",
+      "b": "sesame_weed:agri_0_2895.jpeg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 4,
+      "a": "sesame_weed:agri_0_1166.jpeg",
+      "b": "sesame_weed:agri_0_8733.jpeg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 2,
+      "a": "sesame_weed:agri_0_1168.jpeg",
+      "b": "sesame_weed:agri_0_4213.jpeg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 4,
+      "a": "sesame_weed:agri_0_1168.jpeg",
+      "b": "sesame_weed:agri_0_7839.jpeg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 0,
+      "a": "sesame_weed:agri_0_1171.jpeg",
+      "b": "sesame_weed:agri_0_6565.jpeg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 0,
+      "a": "sesame_weed:agri_0_1173.jpeg",
+      "b": "sesame_weed:agri_0_1619.jpeg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 2,
+      "a": "sesame_weed:agri_0_1173.jpeg",
+      "b": "sesame_weed:agri_0_3856.jpeg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 2,
+      "a": "sesame_weed:agri_0_1173.jpeg",
+      "b": "sesame_weed:agri_0_7209.jpeg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 0,
+      "a": "sesame_weed:agri_0_1173.jpeg",
+      "b": "sesame_weed:agri_0_7814.jpeg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 0,
+      "a": "sesame_weed:agri_0_1192.jpeg",
+      "b": "sesame_weed:agri_0_3234.jpeg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 2,
+      "a": "sesame_weed:agri_0_1192.jpeg",
+      "b": "sesame_weed:agri_0_3828.jpeg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 2,
+      "a": "sesame_weed:agri_0_1193.jpeg",
+      "b": "sesame_weed:agri_0_4964.jpeg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 4,
+      "a": "sesame_weed:agri_0_1198.jpeg",
+      "b": "sesame_weed:agri_0_3276.jpeg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 4,
+      "a": "sesame_weed:agri_0_1198.jpeg",
+      "b": "sesame_weed:agri_0_9796.jpeg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 2,
+      "a": "sesame_weed:agri_0_1210.jpeg",
+      "b": "sesame_weed:agri_0_2545.jpeg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 2,
+      "a": "sesame_weed:agri_0_1210.jpeg",
+      "b": "sesame_weed:agri_0_7135.jpeg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 0,
+      "a": "sesame_weed:agri_0_1211.jpeg",
+      "b": "sesame_weed:agri_0_8682.jpeg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 2,
+      "a": "sesame_weed:agri_0_1215.jpeg",
+      "b": "sesame_weed:agri_0_3346.jpeg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 2,
+      "a": "sesame_weed:agri_0_1215.jpeg",
+      "b": "sesame_weed:agri_0_9403.jpeg",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 2,
+      "a": "sesame_weed:agri_0_122.jpeg",
+      "b": "sesame_weed:agri_0_2144.jpeg",
+      "review_status": "pending_manual_review"
+    }
+  ],
+  "cross_source_exact_matches": 1300,
+  "cross_source_candidates": 1045,
+  "cross_source_examples": [
+    {
+      "sample_id": "sesame_weed:agri_0_1009.jpeg",
+      "existing_sample_id": "saw_agri_0_1009",
+      "existing_source": "pending_audit",
+      "kind": "sha256/pixel_sha256"
+    },
+    {
+      "sample_id": "sesame_weed:agri_0_1017.jpeg",
+      "existing_sample_id": "saw_agri_0_1017",
+      "existing_source": "pending_audit",
+      "kind": "sha256/pixel_sha256"
+    },
+    {
+      "sample_id": "sesame_weed:agri_0_1018.jpeg",
+      "existing_sample_id": "saw_agri_0_1018",
+      "existing_source": "pending_audit",
+      "kind": "sha256/pixel_sha256"
+    },
+    {
+      "sample_id": "sesame_weed:agri_0_1020.jpeg",
+      "existing_sample_id": "saw_agri_0_1020",
+      "existing_source": "pending_audit",
+      "kind": "sha256/pixel_sha256"
+    },
+    {
+      "sample_id": "sesame_weed:agri_0_1024.jpeg",
+      "existing_sample_id": "saw_agri_0_1024",
+      "existing_source": "pending_audit",
+      "kind": "sha256/pixel_sha256"
+    },
+    {
+      "sample_id": "sesame_weed:agri_0_1026.jpeg",
+      "existing_sample_id": "saw_agri_0_1026",
+      "existing_source": "pending_audit",
+      "kind": "sha256/pixel_sha256"
+    },
+    {
+      "sample_id": "sesame_weed:agri_0_1028.jpeg",
+      "existing_sample_id": "saw_agri_0_1028",
+      "existing_source": "pending_audit",
+      "kind": "sha256/pixel_sha256"
+    },
+    {
+      "sample_id": "sesame_weed:agri_0_1041.jpeg",
+      "existing_sample_id": "saw_agri_0_1041",
+      "existing_source": "pending_audit",
+      "kind": "sha256/pixel_sha256"
+    },
+    {
+      "sample_id": "sesame_weed:agri_0_1053.jpeg",
+      "existing_sample_id": "saw_agri_0_1053",
+      "existing_source": "pending_audit",
+      "kind": "sha256/pixel_sha256"
+    },
+    {
+      "sample_id": "sesame_weed:agri_0_106.jpeg",
+      "existing_sample_id": "saw_agri_0_106",
+      "existing_source": "pending_audit",
+      "kind": "sha256/pixel_sha256"
+    },
+    {
+      "sample_id": "sesame_weed:agri_0_1068.jpeg",
+      "existing_sample_id": "saw_agri_0_1068",
+      "existing_source": "pending_audit",
+      "kind": "sha256/pixel_sha256"
+    },
+    {
+      "sample_id": "sesame_weed:agri_0_1079.jpeg",
+      "existing_sample_id": "saw_agri_0_1079",
+      "existing_source": "pending_audit",
+      "kind": "sha256/pixel_sha256"
+    },
+    {
+      "sample_id": "sesame_weed:agri_0_1082.jpeg",
+      "existing_sample_id": "saw_agri_0_1082",
+      "existing_source": "pending_audit",
+      "kind": "sha256/pixel_sha256"
+    },
+    {
+      "sample_id": "sesame_weed:agri_0_1083.jpeg",
+      "existing_sample_id": "saw_agri_0_1083",
+      "existing_source": "pending_audit",
+      "kind": "sha256/pixel_sha256"
+    },
+    {
+      "sample_id": "sesame_weed:agri_0_1094.jpeg",
+      "existing_sample_id": "saw_agri_0_1094",
+      "existing_source": "pending_audit",
+      "kind": "sha256/pixel_sha256"
+    },
+    {
+      "sample_id": "sesame_weed:agri_0_1095.jpeg",
+      "existing_sample_id": "saw_agri_0_1095",
+      "existing_source": "pending_audit",
+      "kind": "sha256/pixel_sha256"
+    },
+    {
+      "sample_id": "sesame_weed:agri_0_110.jpeg",
+      "existing_sample_id": "saw_agri_0_110",
+      "existing_source": "pending_audit",
+      "kind": "sha256/pixel_sha256"
+    },
+    {
+      "sample_id": "sesame_weed:agri_0_1114.jpeg",
+      "existing_sample_id": "saw_agri_0_1114",
+      "existing_source": "pending_audit",
+      "kind": "sha256/pixel_sha256"
+    },
+    {
+      "sample_id": "sesame_weed:agri_0_1119.jpeg",
+      "existing_sample_id": "saw_agri_0_1119",
+      "existing_source": "pending_audit",
+      "kind": "sha256/pixel_sha256"
+    },
+    {
+      "sample_id": "sesame_weed:agri_0_1123.jpeg",
+      "existing_sample_id": "saw_agri_0_1123",
+      "existing_source": "pending_audit",
+      "kind": "sha256/pixel_sha256"
+    },
+    {
+      "sample_id": "sesame_weed:agri_0_1129.jpeg",
+      "existing_sample_id": "saw_agri_0_1129",
+      "existing_source": "pending_audit",
+      "kind": "sha256/pixel_sha256"
+    },
+    {
+      "sample_id": "sesame_weed:agri_0_113.jpeg",
+      "existing_sample_id": "saw_agri_0_113",
+      "existing_source": "pending_audit",
+      "kind": "sha256/pixel_sha256"
+    },
+    {
+      "sample_id": "sesame_weed:agri_0_1130.jpeg",
+      "existing_sample_id": "saw_agri_0_1130",
+      "existing_source": "pending_audit",
+      "kind": "sha256/pixel_sha256"
+    },
+    {
+      "sample_id": "sesame_weed:agri_0_114.jpeg",
+      "existing_sample_id": "saw_agri_0_114",
+      "existing_source": "pending_audit",
+      "kind": "sha256/pixel_sha256"
+    },
+    {
+      "sample_id": "sesame_weed:agri_0_1140.jpeg",
+      "existing_sample_id": "saw_agri_0_1140",
+      "existing_source": "pending_audit",
+      "kind": "sha256/pixel_sha256"
+    },
+    {
+      "sample_id": "sesame_weed:agri_0_1146.jpeg",
+      "existing_sample_id": "saw_agri_0_1146",
+      "existing_source": "pending_audit",
+      "kind": "sha256/pixel_sha256"
+    },
+    {
+      "sample_id": "sesame_weed:agri_0_1166.jpeg",
+      "existing_sample_id": "saw_agri_0_1166",
+      "existing_source": "pending_audit",
+      "kind": "sha256/pixel_sha256"
+    },
+    {
+      "sample_id": "sesame_weed:agri_0_1168.jpeg",
+      "existing_sample_id": "saw_agri_0_1168",
+      "existing_source": "pending_audit",
+      "kind": "sha256/pixel_sha256"
+    },
+    {
+      "sample_id": "sesame_weed:agri_0_1171.jpeg",
+      "existing_sample_id": "saw_agri_0_1171",
+      "existing_source": "pending_audit",
+      "kind": "sha256/pixel_sha256"
+    },
+    {
+      "sample_id": "sesame_weed:agri_0_1173.jpeg",
+      "existing_sample_id": "saw_agri_0_1173",
+      "existing_source": "pending_audit",
+      "kind": "sha256/pixel_sha256"
+    },
+    {
+      "sample_id": "sesame_weed:agri_0_1174.jpeg",
+      "existing_sample_id": "saw_agri_0_1174",
+      "existing_source": "pending_audit",
+      "kind": "sha256/pixel_sha256"
+    },
+    {
+      "sample_id": "sesame_weed:agri_0_1177.jpeg",
+      "existing_sample_id": "saw_agri_0_1177",
+      "existing_source": "pending_audit",
+      "kind": "sha256/pixel_sha256"
+    },
+    {
+      "sample_id": "sesame_weed:agri_0_1192.jpeg",
+      "existing_sample_id": "saw_agri_0_1192",
+      "existing_source": "pending_audit",
+      "kind": "sha256/pixel_sha256"
+    },
+    {
+      "sample_id": "sesame_weed:agri_0_1193.jpeg",
+      "existing_sample_id": "saw_agri_0_1193",
+      "existing_source": "pending_audit",
+      "kind": "sha256/pixel_sha256"
+    },
+    {
+      "sample_id": "sesame_weed:agri_0_1198.jpeg",
+      "existing_sample_id": "saw_agri_0_1198",
+      "existing_source": "pending_audit",
+      "kind": "sha256/pixel_sha256"
+    },
+    {
+      "sample_id": "sesame_weed:agri_0_1210.jpeg",
+      "existing_sample_id": "saw_agri_0_1210",
+      "existing_source": "pending_audit",
+      "kind": "sha256/pixel_sha256"
+    },
+    {
+      "sample_id": "sesame_weed:agri_0_1211.jpeg",
+      "existing_sample_id": "saw_agri_0_1211",
+      "existing_source": "pending_audit",
+      "kind": "sha256/pixel_sha256"
+    },
+    {
+      "sample_id": "sesame_weed:agri_0_1214.jpeg",
+      "existing_sample_id": "saw_agri_0_1214",
+      "existing_source": "pending_audit",
+      "kind": "sha256/pixel_sha256"
+    },
+    {
+      "sample_id": "sesame_weed:agri_0_1215.jpeg",
+      "existing_sample_id": "saw_agri_0_1215",
+      "existing_source": "pending_audit",
+      "kind": "sha256/pixel_sha256"
+    },
+    {
+      "sample_id": "sesame_weed:agri_0_122.jpeg",
+      "existing_sample_id": "saw_agri_0_122",
+      "existing_source": "pending_audit",
+      "kind": "sha256/pixel_sha256"
+    },
+    {
+      "sample_id": "sesame_weed:agri_0_1221.jpeg",
+      "existing_sample_id": "saw_agri_0_1221",
+      "existing_source": "pending_audit",
+      "kind": "sha256/pixel_sha256"
+    },
+    {
+      "sample_id": "sesame_weed:agri_0_1242.jpeg",
+      "existing_sample_id": "saw_agri_0_1242",
+      "existing_source": "pending_audit",
+      "kind": "sha256/pixel_sha256"
+    },
+    {
+      "sample_id": "sesame_weed:agri_0_1258.jpeg",
+      "existing_sample_id": "saw_agri_0_1258",
+      "existing_source": "pending_audit",
+      "kind": "sha256/pixel_sha256"
+    },
+    {
+      "sample_id": "sesame_weed:agri_0_126.jpeg",
+      "existing_sample_id": "saw_agri_0_126",
+      "existing_source": "pending_audit",
+      "kind": "sha256/pixel_sha256"
+    },
+    {
+      "sample_id": "sesame_weed:agri_0_1260.jpeg",
+      "existing_sample_id": "saw_agri_0_1260",
+      "existing_source": "pending_audit",
+      "kind": "sha256/pixel_sha256"
+    },
+    {
+      "sample_id": "sesame_weed:agri_0_129.jpeg",
+      "existing_sample_id": "saw_agri_0_129",
+      "existing_source": "pending_audit",
+      "kind": "sha256/pixel_sha256"
+    },
+    {
+      "sample_id": "sesame_weed:agri_0_131.jpeg",
+      "existing_sample_id": "saw_agri_0_131",
+      "existing_source": "pending_audit",
+      "kind": "sha256/pixel_sha256"
+    },
+    {
+      "sample_id": "sesame_weed:agri_0_1314.jpeg",
+      "existing_sample_id": "saw_agri_0_1314",
+      "existing_source": "pending_audit",
+      "kind": "sha256/pixel_sha256"
+    },
+    {
+      "sample_id": "sesame_weed:agri_0_1317.jpeg",
+      "existing_sample_id": "saw_agri_0_1317",
+      "existing_source": "pending_audit",
+      "kind": "sha256/pixel_sha256"
+    },
+    {
+      "sample_id": "sesame_weed:agri_0_1320.jpeg",
+      "existing_sample_id": "saw_agri_0_1320",
+      "existing_source": "pending_audit",
+      "kind": "sha256/pixel_sha256"
+    }
+  ],
+  "images_duplicate_free": 1300,
+  "unique_class_labels": 1,
+  "unique_group_keys": 1300,
+  "image_suffixes": [
+    ".jpeg"
+  ],
+  "notes": "Perceptual pairs are screening candidates, not proof of duplication; hidden and stepped images differ by design.",
+  "generated_at_utc": "2026-10-23T13:47:49.502235+00:00",
+  "archive": "/data/datasets/Stage5B/sesame_weed/sesame_weed.zip",
+  "archive_sha256": "01de68257cddbd22d8579c6b7f912dc2bd1a592fec676e14c070c140895741c4",
+  "upstream_pending_reclassified": 1300,
+  "cross_source_duplicates_in_adopted_corpus": 0
+}

@@ -1,0 +1,89 @@
+# Stage 4A -- shuffled_boundary_guided RESUME (C3)
+#
+# Resume-only copy of configs/stage4a_shuffled_2000.yaml.
+# Identical to the original apart from:
+#   * meta.load_checkpoint  : true
+#   * meta.read_checkpoint  : the interrupted run's jepa-latest.pth.tar
+#   * save_at_optimizer_steps : [500, 2000]  (500 is filtered out on resume)
+# The LR / WD / EMA / mask / data / manifest fields are unchanged, so the
+# 2,000-step schedule is the same horizon as a fresh run.
+meta:
+  stage: stage3b_stage4a_agricultural_continued_pretraining
+  arm: C3
+  arm_label: shuffled_boundary_guided
+  model_name: vit_huge
+  patch_size: 14
+  pred_depth: 12
+  pred_emb_dim: 384
+  load_checkpoint: true
+  read_checkpoint: /home/test/agrisa_runs/stage4a_shuffled_2000/jepa-latest.pth.tar
+  pretrained_checkpoint: /data/checkpoints/ijepa/IN1K-vit.h.14-300e.pth.tar
+  pretrained_sha256: 0382013c481743e9ccea89f970bc6c6aa126aa19a62127500d6e672a641aae22
+  copy_data: false
+  use_bfloat16: true
+  use_sdpa: true
+  activation_checkpointing: false
+data:
+  dataset: agrifield40k
+  manifest: data/frozen/agrifield40k-v1_train.csv
+  manifest_sha256: d63183af8ede53bc859474d1fc82cc969335c71967008812a485de10476a5435
+  split: train
+  seed: 20261019
+  augmentation_seed: 20261019
+  batch_size: 16
+  color_jitter_strength: 0.0
+  crop_scale:
+  - 0.3
+  - 1.0
+  crop_size: 224
+  image_folder: .
+  image_cache_dir: /home/test/agrisa_cache/agrifield40k-v1-train
+  num_workers: 0
+  pin_mem: true
+  root_path: /data/datasets/AgriField-40K
+  use_color_distortion: false
+  use_gaussian_blur: false
+  use_horizontal_flip: false
+  max_samples: null
+mask:
+  mode: structure_guided
+  allow_overlap: false
+  aspect_ratio:
+  - 0.75
+  - 1.5
+  enc_mask_scale:
+  - 0.85
+  - 1.0
+  min_keep: 10
+  num_enc_masks: 1
+  num_pred_masks: 4
+  patch_size: 14
+  pred_mask_scale:
+  - 0.15
+  - 0.2
+  prior_mode: shuffled_boundary
+  guidance_lambda: 6.0
+  num_candidates: 16
+  base_seed: 20261019
+  boundary_edge_weight: 0.5
+optimization:
+  ema:
+  - 0.996
+  - 1.0
+  epochs: 24
+  stop_after_epoch: null
+  max_optimizer_steps: 2000
+  save_at_optimizer_steps:
+  - 500
+  - 2000
+  final_lr: 1.0e-06
+  final_weight_decay: 0.4
+  ipe_scale: 1.0
+  lr: 0.0002
+  start_lr: 1.0e-05
+  warmup: 0.05
+  weight_decay: 0.04
+  grad_accum: 8
+logging:
+  folder: /home/test/agrisa_runs/stage4a_shuffled_2000
+  write_tag: jepa

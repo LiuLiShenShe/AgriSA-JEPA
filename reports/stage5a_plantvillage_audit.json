@@ -1,0 +1,592 @@
+{
+  "source_id": "plantvillage",
+  "source_name": "PlantVillage (colour images)",
+  "root": "/data/datasets/PlantVillage/extracted",
+  "license": "CC-BY-SA-3.0-US",
+  "source_url": "https://doi.org/10.5281/zenodo.1204914",
+  "files_found": 54305,
+  "files_decoded": 54305,
+  "decode_failures": 0,
+  "decode_failure_examples": [],
+  "exact_duplicate_pairs": 42,
+  "exact_duplicate_examples": [
+    {
+      "kind": "sha256",
+      "kept": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___healthy/11beda66-01e9-4bfd-be37-c0f8646d1478___RS_HL 6271.JPG",
+      "duplicate": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___healthy/13298d36-4425-437d-ae8e-c7d70e200084___RS_HL 6271.JPG"
+    },
+    {
+      "kind": "sha256",
+      "kept": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___healthy/14896dc0-688d-456f-b5ec-a037695b0193___RS_HL 6268.JPG",
+      "duplicate": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___healthy/c21cf428-bfc3-4710-b5d2-69d1c0e94748___RS_HL 6268.JPG"
+    },
+    {
+      "kind": "sha256",
+      "kept": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___healthy/1ab5e019-e5f0-4d8e-a252-94cb0aab8b0a___RS_HL 6269.JPG",
+      "duplicate": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___healthy/3673d121-b5de-481c-b057-d4ee5b4959b1___RS_HL 6269.JPG"
+    },
+    {
+      "kind": "sha256",
+      "kept": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___healthy/3d075f90-7002-4c45-abc0-4f35ee49aa79___RS_HL 6272.JPG",
+      "duplicate": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___healthy/acb21cc2-8d65-4880-a7bb-dcc1eab1564b___RS_HL 6272.JPG"
+    },
+    {
+      "kind": "sha256",
+      "kept": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___healthy/5192db55-4aa7-421c-92d4-c2dac79e7379___RS_HL 6273.JPG",
+      "duplicate": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___healthy/9b75de13-d4b0-4b3f-988c-3e9926eef957___RS_HL 6273.JPG"
+    },
+    {
+      "kind": "sha256",
+      "kept": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___healthy/ced4e27a-5eff-4190-a33a-cdc3d84c811e___RS_HL 6270.JPG",
+      "duplicate": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___healthy/dc18b924-f172-445d-8fed-61445d437aaa___RS_HL 6270.JPG"
+    },
+    {
+      "kind": "sha256",
+      "kept": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___healthy/f2cda910-55c7-46d7-b1a2-9a3bb9792148___RS_HL 6274.JPG",
+      "duplicate": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___healthy/fdbfa6f7-f887-442d-8df1-1f0cf839fc4d___RS_HL 6274.JPG"
+    },
+    {
+      "kind": "sha256",
+      "kept": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Tomato___Late_blight/1a69b38b-c4eb-42c4-9584-bcb14fb8db0c___GHLB2 Leaf 9011.JPG",
+      "duplicate": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Tomato___Late_blight/2c47b891-3c97-48f1-a2cc-5aa53d3a1148___GHLB2 Leaf 9011.JPG"
+    },
+    {
+      "kind": "sha256",
+      "kept": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Tomato___Late_blight/3fae9c64-18f0-4a67-9f97-554248bb1bed___GHLB_PS Leaf 24 Day 16.jpg",
+      "duplicate": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Tomato___Late_blight/5de6da85-f8c4-48c4-b463-3e6bd78884cc___GHLB_PS Leaf 24 Day 16.jpg"
+    },
+    {
+      "kind": "sha256",
+      "kept": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Tomato___Late_blight/48c55974-9fe9-4f4b-94f7-c8cd127d1e05___GHLB_PS Leaf 23.7 Day 13.jpg",
+      "duplicate": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Tomato___Late_blight/bd4f09bd-ee85-4ab1-bce0-8cde3fdd7f1b___GHLB_PS Leaf 23.7 Day 13.jpg"
+    },
+    {
+      "kind": "sha256",
+      "kept": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Tomato___Late_blight/5688ea99-c949-41d0-bbab-9cbf0ffb8bcd___GHLB2 Leaf 8677.JPG",
+      "duplicate": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Tomato___Late_blight/e20107e7-137f-400e-817f-5dc4c58e5d70___GHLB2 Leaf 8677.JPG"
+    },
+    {
+      "kind": "sha256",
+      "kept": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Tomato___Late_blight/5f21282c-e2ef-4c4a-ace1-b5701fe7effc___GHLB2 Leaf 8999.JPG",
+      "duplicate": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Tomato___Late_blight/e5d707cd-077c-43af-bda9-6138e516ff51___GHLB2 Leaf 8999.JPG"
+    },
+    {
+      "kind": "sha256",
+      "kept": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Tomato___Late_blight/861d8b00-57a4-46b0-b51a-09d102dbe119___GHLB_PS Leaf 24 Day 13.jpg",
+      "duplicate": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Tomato___Late_blight/d82b634e-9a19-497b-b698-aaf100d622a1___GHLB_PS Leaf 24 Day 13.jpg"
+    },
+    {
+      "kind": "sha256",
+      "kept": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Tomato___Late_blight/98586693-fe1f-4ea0-8e27-4501b61cf09b___GHLB_PS Leaf 23.5 Day 13.jpg",
+      "duplicate": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Tomato___Late_blight/c1775bad-7c02-41fb-bb7d-f8df91d60ac3___GHLB_PS Leaf 23.5 Day 13.jpg"
+    },
+    {
+      "kind": "sha256",
+      "kept": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Tomato___Late_blight/d6e6897a-5083-4914-9903-804c5684a956___GHLB2 Leaf 102.JPG",
+      "duplicate": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Tomato___Late_blight/d81682aa-746b-4e07-af2b-52ebb6f4c017___GHLB2 Leaf 102.JPG"
+    },
+    {
+      "kind": "sha256",
+      "kept": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Tomato___healthy/068e324c-faf6-40d6-8f83-578907f1cac5___GH_HL Leaf 466.1.JPG",
+      "duplicate": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Tomato___healthy/34c81c57-e1fa-49dd-a49d-34fe8b2385fe___GH_HL Leaf 466.1.JPG"
+    },
+    {
+      "kind": "sha256",
+      "kept": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Tomato___healthy/1af0bfe1-4bcf-4b8b-be66-5d0953eb647e___GH_HL Leaf 482.2.JPG",
+      "duplicate": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Tomato___healthy/cfd491d6-4af5-4728-8f0e-0d330a07174a___GH_HL Leaf 482.2.JPG"
+    },
+    {
+      "kind": "sha256",
+      "kept": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Tomato___healthy/37203047-d8ba-43f7-b31e-d496c41c569c___GH_HL Leaf 389.JPG",
+      "duplicate": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Tomato___healthy/505465db-407b-4e0a-8110-7479dad5261c___GH_HL Leaf 389.JPG"
+    },
+    {
+      "kind": "sha256",
+      "kept": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Tomato___healthy/37aad83b-7ff8-4b35-b3ed-fb8e0f54910b___GH_HL Leaf 342.1.JPG",
+      "duplicate": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Tomato___healthy/e786ac89-29fe-47e3-b49e-b9a9ee7edd9d___GH_HL Leaf 342.1.JPG"
+    },
+    {
+      "kind": "sha256",
+      "kept": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Tomato___healthy/488feb1c-4b9f-44e7-8aa6-4103a9601f5f___GH_HL Leaf 434.JPG",
+      "duplicate": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Tomato___healthy/a5de43e7-fc2f-4a14-a8e6-c0f2f94c84f1___GH_HL Leaf 434.JPG"
+    },
+    {
+      "kind": "sha256",
+      "kept": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Tomato___healthy/9662364c-aaba-45e3-b907-10792d60578c___GH_HL Leaf 220.JPG",
+      "duplicate": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Tomato___healthy/d2ce7896-6fa4-45e6-96c5-d162da0e3e1c___GH_HL Leaf 220.JPG"
+    },
+    {
+      "kind": "pixel_sha256",
+      "kept": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___healthy/11beda66-01e9-4bfd-be37-c0f8646d1478___RS_HL 6271.JPG",
+      "duplicate": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___healthy/13298d36-4425-437d-ae8e-c7d70e200084___RS_HL 6271.JPG"
+    },
+    {
+      "kind": "pixel_sha256",
+      "kept": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___healthy/14896dc0-688d-456f-b5ec-a037695b0193___RS_HL 6268.JPG",
+      "duplicate": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___healthy/c21cf428-bfc3-4710-b5d2-69d1c0e94748___RS_HL 6268.JPG"
+    },
+    {
+      "kind": "pixel_sha256",
+      "kept": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___healthy/1ab5e019-e5f0-4d8e-a252-94cb0aab8b0a___RS_HL 6269.JPG",
+      "duplicate": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___healthy/3673d121-b5de-481c-b057-d4ee5b4959b1___RS_HL 6269.JPG"
+    },
+    {
+      "kind": "pixel_sha256",
+      "kept": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___healthy/3d075f90-7002-4c45-abc0-4f35ee49aa79___RS_HL 6272.JPG",
+      "duplicate": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___healthy/acb21cc2-8d65-4880-a7bb-dcc1eab1564b___RS_HL 6272.JPG"
+    },
+    {
+      "kind": "pixel_sha256",
+      "kept": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___healthy/5192db55-4aa7-421c-92d4-c2dac79e7379___RS_HL 6273.JPG",
+      "duplicate": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___healthy/9b75de13-d4b0-4b3f-988c-3e9926eef957___RS_HL 6273.JPG"
+    },
+    {
+      "kind": "pixel_sha256",
+      "kept": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___healthy/ced4e27a-5eff-4190-a33a-cdc3d84c811e___RS_HL 6270.JPG",
+      "duplicate": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___healthy/dc18b924-f172-445d-8fed-61445d437aaa___RS_HL 6270.JPG"
+    },
+    {
+      "kind": "pixel_sha256",
+      "kept": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___healthy/f2cda910-55c7-46d7-b1a2-9a3bb9792148___RS_HL 6274.JPG",
+      "duplicate": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___healthy/fdbfa6f7-f887-442d-8df1-1f0cf839fc4d___RS_HL 6274.JPG"
+    },
+    {
+      "kind": "pixel_sha256",
+      "kept": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Tomato___Late_blight/1a69b38b-c4eb-42c4-9584-bcb14fb8db0c___GHLB2 Leaf 9011.JPG",
+      "duplicate": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Tomato___Late_blight/2c47b891-3c97-48f1-a2cc-5aa53d3a1148___GHLB2 Leaf 9011.JPG"
+    },
+    {
+      "kind": "pixel_sha256",
+      "kept": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Tomato___Late_blight/3fae9c64-18f0-4a67-9f97-554248bb1bed___GHLB_PS Leaf 24 Day 16.jpg",
+      "duplicate": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Tomato___Late_blight/5de6da85-f8c4-48c4-b463-3e6bd78884cc___GHLB_PS Leaf 24 Day 16.jpg"
+    },
+    {
+      "kind": "pixel_sha256",
+      "kept": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Tomato___Late_blight/48c55974-9fe9-4f4b-94f7-c8cd127d1e05___GHLB_PS Leaf 23.7 Day 13.jpg",
+      "duplicate": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Tomato___Late_blight/bd4f09bd-ee85-4ab1-bce0-8cde3fdd7f1b___GHLB_PS Leaf 23.7 Day 13.jpg"
+    },
+    {
+      "kind": "pixel_sha256",
+      "kept": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Tomato___Late_blight/5688ea99-c949-41d0-bbab-9cbf0ffb8bcd___GHLB2 Leaf 8677.JPG",
+      "duplicate": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Tomato___Late_blight/e20107e7-137f-400e-817f-5dc4c58e5d70___GHLB2 Leaf 8677.JPG"
+    },
+    {
+      "kind": "pixel_sha256",
+      "kept": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Tomato___Late_blight/5f21282c-e2ef-4c4a-ace1-b5701fe7effc___GHLB2 Leaf 8999.JPG",
+      "duplicate": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Tomato___Late_blight/e5d707cd-077c-43af-bda9-6138e516ff51___GHLB2 Leaf 8999.JPG"
+    },
+    {
+      "kind": "pixel_sha256",
+      "kept": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Tomato___Late_blight/861d8b00-57a4-46b0-b51a-09d102dbe119___GHLB_PS Leaf 24 Day 13.jpg",
+      "duplicate": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Tomato___Late_blight/d82b634e-9a19-497b-b698-aaf100d622a1___GHLB_PS Leaf 24 Day 13.jpg"
+    },
+    {
+      "kind": "pixel_sha256",
+      "kept": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Tomato___Late_blight/98586693-fe1f-4ea0-8e27-4501b61cf09b___GHLB_PS Leaf 23.5 Day 13.jpg",
+      "duplicate": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Tomato___Late_blight/c1775bad-7c02-41fb-bb7d-f8df91d60ac3___GHLB_PS Leaf 23.5 Day 13.jpg"
+    },
+    {
+      "kind": "pixel_sha256",
+      "kept": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Tomato___Late_blight/d6e6897a-5083-4914-9903-804c5684a956___GHLB2 Leaf 102.JPG",
+      "duplicate": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Tomato___Late_blight/d81682aa-746b-4e07-af2b-52ebb6f4c017___GHLB2 Leaf 102.JPG"
+    },
+    {
+      "kind": "pixel_sha256",
+      "kept": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Tomato___healthy/068e324c-faf6-40d6-8f83-578907f1cac5___GH_HL Leaf 466.1.JPG",
+      "duplicate": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Tomato___healthy/34c81c57-e1fa-49dd-a49d-34fe8b2385fe___GH_HL Leaf 466.1.JPG"
+    },
+    {
+      "kind": "pixel_sha256",
+      "kept": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Tomato___healthy/1af0bfe1-4bcf-4b8b-be66-5d0953eb647e___GH_HL Leaf 482.2.JPG",
+      "duplicate": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Tomato___healthy/cfd491d6-4af5-4728-8f0e-0d330a07174a___GH_HL Leaf 482.2.JPG"
+    },
+    {
+      "kind": "pixel_sha256",
+      "kept": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Tomato___healthy/37203047-d8ba-43f7-b31e-d496c41c569c___GH_HL Leaf 389.JPG",
+      "duplicate": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Tomato___healthy/505465db-407b-4e0a-8110-7479dad5261c___GH_HL Leaf 389.JPG"
+    },
+    {
+      "kind": "pixel_sha256",
+      "kept": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Tomato___healthy/37aad83b-7ff8-4b35-b3ed-fb8e0f54910b___GH_HL Leaf 342.1.JPG",
+      "duplicate": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Tomato___healthy/e786ac89-29fe-47e3-b49e-b9a9ee7edd9d___GH_HL Leaf 342.1.JPG"
+    },
+    {
+      "kind": "pixel_sha256",
+      "kept": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Tomato___healthy/488feb1c-4b9f-44e7-8aa6-4103a9601f5f___GH_HL Leaf 434.JPG",
+      "duplicate": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Tomato___healthy/a5de43e7-fc2f-4a14-a8e6-c0f2f94c84f1___GH_HL Leaf 434.JPG"
+    },
+    {
+      "kind": "pixel_sha256",
+      "kept": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Tomato___healthy/9662364c-aaba-45e3-b907-10792d60578c___GH_HL Leaf 220.JPG",
+      "duplicate": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Tomato___healthy/d2ce7896-6fa4-45e6-96c5-d162da0e3e1c___GH_HL Leaf 220.JPG"
+    }
+  ],
+  "perceptual_candidate_pairs": 12436,
+  "perceptual_candidate_examples": [
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple_Frogeye_Spot/03fd7154-2e33-4fb6-999d-bfc3a3f467fe___JR_FrgE.S 8681.JPG",
+      "b": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple_Frogeye_Spot/451b68a6-1b39-40c5-8669-f82af6de1eed___JR_FrgE.S 8737.JPG",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple_Frogeye_Spot/04e74a0c-bda4-4e06-aeab-ec24b1007994___JR_FrgE.S 8782.JPG",
+      "b": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple_Frogeye_Spot/ecfabcf4-106e-4357-8058-948dcb2f4798___JR_FrgE.S 8821.JPG",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple_Frogeye_Spot/0f3d45f4-e121-42cd-a5b6-be2f866a0574___JR_FrgE.S 2870.JPG",
+      "b": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple_Frogeye_Spot/a79f3789-8c2c-4a04-acb4-f96544b93082___JR_FrgE.S 2880.JPG",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple_Frogeye_Spot/1ce40e9f-cddc-4939-8e58-7a8235d9b28a___JR_FrgE.S 3019.JPG",
+      "b": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple_Frogeye_Spot/fc5f6bd3-bd4e-4a8c-94d1-d46ea92a3941___JR_FrgE.S 3017.JPG",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple_Frogeye_Spot/2902e85c-1705-423b-bb02-80e2d93bc54e___JR_FrgE.S 2922.JPG",
+      "b": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple_Frogeye_Spot/d240fec5-9b1e-4b36-a7df-d0007d0ebfcb___JR_FrgE.S 2929.JPG",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 4,
+      "a": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple_Frogeye_Spot/30aebb07-bde6-44c8-bee2-a06ff42a948d___JR_FrgE.S 3071.JPG",
+      "b": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple_Frogeye_Spot/fb8255a6-e05d-44d3-a115-80c1e55009bd___JR_FrgE.S 3074.JPG",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple_Frogeye_Spot/39148cb8-c7fa-4760-b708-b4e399047bb6___JR_FrgE.S 2869.JPG",
+      "b": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Pepper_bell___Bacterial_spot/51185964-48e2-493e-a052-42139dd0facd___JR_B.Spot 3331.JPG",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple_Frogeye_Spot/445448e9-b429-45df-942d-fb46932540d7___JR_FrgE.S 2804.JPG",
+      "b": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Potato___Late_blight/12d72127-7880-4481-b3c6-caff04116a86___RS_LB 2632.JPG",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple_Frogeye_Spot/4b8414f0-fa9b-4195-90cb-608f6fd74d44___JR_FrgE.S 2999.JPG",
+      "b": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple_Frogeye_Spot/c3fc7435-5960-4b9a-b333-287ffeb05126___JR_FrgE.S 3002.JPG",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 4,
+      "a": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple_Frogeye_Spot/4eeaca51-3ca2-4afe-884a-d65c2e31e452___JR_FrgE.S 3026.JPG",
+      "b": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple_Frogeye_Spot/fc5f6bd3-bd4e-4a8c-94d1-d46ea92a3941___JR_FrgE.S 3017.JPG",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple_Frogeye_Spot/4fd1092b-5d44-420c-9ea1-b10dc775ecb9___JR_FrgE.S 2903.JPG",
+      "b": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple_Frogeye_Spot/7d0776a1-7aba-4923-93b5-7ec629ca108b___JR_FrgE.S 2902.JPG",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple_Frogeye_Spot/59cb2470-1e5e-4828-90f2-a22dacbb0fd6___JR_FrgE.S 8594.JPG",
+      "b": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Tomato___Tomato_Yellow_Leaf_Curl_Virus/2acea156-8e71-4851-9f34-f9842978bb24___YLCV_GCREC 1933.JPG",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 4,
+      "a": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple_Frogeye_Spot/6af96fb3-002f-48b3-a2e8-fb5cf30dfa63___JR_FrgE.S 2998.JPG",
+      "b": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple_Frogeye_Spot/f83c1286-8bdb-48e6-ac8f-bd8a5209afc7___JR_FrgE.S 3001.JPG",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple_Frogeye_Spot/6c213dbb-aa21-4334-a773-8dc69f4421d2___JR_FrgE.S 2909.JPG",
+      "b": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple_Frogeye_Spot/6ce1eb43-e41c-4eb0-9440-db5a955ab7b6___JR_FrgE.S 2919.JPG",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple_Frogeye_Spot/85e5214e-2998-49c7-bdb9-ee8122387704___JR_FrgE.S 8691.JPG",
+      "b": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Soybean___healthy/aa3f0183-850e-4813-83c3-a027d1bd1661___RS_HL 7548.JPG",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple_Frogeye_Spot/888c8b6e-55cb-4492-b489-22f3624f1c39___JR_FrgE.S 8765.JPG",
+      "b": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Cherry_including_sour___healthy/01958ee7-f585-4956-90aa-a40dc79102d4___JR_HL 9836.JPG",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple_Frogeye_Spot/932e43a7-738f-4864-92e2-745bb715160e___JR_FrgE.S 2997.JPG",
+      "b": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple_Frogeye_Spot/9e4c3e90-477d-4b7e-8227-bf82a037024e___JR_FrgE.S 3003.JPG",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple_Frogeye_Spot/988c58b8-9323-4b0f-86de-c4fe396f09b8___JR_FrgE.S 8648.JPG",
+      "b": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple_Frogeye_Spot/d734401a-6948-4be6-bfe7-1469d8c910f7___JR_FrgE.S 8732.JPG",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple_Frogeye_Spot/9a74119d-ce66-49a9-bec1-52df73abf8d0___JR_FrgE.S 2910.JPG",
+      "b": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Pepper_bell___healthy/4d420109-050f-4d2a-a0c6-8f2bec2fe381___JR_HL 5951.JPG",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple_Frogeye_Spot/a133da59-4ece-4efc-85a6-9376149371e4___JR_FrgE.S 2860.JPG",
+      "b": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple_Frogeye_Spot/e07b2429-8ae5-42dd-8ce8-1e94887ea6df___JR_FrgE.S 8812.JPG",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple_Frogeye_Spot/bd1b3df1-f056-40c1-aded-be7185154408___JR_FrgE.S 8779.JPG",
+      "b": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple_Frogeye_Spot/d65349b4-80ff-474e-a48e-bf8fa597d880___JR_FrgE.S 8775.JPG",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 4,
+      "a": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple_Frogeye_Spot/f3bac530-dd9a-43b3-b3cf-9860315f3d18___JR_FrgE.S 8800.JPG",
+      "b": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Raspberry___healthy/68c91797-4323-4a34-a203-8393cdf3889b___Mary_HL 9143.JPG",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple_Frogeye_Spot/f3bac530-dd9a-43b3-b3cf-9860315f3d18___JR_FrgE.S 8800.JPG",
+      "b": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Soybean___healthy/14e27c58-c16e-4554-b2bb-9a25af4f03b4___RS_HL 3778.JPG",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple_Frogeye_Spot/f3bac530-dd9a-43b3-b3cf-9860315f3d18___JR_FrgE.S 8800.JPG",
+      "b": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Soybean___healthy/d0e3c820-9795-4fb8-b0d0-136176a7c7f5___RS_HL 6554.JPG",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___Apple_scab/0812e1e4-6d1b-4264-8f23-6519354fc5a6___FREC_Scab 3293.JPG",
+      "b": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Pepper_bell___healthy/1b574484-60cd-4ae4-83ed-511a5ae07ea8___JR_HL 7849.JPG",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___Apple_scab/08c42d78-aa7b-4106-b0c1-b260f898dcba___FREC_Scab 3151.JPG",
+      "b": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___Apple_scab/ab7d0d06-b45c-4472-a708-c2a1d65ee748___FREC_Scab 3152.JPG",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___Apple_scab/106aaa5f-c98d-482d-88ef-8e5170e9072d___FREC_Scab 3489.JPG",
+      "b": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Potato___Early_blight/0faca7fe-7254-4dfa-8388-bbc776338c9c___RS_Early.B 7929.JPG",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___Apple_scab/24d43ad3-24e6-4236-8ef7-59b268520ca3___FREC_Scab 3533.JPG",
+      "b": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Peach___Bacterial_spot/31f2c9a8-e3e3-425c-8719-05c9c50f1447___Rutg._Bact.S 1343.JPG",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___Apple_scab/2dd8b8f8-46b0-4bc6-b817-ea7163f4b28b___FREC_Scab 3473.JPG",
+      "b": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___Apple_scab/add9ce00-e304-4632-82f2-ddc86a6be5f6___FREC_Scab 3472.JPG",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___Apple_scab/44d28651-473c-4e9b-81ec-212893669fba___FREC_Scab 3477.JPG",
+      "b": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Orange___Haunglongbing_Citrus_greening/9854450e-e9e8-410f-acf1-0cf52d6becaa___CREC_HLB 3870.JPG",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___Apple_scab/4512edee-9d3b-451e-845d-86666feebe99___FREC_Scab 3328.JPG",
+      "b": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Strawberry___Leaf_scorch/9d7518b0-4a8b-4a64-9775-d8339f66d0c6___RS_L.Scorch 0960.JPG",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___Apple_scab/9dac36c9-3c32-44be-8752-0f03666cbb76___FREC_Scab 3365.JPG",
+      "b": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___Apple_scab/f7c4bd45-5098-4b2c-bbfb-2e47c8f2d711___FREC_Scab 3361.JPG",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___Apple_scab/b4b9c80a-f741-416d-a7e6-6d9566ea731e___FREC_Scab 3399.JPG",
+      "b": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___healthy/a63295f1-8032-4db2-b0d7-4e51f6e30bad___RS_HL 6089.JPG",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___Apple_scab/f105cc0d-1cc5-4726-b46d-f5bd9c9aacc1___FREC_Scab 3321.JPG",
+      "b": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Orange___Haunglongbing_Citrus_greening/708957c4-dca3-44c2-ab93-fe4cf51e77e4___CREC_HLB 5107.JPG",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 4,
+      "a": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___Apple_scab/f6946261-1a18-4306-ba87-ca25344d9bd2___FREC_Scab 3525.JPG",
+      "b": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Blueberry___healthy/23d13863-7320-427f-8559-9665257b9540___RS_HL 2334.JPG",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___Cedar_apple_rust/4bd5f28f-beb3-4b27-b4f1-7e94b332ef93___FREC_C.Rust 9932.JPG",
+      "b": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Pepper_bell___healthy/03138bf7-1441-4df8-88a2-7e71b84f6bf0___JR_HL 5823.JPG",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___Cedar_apple_rust/4bd5f28f-beb3-4b27-b4f1-7e94b332ef93___FREC_C.Rust 9932.JPG",
+      "b": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Soybean___healthy/1dea8556-5d2e-4b24-a07d-83c5afae81a8___RS_HL 5464.JPG",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___Cedar_apple_rust/4bd5f28f-beb3-4b27-b4f1-7e94b332ef93___FREC_C.Rust 9932.JPG",
+      "b": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Soybean___healthy/a382f65c-bc40-4723-a553-b5d9c424d268___RS_HL 5276.JPG",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___Cedar_apple_rust/4bd5f28f-beb3-4b27-b4f1-7e94b332ef93___FREC_C.Rust 9932.JPG",
+      "b": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Soybean___healthy/fb6d6851-cf45-4dc4-ac53-b267a80ebf3c___RS_HL 3543.JPG",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___Cedar_apple_rust/8fd46690-5e57-47f6-8d99-235d4738411f___FREC_C.Rust 0074.JPG",
+      "b": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Tomato___Tomato_Yellow_Leaf_Curl_Virus/9a10d739-932c-47ff-af5d-196d5f615e21___YLCV_NREC 0057.JPG",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___Cedar_apple_rust/a88eb7c4-930a-448e-923e-bef22327fe25___FREC_C.Rust 0044.JPG",
+      "b": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Squash___Powdery_mildew/13de5bec-6a30-48e3-9b9a-cb9d775c8a4a___UMD_Powd.M 0009.JPG",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___Cedar_apple_rust/bd0ead39-9628-46b3-9feb-c3496af0ae8b___FREC_C.Rust 0015.JPG",
+      "b": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___Cedar_apple_rust/f6af5eb5-6338-48a2-8b23-c7143b7f4a62___FREC_C.Rust 0016.JPG",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___healthy/0181db4e-718e-41bc-b6ed-92863471fa85___RS_HL 5941.JPG",
+      "b": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___healthy/2301f2bb-7972-4fb8-8be6-246ce55ca3b6___RS_HL 6100.JPG",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___healthy/0181db4e-718e-41bc-b6ed-92863471fa85___RS_HL 5941.JPG",
+      "b": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___healthy/d99bef24-fac5-4739-8e4e-02465dba4fa8___RS_HL 5686.JPG",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___healthy/03152113-855b-4eab-8a4f-7d78d92240d0___RS_HL 5838.JPG",
+      "b": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Raspberry___healthy/12a43ab6-1f18-4b10-9fb4-4865b216d28e___Mary_HL 9156.JPG",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___healthy/03152113-855b-4eab-8a4f-7d78d92240d0___RS_HL 5838.JPG",
+      "b": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Soybean___healthy/1e17cff8-5ea6-43bb-846b-1ddf4300555b___RS_HL 5516.JPG",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___healthy/0460b7aa-4eb0-4c0b-80e5-055ced6684a3___RS_HL 6287.JPG",
+      "b": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___healthy/ab23fdc9-8036-47f2-a32b-b3facb13fd5b___RS_HL 5947.JPG",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___healthy/0b91573d-d0f3-4e57-b7e5-e1924f537f0e___RS_HL 6216.JPG",
+      "b": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Soybean___healthy/34009746-ae4b-476c-af07-042812984783___RS_HL 4804.JPG",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___healthy/0c056dd8-2040-48cf-a9a8-53d8ae5662d0___RS_HL 7987.JPG",
+      "b": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___healthy/4c368acb-0a47-4c7f-84bd-29dc74660db9___RS_HL 5800.JPG",
+      "review_status": "pending_manual_review"
+    },
+    {
+      "kind": "phash",
+      "distance": 6,
+      "a": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___healthy/0d072074-0253-4a6b-a4cb-02f520c46942___RS_HL 5805.JPG",
+      "b": "plantvillage:plantvillage_deeplearning_paper_dataset/color/Apple___healthy/36c00bef-25c2-48ae-9505-41827bcd83d8___RS_HL 6085.JPG",
+      "review_status": "pending_manual_review"
+    }
+  ],
+  "cross_source_exact_matches": 0,
+  "cross_source_candidates": 0,
+  "cross_source_examples": [],
+  "images_duplicate_free": 54284,
+  "unique_class_labels": 38,
+  "unique_group_keys": 57,
+  "image_suffixes": [
+    ".jpeg",
+    ".jpg",
+    ".png"
+  ],
+  "notes": "Perceptual pairs are screening candidates, not proof of duplication; hidden and stepped images differ by design.",
+  "archive_sha256": "d77991cc7711d705b7c2d5fdc34417752d92ff6bc8de98b42dbeed8583db3739",
+  "manifest": "data/registry/ingested/plantvillage_manifest.csv",
+  "reference_rows": 39963
+}

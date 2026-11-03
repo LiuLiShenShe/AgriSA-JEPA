@@ -1,0 +1,32 @@
+{
+  "generated_at_utc": "2026-10-23T13:51:05.387418+00:00",
+  "manifests": [
+    "data/registry/ingested/sesame_weed_stage5b_manifest.csv",
+    "data/registry/ingested/applebbch81_stage5b_manifest.csv",
+    "data/registry/ingested/weedcrop_stage5b_manifest.csv"
+  ],
+  "images": 5960,
+  "perceptual_pairs": 3826,
+  "pairs_by_kind": {
+    "phash": 1049,
+    "dhash": 2777
+  },
+  "clusters_with_more_than_one_image": 428,
+  "largest_cluster": 55,
+  "cluster_size_histogram": {
+    "2": 284,
+    "3": 90,
+    "4": 36,
+    "5": 12,
+    "6": 4,
+    "23": 1,
+    "55": 1
+  },
+  "risk_tiers": {
+    "chaining_suspected": 55,
+    "cross_group_perceptual": 1013,
+    "same_group_perceptual": 76,
+    "singleton": 4816
+  },
+  "note": "A cluster is a review unit, not a duplication verdict. The recommended action is what a reviewer should do next."
+}

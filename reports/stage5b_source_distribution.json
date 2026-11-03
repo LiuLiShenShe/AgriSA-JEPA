@@ -1,0 +1,313 @@
+{
+  "generated_at_utc": "2026-10-23T15:00:56.993915+00:00",
+  "field_d1_train": {
+    "images": 15118,
+    "sources": 8,
+    "max_source_share": 0.591216,
+    "source_entropy_bits": 2.036125,
+    "domain_entropy_bits": 0.468828,
+    "groups": 13719
+  },
+  "field_d1_val": {
+    "images": 3612,
+    "sources": 7,
+    "max_source_share": 0.621539,
+    "source_entropy_bits": 1.844952,
+    "domain_entropy_bits": 0.438242,
+    "groups": 3313
+  },
+  "v1_for_reference": {
+    "images": 15592,
+    "sources": 6,
+    "max_source_share": 0.717227,
+    "source_entropy_bits": 1.438033,
+    "domain_entropy_bits": 0.0,
+    "groups": 15592
+  },
+  "v1_max_source_share": 0.7172267829656234,
+  "composition": {
+    "train_by_source": {
+      "lucas_vision": {
+        "images": 8938,
+        "share": 0.591216,
+        "groups": 8938
+      },
+      "applebbch81": {
+        "images": 1511,
+        "share": 0.099947,
+        "groups": 112
+      },
+      "vegann": {
+        "images": 1243,
+        "share": 0.08222,
+        "groups": 1243
+      },
+      "sesame_weed": {
+        "images": 1040,
+        "share": 0.068792,
+        "groups": 1040
+      },
+      "inat_weeds": {
+        "images": 1031,
+        "share": 0.068197,
+        "groups": 1031
+      },
+      "acre_crop_weed": {
+        "images": 791,
+        "share": 0.052322,
+        "groups": 791
+      },
+      "radish_wheat": {
+        "images": 427,
+        "share": 0.028244,
+        "groups": 427
+      },
+      "sorghum_weed": {
+        "images": 137,
+        "share": 0.009062,
+        "groups": 137
+      }
+    },
+    "train_by_domain": {
+      "FIELD_IN_SITU": {
+        "images": 13607,
+        "share": 0.900053,
+        "groups": 13607
+      },
+      "ORCHARD_IN_SITU": {
+        "images": 1511,
+        "share": 0.099947,
+        "groups": 112
+      }
+    },
+    "val_by_source": {
+      "lucas_vision": {
+        "images": 2245,
+        "share": 0.621539,
+        "groups": 2245
+      },
+      "vegann": {
+        "images": 360,
+        "share": 0.099668,
+        "groups": 360
+      },
+      "applebbch81": {
+        "images": 327,
+        "share": 0.090532,
+        "groups": 28
+      },
+      "inat_weeds": {
+        "images": 278,
+        "share": 0.076966,
+        "groups": 278
+      },
+      "sesame_weed": {
+        "images": 260,
+        "share": 0.071982,
+        "groups": 260
+      },
+      "radish_wheat": {
+        "images": 107,
+        "share": 0.029623,
+        "groups": 107
+      },
+      "sorghum_weed": {
+        "images": 35,
+        "share": 0.00969,
+        "groups": 35
+      }
+    },
+    "val_by_domain": {
+      "FIELD_IN_SITU": {
+        "images": 3285,
+        "share": 0.909468,
+        "groups": 3285
+      },
+      "ORCHARD_IN_SITU": {
+        "images": 327,
+        "share": 0.090532,
+        "groups": 28
+      }
+    }
+  },
+  "sampling_strategies": {
+    "natural": {
+      "lucas_vision": {
+        "images": 11183,
+        "weight": 1.0,
+        "effective_images": 11183.0,
+        "share_in_corpus": 0.597064,
+        "share_after_sampling": 0.597064
+      },
+      "applebbch81": {
+        "images": 1838,
+        "weight": 1.0,
+        "effective_images": 1838.0,
+        "share_in_corpus": 0.098131,
+        "share_after_sampling": 0.098131
+      },
+      "vegann": {
+        "images": 1603,
+        "weight": 1.0,
+        "effective_images": 1603.0,
+        "share_in_corpus": 0.085585,
+        "share_after_sampling": 0.085585
+      },
+      "inat_weeds": {
+        "images": 1309,
+        "weight": 1.0,
+        "effective_images": 1309.0,
+        "share_in_corpus": 0.069888,
+        "share_after_sampling": 0.069888
+      },
+      "sesame_weed": {
+        "images": 1300,
+        "weight": 1.0,
+        "effective_images": 1300.0,
+        "share_in_corpus": 0.069407,
+        "share_after_sampling": 0.069407
+      },
+      "acre_crop_weed": {
+        "images": 791,
+        "weight": 1.0,
+        "effective_images": 791.0,
+        "share_in_corpus": 0.042232,
+        "share_after_sampling": 0.042232
+      },
+      "radish_wheat": {
+        "images": 534,
+        "weight": 1.0,
+        "effective_images": 534.0,
+        "share_in_corpus": 0.02851,
+        "share_after_sampling": 0.02851
+      },
+      "sorghum_weed": {
+        "images": 172,
+        "weight": 1.0,
+        "effective_images": 172.0,
+        "share_in_corpus": 0.009183,
+        "share_after_sampling": 0.009183
+      }
+    },
+    "source_balanced": {
+      "lucas_vision": {
+        "images": 11183,
+        "weight": 0.209358,
+        "effective_images": 2341.25,
+        "share_in_corpus": 0.597064,
+        "share_after_sampling": 0.125
+      },
+      "applebbch81": {
+        "images": 1838,
+        "weight": 1.273803,
+        "effective_images": 2341.25,
+        "share_in_corpus": 0.098131,
+        "share_after_sampling": 0.125
+      },
+      "vegann": {
+        "images": 1603,
+        "weight": 1.460543,
+        "effective_images": 2341.25,
+        "share_in_corpus": 0.085585,
+        "share_after_sampling": 0.125
+      },
+      "inat_weeds": {
+        "images": 1309,
+        "weight": 1.788579,
+        "effective_images": 2341.25,
+        "share_in_corpus": 0.069888,
+        "share_after_sampling": 0.125
+      },
+      "sesame_weed": {
+        "images": 1300,
+        "weight": 1.800962,
+        "effective_images": 2341.25,
+        "share_in_corpus": 0.069407,
+        "share_after_sampling": 0.125
+      },
+      "acre_crop_weed": {
+        "images": 791,
+        "weight": 2.959861,
+        "effective_images": 2341.25,
+        "share_in_corpus": 0.042232,
+        "share_after_sampling": 0.125
+      },
+      "radish_wheat": {
+        "images": 534,
+        "weight": 4.384363,
+        "effective_images": 2341.25,
+        "share_in_corpus": 0.02851,
+        "share_after_sampling": 0.125
+      },
+      "sorghum_weed": {
+        "images": 172,
+        "weight": 13.611919,
+        "effective_images": 2341.25,
+        "share_in_corpus": 0.009183,
+        "share_after_sampling": 0.125
+      }
+    },
+    "source_capped": {
+      "lucas_vision": {
+        "images": 11183,
+        "weight": 0.837432,
+        "effective_images": 9365.0,
+        "share_in_corpus": 0.597064,
+        "share_after_sampling": 0.5
+      },
+      "applebbch81": {
+        "images": 1838,
+        "weight": 1.24089,
+        "effective_images": 2280.76,
+        "share_in_corpus": 0.098131,
+        "share_after_sampling": 0.12177
+      },
+      "vegann": {
+        "images": 1603,
+        "weight": 1.24089,
+        "effective_images": 1989.15,
+        "share_in_corpus": 0.085585,
+        "share_after_sampling": 0.106201
+      },
+      "inat_weeds": {
+        "images": 1309,
+        "weight": 1.24089,
+        "effective_images": 1624.33,
+        "share_in_corpus": 0.069888,
+        "share_after_sampling": 0.086723
+      },
+      "sesame_weed": {
+        "images": 1300,
+        "weight": 1.24089,
+        "effective_images": 1613.16,
+        "share_in_corpus": 0.069407,
+        "share_after_sampling": 0.086127
+      },
+      "acre_crop_weed": {
+        "images": 791,
+        "weight": 1.24089,
+        "effective_images": 981.54,
+        "share_in_corpus": 0.042232,
+        "share_after_sampling": 0.052405
+      },
+      "radish_wheat": {
+        "images": 534,
+        "weight": 1.24089,
+        "effective_images": 662.64,
+        "share_in_corpus": 0.02851,
+        "share_after_sampling": 0.035379
+      },
+      "sorghum_weed": {
+        "images": 172,
+        "weight": 1.24089,
+        "effective_images": 213.43,
+        "share_in_corpus": 0.009183,
+        "share_after_sampling": 0.011395
+      }
+    }
+  },
+  "notes": [
+    "The reference target of keeping any single source under 50% of sampled mass is a distribution hypothesis, not a data-deletion rule.",
+    "source_balanced repeats small sources, which can show the model the same image many times; source_capped avoids that by capping the large source and proportionally up-weighting the rest."
+  ]
+}

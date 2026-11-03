@@ -1,0 +1,10 @@
+arm,metric,A_mean,arm_mean,delta_pp,n_checkpoints,source,status
+A,mIoU,71.6833,71.6833,0.0,1,stage6c_historical_reuse,not_stage6d_result
+B1,mIoU,71.6833,72.8533,1.17,1,stage6c_historical_reuse,not_stage6d_result
+B2,mIoU,71.6833,72.6433,0.96,1,stage6c_historical_reuse,not_stage6d_result
+B1,crop,81.4567,82.2167,0.76,1,stage6c_historical_reuse,not_stage6d_result
+B2,crop,81.4567,82.2267,0.77,1,stage6c_historical_reuse,not_stage6d_result
+B1,weed,35.98,38.6667,2.6867,1,stage6c_historical_reuse,not_stage6d_result
+B2,weed,35.98,38.01,2.03,1,stage6c_historical_reuse,not_stage6d_result
+B1,soil,97.6085,97.6864,0.0779,1,stage6c_historical_reuse,not_stage6d_result
+B2,soil,97.6085,97.6876,0.0791,1,stage6c_historical_reuse,not_stage6d_result

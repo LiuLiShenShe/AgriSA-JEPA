@@ -1,0 +1,219 @@
+{
+  "agrifield_manifests": [
+    "data/frozen/agrifield40k-v1_train.csv",
+    "data/frozen/agrifield40k-v1_val.csv"
+  ],
+  "phenobench_root": "/data/datasets/PhenoBench/PhenoBench-v110",
+  "phenobench": {
+    "count": 2179,
+    "splits_scanned": [
+      "train",
+      "val"
+    ],
+    "acquisition_dates": {
+      "05-15": 1012,
+      "05-26": 566,
+      "06-05": 601
+    },
+    "scene_names": {
+      "P0030688": 89,
+      "P0030859": 88,
+      "P0030855": 87,
+      "P0037989": 87,
+      "P0030853": 86,
+      "P0030690": 86,
+      "P0037987": 86,
+      "P0030692": 85,
+      "P0030852": 84,
+      "P0034020": 83,
+      "P0030686": 82,
+      "P0030695": 81,
+      "P0037991": 81,
+      "P0034018": 80,
+      "P0034016": 65,
+      "P0037822": 65,
+      "P0037818": 62,
+      "P0030792": 62,
+      "P0034119": 61,
+      "P0034280": 60
+    }
+  },
+  "agrifield_excluded_phenobench_rows": {
+    "rows": 9606,
+    "status": {
+      "exclude": 9606
+    },
+    "acquisition_dates": {
+      "2020-04-25": 1317,
+      "2020-05-03": 1314,
+      "2020-05-15": 1497,
+      "2020-05-26": 1438,
+      "2020-06-05": 1296,
+      "2020-06-12": 1328,
+      "2020-07-02": 1416
+    },
+    "original_split": {
+      "train": 7703,
+      "val": 1903
+    },
+    "naming": "1024x1024 crops of larger field images with explicit x/y offsets (e.g. 20200425_val_nh_P0024183_4178_1024), from the unlabeled patch release"
+  },
+  "comparison": {
+    "agrifield_rows_checked": 15592,
+    "phenobench_images_checked": 2179,
+    "exact_file_sha256_matches": 0,
+    "exact_file_sha256_examples": [],
+    "decoded_pixel_sha256_matches": 0,
+    "decoded_pixel_sha256_examples": [],
+    "perceptual_near_duplicates": 356,
+    "perceptual_near_duplicate_examples": [
+      {
+        "distance": 2,
+        "agrifield_samples": [
+          "acw_rgb-2022-10-10-14-12-36"
+        ],
+        "phenobench_image": "train/05-26_00124_P0034280.png"
+      },
+      {
+        "distance": 3,
+        "agrifield_samples": [
+          "rwd_camden_wheat_radish1_0_20210615_09-37-45_crop"
+        ],
+        "phenobench_image": "train/05-26_00240_P0034018.png"
+      },
+      {
+        "distance": 3,
+        "agrifield_samples": [
+          "rwd_camden_wheat_radish1_0_20210615_09-38-03_crop"
+        ],
+        "phenobench_image": "val/05-26_00219_P0034016.png"
+      },
+      {
+        "distance": 4,
+        "agrifield_samples": [
+          "acw_rgb-2022-10-10-14-52-12"
+        ],
+        "phenobench_image": "train/05-26_00150_P0034119.png"
+      },
+      {
+        "distance": 4,
+        "agrifield_samples": [
+          "rwd_camden_wheat_radish1_0_11-43-36_crop"
+        ],
+        "phenobench_image": "val/05-26_00095_P0034282.png"
+      },
+      {
+        "distance": 4,
+        "agrifield_samples": [
+          "rwd_camden_wheat_radish1_0_20210521_13-19-24_crop"
+        ],
+        "phenobench_image": "val/05-15_00176_P0030695.png"
+      },
+      {
+        "distance": 4,
+        "agrifield_samples": [
+          "rwd_camden_wheat_radish1_0_20210615_09-30-18_crop"
+        ],
+        "phenobench_image": "train/05-15_00110_P0030692.png"
+      },
+      {
+        "distance": 4,
+        "agrifield_samples": [
+          "rwd_camden_wheat_radish1_0_20210615_09-37-45_crop"
+        ],
+        "phenobench_image": "val/05-26_00219_P0034016.png"
+      },
+      {
+        "distance": 4,
+        "agrifield_samples": [
+          "rwd_camden_wheat_radish1_0_20210615_09-38-03_crop"
+        ],
+        "phenobench_image": "train/05-26_00240_P0034018.png"
+      },
+      {
+        "distance": 5,
+        "agrifield_samples": [
+          "acw_rgb-2022-10-06-17-17-06"
+        ],
+        "phenobench_image": "train/05-26_00115_P0034117.png"
+      }
+    ],
+    "dhash_threshold": 8,
+    "dhash_distance_histogram": {
+      "2": 1,
+      "3": 2,
+      "4": 6,
+      "5": 14,
+      "6": 42,
+      "7": 89,
+      "8": 202,
+      "9": 395,
+      "10": 750,
+      "11": 1371,
+      "12": 2373,
+      "13": 4138,
+      "14": 6729,
+      "15": 11417,
+      "16": 19158,
+      "17": 31800,
+      "18": 51813,
+      "19": 85067,
+      "20": 136263,
+      "21": 215097,
+      "22": 328444,
+      "23": 490222,
+      "24": 704474,
+      "25": 974111,
+      "26": 1296597,
+      "27": 1650489,
+      "28": 2012111,
+      "29": 2348059,
+      "30": 2621644,
+      "31": 2791905,
+      "32": 2845262,
+      "33": 2774055,
+      "34": 2583640,
+      "35": 2298492,
+      "36": 1956336,
+      "37": 1593700,
+      "38": 1243147,
+      "39": 930951,
+      "40": 667570,
+      "41": 463116,
+      "42": 307581,
+      "43": 200278,
+      "44": 127202,
+      "45": 79069,
+      "46": 48231,
+      "47": 28932,
+      "48": 17641,
+      "49": 10413,
+      "50": 6216,
+      "51": 3684,
+      "52": 2170,
+      "53": 1223,
+      "54": 657,
+      "55": 345,
+      "56": 162,
+      "57": 69,
+      "58": 28,
+      "59": 8,
+      "60": 7
+    },
+    "near_duplicates_at_stricter_thresholds": {
+      "0": 0,
+      "1": 0,
+      "2": 1,
+      "3": 3,
+      "4": 9,
+      "6": 65,
+      "8": 356
+    }
+  },
+  "notes": [
+    "AgriField v0/v1 already excludes every row the publisher attributed to PhenoBench (data/source_registry.json, 9,606 rows).",
+    "A zero hash match does not prove disjoint scenes: AgriField pnb_ rows are 1024x1024 crops of larger PhenoBench images, so the same field and day can appear with different pixels.",
+    "Overlapping acquisition dates are the real risk signal; see agrifield_excluded_phenobench_rows.acquisition_dates vs phenobench.acquisition_dates.",
+    "All pnb_ rows carry status=exclude in both v0 and v1, so they are in neither the frozen train nor the frozen val split."
+  ]
+}

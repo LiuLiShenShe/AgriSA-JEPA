@@ -1,0 +1,156 @@
+{
+  "note": "profiles decide exposure frequency only; the entity image set is fixed and the split is unchanged",
+  "epoch_length": 150000,
+  "cap_share": 0.5,
+  "accepted_total": 147279,
+  "train_total": 147279,
+  "by_source": {
+    "counts": {
+      "artemis_imagesafari": 111762,
+      "agrifield40k_pool": 18242,
+      "agrifm_ref58": 15386,
+      "applebbch81": 1383,
+      "agrifm_ref11": 382,
+      "agrifm_ref9": 84,
+      "agrifm_ref1": 40
+    },
+    "share": {
+      "artemis_imagesafari": 0.7588454565824049,
+      "agrifield40k_pool": 0.12386015657357805,
+      "agrifm_ref58": 0.10446838992660189,
+      "applebbch81": 0.009390340781781517,
+      "agrifm_ref11": 0.002593716687375661,
+      "agrifm_ref9": 0.0005703460778522396,
+      "agrifm_ref1": 0.0002715933704058284
+    },
+    "hhi": 0.602196714779906,
+    "profiles": {
+      "natural": {
+        "artemis_imagesafari": 113826.81848736072,
+        "agrifield40k_pool": 18579.023486036705,
+        "agrifm_ref58": 15670.258488990285,
+        "applebbch81": 1408.5511172672275,
+        "agrifm_ref11": 389.0575031063492,
+        "agrifm_ref9": 85.55191167783595,
+        "agrifm_ref1": 40.73900556087426
+      },
+      "capped": {
+        "artemis_imagesafari": 75000.0,
+        "agrifield40k_pool": 18579.023486036705,
+        "agrifm_ref58": 15670.258488990285,
+        "applebbch81": 1408.5511172672275,
+        "agrifm_ref11": 389.0575031063492,
+        "agrifm_ref9": 85.55191167783595,
+        "agrifm_ref1": 40.73900556087426
+      },
+      "balanced": {
+        "artemis_imagesafari": 21428.571428571428,
+        "agrifield40k_pool": 21428.571428571428,
+        "agrifm_ref58": 21428.571428571428,
+        "applebbch81": 21428.571428571428,
+        "agrifm_ref11": 21428.571428571428,
+        "agrifm_ref9": 21428.571428571428,
+        "agrifm_ref1": 21428.571428571428
+      }
+    },
+    "profile_hhi": {
+      "natural": 0.602196714779906,
+      "capped": 0.5030861608440753,
+      "balanced": 0.14285714285714285
+    }
+  },
+  "by_upstream_dataset": {
+    "counts": {
+      "ImageSafari": 63668,
+      "Artemis": 48092,
+      "agrifm_ref58": 15386,
+      "LUCASVision": 9459,
+      "VCD": 1802,
+      "AppleBBCH81": 1383,
+      "WE3DS": 1312,
+      "VegAnn": 1266,
+      "iNatWeeds": 1105,
+      "ACRECropWeed": 790,
+      "SesameWeed": 782,
+      "RumexLeaves": 683,
+      "RadishWheat": 448,
+      "agrifm_ref11": 382,
+      "GrassClover": 375,
+      "Maize-Weed": 220,
+      "agrifm_ref9": 84,
+      "agrifm_ref1": 40,
+      "": 2
+    },
+    "hhi": 0.3090948186936947,
+    "profiles": {
+      "natural": {
+        "ImageSafari": 64844.27515124356,
+        "Artemis": 48980.50638583912,
+        "agrifm_ref58": 15670.258488990285,
+        "LUCASVision": 9633.75634000774,
+        "VCD": 1835.2922005173855,
+        "AppleBBCH81": 1408.5511172672275,
+        "WE3DS": 1336.2393823966756,
+        "VegAnn": 1289.3895260016702,
+        "iNatWeeds": 1125.4150286191514,
+        "ACRECropWeed": 804.5953598272666,
+        "SesameWeed": 796.4475587150918,
+        "RumexLeaves": 695.618519951928,
+        "RadishWheat": 456.2768622817917,
+        "agrifm_ref11": 389.0575031063492,
+        "GrassClover": 381.9281771331962,
+        "Maize-Weed": 224.06453058480844,
+        "agrifm_ref9": 85.55191167783595,
+        "agrifm_ref1": 40.73900556087426,
+        "": 2.036950278043713
+      },
+      "capped": {
+        "ImageSafari": 64844.27515124356,
+        "Artemis": 48980.50638583912,
+        "agrifm_ref58": 15670.258488990285,
+        "LUCASVision": 9633.75634000774,
+        "VCD": 1835.2922005173855,
+        "AppleBBCH81": 1408.5511172672275,
+        "WE3DS": 1336.2393823966756,
+        "VegAnn": 1289.3895260016702,
+        "iNatWeeds": 1125.4150286191514,
+        "ACRECropWeed": 804.5953598272666,
+        "SesameWeed": 796.4475587150918,
+        "RumexLeaves": 695.618519951928,
+        "RadishWheat": 456.2768622817917,
+        "agrifm_ref11": 389.0575031063492,
+        "GrassClover": 381.9281771331962,
+        "Maize-Weed": 224.06453058480844,
+        "agrifm_ref9": 85.55191167783595,
+        "agrifm_ref1": 40.73900556087426,
+        "": 2.036950278043713
+      },
+      "balanced": {
+        "ImageSafari": 7894.736842105263,
+        "Artemis": 7894.736842105263,
+        "agrifm_ref58": 7894.736842105263,
+        "LUCASVision": 7894.736842105263,
+        "VCD": 7894.736842105263,
+        "AppleBBCH81": 7894.736842105263,
+        "WE3DS": 7894.736842105263,
+        "VegAnn": 7894.736842105263,
+        "iNatWeeds": 7894.736842105263,
+        "ACRECropWeed": 7894.736842105263,
+        "SesameWeed": 7894.736842105263,
+        "RumexLeaves": 7894.736842105263,
+        "RadishWheat": 7894.736842105263,
+        "agrifm_ref11": 7894.736842105263,
+        "GrassClover": 7894.736842105263,
+        "Maize-Weed": 7894.736842105263,
+        "agrifm_ref9": 7894.736842105263,
+        "agrifm_ref1": 7894.736842105263,
+        "": 7894.736842105263
+      }
+    },
+    "profile_hhi": {
+      "natural": 0.3090948186936947,
+      "capped": 0.3090948186936947,
+      "balanced": 0.05263157894736843
+    }
+  }
+}

@@ -1,0 +1,298 @@
+{
+  "version": "R3v2_strict_rgb",
+  "status": "AUTO_VALIDATED",
+  "auto_status_meaning": "programmatic gates only; NOT human-verified and NOT PROVEN_NO_LEAKAGE",
+  "policy_version": "stage5d-policy-v2",
+  "policy_sha256": "f89e1a4515c4f7353618c73da77bebf77d1b78e570266a4349177f7fd2bfbc97",
+  "counts": {
+    "ledger_rows": 243694,
+    "accepted": 169326,
+    "train": 147279,
+    "train_only_group_unknown": 2,
+    "val": 22047,
+    "diagnostic_val": 23603,
+    "quarantined": 42085,
+    "rejected": 9301,
+    "holdout": 9606,
+    "licence_blocked": 2500,
+    "archive_only": 0,
+    "duplicate_removed": 10876
+  },
+  "by_source": {
+    "artemis_imagesafari": 130270,
+    "agrifield40k_pool": 21418,
+    "agrifm_ref58": 15386,
+    "applebbch81": 1746,
+    "agrifm_ref11": 382,
+    "agrifm_ref9": 84,
+    "agrifm_ref1": 40
+  },
+  "by_crop": {
+    "common-bean": 41809,
+    "unknown": 39058,
+    "sorghum": 27031,
+    "potato": 13930,
+    "cowpea": 8271,
+    "pearl-millet": 7158,
+    "groundnut": 5094,
+    "african-yam": 5091,
+    "pigeon-pea": 4874,
+    "banana": 4367,
+    "finger-millet": 3404,
+    "rice": 2371,
+    "sweet-potato": 2210,
+    "chickpea": 789,
+    "lentil": 785,
+    "cassava": 780,
+    "wheat": 778,
+    "soybean": 776,
+    "maize": 750
+  },
+  "by_country": {
+    "unknown": 113552,
+    "UGA": 18598,
+    "COL": 15415,
+    "USA": 15393,
+    "TZA": 6368
+  },
+  "by_upstream_dataset": {
+    "ImageSafari": 74494,
+    "Artemis": 55774,
+    "agrifm_ref58": 15386,
+    "LUCASVision": 11177,
+    "VCD": 2159,
+    "AppleBBCH81": 1746,
+    "WE3DS": 1520,
+    "VegAnn": 1485,
+    "iNatWeeds": 1312,
+    "SesameWeed": 943,
+    "RumexLeaves": 809,
+    "ACRECropWeed": 790,
+    "RadishWheat": 534,
+    "GrassClover": 434,
+    "agrifm_ref11": 382,
+    "Maize-Weed": 255,
+    "agrifm_ref9": 84,
+    "agrifm_ref1": 40,
+    "": 2
+  },
+  "by_modality": {
+    "RGB_VISIBLE": 169326
+  },
+  "by_group_tier": {
+    "OFFICIAL_GROUP": 130268,
+    "DOCUMENTED_PATH_GROUP": 23164,
+    "WEAK_PROXY": 15892,
+    "UNKNOWN_GROUP": 2
+  },
+  "group_stats": {
+    "strong_groups": 47674,
+    "cross_split_groups": 0,
+    "unknown_group_images": 2,
+    "unknown_group_in_val": 0,
+    "weak_group_images": 15892,
+    "group_disjoint_validation_available": true
+  },
+  "target": {
+    "target_images": 147285,
+    "target_exceeded": true,
+    "shortfall": 0
+  },
+  "train_csv": "data/corpus_v3/R3v2_strict_rgb_train.csv",
+  "val_csv": "data/corpus_v3/R3v2_strict_rgb_val.csv",
+  "train_csv_sha256": "f33b7cc24eee2d04e4f8b53d6b1026cfebe8fac5854971377216f3edb37abc30",
+  "val_csv_sha256": "a64a1222b27ddbdaa835a5c836a5330ceb1a71d1e18f0392f3f0b10a4d2e22d2",
+  "quarantine_csv": "data/corpus_v3/quarantine_reasons.csv",
+  "holdout_exclusions_csv": "data/corpus_v3/holdout_exclusions.csv",
+  "funnel_conserved": true,
+  "funnel_totals": {
+    "n_input": 243694,
+    "n_unique_ids": 243694,
+    "n_accepted": 169326,
+    "n_rejected": 9301,
+    "n_quarantined": 42085,
+    "n_holdout": 9606,
+    "n_licence_blocked": 2500,
+    "n_archive_only": 0,
+    "n_duplicate_removed": 10876,
+    "bucket_total": 243694,
+    "reason_total": 243694,
+    "by_bucket": {
+      "accepted": 169326,
+      "quarantined": 42085,
+      "duplicate_removed": 10876,
+      "holdout": 9606,
+      "rejected": 9301,
+      "licence_blocked": 2500
+    },
+    "by_primary_reason": {
+      "ACCEPTED": 169326,
+      "DOMAIN_QUARANTINE": 32362,
+      "HOLDOUT_EXCLUDED": 9606,
+      "EXACT_DUPLICATE": 9121,
+      "BASIC_QC_REJECT": 5783,
+      "IQA_QUARANTINE": 5060,
+      "MODALITY_NOT_VISIBLE_RGB": 2949,
+      "DUPLICATE_UNCERTAIN": 2600,
+      "LICENCE_BLOCKED": 2500,
+      "BASIC_QC_QUARANTINE": 2063,
+      "NEAR_DUPLICATE": 1755,
+      "IQA_REJECT": 485,
+      "DOMAIN_REJECT": 44,
+      "BELOW_MIN_RESOLUTION": 40
+    },
+    "conserved": true
+  },
+  "policy": {
+    "version": "stage5d-policy-v2",
+    "policy_sha256": "f89e1a4515c4f7353618c73da77bebf77d1b78e570266a4349177f7fd2bfbc97",
+    "basic": {
+      "min_short_side": 224,
+      "laplacian_var_min": 35.0,
+      "tenengrad_min": 25.0,
+      "dark_mean_max": 22.0,
+      "bright_mean_min": 238.0,
+      "entropy_min": 2.6,
+      "extreme_aspect_ratio_max": 8.0,
+      "blank_pixel_fraction_max": 0.85,
+      "near_threshold_band": 0.15,
+      "quarantine_on_conflict": true
+    },
+    "metrics": {
+      "musiq": {
+        "name": "musiq",
+        "direction": "higher_is_better",
+        "score_range": [
+          0.0,
+          100.0
+        ],
+        "accept_threshold": 45.0,
+        "reject_threshold": 25.0,
+        "role": "GATE",
+        "model": "musiq",
+        "model_sha256": "e95806b9eae5f3814c410f574ba8e552362bd5bc63d758ed5b97860f5d6185aa",
+        "scale_evidence": "reports/stage5d_threshold_trace.md; observed min/max over 212,194 scored images in data/corpus_v2/images/*_qc.csv"
+      },
+      "niqe": {
+        "name": "niqe",
+        "direction": "lower_is_better",
+        "score_range": [
+          0.0,
+          100.0
+        ],
+        "accept_threshold": 8.0,
+        "reject_threshold": 12.0,
+        "role": "DIAGNOSTIC_ONLY",
+        "model": "niqe",
+        "model_sha256": "fa2aa4d12dd9595c3fb6bf8b4e1a15c79d5d1469238d0901c88dead195be578d",
+        "scale_evidence": "observed min/max 3.3-5.7 over 3,776 scored images in Stage 5C; coverage is 1.8% of the corpus so it cannot be a gate"
+      }
+    },
+    "missing_score_action": "QUARANTINE"
+  },
+  "basic_counts": {
+    "PASS": 235149,
+    "REJECT": 6320,
+    "QUARANTINE": 2225
+  },
+  "iqa_trace": {
+    "musiq": {
+      "column": "iqa_musiq",
+      "metric_name": "musiq",
+      "direction": "higher_is_better",
+      "score_range": [
+        0.0,
+        100.0
+      ],
+      "accept_threshold": 45.0,
+      "reject_threshold": 25.0,
+      "role": "GATE",
+      "model": "musiq",
+      "model_sha256": "e95806b9eae5f3814c410f574ba8e552362bd5bc63d758ed5b97860f5d6185aa",
+      "scale_evidence": "reports/stage5d_threshold_trace.md; observed min/max over 212,194 scored images in data/corpus_v2/images/*_qc.csv",
+      "measured_rows": 243694,
+      "non_null_rows": 243694,
+      "observed_min": 12.57741928100586,
+      "observed_max": 79.1254653930664,
+      "observed_median": 69.38456726074219,
+      "in_range_rows": 243694,
+      "pass": 234815,
+      "quarantine": 7566,
+      "reject": 1313,
+      "missing": 0
+    },
+    "niqe": {
+      "column": "iqa_niqe",
+      "metric_name": "niqe",
+      "direction": "lower_is_better",
+      "score_range": [
+        0.0,
+        100.0
+      ],
+      "accept_threshold": 8.0,
+      "reject_threshold": 12.0,
+      "role": "DIAGNOSTIC_ONLY",
+      "model": "niqe",
+      "model_sha256": "fa2aa4d12dd9595c3fb6bf8b4e1a15c79d5d1469238d0901c88dead195be578d",
+      "scale_evidence": "observed min/max 3.3-5.7 over 3,776 scored images in Stage 5C; coverage is 1.8% of the corpus so it cannot be a gate",
+      "measured_rows": 243694,
+      "non_null_rows": 2095,
+      "observed_min": 1.548221129427652,
+      "observed_max": 23.84310626909042,
+      "observed_median": 4.65259449641198,
+      "in_range_rows": 2095,
+      "pass": 1843,
+      "quarantine": 216,
+      "reject": 36,
+      "missing": 241599
+    }
+  },
+  "dedup": {
+    "rows": 243694,
+    "with_valid_hashes": 243694,
+    "embedded_images": 25124,
+    "candidate_pairs": 82474,
+    "confirmed_pairs": 15806,
+    "uncertain_pairs": 66668,
+    "component_members": 21937,
+    "giant_groups": 0,
+    "giant_members": 0,
+    "giant_image_ids": [],
+    "hash_report": {
+      "phash": {
+        "column": "phash",
+        "rows": 243694,
+        "valid": 243694,
+        "valid_fraction": 1.0,
+        "unique_hashes": 232768
+      },
+      "dhash": {
+        "column": "dhash",
+        "rows": 243694,
+        "valid": 243694,
+        "valid_fraction": 1.0,
+        "unique_hashes": 233491
+      }
+    },
+    "exact_duplicate_images": 9384
+  },
+  "artemis_join": {
+    "reference_rows": 6920332,
+    "candidate_rows": 135623,
+    "matched_rows": 135623,
+    "unmatched_rows": 0,
+    "one_to_one": 0,
+    "one_to_many": 0,
+    "many_to_one": 0,
+    "key_collisions": 0,
+    "conflict_rows": 0,
+    "conflict_fields": {
+      "bytes": 0
+    },
+    "index_matched_keys": 135621,
+    "parse_failures": 2,
+    "artemis_keys": 56333,
+    "imagesafari_keys": 79288
+  },
+  "seconds": 2444.4
+}

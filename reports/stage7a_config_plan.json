@@ -1,0 +1,26 @@
+{
+  "schema_version": "stage7a_config_plan/v1",
+  "base_config": "configs/stage6_b1_natural_2000.yaml",
+  "base_config_sha256": "52e4478c5b6c375f89476007954a2cbe72ac227ffb91c6e6d184f23bc77657db",
+  "stage1_config": "configs/stage7a_b1_natural_50k.yaml",
+  "stage1_config_sha256": "18f713d9c5ab6d905b6b5f65c7b680c7d630d7ab2730b62371d382be553950f5",
+  "stage2_config": "configs/stage7a_b1_natural_50k_resume.yaml",
+  "stage2_config_sha256": "d63fcf4223e9bc2e441b26f1d035e669f257ecb26d2c3539e5276f145f932f89",
+  "run_id": "stage7a_b1_natural_50k",
+  "pair_id": "S7A",
+  "pretraining_seed": 20261029,
+  "max_optimizer_steps": 50000,
+  "interrupt_after_optimizer_steps": 20000,
+  "save_at_optimizer_steps": [
+    10000,
+    20000,
+    50000
+  ],
+  "warmup_steps": 2500,
+  "epochs": 50,
+  "epochs_minimum": 44,
+  "optimizer_steps_per_epoch": 1151,
+  "output_dir": "/data/agrisa_jepa_runs/stage7a_b1_natural_50k",
+  "problems": [],
+  "ok": true
+}

@@ -107,8 +107,18 @@ def init_opt(
     final_lr=0.0,
     use_bfloat16=False,
     ipe_scale=1.25,
-    total_steps=None
+    total_steps=None,
+    warmup_steps_override=None
 ):
+    """Build optimizer and schedules.
+
+    ``warmup_steps_override`` makes the warmup length an absolute optimizer-
+    update count.  It exists for arm comparisons whose epochs contain different
+    numbers of updates (e.g. Stage 6 natural vs capped sampling): deriving
+    warmup from ``iterations_per_epoch`` would silently give the arms different
+    LR trajectories.  When it is ``None`` the historical
+    ``int(warmup * iterations_per_epoch)`` rule is used unchanged.
+    """
     param_groups = [
         {
             'params': (p for n, p in encoder.named_parameters()
@@ -139,9 +149,15 @@ def init_opt(
         else int(ipe_scale * num_epochs * iterations_per_epoch)
     if horizon < 1:
         raise ValueError(f'Scheduler horizon must be >= 1, got {horizon}')
+    warmup_steps = (int(warmup_steps_override) if warmup_steps_override is not None
+                    else int(warmup*iterations_per_epoch))
+    if warmup_steps < 0 or warmup_steps >= horizon:
+        raise ValueError(
+            f'warmup_steps must be in [0, horizon), got {warmup_steps} '
+            f'with horizon {horizon}')
     scheduler = WarmupCosineSchedule(
         optimizer,
-        warmup_steps=int(warmup*iterations_per_epoch),
+        warmup_steps=warmup_steps,
         start_lr=start_lr,
         ref_lr=ref_lr,
         final_lr=final_lr,

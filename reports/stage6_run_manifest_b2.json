@@ -1,0 +1,104 @@
+{
+  "arm": "B2",
+  "run_dir": "/fj/jepa-二维图像任务/runs/stage6_b2_capped_no_backfill_2000",
+  "inputs": [
+    {
+      "role": "manifest",
+      "path": "/fj/jepa-二维图像任务/data/stage6/stage6_r3v3_train_view_nvme.csv",
+      "bytes": 99717545,
+      "sha256": "26c55431c63791d4f7d427d432840c21aa47a717a5daadbb5990a68a546f71f2"
+    },
+    {
+      "role": "pretrained_checkpoint",
+      "path": "/data/checkpoints/ijepa/IN1K-vit.h.14-300e.pth.tar",
+      "bytes": 10358004345,
+      "sha256": "0382013c481743e9ccea89f970bc6c6aa126aa19a62127500d6e672a641aae22"
+    },
+    {
+      "role": "sampling_profile",
+      "path": "/fj/jepa-二维图像任务/data/corpus_v4/R3v3_license_verified_sampling_profiles.json",
+      "bytes": 8416,
+      "sha256": "91fb23ef5366fa163264a48cdf7c6613769816df751a9695ea9caa284833c505"
+    },
+    {
+      "role": "config_dumped_by_run",
+      "path": "/fj/jepa-二维图像任务/runs/stage6_b2_capped_no_backfill_2000/params-ijepa.yaml",
+      "bytes": 2040,
+      "sha256": "cfed80f099a47a6c9fe95170ba020515a9785a349b428de71a7fa610e8940ebc"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "/fj/jepa-二维图像任务/runs/stage6_b2_capped_no_backfill_2000/jepa-step1000.pth.tar",
+      "bytes": 10358218196,
+      "sha256": "99a3b27ae261222155ed43038442cf47df991f3351e8f795137be3001fda7890"
+    },
+    {
+      "path": "/fj/jepa-二维图像任务/runs/stage6_b2_capped_no_backfill_2000/jepa-step1500.pth.tar",
+      "bytes": 10358218196,
+      "sha256": "3ca880ef35fded115a44b3aa76fa0a4eb38cdc460091c56009eeaab969b33c63"
+    },
+    {
+      "path": "/fj/jepa-二维图像任务/runs/stage6_b2_capped_no_backfill_2000/jepa-step2000.pth.tar",
+      "bytes": 10358218196,
+      "sha256": "faf180d1f3c6b1daa61ee0318b29b5ec07177b43bdc95a68fae22e734c046c11"
+    },
+    {
+      "path": "/fj/jepa-二维图像任务/runs/stage6_b2_capped_no_backfill_2000/jepa-step500.pth.tar",
+      "bytes": 10358215637,
+      "sha256": "686e36a019d29abef752587de45614c118f554c401b1bfe3a88651cb05c8f8d5"
+    },
+    {
+      "path": "/fj/jepa-二维图像任务/runs/stage6_b2_capped_no_backfill_2000/jepa-encoder-step1000.pth",
+      "bytes": 2523204047,
+      "sha256": "a34950d14fbdb9a8c7e6dff9e0a8ac85f0605e34ea1461214fd8a684ae58ecae"
+    },
+    {
+      "path": "/fj/jepa-二维图像任务/runs/stage6_b2_capped_no_backfill_2000/jepa-encoder-step1500.pth",
+      "bytes": 2523204047,
+      "sha256": "c40d2595d71c24214e7f54c45b0e6f809229b605f3ba8ae9a4a28de87475ca2b"
+    },
+    {
+      "path": "/fj/jepa-二维图像任务/runs/stage6_b2_capped_no_backfill_2000/jepa-encoder-step2000.pth",
+      "bytes": 2523204047,
+      "sha256": "6e7a83c9156e556757016145fb804e2b67e7b94f5e8b45bda4ffd24cb5975a62"
+    },
+    {
+      "path": "/fj/jepa-二维图像任务/runs/stage6_b2_capped_no_backfill_2000/jepa-encoder-step500.pth",
+      "bytes": 2523203652,
+      "sha256": "a8510552e18efe69340170548e5e90c500fe1d5c54913d0072942bf851945cf8"
+    },
+    {
+      "path": "/fj/jepa-二维图像任务/runs/stage6_b2_capped_no_backfill_2000/jepa-latest.pth.tar",
+      "bytes": 10358213270,
+      "sha256": "9426fb9a2789adba6be4c6b0d7ead395e84d5758fa4d853d394a18fc2c300eb4"
+    },
+    {
+      "path": "/fj/jepa-二维图像任务/runs/stage6_b2_capped_no_backfill_2000/jepa_r0.csv",
+      "bytes": 589176,
+      "sha256": "ee9662f70ff88c3d9e55c33a7581ac38f3200827fa1b6545a47c5e10e7fb8d6a"
+    },
+    {
+      "path": "/fj/jepa-二维图像任务/runs/stage6_b2_capped_no_backfill_2000/training_verification.yaml",
+      "bytes": 4021,
+      "sha256": "c2bd3da59803767be0bc4c2addbee2f59d28243e4d4a36757635e4a5f0fd2f3a"
+    },
+    {
+      "path": "/fj/jepa-二维图像任务/runs/stage6_b2_capped_no_backfill_2000/stage6_sampling.json",
+      "bytes": 1372,
+      "sha256": "5afc6ec69f1e0c7d2591f316ebd1a963f688d1a53b2f9a4214ffa6589b149190"
+    },
+    {
+      "path": "/fj/jepa-二维图像任务/runs/stage6_b2_capped_no_backfill_2000/source_exposure_ledger.csv",
+      "bytes": 18840075,
+      "sha256": "c59029b62ed6ef4bf2c190890245cc36df8eb907c12f5eec036303e58891840f"
+    },
+    {
+      "path": "/fj/jepa-二维图像任务/runs/stage6_b2_capped_no_backfill_2000/source_exposure_ledger.summary.json",
+      "bytes": 1562,
+      "sha256": "7de11319bd3b15cdba0a295a1aac0e47e6e1af21e9b8226f8c6c6628a6424067"
+    }
+  ],
+  "output_bytes_total": 61903335494,
+  "note": "sha256 computed from the bytes on disk at manifest-build time"
+}

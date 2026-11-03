@@ -1,0 +1,356 @@
+{
+  "https://ageagle.com/data-set/corn-field-mapped-with-ebee-ag-in-brazil/": {
+    "url": "https://ageagle.com/data-set/corn-field-mapped-with-ebee-ag-in-brazil/",
+    "status": null,
+    "final_url": null,
+    "outcome": "unreachable",
+    "error": "URLError: <urlopen error timed out>"
+  },
+  "https://ageagle.com/data-set/mixed-use-agricultural-fields-ebee-ag/": {
+    "url": "https://ageagle.com/data-set/mixed-use-agricultural-fields-ebee-ag/",
+    "status": 403,
+    "final_url": "https://eaglenxt.com/data-set/mixed-use-agricultural-fields-ebee-ag/",
+    "outcome": "reachable_but_blocked"
+  },
+  "https://arxiv.org/abs/1610.03677": {
+    "url": "https://arxiv.org/abs/1610.03677",
+    "status": 206,
+    "final_url": "https://arxiv.org/abs/1610.03677",
+    "outcome": "ok"
+  },
+  "https://arxiv.org/abs/2109.11048": {
+    "url": "https://arxiv.org/abs/2109.11048",
+    "status": 206,
+    "final_url": "https://arxiv.org/abs/2109.11048",
+    "outcome": "ok"
+  },
+  "https://arxiv.org/abs/2110.12331": {
+    "url": "https://arxiv.org/abs/2110.12331",
+    "status": 206,
+    "final_url": "https://arxiv.org/abs/2110.12331",
+    "outcome": "ok"
+  },
+  "https://doi.org/10.1007/978-3-031-45725-8_43": {
+    "url": "https://doi.org/10.1007/978-3-031-45725-8_43",
+    "status": 404,
+    "final_url": "https://doi.org/10.1007/978-3-031-45725-8_43",
+    "outcome": "http_404"
+  },
+  "https://doi.org/10.1016/j.dib.2020.105833": {
+    "url": "https://doi.org/10.1016/j.dib.2020.105833",
+    "status": 200,
+    "final_url": "https://linkinghub.elsevier.com/retrieve/pii/S2352340920307277",
+    "outcome": "ok"
+  },
+  "https://doi.org/10.1016/j.dib.2022.108035": {
+    "url": "https://doi.org/10.1016/j.dib.2022.108035",
+    "status": 200,
+    "final_url": "https://linkinghub.elsevier.com/retrieve/pii/S2352340922002463",
+    "outcome": "ok"
+  },
+  "https://doi.org/10.1016/j.dib.2023.109030": {
+    "url": "https://doi.org/10.1016/j.dib.2023.109030",
+    "status": 200,
+    "final_url": "https://linkinghub.elsevier.com/retrieve/pii/S2352340923001488",
+    "outcome": "ok"
+  },
+  "https://doi.org/10.1016/j.dib.2024.109935": {
+    "url": "https://doi.org/10.1016/j.dib.2024.109935",
+    "status": 404,
+    "final_url": "https://doi.org/10.1016/j.dib.2024.109935",
+    "outcome": "http_404"
+  },
+  "https://doi.org/10.1145/3570991.3571042": {
+    "url": "https://doi.org/10.1145/3570991.3571042",
+    "status": 403,
+    "final_url": "https://dl.acm.org/doi/10.1145/3570991.3571042",
+    "outcome": "reachable_but_blocked"
+  },
+  "https://doi.org/10.17632/8h3s6jkyff.1": {
+    "url": "https://doi.org/10.17632/8h3s6jkyff.1",
+    "status": 200,
+    "final_url": "https://data.mendeley.com/datasets/8h3s6jkyff/1",
+    "outcome": "ok"
+  },
+  "https://doi.org/10.17632/bwh3zbpkpv.1": {
+    "url": "https://doi.org/10.17632/bwh3zbpkpv.1",
+    "status": 200,
+    "final_url": "https://data.mendeley.com/datasets/bwh3zbpkpv/1",
+    "outcome": "ok"
+  },
+  "https://doi.org/10.17632/gj72pjfvb2.1": {
+    "url": "https://doi.org/10.17632/gj72pjfvb2.1",
+    "status": 200,
+    "final_url": "https://data.mendeley.com/datasets/gj72pjfvb2/1",
+    "outcome": "ok"
+  },
+  "https://doi.org/10.3390/s20205893": {
+    "url": "https://doi.org/10.3390/s20205893",
+    "status": 403,
+    "final_url": "https://www.mdpi.com/1424-8220/20/20/5893",
+    "outcome": "reachable_but_blocked"
+  },
+  "https://doi.org/10.3390/s23052713": {
+    "url": "https://doi.org/10.3390/s23052713",
+    "status": 403,
+    "final_url": "https://www.mdpi.com/1424-8220/23/5/2713",
+    "outcome": "reachable_but_blocked"
+  },
+  "https://doi.org/10.3390/s23146298": {
+    "url": "https://doi.org/10.3390/s23146298",
+    "status": 403,
+    "final_url": "https://www.mdpi.com/1424-8220/23/14/6298",
+    "outcome": "reachable_but_blocked"
+  },
+  "https://doi.org/10.5281/zenodo.1204914": {
+    "url": "https://doi.org/10.5281/zenodo.1204914",
+    "status": 200,
+    "final_url": "https://zenodo.org/records/1204914",
+    "outcome": "ok"
+  },
+  "https://doi.org/10.5281/zenodo.5092309": {
+    "url": "https://doi.org/10.5281/zenodo.5092309",
+    "status": 200,
+    "final_url": "https://zenodo.org/records/5092309",
+    "outcome": "ok"
+  },
+  "https://doi.org/10.6084/m9.figshare.13077221.v4": {
+    "url": "https://doi.org/10.6084/m9.figshare.13077221.v4",
+    "status": 202,
+    "final_url": "https://figshare.com/articles/dataset/Soybean_Crop_Insect_Raw_Image_Dataset_V1_with_bounding_boxes/13077221/4",
+    "outcome": "ok"
+  },
+  "https://doi.org/10.6084/m9.figshare.22643434.v1": {
+    "url": "https://doi.org/10.6084/m9.figshare.22643434.v1",
+    "status": 202,
+    "final_url": "https://figshare.com/articles/dataset/Multiclass_Weeds_Dataset_for_Image_Segmentation/22643434/1",
+    "outcome": "ok"
+  },
+  "https://doi.org/10.7910/DVN/TCKVEW": {
+    "url": "https://doi.org/10.7910/DVN/TCKVEW",
+    "status": 202,
+    "final_url": "https://dataverse.harvard.edu/citation?persistentId=doi:10.7910/DVN/TCKVEW",
+    "outcome": "ok"
+  },
+  "https://github.com/AlexOlsen/DeepWeeds": {
+    "url": "https://github.com/AlexOlsen/DeepWeeds",
+    "status": 206,
+    "final_url": "https://github.com/AlexOlsen/DeepWeeds",
+    "outcome": "ok"
+  },
+  "https://github.com/WHU-Sensing/PlantSeg": {
+    "url": "https://github.com/WHU-Sensing/PlantSeg",
+    "status": 404,
+    "final_url": "https://github.com/WHU-Sensing/PlantSeg",
+    "outcome": "http_404"
+  },
+  "https://github.com/cropandweed/cropandweed-dataset": {
+    "url": "https://github.com/cropandweed/cropandweed-dataset",
+    "status": 206,
+    "final_url": "https://github.com/cropandweed/cropandweed-dataset",
+    "outcome": "ok"
+  },
+  "https://github.com/nicolaihaeni/MinneApple": {
+    "url": "https://github.com/nicolaihaeni/MinneApple",
+    "status": 206,
+    "final_url": "https://github.com/nicolaihaeni/MinneApple",
+    "outcome": "ok"
+  },
+  "https://github.com/pratikkayal/PlantDoc-Dataset": {
+    "url": "https://github.com/pratikkayal/PlantDoc-Dataset",
+    "status": 206,
+    "final_url": "https://github.com/pratikkayal/PlantDoc-Dataset",
+    "outcome": "ok"
+  },
+  "https://huggingface.co/datasets/KaraAgroAI/Drone-based-Agricultural-Dataset-for-Crop-Yield-Estimation": {
+    "url": "https://huggingface.co/datasets/KaraAgroAI/Drone-based-Agricultural-Dataset-for-Crop-Yield-Estimation",
+    "status": null,
+    "final_url": null,
+    "outcome": "unreachable",
+    "error": "URLError: <urlopen error [Errno 101] Network is unreachable>"
+  },
+  "https://universe.roboflow.com/artificial-intelligence-82oex/detecting-diseases/dataset/6": {
+    "url": "https://universe.roboflow.com/artificial-intelligence-82oex/detecting-diseases/dataset/6",
+    "status": 403,
+    "final_url": "https://universe.roboflow.com/artificial-intelligence-82oex/detecting-diseases/dataset/6",
+    "outcome": "reachable_but_blocked"
+  },
+  "https://universe.roboflow.com/school-el5qm/crops-maize-cassava-sugarcane-vs-grass": {
+    "url": "https://universe.roboflow.com/school-el5qm/crops-maize-cassava-sugarcane-vs-grass",
+    "status": 403,
+    "final_url": "https://universe.roboflow.com/school-el5qm/crops-maize-cassava-sugarcane-vs-grass",
+    "outcome": "reachable_but_blocked"
+  },
+  "https://universe.roboflow.com/wheat-seg-xcxow/wheat-segmentation-sr7mm": {
+    "url": "https://universe.roboflow.com/wheat-seg-xcxow/wheat-segmentation-sr7mm",
+    "status": 403,
+    "final_url": "https://universe.roboflow.com/wheat-seg-xcxow/wheat-segmentation-sr7mm",
+    "outcome": "reachable_but_blocked"
+  },
+  "https://vegann.inrae.fr/": {
+    "url": "https://vegann.inrae.fr/",
+    "status": null,
+    "final_url": null,
+    "outcome": "unreachable",
+    "error": "URLError: <urlopen error [Errno -2] Name or service not known>"
+  },
+  "https://vision.eng.au.dk/grass-clover-dataset/": {
+    "url": "https://vision.eng.au.dk/grass-clover-dataset/",
+    "status": 200,
+    "final_url": "https://vision.eng.au.dk/grass-clover-dataset/",
+    "outcome": "ok"
+  },
+  "https://weed-ai.sydney.edu.au/": {
+    "url": "https://weed-ai.sydney.edu.au/",
+    "status": 206,
+    "final_url": "https://weed-ai.sydney.edu.au/",
+    "outcome": "ok"
+  },
+  "https://weed-ai.sydney.edu.au/datasets/5c78d067-8750-4803-9cbe-57df8fae55e4": {
+    "url": "https://weed-ai.sydney.edu.au/datasets/5c78d067-8750-4803-9cbe-57df8fae55e4",
+    "status": 206,
+    "final_url": "https://weed-ai.sydney.edu.au/datasets/5c78d067-8750-4803-9cbe-57df8fae55e4",
+    "outcome": "ok"
+  },
+  "https://weed-ai.sydney.edu.au/datasets/8b8f134f-ede4-4792-b1f7-d38fc05d8127": {
+    "url": "https://weed-ai.sydney.edu.au/datasets/8b8f134f-ede4-4792-b1f7-d38fc05d8127",
+    "status": 206,
+    "final_url": "https://weed-ai.sydney.edu.au/datasets/8b8f134f-ede4-4792-b1f7-d38fc05d8127",
+    "outcome": "ok"
+  },
+  "https://www.inaturalist.org": {
+    "url": "https://www.inaturalist.org",
+    "status": 200,
+    "final_url": "https://www.inaturalist.org",
+    "outcome": "ok"
+  },
+  "https://www.ipb.uni-bonn.de/data/growliflower/": {
+    "url": "https://www.ipb.uni-bonn.de/data/growliflower/",
+    "status": null,
+    "final_url": null,
+    "outcome": "unreachable",
+    "error": "URLError: <urlopen error timed out>"
+  },
+  "https://www.ipb.uni-bonn.de/data/must-c/": {
+    "url": "https://www.ipb.uni-bonn.de/data/must-c/",
+    "status": null,
+    "final_url": null,
+    "outcome": "unreachable",
+    "error": "URLError: <urlopen error timed out>"
+  },
+  "https://www.kaggle.com/competitions/cassava-leaf-disease-classification": {
+    "url": "https://www.kaggle.com/competitions/cassava-leaf-disease-classification",
+    "status": 200,
+    "final_url": "https://www.kaggle.com/competitions/cassava-leaf-disease-classification",
+    "outcome": "ok"
+  },
+  "https://www.kaggle.com/competitions/plant-seedlings-classification/data": {
+    "url": "https://www.kaggle.com/competitions/plant-seedlings-classification/data",
+    "status": 200,
+    "final_url": "https://www.kaggle.com/competitions/plant-seedlings-classification/data",
+    "outcome": "ok"
+  },
+  "https://www.kaggle.com/datasets/benediktgeisler/perrenial-plants-detection": {
+    "url": "https://www.kaggle.com/datasets/benediktgeisler/perrenial-plants-detection",
+    "status": 200,
+    "final_url": "https://www.kaggle.com/datasets/benediktgeisler/perrenial-plants-detection",
+    "outcome": "ok"
+  },
+  "https://www.kaggle.com/datasets/clarentjd/classification-maize-and-cocoa-datasets": {
+    "url": "https://www.kaggle.com/datasets/clarentjd/classification-maize-and-cocoa-datasets",
+    "status": 200,
+    "final_url": "https://www.kaggle.com/datasets/clarentjd/classification-maize-and-cocoa-datasets",
+    "outcome": "ok"
+  },
+  "https://www.kaggle.com/datasets/devanshujoshi01/maize-images-dataset": {
+    "url": "https://www.kaggle.com/datasets/devanshujoshi01/maize-images-dataset",
+    "status": 200,
+    "final_url": "https://www.kaggle.com/datasets/devanshujoshi01/maize-images-dataset",
+    "outcome": "ok"
+  },
+  "https://www.kaggle.com/datasets/hamedetezadi/leaf-image-dataset": {
+    "url": "https://www.kaggle.com/datasets/hamedetezadi/leaf-image-dataset",
+    "status": 200,
+    "final_url": "https://www.kaggle.com/datasets/hamedetezadi/leaf-image-dataset",
+    "outcome": "ok"
+  },
+  "https://www.kaggle.com/datasets/nicolaasregnier/pinotnoirgrapes/data": {
+    "url": "https://www.kaggle.com/datasets/nicolaasregnier/pinotnoirgrapes/data",
+    "status": 200,
+    "final_url": "https://www.kaggle.com/datasets/nicolaasregnier/pinotnoirgrapes/data",
+    "outcome": "ok"
+  },
+  "https://www.kaggle.com/datasets/osamajalilhassan/agriculture-crops-dataset": {
+    "url": "https://www.kaggle.com/datasets/osamajalilhassan/agriculture-crops-dataset",
+    "status": 200,
+    "final_url": "https://www.kaggle.com/datasets/osamajalilhassan/agriculture-crops-dataset",
+    "outcome": "ok"
+  },
+  "https://www.kaggle.com/datasets/ravirajsinh45/crop-and-weed-detection-data-with-bounding-boxes": {
+    "url": "https://www.kaggle.com/datasets/ravirajsinh45/crop-and-weed-detection-data-with-bounding-boxes",
+    "status": 200,
+    "final_url": "https://www.kaggle.com/datasets/ravirajsinh45/crop-and-weed-detection-data-with-bounding-boxes",
+    "outcome": "ok"
+  },
+  "https://www.kaggle.com/datasets/voglinio/wheat-dataset-original": {
+    "url": "https://www.kaggle.com/datasets/voglinio/wheat-dataset-original",
+    "status": 200,
+    "final_url": "https://www.kaggle.com/datasets/voglinio/wheat-dataset-original",
+    "outcome": "ok"
+  },
+  "https://www.kaggle.com/datasets/zzzzqi/maize-phenology-images-acquired-using-ndvi-camera": {
+    "url": "https://www.kaggle.com/datasets/zzzzqi/maize-phenology-images-acquired-using-ndvi-camera",
+    "status": 200,
+    "final_url": "https://www.kaggle.com/datasets/zzzzqi/maize-phenology-images-acquired-using-ndvi-camera",
+    "outcome": "ok"
+  },
+  "https://www.kaggle.com/dsv/3603983": {
+    "url": "https://www.kaggle.com/dsv/3603983",
+    "status": 200,
+    "final_url": "https://www.kaggle.com/dsv/3603983",
+    "outcome": "ok"
+  },
+  "https://www.kaggle.com/dsv/6341289": {
+    "url": "https://www.kaggle.com/dsv/6341289",
+    "status": 200,
+    "final_url": "https://www.kaggle.com/dsv/6341289",
+    "outcome": "ok"
+  },
+  "https://www.kaggle.com/dsv/6848682": {
+    "url": "https://www.kaggle.com/dsv/6848682",
+    "status": 200,
+    "final_url": "https://www.kaggle.com/dsv/6848682",
+    "outcome": "ok"
+  },
+  "https://www.kaggle.com/dsv/8681789": {
+    "url": "https://www.kaggle.com/dsv/8681789",
+    "status": 200,
+    "final_url": "https://www.kaggle.com/dsv/8681789",
+    "outcome": "ok"
+  },
+  "https://www.phenobench.org/": {
+    "url": "https://www.phenobench.org/",
+    "status": null,
+    "final_url": null,
+    "outcome": "unreachable",
+    "error": "URLError: <urlopen error timed out>"
+  },
+  "https://www.webpages.uidaho.edu/vakanski/Multispectral_Images_Dataset.html": {
+    "url": "https://www.webpages.uidaho.edu/vakanski/Multispectral_Images_Dataset.html",
+    "status": 403,
+    "final_url": "https://www.uidaho.edu/404.htm",
+    "outcome": "reachable_but_blocked"
+  },
+  "https://zenodo.org/records/5092309": {
+    "url": "https://zenodo.org/records/5092309",
+    "status": 200,
+    "final_url": "https://zenodo.org/records/5092309",
+    "outcome": "ok"
+  },
+  "https://zindi.africa/competitions/makerere-fall-armyworm-crop-challenge/data": {
+    "url": "https://zindi.africa/competitions/makerere-fall-armyworm-crop-challenge/data",
+    "status": 200,
+    "final_url": "https://zindi.world/competitions/makerere-fall-armyworm-crop-challenge/data",
+    "outcome": "ok"
+  }
+}

@@ -1,0 +1,211 @@
+{
+  "rule": "A file is TRACKED only when `git ls-files` returns it. Large per-image CSVs and the holdout index are IGNORED_LOCAL_ONLY: they are recorded by path, line count and SHA-256, never listed as Git artifacts.",
+  "artifacts": [
+    {
+      "path": "data/corpus_v4/R3v3_license_verified_train.csv",
+      "exists": true,
+      "tracked": false,
+      "ignored": true,
+      "status": "IGNORED_LOCAL_ONLY",
+      "bytes": 101699231,
+      "sha256": "9fa34adb36810a5b0d13109761c60892bd9068f27c8f95a48e728146c1a6be08"
+    },
+    {
+      "path": "data/corpus_v4/R3v3_license_verified_val.csv",
+      "exists": true,
+      "tracked": false,
+      "ignored": true,
+      "status": "IGNORED_LOCAL_ONLY",
+      "bytes": 15630460,
+      "sha256": "f4670232237c8017ffb213e739446fce05a0661cbe18315097b1dba214c40686"
+    },
+    {
+      "path": "data/corpus_v4/R3v3_license_verified_quarantine.csv",
+      "exists": true,
+      "tracked": false,
+      "ignored": true,
+      "status": "IGNORED_LOCAL_ONLY",
+      "bytes": 5687800,
+      "sha256": "7603653746f15fb8df744ce7bb1b619b81203fc74ff9e42d473985a935b5b9df"
+    },
+    {
+      "path": "data/corpus_v4/R3v3_license_verified_exclusions.csv",
+      "exists": true,
+      "tracked": false,
+      "ignored": true,
+      "status": "IGNORED_LOCAL_ONLY",
+      "bytes": 17396219,
+      "sha256": "da19005ce04081012e93e55c7fc5171a3908bb46094238f420a9a450df2411d9"
+    },
+    {
+      "path": "data/corpus_v4/holdout_file_index.csv",
+      "exists": true,
+      "tracked": false,
+      "ignored": true,
+      "status": "IGNORED_LOCAL_ONLY",
+      "bytes": 6507078,
+      "sha256": "abe5748eb6e918ab8e5a9bbe24e025bf5163b8099ee18891256ecdec7845767f"
+    },
+    {
+      "path": "data/corpus_v4/holdout_crossmatch.csv",
+      "exists": true,
+      "tracked": false,
+      "ignored": true,
+      "status": "IGNORED_LOCAL_ONLY",
+      "bytes": 5446,
+      "sha256": "6a1fc06c52a184d8d972020a35a3d727808f0a8e057298abe11ba87532e083b4"
+    },
+    {
+      "path": "data/corpus_v4/R3v3_license_verified_manifest.json",
+      "exists": true,
+      "tracked": true,
+      "ignored": false,
+      "status": "TRACKED",
+      "bytes": 4538,
+      "sha256": "40e212aa0a0047568b1e171a1acc5d1e5dbca61e72ef9de1f3a9f5e6fbc23cc6"
+    },
+    {
+      "path": "data/corpus_v4/R3v3_license_verified_sampling_profiles.json",
+      "exists": true,
+      "tracked": true,
+      "ignored": false,
+      "status": "TRACKED",
+      "bytes": 8416,
+      "sha256": "91fb23ef5366fa163264a48cdf7c6613769816df751a9695ea9caa284833c505"
+    },
+    {
+      "path": "data/corpus_v4/R3v3_license_verified_composition.json",
+      "exists": true,
+      "tracked": true,
+      "ignored": false,
+      "status": "TRACKED",
+      "bytes": 2529,
+      "sha256": "7d1a91f00034afd8ae9da949803d633ef69a3e7062e0fc894e0328c20329adac"
+    },
+    {
+      "path": "reports/stage5e_holdout_evidence.json",
+      "exists": true,
+      "tracked": true,
+      "ignored": false,
+      "status": "TRACKED",
+      "bytes": 12938,
+      "sha256": "330e23eee7d9d97ae07c69d2611d98388a6147996407dde233c80a5b9a5dbedd"
+    },
+    {
+      "path": "reports/stage5e_holdout_coverage.csv",
+      "exists": true,
+      "tracked": true,
+      "ignored": false,
+      "status": "TRACKED",
+      "bytes": 6578,
+      "sha256": "0de63cc9d05518be86761ef35bc57b05d07d154eae868ae7c8fa288480ca0c73"
+    },
+    {
+      "path": "reports/stage5e_holdout_audit.md",
+      "exists": true,
+      "tracked": true,
+      "ignored": false,
+      "status": "TRACKED",
+      "bytes": 2531,
+      "sha256": "d576bc9e461da63dcade928b5b284a9f4391750d5a5bb5b6d5fad337ed3c05a1"
+    },
+    {
+      "path": "reports/stage5e_hash_collision_review.json",
+      "exists": true,
+      "tracked": true,
+      "ignored": false,
+      "status": "TRACKED",
+      "bytes": 8160,
+      "sha256": "df785ac7ac1942505e0530d324a04555dbb80bcf3299cc8447e80c0000578039"
+    },
+    {
+      "path": "reports/stage5e_license_audit.json",
+      "exists": true,
+      "tracked": true,
+      "ignored": false,
+      "status": "TRACKED",
+      "bytes": 16060,
+      "sha256": "053605516690587c8082e5c4e37ec2c1b193c922d66f5d5adb7cc7566e86204c"
+    },
+    {
+      "path": "reports/stage5e1_licence_evidence.json",
+      "exists": true,
+      "tracked": false,
+      "ignored": false,
+      "status": "LOCAL_ONLY",
+      "bytes": 19513,
+      "sha256": "4d4bccd1b6f217fc5bdea2b0d3a15c082267bc42f85a25f594e337472653d6fa"
+    },
+    {
+      "path": "reports/stage5e1_pool_upstream_licence_audit.csv",
+      "exists": true,
+      "tracked": false,
+      "ignored": false,
+      "status": "LOCAL_ONLY",
+      "bytes": 6855,
+      "sha256": "bca776f4c5c469848c3d37c1e40b5a50b71597a31eb63cfe6447e667902e95c0"
+    },
+    {
+      "path": "reports/stage5e1_pool_upstream_licence_audit.json",
+      "exists": true,
+      "tracked": false,
+      "ignored": false,
+      "status": "LOCAL_ONLY",
+      "bytes": 13921,
+      "sha256": "662888975d8a6a7d10b18364742e6733bb990fcd3b47ef4603b5c7ce84969d35"
+    },
+    {
+      "path": "reports/stage5e1_gates.json",
+      "exists": true,
+      "tracked": false,
+      "ignored": false,
+      "status": "LOCAL_ONLY",
+      "bytes": 18769,
+      "sha256": "d9318c77ace52053d7368eb1ecd341d4378661e680308d8b2bda4de2d6130ffb"
+    },
+    {
+      "path": "reports/stage5e1_summary.json",
+      "exists": true,
+      "tracked": false,
+      "ignored": false,
+      "status": "LOCAL_ONLY",
+      "bytes": 5588,
+      "sha256": "ac34f8bfbfb4372285b84a55ac5e311b10242647cad1a56e2f19817ee1ceffc5"
+    },
+    {
+      "path": "reports/stage5e1_evidence_reconciliation.md",
+      "exists": true,
+      "tracked": false,
+      "ignored": false,
+      "status": "LOCAL_ONLY",
+      "bytes": 13867,
+      "sha256": "c0b0de5966d01ad7343224ad0d52d267bf87a37336da8c231236e9bf0a21afe9"
+    }
+  ],
+  "tracked": [
+    "data/corpus_v4/R3v3_license_verified_manifest.json",
+    "data/corpus_v4/R3v3_license_verified_sampling_profiles.json",
+    "data/corpus_v4/R3v3_license_verified_composition.json",
+    "reports/stage5e_holdout_evidence.json",
+    "reports/stage5e_holdout_coverage.csv",
+    "reports/stage5e_holdout_audit.md",
+    "reports/stage5e_hash_collision_review.json",
+    "reports/stage5e_license_audit.json"
+  ],
+  "ignored_local_only": [
+    "data/corpus_v4/R3v3_license_verified_train.csv",
+    "data/corpus_v4/R3v3_license_verified_val.csv",
+    "data/corpus_v4/R3v3_license_verified_quarantine.csv",
+    "data/corpus_v4/R3v3_license_verified_exclusions.csv",
+    "data/corpus_v4/holdout_file_index.csv",
+    "data/corpus_v4/holdout_crossmatch.csv"
+  ],
+  "local_only_not_ignored": [
+    "reports/stage5e1_licence_evidence.json",
+    "reports/stage5e1_pool_upstream_licence_audit.csv",
+    "reports/stage5e1_pool_upstream_licence_audit.json",
+    "reports/stage5e1_gates.json",
+    "reports/stage5e1_summary.json",
+    "reports/stage5e1_evidence_reconciliation.md"
+  ]
+}

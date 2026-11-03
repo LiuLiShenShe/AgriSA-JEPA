@@ -1,0 +1,33 @@
+{
+  "train_rows": 147279,
+  "resolved_paths": 147279,
+  "unresolved": 0,
+  "batches": [
+    {
+      "batch": 0,
+      "shape": [
+        16,
+        3,
+        224,
+        224
+      ],
+      "min": 0.0,
+      "max": 1.0,
+      "first_id": "agrifield40k_pool:0000c3a6067067ec"
+    },
+    {
+      "batch": 1,
+      "shape": [
+        16,
+        3,
+        224,
+        224
+      ],
+      "min": 0.0,
+      "max": 1.0,
+      "first_id": "agrifield40k_pool:0043ab599de60d67"
+    }
+  ],
+  "optimizer_updates": 0,
+  "note": "two batches only; no model, no optimizer, no pretraining"
+}

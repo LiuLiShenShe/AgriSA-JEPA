@@ -1,0 +1,88 @@
+{
+  "schema_version": "stage7a_training_record/v1",
+  "run_id": "stage7a_b1_natural_50k",
+  "git_commit": "9ed811e59c234e73ecca6da5f373624eb9b0ac98",
+  "config": "configs/stage7a_b1_natural_50k_resume.yaml",
+  "config_sha256": "d63fcf4223e9bc2e441b26f1d035e669f257ecb26d2c3539e5276f145f932f89",
+  "phase": "stage2",
+  "physical_gpu": {
+    "physical_index": 1,
+    "uuid": "GPU-6836f890-98b2-5891-07ef-675c25199c65",
+    "name": "NVIDIA RTX A6000",
+    "memory_used_mib": 16,
+    "memory_total_mib": 49140,
+    "memory_free_mib": 49124,
+    "utilization_percent": 0
+  },
+  "started_at": "2026-11-01T03:04:29+00:00",
+  "finished_at": "2026-11-03T09:33:09+00:00",
+  "wall_clock_minutes": 3238.5,
+  "optimizer_steps_total": 50000,
+  "optimizer_steps_this_run": 30000,
+  "micro_steps_total": 399821,
+  "micro_steps_this_run": 239889,
+  "optimizer_steps_per_epoch": 1151,
+  "max_optimizer_steps": 50000,
+  "interrupt_after_optimizer_steps": null,
+  "total_optimizer_steps_horizon": 50000,
+  "loss_first": 0.13019071519374847,
+  "loss_last": 0.1046406701207161,
+  "loss_finite": true,
+  "ema_formula_verified": true,
+  "peak_memory_mib": 23544.11572265625,
+  "step_time_ms_mean": 264.92927754066676,
+  "manifest_sha256": "26c55431c63791d4f7d427d432840c21aa47a717a5daadbb5990a68a546f71f2",
+  "pretrained_init": null,
+  "hardware": {
+    "cuda_version": "12.8",
+    "device_type": "cuda",
+    "name": "NVIDIA RTX A6000",
+    "torch_version": "2.9.1+cu128",
+    "total_memory_mib": 48541.4375,
+    "visible_device_index": 0,
+    "world_visible_devices": 1
+  },
+  "sampling_profile": {
+    "batches_per_epoch": 9204,
+    "dataset_rows": 147277,
+    "mode": "natural",
+    "sampler": "DistributedSampler",
+    "seed": 20261029
+  },
+  "realised_source_exposure": {
+    "counts": {
+      "agrifield40k_pool": 475300,
+      "agrifm_ref1": 1035,
+      "agrifm_ref11": 9960,
+      "agrifm_ref58": 401079,
+      "agrifm_ref9": 2189,
+      "applebbch81": 36012,
+      "artemis_imagesafari": 2912649
+    },
+    "entropy": 0.769816550270254,
+    "hhi": 0.6022076144624856,
+    "max_share": 0.758853313407451,
+    "max_source": "artemis_imagesafari",
+    "part": "20000",
+    "samples": 3838224,
+    "shares": {
+      "agrifield40k_pool": 0.12383331457465745,
+      "agrifm_ref1": 0.00026965596588422145,
+      "agrifm_ref11": 0.0025949501644510586,
+      "agrifm_ref58": 0.10449598564336006,
+      "agrifm_ref9": 0.0005703158544160007,
+      "applebbch81": 0.009382464389780274,
+      "artemis_imagesafari": 0.758853313407451
+    },
+    "total": 3838224
+  },
+  "saved_step_snapshots": [
+    {
+      "encoder": "/data/agrisa_jepa_runs/stage7a_b1_natural_50k/jepa-encoder-step50000.pth",
+      "full": "/data/agrisa_jepa_runs/stage7a_b1_natural_50k/jepa-step50000.pth.tar",
+      "step": 50000
+    }
+  ],
+  "checkpoint_50k_sha": "f10e83aa4e74d3ab5305d5cbb4657033e2f39309abf9cbd603248ccfc068bb3c",
+  "encoder_50k_sha": "5f302e4789593024548c7fb249a84eb5882ce59fbf1faaf45c8a66898b9016a8"
+}

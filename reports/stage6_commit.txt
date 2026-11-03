@@ -1,0 +1,30 @@
+# Stage 6 — 提交与远端 HEAD 记录
+
+执行前远端基线（origin，git ls-remote 核实）：
+  7ec8a6b694e6ee66ac3c7027c3cb0d6c924cb981   (origin/agri-stage5e1-evidence-reconciliation)
+
+执行前本地 HEAD：
+  7ec8a6b694e6ee66ac3c7027c3cb0d6c924cb981
+
+执行分支：
+  agri-stage6-controlled-pretraining
+
+**代码 / 配置 / 测试 / 报告提交（本阶段实质内容）：**
+  5f02c86c4d3fa7389da1d5f4abbc16b6c4f0500d
+
+**记录本文件的元数据提交：**
+  d31e9ec2356374ecc7260d7b38371e762ac798d0
+  （仅新增 `reports/stage6_commit.txt`；不改动任何代码）
+
+远端 HEAD 在元数据提交推送后为：
+  d31e9ec2356374ecc7260d7b38371e762ac798d0
+
+如果之后还有提交（例如再次更新本文件），它们同样只改本文件；
+以 `git rev-parse HEAD` / `git ls-remote origin agri-stage6-controlled-pretraining`
+的实时输出为准，代码提交始终是 `5f02c86c4d3fa7389da1d5f4abbc16b6c4f0500d`。
+
+是否合并 main / force push：否。
+是否重置/删除/覆盖用户未提交文件：否（CLAUDE.md 等保留未动）。
+
+提交内容：仅 Stage 6 代码 / 配置 / 测试 / 报告；不含大型数据
+（data/stage6/ 已 gitignore）、checkpoint、预测图或 runs/。

@@ -1,0 +1,78 @@
+{
+  "schema_version": "stage6d_config_plan/v1",
+  "historical_seed": 20261026,
+  "pairs": [
+    {
+      "pair_id": "P1",
+      "seed": 20261027
+    },
+    {
+      "pair_id": "P2",
+      "seed": 20261028
+    }
+  ],
+  "runs": [
+    {
+      "pair_id": "P1",
+      "seed": 20261027,
+      "arm": "B1",
+      "run_id": "stage6d_b1_natural_seed20261027",
+      "config": "configs/stage6d_b1_natural_seed20261027.yaml",
+      "base_config": "configs/stage6_b1_natural_2000.yaml",
+      "base_config_sha256": "52e4478c5b6c375f89476007954a2cbe72ac227ffb91c6e6d184f23bc77657db",
+      "output_dir": "/data/agrisa_jepa_runs/stage6d/stage6d_b1_natural_seed20261027",
+      "config_sha256": "083e359a0ae8607a06178b12be3ece1fed1536a7251dd1e05321fa584ed917c0",
+      "meta_pretraining_seed": 20261027,
+      "data_seed": 20261027,
+      "augmentation_seed": 20261027,
+      "sampling_seed": null
+    },
+    {
+      "pair_id": "P1",
+      "seed": 20261027,
+      "arm": "B2",
+      "run_id": "stage6d_b2_capped_no_backfill_seed20261027",
+      "config": "configs/stage6d_b2_capped_no_backfill_seed20261027.yaml",
+      "base_config": "configs/stage6_b2_capped_no_backfill_2000.yaml",
+      "base_config_sha256": "f0d5fd7bdc6f11a0e4a4103f610aaf3d8e8556dd5e17cf211d93193879b63b01",
+      "output_dir": "/data/agrisa_jepa_runs/stage6d/stage6d_b2_capped_no_backfill_seed20261027",
+      "config_sha256": "1c003ef6fc81fe8c043d099792236d96f9ffc23fd6920b0722dbb2afb6fea1da",
+      "meta_pretraining_seed": 20261027,
+      "data_seed": 20261027,
+      "augmentation_seed": 20261027,
+      "sampling_seed": 20261027
+    },
+    {
+      "pair_id": "P2",
+      "seed": 20261028,
+      "arm": "B1",
+      "run_id": "stage6d_b1_natural_seed20261028",
+      "config": "configs/stage6d_b1_natural_seed20261028.yaml",
+      "base_config": "configs/stage6_b1_natural_2000.yaml",
+      "base_config_sha256": "52e4478c5b6c375f89476007954a2cbe72ac227ffb91c6e6d184f23bc77657db",
+      "output_dir": "/data/agrisa_jepa_runs/stage6d/stage6d_b1_natural_seed20261028",
+      "config_sha256": "62227857b1a081ede96516993865e4095ed91e26b610cb67d97519a3600e157c",
+      "meta_pretraining_seed": 20261028,
+      "data_seed": 20261028,
+      "augmentation_seed": 20261028,
+      "sampling_seed": null
+    },
+    {
+      "pair_id": "P2",
+      "seed": 20261028,
+      "arm": "B2",
+      "run_id": "stage6d_b2_capped_no_backfill_seed20261028",
+      "config": "configs/stage6d_b2_capped_no_backfill_seed20261028.yaml",
+      "base_config": "configs/stage6_b2_capped_no_backfill_2000.yaml",
+      "base_config_sha256": "f0d5fd7bdc6f11a0e4a4103f610aaf3d8e8556dd5e17cf211d93193879b63b01",
+      "output_dir": "/data/agrisa_jepa_runs/stage6d/stage6d_b2_capped_no_backfill_seed20261028",
+      "config_sha256": "2eebb2e6a854e5f9b2fbd8e7fa00c18ff1f64be3c5883a7599b1bf6092935427",
+      "meta_pretraining_seed": 20261028,
+      "data_seed": 20261028,
+      "augmentation_seed": 20261028,
+      "sampling_seed": 20261028
+    }
+  ],
+  "problems": [],
+  "ok": true
+}

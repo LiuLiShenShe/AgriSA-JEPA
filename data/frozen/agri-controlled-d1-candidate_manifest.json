@@ -1,0 +1,29 @@
+{
+  "data_version": "agri-controlled-d1-candidate",
+  "status": "DEFINED_NOT_BUILT",
+  "approved": false,
+  "reason": "The version is defined so the PlantVillage data is not lost, but no manifest is written: the CC-BY-SA-3.0-US terms, the 12,436 perceptual candidates and the source-level licence conflict are all unresolved.",
+  "images": {
+    "files_downloaded": 54305,
+    "duplicate_free_candidates": 54284,
+    "perceptual_candidate_pairs_pending": 12436
+  },
+  "sources": [
+    {
+      "source_id": "agrifm_ref93",
+      "name": "PlantVillage (colour images)",
+      "acquisition_domain": "CONTROLLED_LAB",
+      "license": "CC-BY-SA-3.0-US (Zenodo metadata says cc-by-4.0)",
+      "image_manifest": "data/registry/ingested/plantvillage_manifest.csv",
+      "audit": "reports/stage5a_plantvillage_audit.json"
+    }
+  ],
+  "excluded_from": [
+    "agri-field-d1-candidate"
+  ],
+  "prerequisites_to_build": [
+    "resolve CC-BY-SA-3.0-US attribution/share-alike obligations",
+    "review or explicitly accept the 12,436 perceptual candidates",
+    "record a human approval for the source"
+  ]
+}

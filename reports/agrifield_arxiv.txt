@@ -1,0 +1,1015 @@
+                                          AgriField-40K: Adapting Vision Models to
+                                        Agriculture With Efficient Continual Pretraining
+
+                                          Vasileios Tzouras1,2 , Paraskevas Pegios1,2 , and Lazaros Nalpantidis1,2
+                                               1
+                                                   Technical University of Denmark (DTU), Kongens Lyngby, Denmark
+                                                                    {vatzo,ppar,lanalpa}@dtu.dk
+                                                   2
+                                                     Pioneer Centre for Artificial Intelligence, Copenhagen, Denmark
+
+
+
+
+                                                   Pre-Training        Continual Pre-Training             Efficient Fine-Tuning
+                                             Natural Image Dataset       AgriField-40K Dataset             Downstream Field Tasks
+arXiv:2608.07984v1 [cs.CV] 8 Aug 2026
+
+
+
+
+                                           MAE        Backbone       AgriMAE      Backbone       Adapter AgriMAE    Backbone     Adapter
+
+
+                                                                                                                      Head
+                                                   Model Weights               Model Weights                       Predictions
+
+
+                                        Fig. 1: Overview of our parameter-efficient adaptation framework. Starting
+                                        from MAE pretrained on natural images, AgriMAE performs continual pretraining on
+                                        AgriField-40K by training only adapters. Then, we fine-tune these together with task-
+                                        specific heads for downstream tasks, while keeping the backbone frozen.
+
+
+
+                                              Abstract. Field-based agricultural computer vision is important for
+                                              precision agriculture, yet it largely depends on expensive annotations and
+                                              costly adaptation of large pretrained models. We introduce AgriField-
+                                              40K, a field-centric dataset curated from 17 public resources and cov-
+                                              ering diverse crops, weeds, and field conditions. Building on this, we
+                                              present AgriMAE, a parameter-efficient continual pretraining baseline
+                                              that adapts a masked autoencoder pretrained on natural images by train-
+                                              ing only lightweight adapters. We further explore semantic feature recon-
+                                              struction as an alternative pretraining objective and evaluate transfer
+                                              across multiple tasks. AgriMAE consistently improves downstream per-
+                                              formance and can match or even outperform full fine-tuning while using
+                                              up to 9× fewer trainable parameters, showing that AgriField-40K is a
+                                              practical resource for continual pretraining in agricultural vision. Project
+                                              page: https://dtu-pas.github.io/agrifield40k/
+
+                                              Keywords: Parameter-Efficient Continual Pretraining · Precision Agri-
+                                              culture · Representation Learning · Self-Supervised Learning
+2       V. Tzouras et al.
+
+1   Introduction
+Computer vision is becoming an important tool for visual understanding in agri-
+cultural fields [81]. It supports tasks such as crop and weed recognition [57], plant
+disease detection [58], stress monitoring [74], fruit counting [6], phenotyping [30],
+and field monitoring [45]. These tasks can help reduce manual labour and support
+more precise and efficient farming. However, field-based agricultural vision still
+relies heavily on supervised learning, which requires large labelled datasets [80].
+In practice, such labels are difficult to obtain as annotation requires domain ex-
+pertise and must account for complex field conditions [31]. At the same time,
+large amounts of field imagery are becoming easier to collect through drones,
+field robots, handheld cameras, and phenotyping systems [92]. This makes self-
+supervised learning (SSL) a promising direction for agricultural vision [32].
+    SSL methods leverage strong visual priors learned from large-scale unla-
+belled data [5, 12, 13, 16, 17, 29, 35, 94]. Among these, masked image modelling
+(MIM) [4,34,91,96] has become a powerful paradigm for visual pretraining, with
+Masked Autoencoders (MAE) [34] learning representations by reconstructing
+missing content from partially masked images. However, MAE is typically pre-
+trained on natural-image datasets such as ImageNet [21], whereas agricultural
+field images differ substantially. The latter often contain repeated plant struc-
+tures, fine-grained crop and weed differences, occlusion, changing illumination,
+and variation between growth stages, seasons, or acquisition platforms. This do-
+main gap may reduce the effectiveness of features learned from natural-image
+pretraining when applied to downstream real-world agricultural field tasks.
+    A natural solution is to adapt existing foundation models through con-
+tinual pretraining [60]. Yet, fully adapting large models can be computation-
+ally expensive and may risk over-fitting to small datasets or degrading useful
+general-purpose representations [82]. Recent works [20, 25, 46, 70] have shown
+that continual pretraining with parameter-efficient fine-tuning (PEFT) mecha-
+nisms [15, 38, 39, 43, 52] can improve transfer to specialized domains under data
+or compute constraints. Despite this progress, parameter-efficient self-supervised
+continual pretraining remains under-explored for field agricultural vision, largely
+due to the absence of a unified in-domain pretraining resource. Existing field data
+is fragmented into many public datasets that are individually small in scale or
+limited in crop and weed coverage [30, 63, 79, 88], making it difficult to system-
+atically develop and evaluate continual pretraining methods.
+    To support the systematic study of efficient continual pretraining, we intro-
+duce AgriField-40K, a unified dataset constructed from 17 public field agri-
+cultural datasets and containing approximately 40,000 images. AgriField-40K
+brings together diverse real-field imagery, including crop-weed scenes, pasture
+vegetation, growth-stage variation, and broader field scenes. We further present
+AgriMAE, a strong parameter-efficient baseline for this setting. As illustrated
+in Fig. 1, AgriMAE adapts an ImageNet-pretrained MAE to AgriField-40K with
+lightweight adapters and transfers it to downstream tasks through PEFT. To
+analyse the effect of the pretraining objective in MIM, we compare standard
+pixel-level reconstruction [34] with reconstruction of DINOv3 [73] representa-
+                        AgriField-40K: Continual Pretraining for Agriculture       3
+
+tions, providing a practical reference point for agricultural vision. Finally, we
+demonstrate the effectiveness of our pipeline on downstream applications, in-
+cluding classification, semantic segmentation and object detection tasks.
+    Our main contributions are the following:
+ – The first field-centric agricultural dataset for representation learning and
+   continual pretraining, AgriField-40K, built from 17 public datasets span-
+   ning diverse and field conditions and acquisition settings.
+ – A simple yet effective parameter-efficient baseline, AgriMAE, which adapts
+   a standard MAE to agricultural field imagery by freezing the pretrained
+   backbone and training lightweight adapters on our dataset.
+ – A study of reconstruction objectives for agricultural continual pretraining,
+   comparing pixel-level reconstruction with semantic feature reconstruction.
+ – Downstream validation showing that our continual pretraining strategy con-
+   sistently improves downstream performance in parameter-efficient settings.
+
+
+2   Related Work
+Self-Supervised Learning. Early SSL methods relied on contrastive learn-
+ing [16, 35], while later approaches avoided explicit negative pairs through re-
+dundancy reduction [5, 94], clustering [12], and self-distillation [13, 17, 29]. Mod-
+ern self-distillation models such as DINOv2 [64] and DINOv3 [73] learn highly
+transferable semantic features, but their success comes with substantial training
+cost, relying on large curated datasets, heavy architectures, and carefully scaled
+optimization pipelines. Another direction is MIM, inspired by natural language
+processing [22]. BEiT [4] predicts discrete visual tokens, while MAE [34] sim-
+plifies masked prediction by reconstructing pixels with an asymmetric encoder-
+decoder architecture. Although simple and effective, pixel targets provide limited
+semantic supervision. To address this, I-JEPA [3] predicts masked regions in la-
+tent space, iBOT [96] combines MIM with self-distillation using DINO [13], and
+MILAN [37] reconstructs text-aligned CLIP [65] image features which are of-
+ten object-centric. In this work, we explore DINOv3 [73] as a feature extractor
+for semantic feature reconstruction, using its dense representations to provide
+feature-level guidance for field imagery where crop, weed, and background struc-
+ture is often distributed across the scene.
+
+Efficient Continual Pretraining. Pretrained vision models can be adapted
+to new domains by continuing SSL on unlabelled target-domain data [56,60,67],
+avoiding training from scratch that typically requires large datasets. Early meth-
+ods continue training all backbone parameters, using either MAE [34]-based
+masked modelling [56] or hierarchical SSL pretraining [60, 67] from an exist-
+ing pretrained initialization. However, updating the full backbone can still be
+expensive for large models and may be unnecessary when the goal is domain
+adaptation. To further reduce this cost, recent works [20, 25, 46, 70] apply PEFT
+to continual pretraining. PEFT methods were originally introduced for super-
+vised adaptation, where most backbone parameters are frozen and only a small
+4       V. Tzouras et al.
+
+set of modules are trained, such as bottleneck adapters [38], LoRA [39], visual
+prompts [43], AdaptFormer [15], or UniAdapter [52]. In the context of contin-
+ual pretraining, parameter-efficient adaptation has been applied in several set-
+tings, with SLR [70] for remote sensing, ExPLoRA [46] for satellite, medical, and
+wildlife domains, GLARE [25] for dense prediction, and PECoP [20] for video
+action quality assessment. Our work follows this direction, with AgriField-40K
+enabling continual pretraining research and applications in agriculture and Agri-
+MAE providing a strong parameter-efficient baseline.
+
+Representation Learning in Agriculture. Agricultural vision has adopted
+SSL methods including contrastive [8, 77] and prototype-based learning [32],
+MIM [72,86], self-distillation [95], hybrid approaches [59,87], and CLIP-style [65]
+multimodal image-text alignment [11, 61]. Yet, most studies pretrain on a single
+dataset or target a specific downstream task, such as disease classification [9] or
+fruit ripeness estimation [85]. Recent work has also explored foundation models
+beyond task-specific pretraining. SPROUT [89] explores diffusion-based repre-
+sentation learning, WeedNet [71] pretrains MAE on large-scale web images before
+adapting it to weed recognition, and Agri-FM+ [60] performs continual SSL pre-
+training from ImageNet-pretrained ResNet-50 [36] on a large-scale agricultural
+corpus to improve downstream dense performance. Closer to our goal, Espejo
+et al . [26] evaluate DINOv2 features with linear probing, full and efficient fine-
+tuning across disease, weed, and growth-stage tasks, while Chen et al . [14] study
+adaptation of pretrained MAE [34], DINO [13], and DINOv2 [64] backbones for
+plant phenotyping using task-specific LoRA [39] adapters. However, these ap-
+proaches adapt and evaluate models during downstream supervised training. In
+contrast, we present AgriMAE, which uses adapters for parameter-efficient con-
+tinual pretraining on unlabelled images from AgriField-40K, to produce reusable
+representations for downstream real-world field tasks.
+
+Datasets for Agricultural Vision. Existing datasets cover a wide range of
+tasks, with many resources focusing on leaf-level, whole-plant, or close-up im-
+agery captured under controlled conditions. PlantVillage [40] and PlantDoc [75]
+support leaf disease recognition, while CVPPP [69] provides controlled leaf-level
+segmentation. Larger species-recognition resources such as Pl@ntNet-300K [27],
+iNaturalist [84], PlantCLEF [55], and iNatAg [42] broaden taxonomic coverage,
+but are mainly oriented toward isolated plants or close-up species identification
+rather than canopy-level field monitoring. Field datasets better capture real-
+world visual conditions, including crop rows, soil clutter, mixed vegetation, and
+changing illumination, yet they are often limited to specific crops, weeds, plat-
+forms, or regions, such as sugar beet [1,2,88], selected crop types [18], single-crop
+or weed-focused datasets [19, 30, 33, 49, 79], and rangeland weed imagery [63].
+Closest to our work, Agri-147K [60] combines multiple datasets for general agri-
+cultural pretraining. However, many of its sources remain leaf-centric, and, to
+the best of our knowledge, the curated corpus has not been publicly released. In
+this paper, we prioritize field imagery and carefully curate AgriField-40K from
+                       AgriField-40K: Continual Pretraining for Agriculture      5
+
+
+
+
+        Fig. 2: Sample images from our field-centric AgriField-40K dataset.
+
+
+
+public datasets with permissive licenses, enabling release as a unified resource
+for parameter-efficient continual self-supervised pretraining.
+
+
+3   AgriField-40K Dataset
+
+We introduce AgriField-40K, a well-curated field-centric agricultural dataset
+for representation learning and continual pretraining built from 17 publicly avail-
+able resources. As shown in Fig. 2, we define field-centric imagery as agricul-
+tural imagery captured under real field conditions. This includes crop and weed
+mixtures, pasture vegetation, dense canopies, soil backgrounds, different growth
+stages, and data collected from handheld cameras, robots, drones, and shrouded
+platforms. Table 1 summarizes the resources, licenses, original and retained sizes,
+field domains, acquisition settings, and original tasks. AgriField-40K combines
+crop-focused resources such as MuST-C [18], VegAnn [54], LUCASVision [93],
+and VCD [49], which provide images across crop species, growth stages, camera
+setups, and geographic locations. It also includes crop-weed datasets such as Phe-
+noBench [88], WE3DS [48], ACRECropWeed [7], Ronin [79], SorghumWeed [44],
+and Maize-Weed [62], adding mixed vegetation, robot and patch-based drone
+views, and temporal or illumination variation. To increase fine-grained weed
+and dense-vegetation diversity, we further include RadishWheat [19], PalmerA-
+maranth [66], RumexLeaves [30], Sesame&Weed [83], PerennialPlants [28], and
+GrassClover [76]. Finally, we manually curate iNatWeeds, a set of field-like weed
+images collected from iNaturalist [41] under permissive licenses. To ensure li-
+cense compatibility, AgriField-40K is released under CC BY-SA 4.0, following
+the most restrictive license.
+
+Data Preprocessing & Filtering. Our goal is efficient continual pretraining.
+Therefore, we discard original annotations, such as segmentation masks or class
+labels, and retain only RGB images. We also rename images with a dataset-
+specific prefix such that sources remain recoverable. Several source datasets, es-
+pecially those collected from video streams [62] or robot platforms [79], contain
+consecutive frames that are visually near-identical. These could potentially bias
+the corpus and reduce its effective diversity. Thus, we apply fixed-interval sam-
+pling and retain one frame every k frames, where k is chosen based on the frame
+rate and observed visual change between consecutive frames. For all resources,
+6          V. Tzouras et al.
+
+Table 1: AgriField-40K Dataset Summary: Unless noted otherwise, CC BY denotes
+CC BY 4.0; VegAnn [54] uses CC BY 1.0. In the acquisition column, “H. Cameras”
+denotes handheld cameras and “O. Cameras” denotes overhead cameras.
+
+        Dataset        Year   License   Size Retained          Domain         Acquisition      Task
+                                                         Sugar Beet, Soybean,
+      MuST-C [18]      2026   CC BY     7,242   7,242       Potato, Maize,       Robot          –
+                                                          Wheat & Intercrop
+       VCD [49]        2022   CC BY     2,258   2,258     Maize, Bean & Leek   Shrouded     Detection
+                                                             (Early Stage)      Platform
+PalmerAmaranth [19] 2023      CC BY     614      516       Palmer Amaranth    H. Cameras    Detection
+                                                               (8 Stages)
+ACRECropWeed [7] 2023         CC BY     1,000    791         Maize, Beans        Robot     Multi-Task
+                                                              & 4 Weeds
+    SorghumWeed [44]   2023   CC BY     252      172       Sorghum, Grasses   H. Cameras   Multi-Task
+                                                                & Weeds
+    GrassClover [76]   2019 CC BY-SA    435      435         Grass, Clover    H. Cameras Segmentation
+                                                                & Weeds       & Synthetic
+  PhenoBench [88]      2026 CC BY-SA 29,312      9,606   Sugar Beet & 6 Weeds    Drone    Segmentation
+    VegAnn [54]        2022  CC BY    3,775      1,607        26+ Crops         Multiple  Segmentation
+     Ronin [79]        2021  CC BY    1,176       135     6 Crops & 8 Weeds   H. Cameras    Detection
+ LUCASVision [93]      2023  CC BY   15,876     11,195          12 Crops      H. Cameras Classification
+   WE3DS [48]          2023  CC BY    2,568     1,553     7 Crops & 10 weeds Stereo RGB-D Segmentation
+  Maize-Weed [62]      2022  CC BY     843        255       Maize & Weeds     H. Cameras    Detection
+ RadishWheat [66]      2022  CC BY     552        534    Wild Radish in Wheat O. Cameras    Detection
+ RumexLeaves [30]      2024  CC BY     809        809     Rumex Obtusifolius     Robot      Detection
+Sesame&Weed [83]       2020   CC0     1,300      1,300     Sesame & Weeds     H. Cameras    Detection
+PerennialPlants [28]   2021   MIT      392        240     Weeds in Perennials H. Cameras   Mult-Task
+    iNatWeeds          2026  CC BY    1,315      1,315       Mixed Species    H. Cameras        –
+    AgriField-40K      2026 CC BY-SA     —      39,963      Field-Centric      Multiple     Pretraining
+
+
+
+
+we manually remove, blurry and low-resolution samples, and other low-quality
+images that provide limited useful signal for pretraining.
+
+
+Image Resizing. To standardize the input resolution while avoiding geometric
+distortion, each image is resized with its aspect ratio preserved and then centre-
+cropped. Given an image with width W and height H, we rescale it so that the
+                                                                        T
+shorter side matches T = 512 pixels using the scale factor s = min(W,H)       and
+Lanczos interpolation [10]. The resized image is then centre-cropped to a final
+resolution of T × T . This produces a common input size while preserving the
+original image geometry, although small border regions may be removed.
+
+
+Train & Validation Splits. We split AgriField-40K into 80% training and 20%
+validation images to monitor reconstruction quality during continual pretrain-
+ing. For source datasets derived from image sequences, we split at the sequence
+level rather than the image level to prevent near-duplicate frames from the same
+sequence from appearing in both splits. For source datasets composed of inde-
+pendently captured images, we apply standard random splits.
+                                                 AgriField-40K: Continual Pretraining for Agriculture                                                                                             7
+
+
+      Full Image
+
+
+
+
+    Masked Image
+
+
+
+
+                                                                                            ...
+                                 ...
+
+
+
+
+                                                                                                                 ...
+
+
+
+
+                                                                                                                                                                           ...
+Fig. 3: Overview of AgriMAE with semantic feature reconstruction. An ImageNet-
+pretrained MAE encoder-decoder (bottom), is adapted with lightweight AdaptFormer
+modules (ψ) on AgriField-40K to predict patch-level features from a frozen feature
+extractor F (top), with the loss computed over both masked and visible patches.
+
+
+4     AgriMAE: Efficient Model Adaptation for Agriculture
+We build on MIM with a vision transformer (ViT) [23] backbone, following
+MAE [34], to establish a strong parameter-efficient baseline for continual pre-
+training. Our model adaptation pipeline from continual pretraining to down-
+stream adaptation is shown in Fig. 1. We refer to our approach as AgriMAE
+and denote the encoder and decoder of the pretrained masked autoencoder by
+Eθ and Dϕ , respectively, where parameters θ and ϕ remain frozen. The trainable
+adapter parameters inserted into the MAE are denoted by ψ. In addition to the
+standard pixel-reconstruction objective, we explore semantic feature reconstruc-
+tion using a strong frozen feature extractor, denoted by F. During continual
+pretraining, only ψ is updated using our AgriField-40K dataset, as illustrated
+in Fig. 3. During downstream adaptation, we employ the same principal through
+PEFT and further optimize ψ together with a task-specific prediction head using
+labelled data for each task.
+
+4.1     Parameter-Efficient Adaptation
+For both continual pretraining on AgriField-40K and downstream PEFT, we use
+AdaptFormer [15]. More specifically, we insert a lightweight bottleneck adapter
+in parallel with the feed-forward multilayer perceptron (MLP) module of each
+transformer block, while keeping the original transformer weights frozen. Given
+a block input X̂ ∈ Rn×d , where n is the number of tokens and d is the feature
+dimension, the adapted block output is computed as
+
+                     Y = \hat {X} + \mathrm {MLP}(\mathrm {LN}(\hat {X})) + s \cdot W_\mathrm {up}\,\sigma \!\left (W_\mathrm {down}\,\mathrm {LN}(\hat {X})\right ), \label {eq:adaptformer}    (1)
+
+where LN(·) denotes layer normalization, MLP(·) is the frozen feed-forward mod-
+ule of the transformer block, Wdown ∈ Rr×d and Wup ∈ Rd×r project features
+8       V. Tzouras et al.
+
+
+
+
+          (a) MAE                                     (b) AgriMAE with Lpix                                                                                   (c) AgriMAE with Lfeat
+
+Fig. 4: t-SNE [53] visualization of feature representations from different pretraining
+methods. Features are extracted from the final layer using images from the LUCASVi-
+sion [93] subset of the AgriField-40K validation split.
+
+
+into and out of a bottleneck of rank r ≪ d, σ(·) is a non-linear activation, and s
+is a learnable scale. We denote the adapter parameters as ψ = {Wdown , Wup , s}.
+During both stages, only ψ and the task-specific heads used for downstream
+transfer are updated, while the pretrained backbone remains frozen.
+
+4.2   Efficient Self-Supervised Continual Pretraining
+Given an RGB image x, we divide it into n non-overlapping patches {xi }ni=1 ,
+each of size P . Each patch is linearly projected to dimension d and combined
+with positional embeddings. A random binary mask m ∈ {0, 1}n removes a
+fraction δ of the patches, and the encoder Eθ processes only the visible tokens.
+The decoder Dϕ reconstructs the masked patches from the encoded visible tokens
+and learnable, position-aware [MASK] tokens. Denoting the decoder output by
+x̂, the standard MAE objective minimizes the mean squared error between the
+reconstructed and ground-truth RGB pixel values at the masked positions:
+
+                              \mathcal {L}_{\mathrm {pix}} = \frac {1}{\delta \cdot n} \sum ^{n}_{i=1} m_i \cdot | x_i - \hat {x}_i |^2. \label {eq:l_rec}                             (2)
+
+    We freeze the encoder Eθ and decoder Dϕ , and place an adapter, as defined
+in Eq. 1, in every transformer block. During continual pretraining, only adapter
+parameters ψ are updated to minimize Lpix , keeping parameters θ and ϕ fixed.
+
+4.3   Semantic Feature Reconstruction
+We explore a semantic feature reconstruction objective using dense embeddings
+from a strong, frozen feature extractor F . Given the full unmasked image x,
+F produces one target embedding for each patch, i.e., {fi }ni=1 . In parallel, the
+masked autoencoder receives only the visible patches under the mask m and
+predicts a feature embedding for each patch. To predict features instead of pixel
+RGB values, we replace the decoder’s pixel-prediction head with a linear projec-
+tion into the feature space of F. The decoder Dϕ outputs a sequence of predicted
+                          AgriField-40K: Continual Pretraining for Agriculture                                                                                                                                            9
+
+patch embeddings {fˆi }ni=1 . We compare predicted and target embeddings using
+cosine distance after ℓ2 normalization:
+
+
+                         \mathcal {L}_{\mathrm {feat}} = \frac {1}{n}\sum _{i=1}^{n} \left ( 1 - \frac {f_i}{\lVert f_i \rVert _2} \cdot \frac {\hat {f}_i}{\lVert \hat {f}_i \rVert _2} \right ). \label {eq:l_feat}    (3)
+
+
+    Unlike Lpix , which is computed only at masked positions, we compute Lfeat
+over all patches at both masked and unmasked positions. This encourages Agri-
+MAE to reconstruct semantic structure across the whole image rather than only
+missing low-level pixel content. Thus, AgriMAE can be trained with either pixel
+reconstruction loss in Eq. 2 or semantic feature reconstruction loss in Eq. 3 as
+the continual pretraining objective.
+    Figure 4 visualizes t-SNE [53] embeddings from the LUCASVision [93] subset
+of the AgriField-40K validation set, comparing the original ImageNet-pretrained
+MAE with AgriMAE trained using pixel and feature reconstruction. The stan-
+dard MAE produces highly mixed clusters, reflecting the domain gap between
+natural images and agricultural field imagery. Continual pretraining with pixel
+reconstruction already improves the embedding structure, while feature recon-
+struction leads to more compact and separable clusters, preserving meaningful
+similarities among related crop categories such as wheat, durum wheat, and rye.
+
+
+5     Experiments and Results
+
+We implement AgriMAE, using a ViT-B/16 [23] model pretrained with stan-
+dard MAE [34] pixel reconstruction objective on ImageNet-1K [21]. During con-
+tinual self-supervised pretraining on AgriField-40K, only adapter parameters
+are optimized, while the encoder and decoder remain frozen. We use a masking
+ratio of 0.75 and extract feature reconstruction targets from a frozen DINOv3
+ViT-L/16 model pretrained on LVD-1689M [73]. Optimization uses AdamW [51]
+with a learning rate of 1 × 10−4 , weight decay of 1 × 10−2 , and β = (0.9, 0.95),
+with a 5-epoch linear warm-up followed by cosine decay for a total of 200 epochs
+and an effective batch size of 128. Unless stated otherwise, we use adapter bot-
+tleneck rank r = 512 and standard MAE augmentations, e.g., random resized
+crop and horizontal flip. All continual pretraining experiments are conducted on
+a single consumer-grade NVIDIA RTX 5090 GPU.
+
+
+
+5.1   Downstream Tasks and Datasets
+
+To evaluate the effectiveness of our pipeline for field-centric agricultural vision,
+we benchmark it across diverse downstream tasks using four real-world datasets.
+We consider classification, semantic segmentation, and object detection bench-
+marks, covering weed recognition, crop-weed segmentation, plant-level field seg-
+mentation, and multi-species crop-weed detection. Our evaluation focuses on
+efficient fine-tuning, where the backbone remains frozen and only adapters and
+10     V. Tzouras et al.
+
+task-specific prediction heads are optimized, allowing us to isolate the effect
+of continual pretraining in a parameter-efficient setting. We compare: (i) ran-
+domly initialized adapters inserted into the frozen MAE encoder, (ii) AgriMAE
+adapters continually pretrained with either pixel or feature reconstruction, and
+(iii) full fine-tuning of the original MAE encoder as a strong reference point.
+
+Classification. We use DeepWeeds [63], which consists of 17,509 RGB images
+from nine classes: eight weed species in Australian rangelands and one back-
+ground class. To reduce class imbalance, we subsample the background class,
+which accounts for over 50% of the samples. The data is split into 60%/20%/20%
+train, validation, and test sets. We evaluate both adapter fine-tuning and linear
+probing. For adapter fine-tuning, we freeze the pretrained backbone and fine-
+tune the adapters and a linear classification head using AdamW with learning
+rates of 1 × 10−5 and 1 × 10−4 , respectively, a weight decay of 1 × 10−2 , for 100
+epochs with a batch size of 128. For linear probing, we freeze the encoder and
+train only a linear classifier with AdamW and a learning rate of 1 × 10−4 for
+100 epochs with a batch size of 128, and images resized to 224 × 224. Standard
+MAE augmentations, e.g., random resized crop and horizontal flip, are applied,
+and model selection is based on validation accuracy. Final results are reported
+on the test set using top-1 accuracy.
+
+Semantic Segmentation. We use GrowliFlower [47] and the labelled split of
+PhenoBench [88] for downstream evaluation. The labelled PhenoBench split is
+provided separately by the PhenoBench authors from the unlabelled patches used
+for continual pretraining in AgriField-40K. PhenoBench provides a separate la-
+belled set with dense semantic annotations for crop, weed, and soil/background
+classes. It includes UAV images of sugar beet fields in Meckenheim, Germany,
+with two sugar beet varieties and six weed species from multiple growth stages.
+Following the official benchmark, we use the standardized split of 1,407/772 for
+training and validation. GrowliFlower provides RGB UAV orthophoto patches
+of cauliflower fields near Cologne, Germany, with dense pixel-wise annotations.
+We use the GrowliFlowerL subset and the official splits. To mitigate severe class
+imbalance, we retain the background class and the three most frequent plant
+identifiers while discarding rare instance labels. For both datasets, we attach an
+UPerNet [90] head and fine-tune the adapters and head, keeping the backbone
+frozen. Training uses AdamW with learning rates of 1 × 10−4 for adapters and
+2 × 10−4 for the decoder, weight decay of 1 × 10−2 , 80 epochs, and a batch size
+of 32, with all images resized to 512 × 512. Performance is evaluated on the
+PhenoBench validation set and GrowliFlower test set using class IoU and mean
+IoU.
+
+Object Detection. We evaluate on CropAndWeed [78], using the CropOr-
+Weed2 subset. It consists of RGB images collected from cultivation sites and
+experimental plots in Austria, with annotations for 74 crop and weed species.
+After removing images without valid annotations, the dataset contains 7,705 im-
+                         AgriField-40K: Continual Pretraining for Agriculture         11
+
+Table 2: DeepWeeds test-set classification performance. Linear probing trains only
+a linear head (middle), while PEFT fine-tunes adapters and a task-specific head and
+reports the number of trainable parameters (right). Results are averaged over five seeds.
+NA denotes non-applicable settings. We highlight the best result among parameter-
+efficient methods and include full fine-tuning as a strong reference point.
+
+                                   Linear Probing                 PEFT
+Method            Lpix Lfeat Top-1 Acc. (%) Params. (M) Top-1 Acc. (%) Params. (M)
+Full Fine-tuning   ✓    –          NA           NA        92.23±0.35      85.81
+MAE (Frozen)       ✓    –      86.04±0.10       0.01          NA           NA
+MAE + Adapters     ✓    –          NA           NA        93.66±0.12       9.46
+AgriMAE + Adapters ✓    –      86.84±0.22       0.01      94.15±0.07       9.46
+AgriMAE + Adapters ✓ ✓         88.25±0.15       0.01      94.47±0.14       9.46
+AgriMAE + Adapters –    ✓     88.63±0.15       0.01      94.72±0.20       9.46
+
+
+
+ages, which we randomly split into 60%/20%/20% training, validation, and test
+sets. We attach a Faster R-CNN [68] detector with a Feature Pyramid Network
+(FPN) [50] and fine-tune the adapters and detection head keeping the backbone
+frozen. We use AdamW with learning rates of 1 × 10−5 for adapters and 1 × 10−4
+for the detection head, cosine learning rate decay, 50 epochs, and a batch size of
+32. Images are resized to a shorter side of 800 pixels. Performance is evaluated
+on the test set using mAP@50 and mAP@50:95.
+
+5.2   Main Results
+Classification on DeepWeeds. Table 2 reports DeepWeeds results under lin-
+ear probing and PEFT adaptation. In the linear probing setting, AgriMAE im-
+proves over the original MAE, with feature reconstruction providing the strongest
+gains among the AgriMAE variants. A similar trend is observed under PEFT,
+where randomly initialized adapters already provide a strong baseline, but Agri-
+MAE further improves downstream performance through continual pretraining.
+AgriMAE trained with Lf eat performs best among the parameter-efficient meth-
+ods and also surpasses full backbone fine-tuning. Importantly, this is achieved
+while updating almost 9× fewer trainable parameters which demonstrates the
+effectiveness of parameter-efficient adaptation for limited-data settings.
+
+Semantic Segmentation on PhenoBench. Table 3 reports per-class IoU
+and mIoU on the validation set. Randomly initialized adapters achieve strong
+soil performance but lower performance on the more challenging weed class.
+Continual pretraining improves performance, and AgriMAE with Lf eat achieves
+the best IoU on weed class. Full fine-tuning obtains slightly better performance
+on average but updates 121.06M parameters compared to 44.08M for adapters.
+AgriMAE therefore almost matches full fine-tuning with fewer trainable param-
+eters while improving the most challenging weed class.
+
+Semantic Segmentation on GrowliFlower. Table 4 shows per-class IoU and
+mIoU on the test set. AgriMAE consistently improves over the original MAE
+12        V. Tzouras et al.
+
+
+
+
+     (a) Ground truth    (b) AgriMAE (Lf eat )   (c) AgriMAE (Lpix )   (d) MAE
+
+Fig. 5: Qualitative results. Top: Examples for the semantic segmentation task on
+GrowliFlower. Bottom: Examples for the object detection task on CropAndWeed.
+
+
+
+baseline, with feature reconstruction producing better fine-grained segmenta-
+tion details, as shown in the upper part of Fig. 5. We observe higher variance
+for under-represented classes, showing the strong class imbalance in the dataset.
+Class 3 remains very challenging even with full fine-tuning, likely due to limited
+representation (530 images compared to 1,381 and 1,211 for classes 1 and 2).
+
+Object Detection on CropAndWeed. Table 5 reports object detection re-
+sults on the CropAndWeed test set. MAE provides a solid baseline, and contin-
+ual pretraining improves both mAP@50 and mAP@50:95. AgriMAE with Lf eat
+provides the strongest performance, significantly outperforming full fine-tuning
+across all detection metrics. This is achieved with about 74% fewer trainable
+parameters, showing the effectiveness of semantic reconstruction for parameter-
+                         AgriField-40K: Continual Pretraining for Agriculture           13
+
+Table 3: Segmentation results on the PhenoBench [88] validation set. All models use
+an UPerNet [90] head. Results are averaged over five seeds. We highlight the best result
+among efficient methods and include full fine-tuning as a strong reference point.
+
+                              Soil      Crop       Weed      Overall   Model
+Method            Lpix Lfeat          IoU (%)              mIoU (%) Params. (M)
+Full Fine-tuning   ✓    – 98.50±0.02 86.75±0.65 57.14±0.36 80.80±0.11  121.06
+MAE + Adapters     ✓    – 98.33±0.05 85.20±0.18 55.90±0.31 79.81±0.10   44.08
+AgriMAE + Adapters ✓    – 98.33±0.04 85.67±0.13 56.22±0.33 80.07±0.07   44.08
+AgriMAE + Adapters –    ✓ 98.35±0.05 86.12±0.11 57.28±0.24 80.58±0.10  44.08
+
+
+Table 4: Semantic segmentation results on the GrowliFlower [47] test set. All models
+use an UPerNet [90] head. Results are averaged over five seeds. We highlight the best
+result among efficient methods and include full fine-tuning as a strong reference point.
+
+                               0          1          2          3       Overall   Model
+Method            Lpix Lfeat                IoU (%)                   mIoU (%) Params. (M)
+Full Fine-tuning   ✓    – 98.97±0.03 68.68±0.41 51.35±1.24 20.93±0.99 59.93±0.46  121.06
+MAE + Adapters     ✓    – 98.83±0.12 66.28±0.65 44.74±1.26 16.84±0.37 56.58±0.78   44.08
+AgriMAE + Adapters ✓    – 98.94±0.01 67.26±0.58 46.64±1.54 16.04±0.80 57.22±0.46   44.08
+AgriMAE + Adapters –    ✓ 98.97±0.03 67.89±0.44 48.12±0.77 17.39±1.03 58.09±0.35  44.08
+
+
+
+
+efficient settings. As shown in the lower part of Figure 5, AgriMAE with Lf eat
+detects all instances correctly, whereas MAE produces several false positives.
+
+
+5.3   Ablation Studies
+
+Adapter Bottleneck Rank. We study the effect of the AdaptFormer [15] bot-
+tleneck rank r using linear probing on the DeepWeeds validation set. We evaluate
+r ∈ {32, 64, 128, 256, 512} while keeping all other continual pretraining settings
+fixed. As shown in Tab. 6, linear probing performance improves consistently with
+increasing r. We therefore use r = 512 as a default in all of our experiments.
+Although r = 512 is relatively large compared to the ViT-B hidden dimension
+(d = 768), adapters remain substantially more efficient than full fine-tuning.
+
+Reconstruction Objective. We ablate the effect of pixel and feature recon-
+struction in continual pretraining, and their combination using linear probing on
+the DeepWeeds validation set. As shown in Tab. 6, AgriMAE with Lpix improves
+over the frozen backbone, demonstrating the benefit of continual pretraining on
+AgriField-40K. Combining this with Lf eat further improves accuracy, while Agri-
+MAE trained only with Lf eat achieves the best results.
+
+
+6     Discussion
+
+Our results demonstrate the effectiveness of parameter-efficient continual pre-
+training for field-centric agricultural vision. Across classification, semantic seg-
+mentation, and object detection, AgriMAE improves over the original MAE
+14       V. Tzouras et al.
+
+Table 5: Object detection results on the CropAndWeed [78] test set. All models use
+a Faster R-CNN [68] head. Results are averaged over five seeds. We highlight the best
+result among efficient methods and include full fine-tuning as a strong reference point.
+
+                                  Crop                  Weed                 Overall          Model
+Method            Lpix Lfeat AP50      AP50:95     AP50      AP50:95    mAP50     mAP50:95 Params. (M)
+Full Fine-tuning   ✓    – 77.26±0.60 48.67±0.76 49.17±0.43 24.36±0.28 63.25±0.31 36.44±0.26   103.46
+MAE + Adapters     ✓    – 72.54±0.65 45.33±0.63 47.51±0.32 23.27±0.41 60.03±0.48 34.30±0.47    27.11
+AgriMAE + Adapters ✓    – 73.37±0.36 46.56±0.31 48.31±0.52 23.79±0.52 60.79±0.38 35.18±0.36    27.11
+AgriMAE + Adapters –    ✓ 79.92±0.82 52.02±0.50 52.54±0.88 27.35±0.58 66.23±0.72 39.68±0.51   27.11
+
+
+
+Table 6: Ablation study for linear probing on the DeepWeeds validation set. Left:
+Effect of the adapter bottleneck dimension r for AgriMAE trained with Lpix , shown
+from a single run. Right: Effect of different pretraining objectives, evaluated with the
+best r = 512 and reported as the mean and standard deviation over five seeds.
+
+         Bottleneck (Lpix )              Pretraining Objective (r = 512)
+        r Top-1 Acc. (%)            Method            Lpix Lfeat Top-1 Acc. (%)
+       32      83.57
+       64      84.85                MAE (Frozen)       ✓              –       85.34±0.13
+       128     85.78                AgriMAE + Adapters ✓              –       86.52±0.10
+       256     86.09                AgriMAE + Adapters ✓              ✓       87.58±0.12
+       512     86.52                AgriMAE + Adapters –              ✓      87.82±0.27
+
+
+
+adapter baseline, showing that adapting representations on AgriField-40K ben-
+efits downstream tasks. A key finding is that the reconstruction target matters.
+While pixel reconstruction already improves over the ImageNet-pretrained MAE,
+semantic feature reconstruction provides larger gains. As shown in Fig. 4, our
+feature-reconstruction variant produces more compact and better separated clus-
+ters. This suggests that leveraging a strong feature extractor such as DINOv3
+for dense feature-level guidance is useful for field imagery, where crop, weed,
+and background structure is often distributed across the scene. The qualitative
+examples in Fig. 5 show the same trend, with feature reconstruction producing
+cleaner segmentation masks and more accurate detections than pixel reconstruc-
+tion. Finally, our ablation shows that larger adapter ranks strengthen continual
+pretraining, indicating that AgriMAE benefits from added adaptation capacity
+while still remaining far more parameter-efficient than full fine-tuning.
+
+    To keep the study controlled, we focus on masked image modelling and com-
+pare PEFT adaptation of the ImageNet-pretrained MAE [34] with AgriMAE
+on several downstream tasks. While this isolates the effect of continual pre-
+training, future work could explore other representation learning approaches,
+such as contrastive learning [16], self-distillation [13], and diffusion-based rep-
+resentation learning [89]. Moreover, we implement AgriMAE with a ViT-B [23]
+backbone, AdaptFormer [15], and DINOv3 [73] ViT-L feature targets to provide
+a controlled and reproducible baseline. Exploring alternative teacher feature ex-
+tractors for semantic reconstruction, or extending our adaptation framework to
+larger backbones, and evaluating other PEFT variants such as LoRA [39], and
+                        AgriField-40K: Continual Pretraining for Agriculture         15
+
+ExPLoRA [46] are promising directions. Future work could also study efficient
+adaption of agriculture-specific foundation models [60, 71, 89], with AgriField-
+40K serving as a field-centric resource for efficient continual pretraining. Fi-
+nally, three of our downstream evaluation tasks are fully independent of the
+AgriField-40K pretraining corpus. For PhenoBench, we included its unlabelled
+patches in AgriField-40K for continual pretraining and used its officially labelled
+split for downstream supervised fine-tuning, though PhenoBench does not pro-
+vide sufficient detail on how images were partitioned across fields, sequences,
+or campaigns. This follows common evaluation practice in parameter-efficient
+continual pretraining [46], where unlabelled splits are used for pretraining and
+labelled splits from the same dataset are used for downstream evaluation.
+
+Conclusion. We introduce AgriField-40K and establish AgriMAE as a strong
+parameter-efficient baseline for continual pretraining. Our results show that Agri-
+MAE can match or even outperform full fine-tuning while using substantially
+fewer trainable parameters. We hope AgriField-40K will support future research
+on efficient continual pretraining and practical agricultural vision applications.
+
+
+Acknowledgements
+
+This work was supported by Innovation Fund Denmark under Grant Agreement
+No. 2105-00013A (SAVA - Safety in Autonomous Vehicles in Agriculture) and
+the Novo Nordisk Foundation under Grant Agreement No. NNF25SA0104538
+(RIC - Robotic Intercropping). HPC resources for the initial experiments were
+provided by the Pioneer Centre for Artificial Intelligence and the DTU Comput-
+ing Center [24].
+
+
+References
+ 1. Ahmadi, A., Halstead, M., McCool, C.: Towards Autonomous Crop-Agnostic Vi-
+    sual Navigation in Arable Fields. CoRR (2021), https://arxiv.org/abs/2109.
+    11936
+ 2. Ahmadi, A., Halstead, M., McCool, C.: Virtual Temporal Samples for Recurrent
+    Neural Networks: applied to semantic segmentation in agriculture. CoRR (2021),
+    https://arxiv.org/abs/2106.10118
+ 3. Assran, M., Duval, Q., Misra, I., Bojanowski, P., Vincent, P., Rabbat, M., LeCun,
+    Y., Ballas, N.: Self-supervised learning from images with a joint-embedding predic-
+    tive architecture. In: Proceedings of the IEEE/CVF conference on computer vision
+    and pattern recognition. pp. 15619–15629 (2023)
+ 4. Bao, H., Dong, L., Piao, S., Wei, F.: Beit: Bert pre-training of image transformers.
+    arXiv preprint arXiv:2106.08254 (2021)
+ 5. Bardes, A., Ponce, J., LeCun, Y.: Vicreg: Variance-invariance-covariance regular-
+    ization for self-supervised learning. arXiv preprint arXiv:2105.04906 (2021)
+ 6. Bargoti, S., Underwood, J.: Deep fruit detection in orchards. In: 2017 IEEE in-
+    ternational conference on robotics and automation (ICRA). pp. 3626–3633. IEEE
+    (2017)
+16      V. Tzouras et al.
+
+ 7. Bertoglio, R., Spizzichino, E., Kalouguine, A., Vitali, G., Matteucci, M.: The ACRE
+    Crop-Weed Dataset for Benchmarking Weed Detection Models on Maize and Beans
+    Fields. In: Joint European Conference on Machine Learning and Knowledge Dis-
+    covery in Databases. pp. 312–323. Springer (2023)
+ 8. Bunyang, S., Thedwichienchai, N., Pintong, K., Lael, N., Kunaborimas, W., Boon-
+    rat, P., Siriborvornratanakul, T.: Self-supervised learning advanced plant disease
+    image classification with SimCLR. Advances in Computational Intelligence 3(5),
+    18 (2023)
+ 9. Bunyang, S., Thedwichienchai, N., Pintong, K., Lael, N., Kunaborimas, W., Boon-
+    rat, P., Siriborvornratanakul, T.: Self-supervised learning advanced plant disease
+    image classification with SimCLR. Advances in Computational Intelligence 3(5),
+    18 (2023)
+10. Burger, W., Burge, M.J.: Digital image processing: An algorithmic introduction.
+    Springer Nature (2022)
+11. Cao, Y., Chen, L., Yuan, Y., Sun, G.: Cucumber disease recognition with small
+    samples using image-text-label-based multi-modal language model. Computers and
+    electronics in agriculture 211, 107993 (2023)
+12. Caron, M., Misra, I., Mairal, J., Goyal, P., Bojanowski, P., Joulin, A.: Unsupervised
+    learning of visual features by contrasting cluster assignments. Advances in neural
+    information processing systems 33, 9912–9924 (2020)
+13. Caron, M., Touvron, H., Misra, I., Jégou, H., Mairal, J., Bojanowski, P., Joulin,
+    A.: Emerging properties in self-supervised vision transformers. In: Proceedings of
+    the IEEE/CVF international conference on computer vision. pp. 9650–9660 (2021)
+14. Chen, F., Giuffrida, M.V., Tsaftaris, S.A.: Adapting vision foundation models for
+    plant phenotyping. In: Proceedings of the IEEE/CVF International Conference on
+    Computer Vision. pp. 604–613 (2023)
+15. Chen, S., Ge, C., Tong, Z., Wang, J., Song, Y., Wang, J., Luo, P.: Adaptformer:
+    Adapting vision transformers for scalable visual recognition. Advances in Neural
+    Information Processing Systems 35, 16664–16678 (2022)
+16. Chen, T., Kornblith, S., Norouzi, M., Hinton, G.: A simple framework for con-
+    trastive learning of visual representations. In: International conference on machine
+    learning. pp. 1597–1607. PmLR (2020)
+17. Chen, X., He, K.: Exploring simple siamese representation learning. In: Proceedings
+    of the IEEE/CVF conference on computer vision and pattern recognition. pp.
+    15750–15758 (2021)
+18. Chong, Y.L., Krämer, J., Chakhvashvili, E., Marks, E., Esser, F., Dreier, A., Rosu,
+    R.A., Warstat, K., Pude, R., Behnke, S., et al.: The Multi-Sensor and Multi-
+    Temporal Dataset of Multiple Crops for In-Field Phenotyping and Monitoring.
+    Scientific Data (2026)
+19. Coleman, G., Kutugata, M., Walsh, M., Bagavathiannan, M.: Palmer Amaranth
+    Growth Stage – 8 (PAGS8) (2023), https://weed-ai.sydney.edu.au/datasets/
+    5c78d067-8750-4803-9cbe-57df8fae55e4
+20. Dadashzadeh, A., Duan, S., Whone, A., Mirmehdi, M.: Pecop: Parameter effi-
+    cient continual pretraining for action quality assessment. In: Proceedings of the
+    IEEE/CVF Winter Conference on applications of computer vision. pp. 42–52
+    (2024)
+21. Deng, J., Dong, W., Socher, R., Li, L.J., Li, K., Fei-Fei, L.: Imagenet: A large-
+    scale hierarchical image database. In: 2009 IEEE conference on computer vision
+    and pattern recognition. pp. 248–255. Ieee (2009)
+                         AgriField-40K: Continual Pretraining for Agriculture          17
+
+22. Devlin, J., Chang, M.W., Lee, K., Toutanova, K.: Bert: Pre-training of deep bidi-
+    rectional transformers for language understanding. In: Proceedings of the 2019
+    conference of the North American chapter of the association for computational
+    linguistics: human language technologies, volume 1 (long and short papers). pp.
+    4171–4186 (2019)
+23. Dosovitskiy, A., Beyer, L., Kolesnikov, A., Weissenborn, D., Zhai, X., Unterthiner,
+    T., Dehghani, M., Minderer, M., Heigold, G., Gelly, S., et al.: An image is
+    worth 16x16 words: Transformers for image recognition at scale. arXiv preprint
+    arXiv:2010.11929 (2020)
+24. DTU Computing Center: DTU Computing Center resources (2024). https://doi.
+    org/10.48714/DTU.HPC.0001, https://doi.org/10.48714/DTU.HPC.0001
+25. Ebouky, B., Chhatkuli, A., Malossi, C., Studer, C., Assaf, R., Bartezzaghi, A.:
+    Enhancing Semantic Segmentation with Continual Self-Supervised Pre-training.
+    arXiv preprint arXiv:2509.17816 (2025)
+26. Espejo-Garcia, B., Güldenring, R., Nalpantidis, L., Fountas, S.: Foundation vision
+    models in agriculture: DINOv2, LoRA and knowledge distillation for disease and
+    weed identification. Computers and Electronics in Agriculture 239, 110900 (2025)
+27. Garcin, C., Bonnet, P., Affouard, A., Lombardo, J.C., Chouet, M., Servajean, M.,
+    Lorieul, T., Salmon, J., et al.: Pl@ ntNet-300K: a plant image dataset with high
+    label ambiguity and a long-tailed distribution. In: Thirty-fifth Conference on Neu-
+    ral Information Processing Systems Datasets and Benchmarks Track (Round 2)
+    (2021)
+28. Geisler, B.: Perrenial Plants Detection (2021), https : / / www . kaggle . com /
+    datasets/benediktgeisler/perrenial-plants-detection
+29. Grill, J.B., Strub, F., Altché, F., Tallec, C., Richemond, P., Buchatskaya, E., Do-
+    ersch, C., Avila Pires, B., Guo, Z., Gheshlaghi Azar, M., et al.: Bootstrap your own
+    latent-a new approach to self-supervised learning. Advances in neural information
+    processing systems 33, 21271–21284 (2020)
+30. Güldenring, R., Andersen, R.E., Nalpantidis, L.: Zoom in on the Plant: Fine-
+    Grained Analysis of Leaf, Stem, and Vein Instances. IEEE Robotics and Automa-
+    tion Letters 9(2), 1588–1595 (2023)
+31. Güldenring, R., Boukas, E., Ravn, O., Nalpantidis, L.: Few-leaf Learning: Weed
+    Segmentation in Grasslands. In 2021 IEEE. In: RSJ International Conference on
+    Intelligent Robots and Systems (IROS). pp. 3248–3254 (2021)
+32. Güldenring, R., Nalpantidis, L.: Self-supervised contrastive learning on agricultural
+    images. Computers and Electronics in Agriculture 191, 106510 (2021)
+33. Güldenring, R., Van Evert, F.K., Nalpantidis, L.: RumexWeeds: A grassland
+    dataset for agricultural robotics. Journal of Field Robotics 40(6), 1639–1656 (2023)
+34. He, K., Chen, X., Xie, S., Li, Y., Dollár, P., Girshick, R.: Masked autoencoders are
+    scalable vision learners. In: Proceedings of the IEEE/CVF conference on computer
+    vision and pattern recognition. pp. 16000–16009 (2022)
+35. He, K., Fan, H., Wu, Y., Xie, S., Girshick, R.: Momentum contrast for unsupervised
+    visual representation learning. In: Proceedings of the IEEE/CVF conference on
+    computer vision and pattern recognition. pp. 9729–9738 (2020)
+36. He, K., Zhang, X., Ren, S., Sun, J.: Deep residual learning for image recognition. In:
+    Proceedings of the IEEE conference on computer vision and pattern recognition.
+    pp. 770–778 (2016)
+37. Hou, Z., Sun, F., Chen, Y.K., Xie, Y., Kung, S.Y.: Milan: Masked image pretraining
+    on language assisted representation. arXiv preprint arXiv:2208.06049 (2022)
+18      V. Tzouras et al.
+
+38. Houlsby, N., Giurgiu, A., Jastrzebski, S., Morrone, B., De Laroussilhe, Q., Ges-
+    mundo, A., Attariyan, M., Gelly, S.: Parameter-efficient transfer learning for NLP.
+    In: International conference on machine learning. pp. 2790–2799. PMLR (2019)
+39. Hu, E.J., Shen, Y., Wallis, P., Allen-Zhu, Z., Li, Y., Wang, S., Wang, L., Chen,
+    W., et al.: Lora: Low-rank adaptation of large language models. Iclr 1(2), 3 (2022)
+40. Hughes, D., Salathé, M., et al.: An open access repository of images on plant
+    health to enable the development of mobile disease diagnostics. arXiv preprint
+    arXiv:1511.08060 (2015)
+41. iNaturalist: inaturalist. https://www.inaturalist.org (2026)
+42. Jain, N., Joshi, A., Earles, M.: iNatAg: Multi-Class Classification Models Enabled
+    by a Large-Scale Benchmark Dataset with 4.7 M Images of 2,959 Crop and Weed
+    Species. In: Proceedings of the Computer Vision and Pattern Recognition Confer-
+    ence. pp. 5501–5510 (2025)
+43. Jia, M., Tang, L., Chen, B.C., Cardie, C., Belongie, S., Hariharan, B., Lim, S.N.:
+    Visual prompt tuning. In: European conference on computer vision. pp. 709–727.
+    Springer (2022)
+44. Justina, M.J., Thenmozhi, M.: SorghumWeedDataset_Classification and
+    SorghumWeedDataset_Segmentation datasets for classification, detection,
+    and segmentation in deep learning. Data in brief 52, 109935 (2024)
+45. Kamilaris, A., Prenafeta-Boldú, F.X.: Deep learning in agriculture: A survey. Com-
+    puters and electronics in agriculture 147, 70–90 (2018)
+46. Khanna, S., Irgau, M., Lobell, D.B., Ermon, S.: Explora: Parameter-efficient
+    extended pre-training to adapt vision transformers under domain shifts. arXiv
+    preprint arXiv:2406.10973 (2024)
+47. Kierdorf, J., Junker-Frohn, L.V., Delaney, M., Olave, M.D., Burkart, A., Jaenicke,
+    H., Muller, O., Rascher, U., Roscher, R.: GrowliFlower: An image time-series
+    dataset for GROWth analysis of cauLIFLOWER. Journal of Field Robotics 40(2),
+    173–192 (2023)
+48. Kitzler, F., Barta, N., Neugschwandtner, R.W., Gronauer, A., Motsch, V.: WE3DS:
+    An RGB-D image dataset for semantic segmentation in agriculture. Sensors 23(5),
+    2713 (2023)
+49. Lac, L., Keresztes, B., Louargant, M., Donias, M., Da Costa, J.P.: An annotated
+    image dataset of vegetable crops at an early stage of growth for proximal sensing
+    applications. Data in Brief 42, 108035 (2022)
+50. Lin, T.Y., Dollár, P., Girshick, R., He, K., Hariharan, B., Belongie, S.: Feature
+    pyramid networks for object detection. In: Proceedings of the IEEE conference on
+    computer vision and pattern recognition. pp. 2117–2125 (2017)
+51. Loshchilov, I., Hutter, F.: Decoupled weight decay regularization. arXiv preprint
+    arXiv:1711.05101 (2017)
+52. Lu, H., Huo, Y., Yang, G., Lu, Z., Zhan, W., Tomizuka, M., Ding, M.: Uniadapter:
+    Unified parameter-efficient transfer learning for cross-modal modeling. In: Interna-
+    tional Conference on Learning Representations. vol. 2024, pp. 24577–24596 (2024)
+53. Maaten, L.v.d., Hinton, G.: Visualizing data using t-sne. Journal of machine learn-
+    ing research 9(Nov), 2579–2605 (2008)
+54. Madec, S., Irfan, K., Velumani, K., Baret, F., David, E., Daubige, G., Samatan,
+    L.B., Serouart, M., Smith, D., James, C., et al.: VegAnn, Vegetation Annotation
+    of multi-crop RGB images acquired under diverse conditions for segmentation.
+    Scientific Data 10(1), 302 (2023)
+55. Martellucci, G., Goëau, H., Bonnet, P., Vinatier, F., Joly, A.: Overview of Plant-
+    CLEF 2025: Multi-Species Plant Identification in Vegetation Quadrat Images:
+                         AgriField-40K: Continual Pretraining for Agriculture        19
+
+    Notebook for the LifeCLEF Lab at CLEF 2025. In: CLEF 2025-Working Notes
+    of the Conference and Labs of the Evaluation Forum. vol. 4038, pp. 2942–2954.
+    CEUR (2025)
+56. Mendieta, M., Han, B., Shi, X., Zhu, Y., Chen, C.: Towards geospatial foundation
+    models via continual pretraining. In: Proceedings of the IEEE/CVF International
+    Conference on Computer Vision. pp. 16806–16816 (2023)
+57. Milioto, A., Lottes, P., Stachniss, C.: Real-time semantic segmentation of crop and
+    weed for precision agriculture robots leveraging background knowledge in CNNs.
+    In: 2018 IEEE international conference on robotics and automation (ICRA). pp.
+    2229–2235. IEEE (2018)
+58. Mohanty, S.P., Hughes, D.P., Salathé, M.: Using deep learning for image-based
+    plant disease detection. Frontiers in plant science 7, 1419 (2016)
+59. Nagasubramanian, K., Singh, A., Singh, A., Sarkar, S., Ganapathysubramanian,
+    B.: Plant phenotyping with limited annotation: Doing more with less. The Plant
+    Phenome Journal 5(1), e20051 (2022)
+60. Nahian, A., Jaber, M., et al.: Agri-FM+: A Self-Supervised Foundation Model for
+    Agricultural Vision. In: Proceedings of the Computer Vision and Pattern Recog-
+    nition Conference. pp. 5511–5523 (2025)
+61. Nawaz, U., Muhammad, A., Gani, H., Naseer, M., Khan, F.S., Khan, S., Anwer,
+    R.: AgriCLIP: Adapting CLIP for agriculture and livestock via domain-specialized
+    cross-model alignment. In: Proceedings of the 31st International Conference on
+    Computational Linguistics. pp. 9630–9639 (2025)
+62. Olaniyi, O.M., Salaudeen, M.T., Daniya, E., Abdullahi, I.M., Folorunso, T.A.,
+    Bala, J.A., Nuhu, B.K., Adedigba, A.P., Oluwole, B.I., Bankole, A.O., et al.: De-
+    velopment of maize plant dataset for intelligent recognition and weed control. Data
+    in Brief 47, 109030 (2023)
+63. Olsen, A., Konovalov, D.A., Philippa, B., Ridd, P., Wood, J.C., Johns, J., Banks,
+    W., Girgenti, B., Kenny, O., Whinney, J., et al.: Deepweeds: A multiclass weed
+    species image dataset for deep learning. Scientific reports 9(1), 2058 (2019)
+64. Oquab, M., Darcet, T., Moutakanni, T., Vo, H., Szafraniec, M., Khalidov, V.,
+    Fernandez, P., Haziza, D., Massa, F., El-Nouby, A., et al.: Dinov2: Learning robust
+    visual features without supervision. arXiv preprint arXiv:2304.07193 (2023)
+65. Radford, A., Kim, J.W., Hallacy, C., Ramesh, A., Goh, G., Agarwal, S., Sastry, G.,
+    Askell, A., Mishkin, P., Clark, J., et al.: Learning transferable visual models from
+    natural language supervision. In: International conference on machine learning. pp.
+    8748–8763. PmLR (2021)
+66. Rayner, G.: RadishWheatDataset (2022), https://weed- ai.sydney.edu.au/
+    datasets/8b8f134f-ede4-4792-b1f7-d38fc05d8127
+67. Reed, C.J., Yue, X., Nrusimha, A., Ebrahimi, S., Vijaykumar, V., Mao, R., Li, B.,
+    Zhang, S., Guillory, D., Metzger, S., et al.: Self-supervised pretraining improves
+    self-supervised pretraining. In: Proceedings of the IEEE/CVF winter conference
+    on applications of computer vision. pp. 2584–2594 (2022)
+68. Ren, S., He, K., Girshick, R., Sun, J.: Faster r-cnn: Towards real-time object de-
+    tection with region proposal networks. Advances in neural information processing
+    systems 28 (2015)
+69. Scharr, H., Minervini, M., French, A.P., Klukas, C., Kramer, D.M., Liu, X., Luengo,
+    I., Pape, J.M., Polder, G., Vukadinovic, D., et al.: Leaf segmentation in plant
+    phenotyping: a collation study. Machine vision and applications 27(4), 585–606
+    (2016)
+20      V. Tzouras et al.
+
+70. Scheibenreif, L., Mommert, M., Borth, D.: Parameter efficient self-supervised
+    geospatial domain adaptation. In: Proceedings of the IEEE/CVF Conference on
+    Computer Vision and Pattern Recognition. pp. 27841–27851 (2024)
+71. Shen, Y., Ayanlade, T.T., Boddepalli, V.N., Saadati, M., Rairdin, A., Deng, Z.K.,
+    Arshad, M.A., Balu, A., Mueller, D., Singh, A.K., et al.: WeedNet: A foundation
+    model-based global-to-local AI approach for real-time weed species identification
+    and classification. arXiv preprint arXiv:2505.18930 (2025)
+72. Shikhar, S., Sobti, A.: Label-free anomaly detection in aerial agricultural images
+    with masked image modeling. In: Proceedings of the IEEE/CVF Conference on
+    Computer Vision and Pattern Recognition. pp. 5440–5449 (2024)
+73. Siméoni, O., Vo, H.V., Seitzer, M., Baldassarre, F., Oquab, M., Jose, C., Khali-
+    dov, V., Szafraniec, M., Yi, S., Ramamonjisoa, M., et al.: Dinov3. arXiv preprint
+    arXiv:2508.10104 (2025)
+74. Singh, A.K., Ganapathysubramanian, B., Sarkar, S., Singh, A.: Deep learning for
+    plant stress phenotyping: trends and future perspectives. Trends in plant science
+    23(10), 883–898 (2018)
+75. Singh, D., Jain, N., Jain, P., Kayal, P., Kumawat, S., Batra, N.: PlantDoc: A
+    dataset for visual plant disease detection (2020)
+76. Skovsen, S., Dyrmann, M., Mortensen, A.K., Laursen, M.S., Gislum, R., Eriksen,
+    J., Farkhani, S., Karstoft, H., Jorgensen, R.N.: The GrassClover image dataset for
+    semantic and hierarchical species understanding in agriculture. In: Proceedings of
+    the IEEE/CVF conference on computer vision and pattern recognition workshops.
+    pp. 0–0 (2019)
+77. Sornapudi, S., Singh, R.: Self-supervised backbone framework for diverse agricul-
+    tural vision tasks. arXiv preprint arXiv:2403.15248 (2024)
+78. Steininger, D., Trondl, A., Croonen, G., Simon, J., Widhalm, V.: The cropandweed
+    dataset: A multi-modal learning approach for efficient crop and weed manipulation.
+    In: Proceedings of the IEEE/CVF Winter Conference on Applications of Computer
+    Vision. pp. 3729–3738 (2023)
+79. Sudars, K., Jasko, J., Namatevs, I., Ozola, L., Badaukis, N.: Dataset of annotated
+    food crops and weed images for robotic computer vision control. Data in brief 31,
+    105833 (2020)
+80. Sun, C., Shrivastava, A., Singh, S., Gupta, A.: Revisiting unreasonable effectiveness
+    of data in deep learning era. In: Proceedings of the IEEE international conference
+    on computer vision. pp. 843–852 (2017)
+81. Tian, H., Wang, T., Liu, Y., Qiao, X., Li, Y.: Computer vision technology in
+    agricultural automation—A review. Information processing in agriculture 7(1), 1–
+    19 (2020)
+82. Tzouras, V., Nalpantidis, L., Güldenring, R.: From web data to real fields: Low-cost
+    unsupervised domain adaptation for agricultural robots. In: Scandinavian Confer-
+    ence on Image Analysis. pp. 203–216. Springer (2025)
+83. Utsav, P., Raviraj, P., Rayja, M.: Crop and Weed Detection Data with
+    Bounding Boxes. Kaggle Dataset (2020), https://www.kaggle.com/datasets/
+    ravirajsinh45/crop-and-weed-detection-data-with-bounding-boxes
+84. Van Horn, G., Mac Aodha, O., Song, Y., Cui, Y., Sun, C., Shepard, A., Adam,
+    H., Perona, P., Belongie, S.: The inaturalist species classification and detection
+    dataset. In: Proceedings of the IEEE conference on computer vision and pattern
+    recognition. pp. 8769–8778 (2018)
+85. Varga, L.A., Frank, H., Zell, A.: Self-supervised pretraining for hyperspectral clas-
+    sification of fruit ripeness. In: 6th International Conference on Optical Character-
+    ization of Materials, OCM. pp. 97–108 (2023)
+                         AgriField-40K: Continual Pretraining for Agriculture         21
+
+86. Wang, Y., Yin, Y., Li, Y., Qu, T., Guo, Z., Peng, M., Jia, S., Wang, Q., Zhang,
+    W., Li, F.: Classification of plant leaf disease recognition based on self-supervised
+    learning. Agronomy 14(3), 500 (2024)
+87. Wang, Z., Wang, R., Wang, M., Lai, T., Zhang, M.: Self-supervised transformer-
+    based pre-training method with General Plant Infection dataset. In: Chinese
+    Conference on Pattern Recognition and Computer Vision (PRCV). pp. 189–202.
+    Springer (2024)
+88. Weyler, J., Magistri, F., Marks, E., Chong, Y.L., Sodano, M., Roggiolani, G., Che-
+    brolu, N., Stachniss, C., Behley, J.: Phenobench: A large dataset and benchmarks
+    for semantic image interpretation in the agricultural domain. IEEE transactions
+    on pattern analysis and machine intelligence 46(12), 9583–9594 (2024)
+89. Xiang, S., Guo, W., Burridge, J., Liu, S., Lu, H., Fukatsu, T.: SPROUT: A
+    Scalable Diffusion Foundation Model for Agricultural Vision. arXiv preprint
+    arXiv:2603.27519 (2026)
+90. Xiao, T., Liu, Y., Zhou, B., Jiang, Y., Sun, J.: Unified perceptual parsing for scene
+    understanding. In: Proceedings of the European conference on computer vision
+    (ECCV). pp. 418–434 (2018)
+91. Xie, Z., Zhang, Z., Cao, Y., Lin, Y., Bao, J., Yao, Z., Dai, Q., Hu, H.: Simmim: A
+    simple framework for masked image modeling. In: Proceedings of the IEEE/CVF
+    conference on computer vision and pattern recognition. pp. 9653–9663 (2022)
+92. Xu, R., Li, C.: A review of high-throughput field phenotyping systems: Focusing
+    on ground robots. Plant phenomics (2022)
+93. Yordanov, M., d’Andrimont, R., Martinez-Sanchez, L., Lemoine, G., Fasbender,
+    D., Van der Velde, M.: Crop identification using deep learning on LUCAS crop
+    cover photos. Sensors 23(14), 6298 (2023)
+94. Zbontar, J., Jing, L., Misra, I., LeCun, Y., Deny, S.: Barlow twins: Self-supervised
+    learning via redundancy reduction. In: International conference on machine learn-
+    ing. pp. 12310–12320. PMLR (2021)
+95. Zhang, X., Han, L., Sobeih, T., Lappin, L., Lee, M.A., Howard, A., Kisdi, A.: The
+    self-supervised spectral–spatial vision transformer network for accurate prediction
+    of wheat nitrogen status from UAV imagery. Remote Sensing 14(6), 1400 (2022)
+96. Zhou, J., Wei, C., Wang, H., Shen, W., Xie, C., Yuille, A., Kong, T.: ibot: Image
+    bert pre-training with online tokenizer. arXiv preprint arXiv:2111.07832 (2021)
+

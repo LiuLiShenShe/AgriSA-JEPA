@@ -1,0 +1,72 @@
+{
+  "manifest": "data/frozen/agrifield40k-v1_train.csv",
+  "batch_size": 16,
+  "batches": 12,
+  "warmup_batches": 3,
+  "device": "cpu",
+  "guidance_lambda": 6.0,
+  "num_candidates": 16,
+  "note": "timed in isolation; the wall-clock difference between the training arms additionally contains two arms sharing two GPUs and the evaluations sharing host RAM, so it is not attributed to the mask sampler.",
+  "arms": {
+    "B": {
+      "mask_mode": "random",
+      "prior_mode": null,
+      "batch_size": 16,
+      "batches_measured": 12,
+      "batch_seconds_mean": 0.10333,
+      "batch_seconds_std": 0.10914,
+      "batch_seconds_p50": 0.05398,
+      "images_per_second": 154.8,
+      "prior_seconds_mean": null,
+      "selection_seconds_mean": null,
+      "micro_step_overhead_ms": null,
+      "overhead_vs_B_ms": 0.0,
+      "overhead_vs_B_percent": 0.0
+    },
+    "C1": {
+      "mask_mode": "structure_guided",
+      "prior_mode": "vegetation",
+      "batch_size": 16,
+      "batches_measured": 12,
+      "batch_seconds_mean": 0.50488,
+      "batch_seconds_std": 0.19795,
+      "batch_seconds_p50": 0.55297,
+      "images_per_second": 31.7,
+      "prior_seconds_mean": 0.191,
+      "selection_seconds_mean": 0.06182,
+      "micro_step_overhead_ms": 126.412,
+      "overhead_vs_B_ms": 401.55,
+      "overhead_vs_B_percent": 388.61
+    },
+    "C2": {
+      "mask_mode": "structure_guided",
+      "prior_mode": "boundary",
+      "batch_size": 16,
+      "batches_measured": 12,
+      "batch_seconds_mean": 0.83172,
+      "batch_seconds_std": 0.57657,
+      "batch_seconds_p50": 0.68509,
+      "images_per_second": 19.2,
+      "prior_seconds_mean": 0.49338,
+      "selection_seconds_mean": 0.0815,
+      "micro_step_overhead_ms": 287.441,
+      "overhead_vs_B_ms": 728.39,
+      "overhead_vs_B_percent": 704.92
+    },
+    "C3": {
+      "mask_mode": "structure_guided",
+      "prior_mode": "shuffled_boundary",
+      "batch_size": 16,
+      "batches_measured": 12,
+      "batch_seconds_mean": 0.6477,
+      "batch_seconds_std": 0.2578,
+      "batch_seconds_p50": 0.62819,
+      "images_per_second": 24.7,
+      "prior_seconds_mean": 0.39314,
+      "selection_seconds_mean": 0.06669,
+      "micro_step_overhead_ms": 229.915,
+      "overhead_vs_B_ms": 544.37,
+      "overhead_vs_B_percent": 526.83
+    }
+  }
+}

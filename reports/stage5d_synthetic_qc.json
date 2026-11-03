@@ -1,0 +1,119 @@
+{
+  "base_images": 210,
+  "degradations_per_base": 16,
+  "clean_rows": 210,
+  "degraded_rows": 3360,
+  "clean_retention": 1.0,
+  "clean_false_removal": 0.0,
+  "overall_recall": 0.39107142857142857,
+  "basic_only_recall": 0.22738095238095238,
+  "iqa_only_recall": 0.33214285714285713,
+  "per_degradation": [
+    {
+      "kind": "brighten",
+      "severity": "overexposed",
+      "count": 210,
+      "mean": 0.36666666666666664
+    },
+    {
+      "kind": "brighten",
+      "severity": "severely overexposed",
+      "count": 210,
+      "mean": 0.5238095238095238
+    },
+    {
+      "kind": "darken",
+      "severity": "underexposed",
+      "count": 210,
+      "mean": 0.8666666666666667
+    },
+    {
+      "kind": "defocus_blur",
+      "severity": "defocus",
+      "count": 210,
+      "mean": 0.6523809523809524
+    },
+    {
+      "kind": "downscale",
+      "severity": "below minimum resolution",
+      "count": 210,
+      "mean": 0.7380952380952381
+    },
+    {
+      "kind": "gaussian_blur",
+      "severity": "mild blur",
+      "count": 210,
+      "mean": 0.26666666666666666
+    },
+    {
+      "kind": "gaussian_blur",
+      "severity": "moderate blur",
+      "count": 210,
+      "mean": 0.6428571428571429
+    },
+    {
+      "kind": "gaussian_blur",
+      "severity": "severe blur",
+      "count": 210,
+      "mean": 0.9809523809523809
+    },
+    {
+      "kind": "gaussian_noise",
+      "severity": "heavy noise",
+      "count": 210,
+      "mean": 0.11428571428571428
+    },
+    {
+      "kind": "gaussian_noise",
+      "severity": "sensor noise",
+      "count": 210,
+      "mean": 0.0761904761904762
+    },
+    {
+      "kind": "jpeg",
+      "severity": "heavy compression",
+      "count": 210,
+      "mean": 0.09523809523809523
+    },
+    {
+      "kind": "jpeg",
+      "severity": "moderate compression",
+      "count": 210,
+      "mean": 0.06666666666666667
+    },
+    {
+      "kind": "low_contrast",
+      "severity": "flat contrast",
+      "count": 210,
+      "mean": 0.24761904761904763
+    },
+    {
+      "kind": "motion_blur",
+      "severity": "camera shake",
+      "count": 210,
+      "mean": 0.46190476190476193
+    },
+    {
+      "kind": "occlusion",
+      "severity": "blocked view",
+      "count": 210,
+      "mean": 0.06666666666666667
+    },
+    {
+      "kind": "white_balance",
+      "severity": "colour cast",
+      "count": 210,
+      "mean": 0.09047619047619047
+    }
+  ],
+  "per_stratum": {
+    "agrifield40k_pool|FIELD_IN_SITU": 0.525,
+    "agrifm_ref11|FIELD_IN_SITU": 0.20416666666666666,
+    "agrifm_ref1|FIELD_IN_SITU": 0.11458333333333333,
+    "agrifm_ref58|FIELD_IN_SITU": 0.4270833333333333,
+    "agrifm_ref9|ORCHARD_IN_SITU": 0.46458333333333335,
+    "applebbch81|ORCHARD_IN_SITU": 0.5833333333333334,
+    "artemis_imagesafari|FIELD_IN_SITU": 0.41875
+  },
+  "disclaimer": "labels are synthetic degradations, not human quality judgements; recall measures sensitivity to the constructed damage only"
+}

@@ -1,0 +1,19 @@
+{
+  "rows": 63,
+  "sha256_canonical_csv": "953150fc59a71a4d73e82b936fbbbbfb5b449b0820f32cce1c350cf6e451a705",
+  "states": {
+    "DISCOVERED": 1,
+    "URL_VERIFIED": 26,
+    "LICENSE_VERIFIED": 27,
+    "DOWNLOADED": 0,
+    "DECODED": 0,
+    "DUPLICATE_SCREENED": 1,
+    "SPLIT_CHECKED": 7,
+    "APPROVED": 1,
+    "FROZEN": 0,
+    "BLOCKED": 0
+  },
+  "benchmarks": 12,
+  "holdouts": 12,
+  "url_checks": 58
+}

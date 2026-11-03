@@ -62,6 +62,7 @@ def strip_module_prefix(state_dict: Mapping[str, torch.Tensor]) -> Dict[str, tor
 def load_pretrained_payload(
     path: str | Path,
     weights_only: bool = True,
+    trusted: bool = False,
 ) -> Tuple[Mapping, str]:
     """Safely deserialize an official I-JEPA checkpoint.
 
@@ -70,10 +71,22 @@ def load_pretrained_payload(
     tensors for the weight fields, so this normally succeeds.  If it does not,
     the caller is told explicitly which mode was used instead of silently
     falling back.
+
+    ``trusted=True`` skips the ``weights_only=True`` attempt and deserializes
+    directly with ``weights_only=False``.  The caller must only pass it after
+    verifying the file's SHA-256 (as ``src/train.py`` does for the configured
+    official checkpoint): the official payload contains optimizer state that
+    ``weights_only=True`` cannot represent, so the safe-first path otherwise
+    reads the whole multi-gigabyte file twice on every start.
     """
     path = Path(path)
     if not path.is_file():
         raise FileNotFoundError(f'Pretrained checkpoint not found: {path}')
+    if trusted:
+        payload = torch.load(path, map_location='cpu', weights_only=False)
+        if not isinstance(payload, Mapping):
+            raise TypeError(f'Unexpected checkpoint payload type: {type(payload).__name__}')
+        return payload, 'weights_only=False (trusted, SHA-256 verified)'
     try:
         payload = torch.load(path, map_location='cpu', weights_only=True)
         mode = 'weights_only=True'
@@ -161,14 +174,21 @@ def init_from_pretrained(
     predictor: nn.Module,
     target_encoder: Optional[nn.Module] = None,
     device: Optional[torch.device] = None,
+    sha256: Optional[str] = None,
+    trusted: bool = False,
 ) -> Dict[str, object]:
     """Operation A: initialize the model weights from an official I-JEPA run.
 
     Encoder, target encoder and the shape-compatible predictor are all loaded
     from the checkpoint.  Returns a report dict describing exactly what was
     transferred.  Optimizer/scheduler/scaler/epoch are intentionally untouched.
+
+    ``sha256`` may be supplied by a caller that has already verified the file,
+    which avoids re-hashing multiple gigabytes here.  ``trusted`` is forwarded
+    to :func:`load_pretrained_payload` and must only be set together with a
+    verified digest.
     """
-    payload, load_mode = load_pretrained_payload(path)
+    payload, load_mode = load_pretrained_payload(path, trusted=trusted)
     missing_fields = [f for f in WEIGHT_FIELDS if f not in payload]
     if missing_fields:
         raise KeyError(
@@ -178,7 +198,7 @@ def init_from_pretrained(
 
     report: Dict[str, object] = {
         'path': str(path),
-        'sha256': sha256_file(path),
+        'sha256': sha256 if sha256 is not None else sha256_file(path),
         'load_mode': load_mode,
         'payload': describe_payload(payload),
         'transferred': {},

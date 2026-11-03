@@ -20,6 +20,10 @@ def init_distributed(port=40112, rank_and_world_size=(None, None)):
     if dist.is_available() and dist.is_initialized():
         return dist.get_world_size(), dist.get_rank()
 
+    # -- allow several independent single-GPU runs to coexist on one host
+    #    without fighting over the same rendezvous port.
+    port = int(os.environ.get('AGRISA_MASTER_PORT', port))
+
     rank, world_size = rank_and_world_size
     os.environ['MASTER_ADDR'] = 'localhost'
 

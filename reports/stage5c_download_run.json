@@ -1,0 +1,204 @@
+[
+  {
+    "source_id": "agrifm_ref1",
+    "method": "kaggle_dataset",
+    "actions": [
+      {
+        "remote_url": "https://www.kaggle.com/api/v1/datasets/download/voglinio/wheat-dataset-original",
+        "archive_file": "/data/datasets/Stage5C/archives/agrifm_ref1/ref1_wheat.zip",
+        "expected_bytes": 546032010,
+        "downloaded_bytes": 546032010,
+        "checksum_algorithm": "sha256",
+        "checksum_value": "1ec9fe29c54d440202e934aeca49bb87ddc715d624646fde89ddf650782afb96",
+        "retry_count": 0,
+        "status": "DOWNLOADED",
+        "error_code": "",
+        "evidence": "attempts=1",
+        "source_id": "agrifm_ref1"
+      },
+      {
+        "status": "EXTRACTED",
+        "dest": "/data/datasets/Stage5C/raw/agrifm_ref1"
+      }
+    ],
+    "images": 670
+  },
+  {
+    "source_id": "agrifm_ref90",
+    "method": "mendeley_zip",
+    "actions": [
+      {
+        "DOWNLOADED": 1
+      },
+      {
+        "status": "EXTRACTED",
+        "dest": "/data/datasets/Stage5C/raw/agrifm_ref90"
+      }
+    ],
+    "images": 520
+  },
+  {
+    "source_id": "agrifm_ref58",
+    "method": "dataverse",
+    "actions": [
+      {
+        "DOWNLOADED": 6
+      },
+      {
+        "status": "EXTRACTED",
+        "dest": "/data/datasets/Stage5C/raw/agrifm_ref58"
+      },
+      {
+        "status": "SKIPPED_EXISTING",
+        "dest": "/data/datasets/Stage5C/raw/agrifm_ref58"
+      },
+      {
+        "status": "SKIPPED_EXISTING",
+        "dest": "/data/datasets/Stage5C/raw/agrifm_ref58"
+      },
+      {
+        "status": "SKIPPED_EXISTING",
+        "dest": "/data/datasets/Stage5C/raw/agrifm_ref58"
+      },
+      {
+        "status": "SKIPPED_EXISTING",
+        "dest": "/data/datasets/Stage5C/raw/agrifm_ref58"
+      },
+      {
+        "status": "SKIPPED_EXISTING",
+        "dest": "/data/datasets/Stage5C/raw/agrifm_ref58"
+      }
+    ],
+    "images": 2501
+  },
+  {
+    "source_id": "perennial_plants",
+    "method": "kaggle_dataset",
+    "actions": [
+      {
+        "status": "BLOCKED",
+        "reason": "no access method"
+      }
+    ]
+  },
+  {
+    "source_id": "agrifm_ref6",
+    "method": "kaggle_dataset",
+    "actions": [
+      {
+        "remote_url": "https://www.kaggle.com/api/v1/datasets/download/hamedetezadi/leaf-image-dataset",
+        "archive_file": "/data/datasets/Stage5C/archives/agrifm_ref6/ref6_leaf_images.zip",
+        "expected_bytes": 14105730,
+        "downloaded_bytes": 14105730,
+        "checksum_algorithm": "sha256",
+        "checksum_value": "5559c381cda0959ba8e0fbfcb057aab34359188813714b11afb09c4e088a45c4",
+        "retry_count": 0,
+        "status": "DOWNLOADED",
+        "error_code": "",
+        "evidence": "attempts=1",
+        "source_id": "agrifm_ref6"
+      },
+      {
+        "status": "EXTRACTED",
+        "dest": "/data/datasets/Stage5C/raw/agrifm_ref6"
+      }
+    ],
+    "images": 900
+  },
+  {
+    "source_id": "agrifm_ref7",
+    "method": "kaggle_dataset",
+    "actions": [
+      {
+        "remote_url": "https://www.kaggle.com/api/v1/datasets/download/osamajalilhassan/agriculture-crops-dataset",
+        "archive_file": "/data/datasets/Stage5C/archives/agrifm_ref7/ref7_agriculture_crops.zip",
+        "expected_bytes": 82830492,
+        "downloaded_bytes": 82830492,
+        "checksum_algorithm": "sha256",
+        "checksum_value": "0bf4a77f591576dec9d1906257cee5c3704ffd6f1072eba52a563e10e8325103",
+        "retry_count": 0,
+        "status": "DOWNLOADED",
+        "error_code": "",
+        "evidence": "attempts=1",
+        "source_id": "agrifm_ref7"
+      },
+      {
+        "status": "EXTRACTED",
+        "dest": "/data/datasets/Stage5C/raw/agrifm_ref7"
+      }
+    ],
+    "images": 829
+  },
+  {
+    "source_id": "agrifm_ref8",
+    "method": "kaggle_dataset",
+    "actions": [
+      {
+        "remote_url": "https://www.kaggle.com/api/v1/datasets/download/devanshujoshi01/maize-images-dataset",
+        "archive_file": "/data/datasets/Stage5C/archives/agrifm_ref8/ref8_maize_images.zip",
+        "expected_bytes": 273842393,
+        "downloaded_bytes": 273842393,
+        "checksum_algorithm": "sha256",
+        "checksum_value": "751004a72f583f556fee6e05b9e5621aeebaf72ab57950966a269a94085f1d90",
+        "retry_count": 0,
+        "status": "DOWNLOADED",
+        "error_code": "",
+        "evidence": "attempts=1",
+        "source_id": "agrifm_ref8"
+      },
+      {
+        "status": "EXTRACTED",
+        "dest": "/data/datasets/Stage5C/raw/agrifm_ref8"
+      }
+    ],
+    "images": 251
+  },
+  {
+    "source_id": "agrifm_ref9",
+    "method": "kaggle_dataset",
+    "actions": [
+      {
+        "remote_url": "https://www.kaggle.com/api/v1/datasets/download/nicolaasregnier/pinotnoirgrapes",
+        "archive_file": "/data/datasets/Stage5C/archives/agrifm_ref9/ref9_pinot_noir_grapes.zip",
+        "expected_bytes": 1701005180,
+        "downloaded_bytes": 1701005180,
+        "checksum_algorithm": "sha256",
+        "checksum_value": "143568be45f81a8ca25592955fe99fae0b2f285ec6dc50ed265c225145512c0a",
+        "retry_count": 0,
+        "status": "DOWNLOADED",
+        "error_code": "",
+        "evidence": "attempts=1",
+        "source_id": "agrifm_ref9"
+      },
+      {
+        "status": "EXTRACTED",
+        "dest": "/data/datasets/Stage5C/raw/agrifm_ref9"
+      }
+    ],
+    "images": 115
+  },
+  {
+    "source_id": "agrifm_ref11",
+    "method": "kaggle_dataset",
+    "actions": [
+      {
+        "remote_url": "https://www.kaggle.com/api/v1/datasets/download/zzzzqi/maize-phenology-images-acquired-using-ndvi-camera",
+        "archive_file": "/data/datasets/Stage5C/archives/agrifm_ref11/ref11_maize_ndvi.zip",
+        "expected_bytes": 6590889394,
+        "downloaded_bytes": 6590889394,
+        "checksum_algorithm": "sha256",
+        "checksum_value": "0e3673126b8dcc30493c316c2fc88d4ecdac6f1f02dc64ae231b88127fa887d4",
+        "retry_count": 0,
+        "status": "DOWNLOADED",
+        "error_code": "",
+        "evidence": "attempts=1",
+        "source_id": "agrifm_ref11"
+      },
+      {
+        "status": "EXTRACTED",
+        "dest": "/data/datasets/Stage5C/raw/agrifm_ref11"
+      }
+    ],
+    "images": 5899
+  }
+]

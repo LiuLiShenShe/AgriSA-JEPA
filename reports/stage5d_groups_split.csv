@@ -1,0 +1,8 @@
+source,official_group_n,documented_path_group_n,weak_group_n,unknown_group_n,strong_groups,train,val,cross_known_groups,unknown_val_n,holdout_risk
+agrifield40k_pool,0,21418,0,0,20415,18242,3176,0,0,none_in_accepted
+agrifm_ref1,0,0,40,0,0,40,0,0,0,none_in_accepted
+agrifm_ref11,0,0,382,0,0,382,0,0,0,none_in_accepted
+agrifm_ref58,0,0,15386,0,0,15386,0,0,0,none_in_accepted
+agrifm_ref9,0,0,84,0,0,84,0,0,0,none_in_accepted
+applebbch81,0,1746,0,0,140,1383,363,0,0,none_in_accepted
+artemis_imagesafari,130268,0,0,2,8981,111760,18508,0,0,none_in_accepted

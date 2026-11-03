@@ -1,0 +1,72 @@
+# Stage 5D - metadata coverage
+
+Denominators are explicit: `known_fraction` is over every accepted
+image, and `share_among_known` is over the known subset only.
+
+| dimension | value | known_n | unknown_n | known_fraction | share_among_known |
+|---|---|---:|---:|---:|---:|
+| crop | common-bean | 41,809 | 39,058 | 0.7693 | 0.3209 |
+| crop | sorghum | 27,031 | 39,058 | 0.7693 | 0.2075 |
+| crop | potato | 13,930 | 39,058 | 0.7693 | 0.1069 |
+| crop | cowpea | 8,271 | 39,058 | 0.7693 | 0.0635 |
+| crop | pearl-millet | 7,158 | 39,058 | 0.7693 | 0.0549 |
+| crop | groundnut | 5,094 | 39,058 | 0.7693 | 0.0391 |
+| crop | african-yam | 5,091 | 39,058 | 0.7693 | 0.0391 |
+| crop | pigeon-pea | 4,874 | 39,058 | 0.7693 | 0.0374 |
+| crop | banana | 4,367 | 39,058 | 0.7693 | 0.0335 |
+| crop | finger-millet | 3,404 | 39,058 | 0.7693 | 0.0261 |
+| crop | rice | 2,371 | 39,058 | 0.7693 | 0.0182 |
+| crop | sweet-potato | 2,210 | 39,058 | 0.7693 | 0.0170 |
+| crop | chickpea | 789 | 39,058 | 0.7693 | 0.0061 |
+| crop | lentil | 785 | 39,058 | 0.7693 | 0.0060 |
+| crop | cassava | 780 | 39,058 | 0.7693 | 0.0060 |
+| crop | wheat | 778 | 39,058 | 0.7693 | 0.0060 |
+| crop | soybean | 776 | 39,058 | 0.7693 | 0.0060 |
+| crop | maize | 750 | 39,058 | 0.7693 | 0.0058 |
+| country | UGA | 18,598 | 113,552 | 0.3294 | 0.3335 |
+| country | COL | 15,415 | 113,552 | 0.3294 | 0.2764 |
+| country | USA | 15,393 | 113,552 | 0.3294 | 0.2760 |
+| country | TZA | 6,368 | 113,552 | 0.3294 | 0.1142 |
+| farm | ciat-arusha | 18,160 | 39,058 | 0.7693 | 0.1394 |
+| farm | ciat-kawanda | 15,518 | 39,058 | 0.7693 | 0.1191 |
+| farm | ciat-palmira | 15,415 | 39,058 | 0.7693 | 0.1183 |
+| farm | csu-fort-collins | 15,393 | 39,058 | 0.7693 | 0.1182 |
+| farm | cimmyt-kiboko | 14,989 | 39,058 | 0.7693 | 0.1151 |
+| farm | cip-nairobi | 14,215 | 39,058 | 0.7693 | 0.1091 |
+| farm | cimmyt-senegal | 10,175 | 39,058 | 0.7693 | 0.0781 |
+| farm | cimmyt-kibos | 8,623 | 39,058 | 0.7693 | 0.0662 |
+| farm | iita-osogbo | 5,095 | 39,058 | 0.7693 | 0.0391 |
+| farm | iita-kampala | 4,290 | 39,058 | 0.7693 | 0.0329 |
+| farm | naro-namulonge | 3,080 | 39,058 | 0.7693 | 0.0236 |
+| farm | africa-rice-ci | 2,364 | 39,058 | 0.7693 | 0.0181 |
+| farm | qed-lilongwe | 1,768 | 39,058 | 0.7693 | 0.0136 |
+| farm | cimmyt-njoro | 595 | 39,058 | 0.7693 | 0.0046 |
+| farm | iita-kano | 498 | 39,058 | 0.7693 | 0.0038 |
+| farm | iita-nambala | 77 | 39,058 | 0.7693 | 0.0006 |
+| farm | africa-rice-ibadan | 7 | 39,058 | 0.7693 | 0.0001 |
+| farm | csir-ghana | 6 | 39,058 | 0.7693 | 0.0000 |
+| upstream_dataset | ImageSafari | 74,494 | 2 | 1.0000 | 0.4399 |
+| upstream_dataset | Artemis | 55,774 | 2 | 1.0000 | 0.3294 |
+| upstream_dataset | agrifm_ref58 | 15,386 | 2 | 1.0000 | 0.0909 |
+| upstream_dataset | LUCASVision | 11,177 | 2 | 1.0000 | 0.0660 |
+| upstream_dataset | VCD | 2,159 | 2 | 1.0000 | 0.0128 |
+| upstream_dataset | AppleBBCH81 | 1,746 | 2 | 1.0000 | 0.0103 |
+| upstream_dataset | WE3DS | 1,520 | 2 | 1.0000 | 0.0090 |
+| upstream_dataset | VegAnn | 1,485 | 2 | 1.0000 | 0.0088 |
+| upstream_dataset | iNatWeeds | 1,312 | 2 | 1.0000 | 0.0077 |
+| upstream_dataset | SesameWeed | 943 | 2 | 1.0000 | 0.0056 |
+| upstream_dataset | RumexLeaves | 809 | 2 | 1.0000 | 0.0048 |
+| upstream_dataset | ACRECropWeed | 790 | 2 | 1.0000 | 0.0047 |
+| upstream_dataset | RadishWheat | 534 | 2 | 1.0000 | 0.0032 |
+| upstream_dataset | GrassClover | 434 | 2 | 1.0000 | 0.0026 |
+| upstream_dataset | agrifm_ref11 | 382 | 2 | 1.0000 | 0.0023 |
+| upstream_dataset | Maize-Weed | 255 | 2 | 1.0000 | 0.0015 |
+| upstream_dataset | agrifm_ref9 | 84 | 2 | 1.0000 | 0.0005 |
+| upstream_dataset | agrifm_ref1 | 40 | 2 | 1.0000 | 0.0002 |
+| group_tier | OFFICIAL_GROUP | 130,268 | 0 | 1.0000 | 0.7693 |
+| group_tier | DOCUMENTED_PATH_GROUP | 23,164 | 0 | 1.0000 | 0.1368 |
+| group_tier | WEAK_PROXY | 15,892 | 0 | 1.0000 | 0.0939 |
+| group_tier | UNKNOWN_GROUP | 2 | 0 | 1.0000 | 0.0000 |
+| modality | RGB_VISIBLE | 169,326 | 0 | 1.0000 | 1.0000 |
+| acquisition_domain | FIELD_IN_SITU | 167,496 | 0 | 1.0000 | 0.9892 |
+| acquisition_domain | ORCHARD_IN_SITU | 1,830 | 0 | 1.0000 | 0.0108 |

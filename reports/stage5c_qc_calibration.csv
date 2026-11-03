@@ -1,0 +1,8 @@
+fault,positives,clean_negatives,true_positive,false_positive,recall,false_positive_rate,precision
+blur_sigma2,16,16,8,0,0.5,0.0,1.0
+blur_sigma4,16,16,13,0,0.8125,0.0,1.0
+dark_0.25,16,16,4,0,0.25,0.0,1.0
+bright_1.8,16,16,0,0,0.0,0.0,0.0
+jpeg_q10,16,16,0,0,0.0,0.0,0.0
+noise_sigma25,16,16,0,0,0.0,0.0,0.0
+downscale_0.25,16,16,8,0,0.5,0.0,1.0

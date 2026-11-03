@@ -1,0 +1,120 @@
+{
+  "per_source": [
+    {
+      "source": "agrifield40k_pool",
+      "accepted": 21418,
+      "official_group_n": 0,
+      "documented_path_group_n": 21418,
+      "weak_proxy_n": 0,
+      "unknown_group_n": 0,
+      "train": 18242,
+      "train_only_unknown": 0,
+      "val": 3176,
+      "unknown_val_n": 0,
+      "cross_known_groups": 0,
+      "diagnostic_val": 3175
+    },
+    {
+      "source": "agrifm_ref1",
+      "accepted": 40,
+      "official_group_n": 0,
+      "documented_path_group_n": 0,
+      "weak_proxy_n": 40,
+      "unknown_group_n": 0,
+      "train": 40,
+      "train_only_unknown": 0,
+      "val": 0,
+      "unknown_val_n": 0,
+      "cross_known_groups": 0,
+      "diagnostic_val": 0
+    },
+    {
+      "source": "agrifm_ref11",
+      "accepted": 382,
+      "official_group_n": 0,
+      "documented_path_group_n": 0,
+      "weak_proxy_n": 382,
+      "unknown_group_n": 0,
+      "train": 382,
+      "train_only_unknown": 0,
+      "val": 0,
+      "unknown_val_n": 0,
+      "cross_known_groups": 0,
+      "diagnostic_val": 0
+    },
+    {
+      "source": "agrifm_ref58",
+      "accepted": 15386,
+      "official_group_n": 0,
+      "documented_path_group_n": 0,
+      "weak_proxy_n": 15386,
+      "unknown_group_n": 0,
+      "train": 15386,
+      "train_only_unknown": 0,
+      "val": 0,
+      "unknown_val_n": 0,
+      "cross_known_groups": 0,
+      "diagnostic_val": 0
+    },
+    {
+      "source": "agrifm_ref9",
+      "accepted": 84,
+      "official_group_n": 0,
+      "documented_path_group_n": 0,
+      "weak_proxy_n": 84,
+      "unknown_group_n": 0,
+      "train": 84,
+      "train_only_unknown": 0,
+      "val": 0,
+      "unknown_val_n": 0,
+      "cross_known_groups": 0,
+      "diagnostic_val": 0
+    },
+    {
+      "source": "applebbch81",
+      "accepted": 1746,
+      "official_group_n": 0,
+      "documented_path_group_n": 1746,
+      "weak_proxy_n": 0,
+      "unknown_group_n": 0,
+      "train": 1383,
+      "train_only_unknown": 0,
+      "val": 363,
+      "unknown_val_n": 0,
+      "cross_known_groups": 0,
+      "diagnostic_val": 256
+    },
+    {
+      "source": "artemis_imagesafari",
+      "accepted": 130270,
+      "official_group_n": 130268,
+      "documented_path_group_n": 0,
+      "weak_proxy_n": 0,
+      "unknown_group_n": 2,
+      "train": 111760,
+      "train_only_unknown": 2,
+      "val": 18508,
+      "unknown_val_n": 0,
+      "cross_known_groups": 0,
+      "diagnostic_val": 20172
+    }
+  ],
+  "totals": {
+    "accepted": 169326,
+    "train": 147279,
+    "val": 22047,
+    "unknown_group_images": 2,
+    "unknown_group_in_val": 0,
+    "weak_group_images": 15892,
+    "strong_groups": 47674,
+    "cross_split_groups": 0,
+    "group_disjoint_validation_available": true
+  },
+  "rules": {
+    "OFFICIAL_GROUP": "from official Artemis/ImageSafari key fields",
+    "DOCUMENTED_PATH_GROUP": "from the documented directory layout",
+    "WEAK_PROXY": "single-campaign or fallback prefix; train only",
+    "UNKNOWN_GROUP": "no group evidence; train only, labelled TRAIN_ONLY_GROUP_UNKNOWN",
+    "diagnostic_split": "hash-ranked random split, NOT group-disjoint"
+  }
+}

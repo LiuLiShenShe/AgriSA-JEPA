@@ -1,0 +1,13 @@
+source_id,official_name,task,license,reason
+phenobench,PhenoBench v1.1.0,semantic segmentation,CC-BY-SA-4.0,downstream evaluation data; excluded from every pretraining manifest (no test-image leakage)
+gwhd_2021,Global Wheat Head Dataset 2021,object detection,CC-BY-4.0,downstream evaluation data; excluded from every pretraining manifest (no test-image leakage)
+plantdoc,PlantDoc,object detection,CC-BY-4.0,downstream evaluation data; excluded from every pretraining manifest (no test-image leakage)
+minneapple,MinneApple,object detection / instance segmentation,research use (see repository),downstream evaluation data; excluded from every pretraining manifest (no test-image leakage)
+roboflow_disease_detection,Roboflow Detecting-Diseases,object detection,CC-BY-4.0 (Roboflow dataset page),downstream evaluation data; excluded from every pretraining manifest (no test-image leakage)
+roboflow_crop_detection,"Roboflow Crops (maize, cassava, sugarcane vs grass)",object detection,CC-BY-4.0 (Roboflow dataset page),downstream evaluation data; excluded from every pretraining manifest (no test-image leakage)
+plantseg,PlantSeg,semantic segmentation,see repository,downstream evaluation data; excluded from every pretraining manifest (no test-image leakage)
+multiclass_weeds,Multiclass Weeds Dataset,semantic segmentation,CC-BY-4.0 (figshare record),downstream evaluation data; excluded from every pretraining manifest (no test-image leakage)
+gwhd_instance_seg,GWHD Instance Segmentation (Roboflow wheat-seg),instance segmentation,CC-BY-4.0 (Roboflow dataset page),downstream evaluation data; excluded from every pretraining manifest (no test-image leakage)
+deepweeds,DeepWeeds,weed classification,CC-BY-4.0,downstream evaluation data; excluded from every pretraining manifest (no test-image leakage)
+growliflower,GrowliFlower,semantic segmentation,CC-BY-4.0,downstream evaluation data; excluded from every pretraining manifest (no test-image leakage)
+cropandweed,CropAndWeed,semantic segmentation,CC-BY-SA-4.0,downstream evaluation data; excluded from every pretraining manifest (no test-image leakage)

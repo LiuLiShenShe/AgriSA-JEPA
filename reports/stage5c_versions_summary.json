@@ -1,0 +1,224 @@
+{
+  "r0": {
+    "version": "R0_agrifm35_source_pool",
+    "status": "AUDIT_ONLY",
+    "auto_status_meaning": "AUDIT_ONLY",
+    "policy_version": "stage5c-policy-v1",
+    "policy_sha256": "45379ed1a669edb64778b97c1e9dd59ba9f3d8d5983418f642a2542b437a565c",
+    "counts": {
+      "images": 243694,
+      "sources": 14,
+      "groups": 29380,
+      "groups_unknown_images": 149630,
+      "train": 206971,
+      "val": 36723
+    },
+    "by_source": {
+      "artemis_imagesafari": 135623,
+      "agrifield40k_pool": 39963,
+      "agrifm_ref57": 31500,
+      "agrifm_ref58": 23205,
+      "agrifm_ref11": 5899,
+      "applebbch81": 1838,
+      "sesame_weed": 1300,
+      "agrifm_ref20": 1081,
+      "agrifm_ref6": 900,
+      "agrifm_ref7": 829,
+      "agrifm_ref1": 670,
+      "agrifm_ref90": 520,
+      "agrifm_ref8": 251,
+      "agrifm_ref9": 115
+    },
+    "by_domain": {
+      "FIELD_IN_SITU": 198376,
+      "UNKNOWN": 40829,
+      "ORCHARD_IN_SITU": 1988,
+      "CONTROLLED_LAB": 1981,
+      "PROTECTED_CULTIVATION": 520
+    },
+    "by_crop": {
+      "unknown": 243694
+    },
+    "max_source_share": 0.5565299104614804,
+    "cross_split_groups": 0,
+    "holdout_images": 7703,
+    "license_blocked_images": 2500,
+    "csv_sha256": "5067581537f0be63c6d864002eddb911f2eacabe06c8f28ee4b6008a8a79ba54",
+    "note": "everything actually on disk; audit layer, never pretraining data",
+    "manifest_csv": "/fj/jepa-\u4e8c\u7ef4\u56fe\u50cf\u4efb\u52a1/data/corpus_v2/R0_agrifm35_source_pool_manifest.csv",
+    "manifest_csv_sha256": "8cbd124525d43dd28e00cbd4e4f903f7da6b4fc78390599f1386e03f8c31ae7b",
+    "gates": {
+      "no_holdout": false,
+      "no_license_blocked": false,
+      "groups_disjoint": true,
+      "no_duplicate_representatives": false,
+      "no_unconfirmed_near_duplicates": true,
+      "no_giant_clusters": true,
+      "all_qc_labelled": true,
+      "all_domain_labelled": true
+    }
+  },
+  "r1": {
+    "version": "R1_agrifm147_rebuild",
+    "status": "PROTOCOL_INFORMED_RECONSTRUCTION",
+    "auto_status_meaning": "PROTOCOL_INFORMED_RECONSTRUCTION",
+    "policy_version": "stage5c-policy-v1",
+    "policy_sha256": "45379ed1a669edb64778b97c1e9dd59ba9f3d8d5983418f642a2542b437a565c",
+    "counts": {
+      "images": 60603,
+      "sources": 9,
+      "groups": 3,
+      "groups_unknown_images": 60003,
+      "train": 51617,
+      "val": 8986
+    },
+    "by_source": {
+      "agrifm_ref57": 29066,
+      "agrifm_ref58": 23203,
+      "agrifm_ref11": 5899,
+      "agrifm_ref6": 900,
+      "agrifm_ref1": 670,
+      "agrifm_ref7": 441,
+      "agrifm_ref8": 251,
+      "agrifm_ref9": 115,
+      "agrifm_ref20": 58
+    },
+    "by_domain": {
+      "FIELD_IN_SITU": 29788,
+      "UNKNOWN": 29728,
+      "CONTROLLED_LAB": 958,
+      "ORCHARD_IN_SITU": 129
+    },
+    "by_crop": {
+      "unknown": 60603
+    },
+    "max_source_share": 0.4796132204676336,
+    "cross_split_groups": 0,
+    "holdout_images": 0,
+    "license_blocked_images": 1592,
+    "csv_sha256": "1da92de3ff9ace402161841adb349e21c62887272cd050ed266966102e64f212",
+    "note": "rules the paper discloses; P1 gates are NOT applied here",
+    "manifest_csv": "/fj/jepa-\u4e8c\u7ef4\u56fe\u50cf\u4efb\u52a1/data/corpus_v2/R1_agrifm147_rebuild_manifest.csv",
+    "manifest_csv_sha256": "fdb0aab21080269a9707d839748d37040fa99eebbaf5fa59978fa748f41324d9",
+    "gates": {
+      "no_holdout": true,
+      "no_license_blocked": false,
+      "groups_disjoint": true,
+      "no_duplicate_representatives": false,
+      "no_unconfirmed_near_duplicates": true,
+      "no_giant_clusters": true,
+      "all_qc_labelled": true,
+      "all_domain_labelled": true
+    }
+  },
+  "r2": {
+    "version": "R2_field_strict",
+    "status": "AUTO_FROZEN",
+    "auto_status_meaning": "programmatic gates satisfied; NOT human-verified",
+    "policy_version": "stage5c-policy-v1",
+    "policy_sha256": "45379ed1a669edb64778b97c1e9dd59ba9f3d8d5983418f642a2542b437a565c",
+    "counts": {
+      "images": 20944,
+      "sources": 3,
+      "groups": 0,
+      "groups_unknown_images": 20944,
+      "train": 17780,
+      "val": 3164
+    },
+    "by_source": {
+      "agrifm_ref58": 15396,
+      "agrifm_ref11": 5458,
+      "agrifm_ref9": 90
+    },
+    "by_domain": {
+      "FIELD_IN_SITU": 20854,
+      "ORCHARD_IN_SITU": 90
+    },
+    "by_crop": {
+      "unknown": 20944
+    },
+    "max_source_share": 0.7351031321619557,
+    "cross_split_groups": 0,
+    "holdout_images": 0,
+    "license_blocked_images": 0,
+    "csv_sha256": "7c00a5ee114eee24efe1f63ac5cde1aec8c9620b1ee5ee56363c583c5808077a",
+    "note": "programmatic gates only; not human-verified",
+    "manifest_csv": "/fj/jepa-\u4e8c\u7ef4\u56fe\u50cf\u4efb\u52a1/data/corpus_v2/R2_field_strict_manifest.csv",
+    "manifest_csv_sha256": "3d0519cf849948ad6a1ad6b1cb3f21947c6e495844ff549614e30e8c384928de",
+    "gates": {
+      "no_holdout": true,
+      "no_license_blocked": true,
+      "groups_disjoint": true,
+      "no_duplicate_representatives": true,
+      "no_unconfirmed_near_duplicates": true,
+      "no_giant_clusters": true,
+      "all_qc_labelled": true,
+      "all_domain_labelled": true
+    }
+  },
+  "r3": {
+    "version": "R3_field_extended",
+    "status": "AUTO_FROZEN",
+    "auto_status_meaning": "programmatic gates satisfied; NOT human-verified",
+    "policy_version": "stage5c-policy-v1",
+    "policy_sha256": "45379ed1a669edb64778b97c1e9dd59ba9f3d8d5983418f642a2542b437a565c",
+    "counts": {
+      "images": 177396,
+      "sources": 6,
+      "groups": 27370,
+      "groups_unknown_images": 100387,
+      "train": 150613,
+      "val": 26783
+    },
+    "by_source": {
+      "artemis_imagesafari": 130961,
+      "agrifield40k_pool": 23742,
+      "agrifm_ref58": 15396,
+      "agrifm_ref11": 5458,
+      "applebbch81": 1749,
+      "agrifm_ref9": 90
+    },
+    "by_domain": {
+      "FIELD_IN_SITU": 175557,
+      "ORCHARD_IN_SITU": 1839
+    },
+    "by_crop": {
+      "unknown": 177396
+    },
+    "max_source_share": 0.7382409975422219,
+    "cross_split_groups": 0,
+    "holdout_images": 0,
+    "license_blocked_images": 0,
+    "csv_sha256": "a3d4e0ea843619bc84f5babad6bfafc7e535ae702f70a9239032d15c3deff118",
+    "note": "R2 plus verified extensions; programmatic gates only",
+    "manifest_csv": "/fj/jepa-\u4e8c\u7ef4\u56fe\u50cf\u4efb\u52a1/data/corpus_v2/R3_field_extended_manifest.csv",
+    "manifest_csv_sha256": "ce32e5c819d0c1e4d4cf6a9866176415f9c2e911638be449c1f9aef7526aaf71",
+    "gates": {
+      "no_holdout": true,
+      "no_license_blocked": true,
+      "groups_disjoint": true,
+      "no_duplicate_representatives": true,
+      "no_unconfirmed_near_duplicates": true,
+      "no_giant_clusters": true,
+      "all_qc_labelled": true,
+      "all_domain_labelled": true
+    }
+  },
+  "seconds": 287.4,
+  "sources_loaded": [
+    "agrifield40k_pool",
+    "agrifm_ref1",
+    "agrifm_ref11",
+    "agrifm_ref20",
+    "agrifm_ref57",
+    "agrifm_ref58",
+    "agrifm_ref6",
+    "agrifm_ref7",
+    "agrifm_ref8",
+    "agrifm_ref9",
+    "agrifm_ref90",
+    "applebbch81",
+    "artemis_imagesafari",
+    "sesame_weed"
+  ]
+}

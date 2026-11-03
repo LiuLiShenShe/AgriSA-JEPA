@@ -1,0 +1,14 @@
+key,value
+data_version,"""agri-corpus-d1-candidate"""
+status,"""CANDIDATE"""
+approved,false
+base_version,"""agrifield40k-v1 (PROVISIONAL)"""
+new_sources,"{""plantvillage"": 54284}"
+new_sources_images,54284
+v1_train_images,66851
+v1_val_images,3025
+total_images,69876
+sha256_canonical_csv_train,"""a90794defecf3dd2557807fa7b5d84c637f82e7f444c8f16d3c3c1e8f8e36fd3"""
+sha256_canonical_csv_val,"""b4715e148f229f02dee38e604c750c352b3edfcbba78885227c5989825b6c03f"""
+unresolved,"{""agrifield40k_pending_audit_images"": 14743, ""pending_manual_duplicate_candidates"": 784, ""plantvillage_perceptual_candidates"": 12436}"
+notes,"""Every new row carries source, licence, attribution, original path and SHA-256.  Approval requires a human decision, which has not been made yet."""

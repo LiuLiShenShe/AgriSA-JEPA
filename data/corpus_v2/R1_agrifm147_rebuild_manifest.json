@@ -1,0 +1,53 @@
+{
+  "version": "R1_agrifm147_rebuild",
+  "status": "PROTOCOL_INFORMED_RECONSTRUCTION",
+  "auto_status_meaning": "PROTOCOL_INFORMED_RECONSTRUCTION",
+  "policy_version": "stage5c-policy-v1",
+  "policy_sha256": "45379ed1a669edb64778b97c1e9dd59ba9f3d8d5983418f642a2542b437a565c",
+  "counts": {
+    "images": 60603,
+    "sources": 9,
+    "groups": 3,
+    "groups_unknown_images": 60003,
+    "train": 51617,
+    "val": 8986
+  },
+  "by_source": {
+    "agrifm_ref57": 29066,
+    "agrifm_ref58": 23203,
+    "agrifm_ref11": 5899,
+    "agrifm_ref6": 900,
+    "agrifm_ref1": 670,
+    "agrifm_ref7": 441,
+    "agrifm_ref8": 251,
+    "agrifm_ref9": 115,
+    "agrifm_ref20": 58
+  },
+  "by_domain": {
+    "FIELD_IN_SITU": 29788,
+    "UNKNOWN": 29728,
+    "CONTROLLED_LAB": 958,
+    "ORCHARD_IN_SITU": 129
+  },
+  "by_crop": {
+    "unknown": 60603
+  },
+  "max_source_share": 0.4796132204676336,
+  "cross_split_groups": 0,
+  "holdout_images": 0,
+  "license_blocked_images": 1592,
+  "csv_sha256": "1da92de3ff9ace402161841adb349e21c62887272cd050ed266966102e64f212",
+  "note": "rules the paper discloses; P1 gates are NOT applied here",
+  "manifest_csv": "/fj/jepa-\u4e8c\u7ef4\u56fe\u50cf\u4efb\u52a1/data/corpus_v2/R1_agrifm147_rebuild_manifest.csv",
+  "manifest_csv_sha256": "fdb0aab21080269a9707d839748d37040fa99eebbaf5fa59978fa748f41324d9",
+  "gates": {
+    "no_holdout": true,
+    "no_license_blocked": false,
+    "groups_disjoint": true,
+    "no_duplicate_representatives": false,
+    "no_unconfirmed_near_duplicates": true,
+    "no_giant_clusters": true,
+    "all_qc_labelled": true,
+    "all_domain_labelled": true
+  }
+}

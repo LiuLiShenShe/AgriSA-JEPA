@@ -1,0 +1,69 @@
+{
+  "backbone": "A",
+  "backbone_checkpoint": "/data/checkpoints/ijepa/IN1K-vit.h.14-300e.pth.tar",
+  "backbone_sha256": "0382013c481743e9ccea89f970bc6c6aa126aa19a62127500d6e672a641aae22",
+  "input_size": 518,
+  "iterations": 20000,
+  "batch_size": 2,
+  "lr": 0.0025,
+  "momentum": 0.9,
+  "weight_decay": 0.0001,
+  "warmup_iterations": 500,
+  "eval_every": 2000,
+  "min_box_size": 2.0,
+  "hflip_prob": 0.5,
+  "score_thresh": 0.01,
+  "seed": 1,
+  "architecture": "FasterRCNN + SimpleFeaturePyramid(ViT-H/14 patch tokens)",
+  "anchors": "4 levels (16,32,64,128) x (0.5,1.0,2.0)",
+  "optimizer": "SGD(momentum, nesterov=False) on head/neck only",
+  "scheduler": "linear warmup + cosine to 0",
+  "data_root": "/data/datasets/GWHD2021/extracted",
+  "split_files": {
+    "test": "/data/datasets/GWHD2021/extracted/gwhd_2021/competition_test.csv",
+    "train": "/data/datasets/GWHD2021/extracted/gwhd_2021/competition_train.csv",
+    "val": "/data/datasets/GWHD2021/extracted/gwhd_2021/competition_val.csv"
+  },
+  "split_counts": {
+    "test": 1381,
+    "train": 3655,
+    "val": 1476
+  },
+  "split_isolation": {
+    "counts": {
+      "test": 1381,
+      "train": 3655,
+      "val": 1476
+    },
+    "groups": {
+      "test": 18,
+      "train": 18,
+      "val": 11
+    },
+    "overlaps": {
+      "train_val": {
+        "shared_image_names": 0,
+        "shared_groups": [],
+        "shared_group_count": 0
+      },
+      "train_test": {
+        "shared_image_names": 0,
+        "shared_groups": [],
+        "shared_group_count": 0
+      },
+      "val_test": {
+        "shared_image_names": 0,
+        "shared_groups": [],
+        "shared_group_count": 0
+      }
+    },
+    "dropped_duplicate_rows": {
+      "test": 1,
+      "train": 2,
+      "val": 0
+    }
+  },
+  "trainable_parameters": 17188121,
+  "frozen_parameters": 632186880,
+  "gpu": "NVIDIA RTX A6000"
+}

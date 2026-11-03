@@ -1,0 +1,306 @@
+{
+  "schema_version": "stage6d_comparison/v1",
+  "subset_traceable_only": true,
+  "n_checkpoints": {
+    "A": 1,
+    "B1": 2,
+    "B2": 2
+  },
+  "arm_summaries": {
+    "A": {
+      "n_checkpoints": 1,
+      "checkpoints": [
+        {
+          "run_id": "A_official",
+          "pair_id": "",
+          "seed": 0,
+          "traceable": true,
+          "checkpoint_sha256": "0382013c481743e9ccea89f970bc6c6aa126aa19a62127500d6e672a641aae22",
+          "result": "runs/stage3a_phenobench/armA/result.json",
+          "soil": 97.6085,
+          "crop": 81.4567,
+          "weed": 35.98,
+          "mIoU": 71.6833
+        }
+      ],
+      "soil": {
+        "mean": 97.6085,
+        "std": 0.0,
+        "values": [
+          97.6085
+        ]
+      },
+      "crop": {
+        "mean": 81.4567,
+        "std": 0.0,
+        "values": [
+          81.4567
+        ]
+      },
+      "weed": {
+        "mean": 35.98,
+        "std": 0.0,
+        "values": [
+          35.98
+        ]
+      },
+      "mIoU": {
+        "mean": 71.6833,
+        "std": 0.0,
+        "values": [
+          71.6833
+        ]
+      }
+    },
+    "B1": {
+      "n_checkpoints": 2,
+      "checkpoints": [
+        {
+          "run_id": "stage6d_b1_natural_seed20261027",
+          "pair_id": "P1",
+          "seed": 20261027,
+          "traceable": true,
+          "checkpoint_sha256": "1dc10ab68ab48b7e4de0bfa0cd444a1328d0104589484e4454d36cbe5f389106",
+          "result": "/data/agrisa_jepa_runs/stage6d/phenobench/stage6d_b1_natural_seed20261027/result.json",
+          "soil": 97.6902,
+          "crop": 82.2333,
+          "weed": 38.52,
+          "mIoU": 72.81
+        },
+        {
+          "run_id": "stage6d_b1_natural_seed20261028",
+          "pair_id": "P2",
+          "seed": 20261028,
+          "traceable": true,
+          "checkpoint_sha256": "7e3cb0b67f1f53de720f5a705ef9960df7fd55f2568b4c3fd355ddf9cec82bae",
+          "result": "/data/agrisa_jepa_runs/stage6d/phenobench/stage6d_b1_natural_seed20261028/result.json",
+          "soil": 97.7011,
+          "crop": 82.33,
+          "weed": 39.7333,
+          "mIoU": 73.2533
+        }
+      ],
+      "soil": {
+        "mean": 97.6957,
+        "std": 0.0054,
+        "values": [
+          97.6902,
+          97.7011
+        ]
+      },
+      "crop": {
+        "mean": 82.2817,
+        "std": 0.0483,
+        "values": [
+          82.2333,
+          82.33
+        ]
+      },
+      "weed": {
+        "mean": 39.1267,
+        "std": 0.6067,
+        "values": [
+          38.52,
+          39.7333
+        ]
+      },
+      "mIoU": {
+        "mean": 73.0317,
+        "std": 0.2217,
+        "values": [
+          72.81,
+          73.2533
+        ]
+      }
+    },
+    "B2": {
+      "n_checkpoints": 2,
+      "checkpoints": [
+        {
+          "run_id": "stage6d_b2_capped_no_backfill_seed20261027",
+          "pair_id": "P1",
+          "seed": 20261027,
+          "traceable": true,
+          "checkpoint_sha256": "4df238c16a4945e416ab47edf0f37d2eaa94088e440f48777d569d2b71ddeab7",
+          "result": "/data/agrisa_jepa_runs/stage6d/phenobench/stage6d_b2_capped_no_backfill_seed20261027/result.json",
+          "soil": 97.6926,
+          "crop": 82.2833,
+          "weed": 39.2,
+          "mIoU": 73.06
+        },
+        {
+          "run_id": "stage6d_b2_capped_no_backfill_seed20261028",
+          "pair_id": "P2",
+          "seed": 20261028,
+          "traceable": true,
+          "checkpoint_sha256": "1650db8c5a158fae3c730b84fb38d262bbdc1ea0be10c640c1639ad30cd76eb8",
+          "result": "/data/agrisa_jepa_runs/stage6d/phenobench/stage6d_b2_capped_no_backfill_seed20261028/result.json",
+          "soil": 97.6965,
+          "crop": 82.26,
+          "weed": 39.2333,
+          "mIoU": 73.0667
+        }
+      ],
+      "soil": {
+        "mean": 97.6945,
+        "std": 0.0019,
+        "values": [
+          97.6926,
+          97.6965
+        ]
+      },
+      "crop": {
+        "mean": 82.2717,
+        "std": 0.0117,
+        "values": [
+          82.2833,
+          82.26
+        ]
+      },
+      "weed": {
+        "mean": 39.2167,
+        "std": 0.0167,
+        "values": [
+          39.2,
+          39.2333
+        ]
+      },
+      "mIoU": {
+        "mean": 73.0633,
+        "std": 0.0033,
+        "values": [
+          73.06,
+          73.0667
+        ]
+      }
+    }
+  },
+  "delta": {
+    "B1_minus_A": {
+      "soil": {
+        "A_mean": 97.6085,
+        "B1_mean": 97.6957,
+        "B1_minus_A": 0.0872
+      },
+      "crop": {
+        "A_mean": 81.4567,
+        "B1_mean": 82.2817,
+        "B1_minus_A": 0.825
+      },
+      "weed": {
+        "A_mean": 35.98,
+        "B1_mean": 39.1267,
+        "B1_minus_A": 3.1467
+      },
+      "mIoU": {
+        "A_mean": 71.6833,
+        "B1_mean": 73.0317,
+        "B1_minus_A": 1.3484
+      }
+    },
+    "B2_minus_A": {
+      "soil": {
+        "A_mean": 97.6085,
+        "B2_mean": 97.6945,
+        "B2_minus_A": 0.086
+      },
+      "crop": {
+        "A_mean": 81.4567,
+        "B2_mean": 82.2717,
+        "B2_minus_A": 0.815
+      },
+      "weed": {
+        "A_mean": 35.98,
+        "B2_mean": 39.2167,
+        "B2_minus_A": 3.2367
+      },
+      "mIoU": {
+        "A_mean": 71.6833,
+        "B2_mean": 73.0633,
+        "B2_minus_A": 1.38
+      }
+    }
+  },
+  "paired_b1_b2": {
+    "per_pair": [
+      {
+        "pair_id": "P1",
+        "seed": 20261027,
+        "soil": {
+          "B1": 97.6902,
+          "B2": 97.6926,
+          "B2_minus_B1": 0.0024
+        },
+        "crop": {
+          "B1": 82.2333,
+          "B2": 82.2833,
+          "B2_minus_B1": 0.05
+        },
+        "weed": {
+          "B1": 38.52,
+          "B2": 39.2,
+          "B2_minus_B1": 0.68
+        },
+        "mIoU": {
+          "B1": 72.81,
+          "B2": 73.06,
+          "B2_minus_B1": 0.25
+        }
+      },
+      {
+        "pair_id": "P2",
+        "seed": 20261028,
+        "soil": {
+          "B1": 97.7011,
+          "B2": 97.6965,
+          "B2_minus_B1": -0.0046
+        },
+        "crop": {
+          "B1": 82.33,
+          "B2": 82.26,
+          "B2_minus_B1": -0.07
+        },
+        "weed": {
+          "B1": 39.7333,
+          "B2": 39.2333,
+          "B2_minus_B1": -0.5
+        },
+        "mIoU": {
+          "B1": 73.2533,
+          "B2": 73.0667,
+          "B2_minus_B1": -0.1867
+        }
+      }
+    ],
+    "cross_pair": {
+      "soil": {
+        "mean": -0.0011,
+        "values": [
+          0.0024,
+          -0.0046
+        ]
+      },
+      "crop": {
+        "mean": -0.01,
+        "values": [
+          0.05,
+          -0.07
+        ]
+      },
+      "weed": {
+        "mean": 0.09,
+        "values": [
+          0.68,
+          -0.5
+        ]
+      },
+      "mIoU": {
+        "mean": 0.0316,
+        "values": [
+          0.25,
+          -0.1867
+        ]
+      }
+    }
+  }
+}

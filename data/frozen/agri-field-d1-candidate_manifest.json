@@ -1,0 +1,367 @@
+{
+  "data_version": "agri-field-d1-candidate",
+  "status": "CANDIDATE",
+  "approved": false,
+  "images": {
+    "train": 15118,
+    "val": 3612,
+    "total": 18730
+  },
+  "sources": 8,
+  "composition": {
+    "train": {
+      "acre_crop_weed": {
+        "images": 791
+      },
+      "applebbch81": {
+        "images": 1838
+      },
+      "inat_weeds": {
+        "images": 1309
+      },
+      "lucas_vision": {
+        "images": 11183
+      },
+      "radish_wheat": {
+        "images": 534
+      },
+      "sesame_weed": {
+        "images": 1300
+      },
+      "sorghum_weed": {
+        "images": 172
+      },
+      "vegann": {
+        "images": 1603
+      }
+    }
+  },
+  "acquisition_domain": {
+    "FIELD_IN_SITU": {
+      "images": 16892
+    },
+    "ORCHARD_IN_SITU": {
+      "images": 1838
+    }
+  },
+  "split_integrity": {
+    "groups": 17032,
+    "train_groups": 13719,
+    "val_groups": 3313,
+    "cross_split_groups": 0,
+    "train_val_disjoint": true
+  },
+  "sha256": {
+    "agri-field-d1-candidate_train.csv": "6ba4ba172f09c7d6d38ac7d2ae771400af2f4ae6bb74b57e8ca401023c6ae437",
+    "agri-field-d1-candidate_val.csv": "db4054c5e68f119771a6facdd7cc15ad1b7f1842a5c6d118a94f8506457a23d6"
+  },
+  "loader_contract": [
+    "sample_id",
+    "path",
+    "split",
+    "status"
+  ],
+  "policy": {
+    "version": "stage5b-field-domain-policy-v1",
+    "admitted_domains": [
+      "FIELD_IN_SITU",
+      "ORCHARD_IN_SITU"
+    ],
+    "excluded_domains": [
+      "CONTROLLED_LAB",
+      "PROTECTED_CULTIVATION",
+      "UAV_AERIAL",
+      "SATELLITE_REMOTE",
+      "UNKNOWN"
+    ],
+    "holdout_sources": [
+      "cropandweed",
+      "deepweeds",
+      "growliflower",
+      "gwhd_2021",
+      "gwhd_instance_seg",
+      "minneapple",
+      "multiclass_weeds",
+      "phenobench",
+      "plantdoc",
+      "plantseg",
+      "roboflow_crop_detection",
+      "roboflow_disease_detection"
+    ]
+  },
+  "inherited": {
+    "frozen_v1_train_csv": "agrifield40k-v1_train.csv",
+    "frozen_v1_val_csv": "agrifield40k-v1_val.csv",
+    "v1_sha256": {
+      "agrifield40k-v1_train.csv": "d63183af8ede53bc859474d1fc82cc969335c71967008812a485de10476a5435",
+      "agrifield40k-v1_val.csv": "86efe5156291950b25af692d41b5f1b4cee437dd3ba2a44ce39e2cf18984f944"
+    },
+    "note": "v1 is read-only; rows and capture groups are inherited, and the v1 unreviewed perceptual-duplicate and pending-audit findings are inherited as risk, not cleared."
+  },
+  "new_sources": [
+    {
+      "source_id": "sesame_weed",
+      "images_in_manifest": 1300,
+      "images_after_exact_dedup": 1300,
+      "domain": "FIELD_IN_SITU",
+      "admitted_to_candidate": true,
+      "reason": "admitted at candidate: FIELD_IN_SITU/official_documentation/high/model_assisted_pending_human"
+    },
+    {
+      "source_id": "applebbch81",
+      "images_in_manifest": 1838,
+      "images_after_exact_dedup": 1838,
+      "domain": "ORCHARD_IN_SITU",
+      "admitted_to_candidate": true,
+      "reason": "admitted at candidate: ORCHARD_IN_SITU/official_documentation/high/model_assisted_pending_human"
+    }
+  ],
+  "blocked_sources": [
+    {
+      "source_id": "weedcrop",
+      "images_in_manifest": 2822,
+      "images_after_exact_dedup": 2822,
+      "domain": "UNKNOWN",
+      "admitted_to_candidate": false,
+      "reason": "an unverified acquisition domain never enters the main corpus",
+      "examples": 0
+    }
+  ],
+  "gate_rejections": {},
+  "distribution": {
+    "by_source": {
+      "lucas_vision": {
+        "images": 11183,
+        "share": 0.597064,
+        "groups": 11183
+      },
+      "applebbch81": {
+        "images": 1838,
+        "share": 0.098131,
+        "groups": 140
+      },
+      "vegann": {
+        "images": 1603,
+        "share": 0.085585,
+        "groups": 1603
+      },
+      "inat_weeds": {
+        "images": 1309,
+        "share": 0.069888,
+        "groups": 1309
+      },
+      "sesame_weed": {
+        "images": 1300,
+        "share": 0.069407,
+        "groups": 1300
+      },
+      "acre_crop_weed": {
+        "images": 791,
+        "share": 0.042232,
+        "groups": 791
+      },
+      "radish_wheat": {
+        "images": 534,
+        "share": 0.02851,
+        "groups": 534
+      },
+      "sorghum_weed": {
+        "images": 172,
+        "share": 0.009183,
+        "groups": 172
+      }
+    },
+    "by_domain": {
+      "FIELD_IN_SITU": {
+        "images": 16892,
+        "share": 0.901869,
+        "groups": 16892
+      },
+      "ORCHARD_IN_SITU": {
+        "images": 1838,
+        "share": 0.098131,
+        "groups": 140
+      }
+    },
+    "max_source_share": 0.597064,
+    "source_entropy_bits": 2.013119,
+    "domain_entropy_bits": 0.463044,
+    "sampling_strategies": {
+      "natural": {
+        "lucas_vision": {
+          "images": 11183,
+          "weight": 1.0,
+          "effective_images": 11183.0,
+          "share_in_corpus": 0.597064,
+          "share_after_sampling": 0.597064
+        },
+        "applebbch81": {
+          "images": 1838,
+          "weight": 1.0,
+          "effective_images": 1838.0,
+          "share_in_corpus": 0.098131,
+          "share_after_sampling": 0.098131
+        },
+        "vegann": {
+          "images": 1603,
+          "weight": 1.0,
+          "effective_images": 1603.0,
+          "share_in_corpus": 0.085585,
+          "share_after_sampling": 0.085585
+        },
+        "inat_weeds": {
+          "images": 1309,
+          "weight": 1.0,
+          "effective_images": 1309.0,
+          "share_in_corpus": 0.069888,
+          "share_after_sampling": 0.069888
+        },
+        "sesame_weed": {
+          "images": 1300,
+          "weight": 1.0,
+          "effective_images": 1300.0,
+          "share_in_corpus": 0.069407,
+          "share_after_sampling": 0.069407
+        },
+        "acre_crop_weed": {
+          "images": 791,
+          "weight": 1.0,
+          "effective_images": 791.0,
+          "share_in_corpus": 0.042232,
+          "share_after_sampling": 0.042232
+        },
+        "radish_wheat": {
+          "images": 534,
+          "weight": 1.0,
+          "effective_images": 534.0,
+          "share_in_corpus": 0.02851,
+          "share_after_sampling": 0.02851
+        },
+        "sorghum_weed": {
+          "images": 172,
+          "weight": 1.0,
+          "effective_images": 172.0,
+          "share_in_corpus": 0.009183,
+          "share_after_sampling": 0.009183
+        }
+      },
+      "source_balanced": {
+        "lucas_vision": {
+          "images": 11183,
+          "weight": 0.209358,
+          "effective_images": 2341.25,
+          "share_in_corpus": 0.597064,
+          "share_after_sampling": 0.125
+        },
+        "applebbch81": {
+          "images": 1838,
+          "weight": 1.273803,
+          "effective_images": 2341.25,
+          "share_in_corpus": 0.098131,
+          "share_after_sampling": 0.125
+        },
+        "vegann": {
+          "images": 1603,
+          "weight": 1.460543,
+          "effective_images": 2341.25,
+          "share_in_corpus": 0.085585,
+          "share_after_sampling": 0.125
+        },
+        "inat_weeds": {
+          "images": 1309,
+          "weight": 1.788579,
+          "effective_images": 2341.25,
+          "share_in_corpus": 0.069888,
+          "share_after_sampling": 0.125
+        },
+        "sesame_weed": {
+          "images": 1300,
+          "weight": 1.800962,
+          "effective_images": 2341.25,
+          "share_in_corpus": 0.069407,
+          "share_after_sampling": 0.125
+        },
+        "acre_crop_weed": {
+          "images": 791,
+          "weight": 2.959861,
+          "effective_images": 2341.25,
+          "share_in_corpus": 0.042232,
+          "share_after_sampling": 0.125
+        },
+        "radish_wheat": {
+          "images": 534,
+          "weight": 4.384363,
+          "effective_images": 2341.25,
+          "share_in_corpus": 0.02851,
+          "share_after_sampling": 0.125
+        },
+        "sorghum_weed": {
+          "images": 172,
+          "weight": 13.611919,
+          "effective_images": 2341.25,
+          "share_in_corpus": 0.009183,
+          "share_after_sampling": 0.125
+        }
+      },
+      "source_capped": {
+        "lucas_vision": {
+          "images": 11183,
+          "weight": 0.837432,
+          "effective_images": 9365.0,
+          "share_in_corpus": 0.597064,
+          "share_after_sampling": 0.5
+        },
+        "applebbch81": {
+          "images": 1838,
+          "weight": 1.24089,
+          "effective_images": 2280.76,
+          "share_in_corpus": 0.098131,
+          "share_after_sampling": 0.12177
+        },
+        "vegann": {
+          "images": 1603,
+          "weight": 1.24089,
+          "effective_images": 1989.15,
+          "share_in_corpus": 0.085585,
+          "share_after_sampling": 0.106201
+        },
+        "inat_weeds": {
+          "images": 1309,
+          "weight": 1.24089,
+          "effective_images": 1624.33,
+          "share_in_corpus": 0.069888,
+          "share_after_sampling": 0.086723
+        },
+        "sesame_weed": {
+          "images": 1300,
+          "weight": 1.24089,
+          "effective_images": 1613.16,
+          "share_in_corpus": 0.069407,
+          "share_after_sampling": 0.086127
+        },
+        "acre_crop_weed": {
+          "images": 791,
+          "weight": 1.24089,
+          "effective_images": 981.54,
+          "share_in_corpus": 0.042232,
+          "share_after_sampling": 0.052405
+        },
+        "radish_wheat": {
+          "images": 534,
+          "weight": 1.24089,
+          "effective_images": 662.64,
+          "share_in_corpus": 0.02851,
+          "share_after_sampling": 0.035379
+        },
+        "sorghum_weed": {
+          "images": 172,
+          "weight": 1.24089,
+          "effective_images": 213.43,
+          "share_in_corpus": 0.009183,
+          "share_after_sampling": 0.011395
+        }
+      }
+    }
+  },
+  "generated_at_utc": "2026-10-23T14:49:44.036778+00:00"
+}

@@ -1,0 +1,13 @@
+{
+  "data_version": "agri-mixed-d1-candidate",
+  "status": "DEFINED_NOT_BUILT",
+  "approved": false,
+  "composition_rule": "Field-D1 candidate rows + Controlled-D1 candidate rows",
+  "purpose": "test whether adding a large controlled-leaf corpus helps or hurts transfer to field tasks",
+  "prerequisites": [
+    "Controlled-D1 reaches at least CANDIDATE status with resolved licence",
+    "both sides pass the same duplicate and holdout gates",
+    "no holdout source appears on either side"
+  ],
+  "not_run_in_stage5b": true
+}
