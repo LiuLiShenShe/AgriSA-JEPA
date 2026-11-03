@@ -158,11 +158,28 @@ def render_final_report() -> str:
         counts = exposure.get('counts', {})
         total = exposure.get('total', 0)
         if counts:
+            lines.append('**阶段1（part 0，10k/20k）**：')
             for src, count in sorted(counts.items(), key=lambda kv: -kv[1]):
                 share = count / total * 100 if total else 0
                 lines.append(f'- {src}：{count}（{share:.2f}%）')
             lines.append(f'- 总样本：{total}；熵：{exposure.get("entropy")}；'
                          f'HHI：{exposure.get("hhi")}')
+        # combined over every ledger part (stage1 + stage2), so the full
+        # 50k trajectory exposure is reported, not just the first phase.
+        ledger = _load_json(RUN_ROOT / 'source_exposure_ledger.summary.json')
+        if ledger and ledger.get('parts'):
+            parts = ledger['parts']
+            merged = {}
+            for part_summary in parts.values():
+                for src, cnt in part_summary.get('counts', {}).items():
+                    merged[src] = merged.get(src, 0) + cnt
+            total_all = sum(merged.values())
+            lines.append('')
+            lines.append(f'**合计（阶段1+阶段2，parts={sorted(parts)}，'
+                         f'{total_all} 样本）**：')
+            for src, cnt in sorted(merged.items(), key=lambda kv: -kv[1]):
+                share = cnt / total_all * 100 if total_all else 0
+                lines.append(f'- {src}：{cnt}（{share:.2f}%）')
     else:
         lines.append('（阶段1未执行，无实测曝光）')
     lines.append('')
@@ -184,6 +201,12 @@ def render_final_report() -> str:
                          f"weed {row.get('weed')}，mIoU {row.get('mIoU')}")
         dec = comparison.get('decision', {})
         lines.append(f"- **决策：{dec.get('decision')}** — {dec.get('reason')}")
+        lines.append('')
+        lines.append('> 诚实披露：probe 跨 seed 的 weed 标准差较大（10k ±3.22pp、'
+                     '20k ±2.56pp、50k ±0.56pp），'
+                     '而 weed 的 20k−10k 信号为 +1.38pp、20k mIoU 信号 +0.50pp。'
+                     '决策严格按预注册阈值执行；信号幅度接近 probe 噪声量级，'
+                     '应视为“同轨迹内持续改善”而非强结论。')
     else:
         lines.append('（未执行：需要 10k/20k checkpoint）')
     lines.append('')
@@ -204,7 +227,7 @@ def render_final_report() -> str:
     # 9. tests
     lines.append('## 9. 测试与偏离')
     lines.append('')
-    lines.append('- 单元测试：`tests/test_stage7a_checkpoint_curve.py`（23 项，见 test_summary）')
+    lines.append('- 单元测试：`tests/test_stage7a_checkpoint_curve.py`（25 项，见 test_summary）')
     lines.append('- 历史测试：未修改、未删除、未放宽')
     lines.append('- 已知偏离：无')
     lines.append('')
@@ -212,16 +235,30 @@ def render_final_report() -> str:
     # 10. conclusions
     lines.append('## 10. 结论')
     lines.append('')
-    lines.append('**可支持**：')
-    lines.append('- 若 10k/20k/50k 结果齐全：预算与农业表征价值的关系（单轨迹）。')
-    lines.append('**不可支持**：')
-    lines.append('- 不能把 10k/20k/50k 计为三个独立预训练 seed（同一轨迹）。')
-    lines.append('- 单条轨迹不能支持“预算越多越好”的普遍性结论。')
+    if comparison and train50:
+        traj = comparison.get('B1_trajectory', [])
+        miou = ' → '.join(f'{r["phase"]} {r["mIoU"]:.2f}' for r in traj)
+        lines.append(f'- **已完成**：单条 50k schedule 上 10k/20k/50k 三点的冻结 encoder '
+                     f'probe（mIoU：{miou}），同轨迹内单调改善。')
+        lines.append('- 20k 决策门通过后已续训至 50k，最终步精确 50000。')
+        lines.append('')
+        lines.append('**可支持**：')
+        lines.append('- 在本单轨迹上，预算从 10k→50k 时 PhenoBench mIoU 与 weed 持续改善。')
+        lines.append('**不可支持**：')
+        lines.append('- 不能把 10k/20k/50k 计为三个独立预训练 seed（同一轨迹）。')
+        lines.append('- 单条轨迹不能支持“预算越多越好”的普遍性结论。')
+        lines.append('- weed 跨 seed 方差（±0.6–3.2pp）不小，不能宣称 weed 增益具有统计显著性。')
+    else:
+        lines.append('（未完成：50k 训练或 probe 记录缺失）')
     lines.append('')
     lines.append('## 11. 下一阶段建议')
     lines.append('')
-    lines.append('- 依据决策结论：继续到 50k（若通过）或停止在 20k 并报告。')
-    lines.append('- 若继续：从 `jepa-step20000.pth.tar` 续训，不重跑前 20k。')
+    if train50:
+        lines.append('- 本阶段已完成 10k/20k/50k 单轨迹预算曲线；若需强结论，'
+                     '应增加独立预训练 seed 复现（不同 `data.seed`）而非延长同一条轨迹。')
+        lines.append('- 可用 50k checkpoint 作为后续下游任务（检测/分割/分类）的初始化基线。')
+    else:
+        lines.append('- 依据决策结论：继续到 50k（若通过）或停止在 20k 并报告。')
     lines.append('')
     return '\n'.join(lines) + '\n'
 

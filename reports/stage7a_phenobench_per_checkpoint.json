@@ -252,6 +252,64 @@
         "weed": 1.3833,
         "mIoU": 0.5
       }
+    },
+    {
+      "phase": "step50k",
+      "arm": "B1",
+      "run_id": "stage7a_b1_natural_50k_50k",
+      "pair_id": "S7A",
+      "pretraining_seed": 20261029,
+      "traceable": true,
+      "checkpoint": "/data/agrisa_jepa_runs/stage7a_b1_natural_50k/jepa-encoder-step50000.pth",
+      "checkpoint_sha256": "5f302e4789593024548c7fb249a84eb5882ce59fbf1faaf45c8a66898b9016a8",
+      "result": "/data/agrisa_jepa_runs/stage7a_b1_natural_50k/phenobench/stage7a_b1_natural_50k_50k/result.json",
+      "probe_seeds": [
+        0,
+        1,
+        2
+      ],
+      "soil": {
+        "mean": 97.7415,
+        "std": 0.0047,
+        "values": [
+          97.7361,
+          97.7475,
+          97.7409
+        ]
+      },
+      "crop": {
+        "mean": 82.4733,
+        "std": 0.0205,
+        "values": [
+          82.45,
+          82.47,
+          82.5
+        ]
+      },
+      "weed": {
+        "mean": 37.8267,
+        "std": 0.556,
+        "values": [
+          38.45,
+          37.93,
+          37.1
+        ]
+      },
+      "mIoU": {
+        "mean": 72.68,
+        "std": 0.1768,
+        "values": [
+          72.88,
+          72.71,
+          72.45
+        ]
+      },
+      "delta_vs_A": {
+        "soil": 0.133,
+        "crop": 1.0166,
+        "weed": 1.8467,
+        "mIoU": 0.9967
+      }
     }
   ],
   "note": "同一 50k schedule 的中间快照（10k/20k）不是独立预训练 seed；20k→50k 用预定义规则决策。"

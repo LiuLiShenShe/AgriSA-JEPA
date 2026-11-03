@@ -51,6 +51,17 @@
       "result": "/data/agrisa_jepa_runs/stage7a_b1_natural_50k/phenobench/stage7a_b1_natural_50k_20k/result.json",
       "checkpoint": "/data/agrisa_jepa_runs/stage7a_b1_natural_50k/jepa-encoder-step20000.pth",
       "checkpoint_sha256": "a66f1fa42dcdc44718c9e79cd89fe8930f7732a280bd1edfad2ad6e7d4e8d23f"
+    },
+    {
+      "arm": "B1",
+      "run_id": "stage7a_b1_natural_50k_50k",
+      "pair_id": "S7A",
+      "seed": 20261029,
+      "traceable": true,
+      "phase": "step50k",
+      "result": "/data/agrisa_jepa_runs/stage7a_b1_natural_50k/phenobench/stage7a_b1_natural_50k_50k/result.json",
+      "checkpoint": "/data/agrisa_jepa_runs/stage7a_b1_natural_50k/jepa-encoder-step50000.pth",
+      "checkpoint_sha256": "5f302e4789593024548c7fb249a84eb5882ce59fbf1faaf45c8a66898b9016a8"
     }
   ]
 }
