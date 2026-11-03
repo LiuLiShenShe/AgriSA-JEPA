@@ -91,10 +91,12 @@ def probe_label(run_id: str, checkpoint_sha: str, manifest_sha: str) -> str:
     return f'stage7a_{run_id}__{digest[:24]}'
 
 
-def new_records(include_50k: bool) -> List[Dict[str, object]]:
+def new_records(include_50k: bool, only: Sequence[str] = ()) -> List[Dict[str, object]]:
     records: List[Dict[str, object]] = []
     for tag, path in ENCODER_FILES.items():
         if tag == '50k' and not include_50k:
+            continue
+        if only and tag not in only:
             continue
         if not path.is_file():
             print(f'SKIP {tag}: {path} not found', file=sys.stderr)
@@ -138,17 +140,27 @@ def verify_probe_result(result_path: Path, checkpoint_sha: str,
     return []
 
 
-def build_comparison_manifest(new_records: Sequence[Dict[str, object]],
-                              out_root: Path) -> Dict[str, object]:
+def build_comparison_manifest(include_50k: bool, out_root: Path) -> Dict[str, object]:
+    """Rebuild the comparison manifest from every available B1 result.
+
+    The manifest must always carry ALL probed checkpoints (plus the two
+    references), even when only one checkpoint was just re-probed via
+    ``--only``, so the reference/trajectory rows stay complete.
+    """
     entries = [dict(BASELINE_A), dict(STAGE6D_2K_REFERENCE)]
-    for record in new_records:
+    for tag, path in ENCODER_FILES.items():
+        if tag == '50k' and not include_50k:
+            continue
+        result_path = out_root / f'stage7a_b1_natural_50k_{tag}' / 'result.json'
+        if not path.is_file() or not result_path.is_file():
+            continue
         entries.append({
-            'arm': record['arm'], 'run_id': record['run_id'],
-            'pair_id': record['pair_id'], 'seed': record['seed'],
-            'traceable': True, 'phase': record.get('phase'),
-            'result': str(out_root / record['run_id'] / 'result.json'),
-            'checkpoint': record['checkpoint'],
-            'checkpoint_sha256': record['checkpoint_sha256'],
+            'arm': 'B1', 'run_id': f'stage7a_b1_natural_50k_{tag}',
+            'pair_id': 'S7A', 'seed': 20261029,
+            'traceable': True, 'phase': f'step{tag}',
+            'result': str(result_path),
+            'checkpoint': str(path),
+            'checkpoint_sha256': sha256_file(path),
         })
     return {
         'schema_version': 'stage7a_comparison_manifest/v1',
@@ -194,6 +206,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                         help='also probe the 50k checkpoint (after phase 2)')
     parser.add_argument('--manifest-only', action='store_true',
                         help='validate existing results and write the comparison manifest')
+    parser.add_argument('--only', nargs='*', default=(),
+                        help='probe only these encoder tags, e.g. --only 50k')
     parser.add_argument('--device', type=int, default=1)
     parser.add_argument('--out-root', type=Path,
                         default=Path('/data/agrisa_jepa_runs/stage7a_b1_natural_50k/phenobench'))
@@ -203,7 +217,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                         default=ROOT / 'reports/stage7a_comparison_manifest.json')
     args = parser.parse_args(argv)
 
-    records = new_records(args.include_50k)
+    records = new_records(args.include_50k, tuple(args.only))
     if not records and not args.manifest_only:
         print('no probeable checkpoints found (run training first)', file=sys.stderr)
         return 1
@@ -262,7 +276,9 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                     print(f'  - {problem}', file=sys.stderr)
                 return 1
 
-    manifest = build_comparison_manifest(records, args.out_root)
+    include_50k = args.include_50k or (
+        args.out_root / 'stage7a_b1_natural_50k_50k' / 'result.json').is_file()
+    manifest = build_comparison_manifest(include_50k, args.out_root)
     args.manifest_out.parent.mkdir(parents=True, exist_ok=True)
     args.manifest_out.write_text(
         json.dumps(manifest, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
