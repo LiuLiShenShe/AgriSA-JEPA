@@ -2,7 +2,7 @@
   "schema_version": "stage7a_checkpoint_manifest/v1",
   "run_id": "stage7a_b1_natural_50k",
   "output_dir": "/data/agrisa_jepa_runs/stage7a_b1_natural_50k",
-  "git_commit": "166d49458ac2b5d625d1d71bc8a23db7e18a3399",
+  "git_commit": "9ed811e59c234e73ecca6da5f373624eb9b0ac98",
   "checkpoints": [
     {
       "path": "/data/agrisa_jepa_runs/stage7a_b1_natural_50k/jepa-step10000.pth.tar",
@@ -15,6 +15,11 @@
       "sha256": "29cd7a5228ddc6c9e80212b494b215059ce090595d60ddbbab4725d5bc7b11cd"
     },
     {
+      "path": "/data/agrisa_jepa_runs/stage7a_b1_natural_50k/jepa-step50000.pth.tar",
+      "bytes": 10358220371,
+      "sha256": "f10e83aa4e74d3ab5305d5cbb4657033e2f39309abf9cbd603248ccfc068bb3c"
+    },
+    {
       "path": "/data/agrisa_jepa_runs/stage7a_b1_natural_50k/jepa-encoder-step10000.pth",
       "bytes": 2523204186,
       "sha256": "ee8ce11eab1023f0a620eedf958ac39accdba1b816ce39ff25f76baa9254360f"
@@ -25,9 +30,14 @@
       "sha256": "a66f1fa42dcdc44718c9e79cd89fe8930f7732a280bd1edfad2ad6e7d4e8d23f"
     },
     {
+      "path": "/data/agrisa_jepa_runs/stage7a_b1_natural_50k/jepa-encoder-step50000.pth",
+      "bytes": 2523204250,
+      "sha256": "5f302e4789593024548c7fb249a84eb5882ce59fbf1faaf45c8a66898b9016a8"
+    },
+    {
       "path": "/data/agrisa_jepa_runs/stage7a_b1_natural_50k/jepa-latest.pth.tar",
-      "bytes": 10358212886,
-      "sha256": "f8c8161bca4f4bca02eced5637dfd9ffc5bcd50a29ed22ef4dd8886b246ff2ab"
+      "bytes": 10358212630,
+      "sha256": "d0162877a7b04a6d122089e8f0ea0d7e81f3fea6d152da49b6fbf37cffced5ef"
     }
   ]
 }

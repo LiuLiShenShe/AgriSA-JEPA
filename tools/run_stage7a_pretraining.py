@@ -200,7 +200,8 @@ def _read_verification(run_dir: Path) -> Dict[str, object]:
         return yaml.safe_load(handle)
 
 
-def _check_common(verification: Mapping[str, object]) -> List[str]:
+def _check_common(verification: Mapping[str, object],
+                  check_pretrained: bool = True) -> List[str]:
     problems: List[str] = []
     if verification.get('loss_finite') is not True:
         problems.append('loss_finite is not true')
@@ -209,10 +210,11 @@ def _check_common(verification: Mapping[str, object]) -> List[str]:
     if verification.get('manifest_sha256') != EXPECTED_MANIFEST_SHA:
         problems.append(f'manifest_sha256 {verification.get("manifest_sha256")} '
                         f'!= {EXPECTED_MANIFEST_SHA}')
-    pretrained = verification.get('pretrained_init') or {}
-    if pretrained.get('sha256') != EXPECTED_PRETRAINED_SHA:
-        problems.append(f'pretrained_init.sha256 {pretrained.get("sha256")} '
-                        f'!= {EXPECTED_PRETRAINED_SHA}')
+    if check_pretrained:
+        pretrained = verification.get('pretrained_init') or {}
+        if pretrained.get('sha256') != EXPECTED_PRETRAINED_SHA:
+            problems.append(f'pretrained_init.sha256 {pretrained.get("sha256")} '
+                            f'!= {EXPECTED_PRETRAINED_SHA}')
     if verification.get('git_commit') != git(['rev-parse', 'HEAD']):
         problems.append(f'verification git_commit {verification.get("git_commit")} '
                         f'!= current HEAD {git(["rev-parse", "HEAD"])}')
@@ -323,7 +325,19 @@ def verify_stage2(run_dir: Path, expected_20k_sha: str) -> List[str]:
         problems.append('max_optimizer_steps mismatch')
     if v.get('interrupt_after_optimizer_steps') is not None:
         problems.append('stage2 still carries an interruption point')
-    problems.extend(_check_common(v))
+    problems.extend(_check_common(v, check_pretrained=False))
+    # a resumed run never loads the official pretrained init (it resumes from
+    # the 20k checkpoint), so its provenance is anchored through the phase-1
+    # record, which DID verify it.  Keep that anchor explicit.
+    stage1_record_path = ROOT / 'reports' / 'stage7a_training_20k.json'
+    if stage1_record_path.is_file():
+        stage1_record = json.loads(stage1_record_path.read_text(encoding='utf-8'))
+        if (stage1_record.get('pretrained_init') or {}).get('sha256') != EXPECTED_PRETRAINED_SHA:
+            problems.append('phase-1 record pretrained_init.sha256 does not match '
+                            f'{EXPECTED_PRETRAINED_SHA}')
+    else:
+        problems.append(f'missing {stage1_record_path.relative_to(ROOT)} for '
+                        'pretrained-init provenance anchor')
     problems.extend(_check_snapshot_files(run_dir, SNAPSHOT_STEPS['stage2']))
     for step in SNAPSHOT_STEPS['stage2']:
         problems.extend(_check_snapshot_schedule(run_dir, step, cfg))
@@ -427,6 +441,63 @@ def preflight_md(report: Mapping[str, object], phase: str) -> str:
     else:
         lines.append('验收通过，可以启动。')
     return '\n'.join(lines) + '\n'
+
+
+def finalize_phase(phase: str) -> int:
+    """Verify an already-finished phase and write its record + manifest.
+
+    Training is NOT re-run.  This exists for the case where the training
+    process finished correctly but the post-run assertion set was wrong (e.g. a
+    resumed run legitimately has no ``pretrained_init``); re-hashing the
+    multi-GB checkpoints is the only expensive part.
+    """
+    launch_path = RUN_DIR / f'stage7a_launch_{phase}.json'
+    if not launch_path.is_file():
+        print(f'missing {launch_path}', file=sys.stderr)
+        return 1
+    verification_path = RUN_DIR / 'training_verification.yaml'
+    if not verification_path.is_file():
+        print(f'missing {verification_path}', file=sys.stderr)
+        return 1
+    launch = json.loads(launch_path.read_text(encoding='utf-8'))
+    verification = _read_verification(RUN_DIR)
+    reports = ROOT / 'reports'
+    if phase == 'stage1':
+        problems = verify_stage1(RUN_DIR)
+    else:
+        prior = json.loads((reports / 'stage7a_training_20k.json').read_text(
+            encoding='utf-8'))
+        problems = verify_stage2(RUN_DIR, prior.get('checkpoint_20k_sha'))
+    if problems:
+        print(f'{phase} VERIFICATION FAILED:', file=sys.stderr)
+        for problem in problems:
+            print(f'  - {problem}', file=sys.stderr)
+        return 1
+
+    started = datetime.fromisoformat(str(launch['started_at']))
+    console = RUN_DIR / f'console_{phase}.log'
+    finished = (datetime.fromtimestamp(console.stat().st_mtime, tz=timezone.utc)
+                if console.is_file() else datetime.now(timezone.utc))
+    wall_minutes = (finished - started).total_seconds() / 60.0
+
+    record = stage_records(RUN_DIR, verification, launch, wall_minutes)
+    manifest = checkpoint_manifest(RUN_DIR)
+    if phase == 'stage1':
+        record['checkpoint_10k_sha'] = sha256_file(RUN_DIR / 'jepa-step10000.pth.tar')
+        record['checkpoint_20k_sha'] = sha256_file(RUN_DIR / 'jepa-step20000.pth.tar')
+        record['encoder_10k_sha'] = sha256_file(RUN_DIR / 'jepa-encoder-step10000.pth')
+        record['encoder_20k_sha'] = sha256_file(RUN_DIR / 'jepa-encoder-step20000.pth')
+        (reports / 'stage7a_training_20k.json').write_text(
+            json.dumps(record, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
+    else:
+        record['checkpoint_50k_sha'] = sha256_file(RUN_DIR / 'jepa-step50000.pth.tar')
+        record['encoder_50k_sha'] = sha256_file(RUN_DIR / 'jepa-encoder-step50000.pth')
+        (reports / 'stage7a_training_50k.json').write_text(
+            json.dumps(record, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
+    (reports / 'stage7a_checkpoint_manifest.json').write_text(
+        json.dumps(manifest, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
+    print(json.dumps(record, indent=2, ensure_ascii=False))
+    return 0
 
 
 def run_phase(phase: str, device: int, min_free_mib: int,
@@ -538,9 +609,14 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     parser.add_argument('--min-free-mib', type=int, default=DEFAULT_MIN_FREE_MIB)
     parser.add_argument('--max-utilization-percent', type=int, default=5)
     parser.add_argument('--allow-dirty', action='store_true')
+    parser.add_argument('--finalize', action='store_true',
+                        help='verify an already-finished phase and write its '
+                             'record + manifest without re-running training')
     args = parser.parse_args(argv)
 
     phase = 'stage2' if args.stage2 else 'stage1'
+    if args.finalize:
+        return finalize_phase(phase)
     if not args.execute or args.dry_run:
         print(json.dumps({
             'mode': 'dry-run', 'phase': phase, 'device': args.device,
