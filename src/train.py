@@ -974,7 +974,7 @@ def main(args, resume_preempt=False):
                             b''.join(_tensor_sha(m).encode() for m in masks_pred)
                         ).hexdigest()[:16],
                         'sample_ids': [str(x) for x in udata[1]],
-                    }) + '\n', encoding='utf-8')
+                    }) + '\n')
 
             # -- realised source exposure for this consumed micro-batch
             if source_ledger is not None:
