@@ -1,0 +1,62 @@
+{
+  "schema_version": "stage7b_protocol/v1",
+  "base_config": "configs/stage6_b1_natural_2000.yaml",
+  "epochs": 50,
+  "stop": 2000,
+  "arms": {
+    "A": {
+      "max_optimizer_steps": 2000,
+      "interrupt_after_optimizer_steps": null,
+      "warmup_steps": 100,
+      "save_at_optimizer_steps": [
+        2000
+      ]
+    },
+    "B": {
+      "max_optimizer_steps": 50000,
+      "interrupt_after_optimizer_steps": 2000,
+      "warmup_steps": 100,
+      "save_at_optimizer_steps": [
+        2000
+      ]
+    },
+    "C": {
+      "max_optimizer_steps": 50000,
+      "interrupt_after_optimizer_steps": 2000,
+      "warmup_steps": 2500,
+      "save_at_optimizer_steps": [
+        2000
+      ]
+    }
+  },
+  "seeds": {
+    "p1": 20261104,
+    "p2": 20261105
+  },
+  "run_root": "/data/agrisa_jepa_runs/stage7b",
+  "schedule_positions_at_2000": {
+    "A": {
+      "lr": 1e-06,
+      "wd": 0.4,
+      "ema": 1.0
+    },
+    "B": {
+      "lr": 0.00019928898129914537,
+      "wd": 0.04141935376339395,
+      "ema": 0.99616
+    },
+    "C": {
+      "lr": 0.000162,
+      "wd": 0.04141935376339395,
+      "ema": 0.99616
+    }
+  },
+  "frozen_inputs": {
+    "train_view": {
+      "expected_sha256": "26c55431c63791d4f7d427d432840c21aa47a717a5daadbb5990a68a546f71f2",
+      "ok": true
+    }
+  },
+  "ok": true,
+  "problems": []
+}
