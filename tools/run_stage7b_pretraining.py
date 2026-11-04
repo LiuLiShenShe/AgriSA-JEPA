@@ -59,7 +59,7 @@ def load_yaml(path: Path) -> Dict[str, object]:
 
 def run_one(key: str, device: int) -> int:
     cfg_path = ROOT / 'configs' / f'stage7b_{key}.yaml'
-    run_dir = RUN_ROOT / key
+    run_dir = RUN_ROOT / f'stage7b_{key}'
     run_dir.mkdir(parents=True, exist_ok=True)
     env = dict(os.environ)
     env['CUDA_VISIBLE_DEVICES'] = str(device)
@@ -77,7 +77,7 @@ def verify_run(key: str) -> List[str]:
     arm, tag = key.split('_')
     spec = ARMS[arm]
     cfg = load_yaml(ROOT / 'configs' / f'stage7b_{key}.yaml')
-    run_dir = RUN_ROOT / key
+    run_dir = RUN_ROOT / f'stage7b_{key}'
     problems: List[str] = []
     ver_path = run_dir / 'training_verification.yaml'
     if not ver_path.is_file():
@@ -112,11 +112,11 @@ def verify_run(key: str) -> List[str]:
         if int(snap.get('optimizer_steps', -1)) != STOP:
             problems.append(f'snapshot optimizer_steps {snap.get("optimizer_steps")} != {STOP}')
         for label, got, want in (
-                ('LR', snap.get('lr_at_snapshot'), expected_lr(STOP, horizon, warmup)),
+                ('LR', snap.get('lr_at_snapshot'), expected_lr(STOP, cfg)),
                 ('WD', snap.get('weight_decay_at_snapshot'),
-                 expected_wd(STOP, horizon)),
+                 expected_wd(STOP, cfg)),
                 ('EMA', snap.get('ema_momentum_at_snapshot'),
-                 expected_ema(STOP, horizon))):
+                 expected_ema(STOP, cfg))):
             if got is None or not math.isclose(float(got), float(want), rel_tol=1e-6,
                                                abs_tol=1e-12):
                 problems.append(f'{label}@snapshot {got} != {want}')
@@ -161,7 +161,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
     records = []
     for key in keys:
-        run_dir = RUN_ROOT / key
+        run_dir = RUN_ROOT / f'stage7b_{key}'
         if (run_dir / 'training_verification.yaml').is_file():
             print(f'SKIP {key}: already has a verification record', flush=True)
             continue

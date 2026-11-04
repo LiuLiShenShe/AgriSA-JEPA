@@ -62,7 +62,9 @@ def phenobench_manifest_sha() -> str:
 
 
 def encoder_path(key: str) -> Path:
-    return RUN_ROOT / key / f'jepa-encoder-step{STOP}.pth'
+    # the training configs write to RUN_ROOT/stage7b_{arm}_{tag} (see
+    # tools/stage7b_build_configs.run_id), not RUN_ROOT/{arm}_{tag}
+    return RUN_ROOT / f'stage7b_{key}' / f'jepa-encoder-step{STOP}.pth'
 
 
 def new_records(only: Sequence[str] = ()) -> List[Dict[str, object]]:
