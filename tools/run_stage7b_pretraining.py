@@ -178,6 +178,15 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             for problem in problems:
                 print(f'  - {problem}', file=sys.stderr)
             return 1
+        # The rolling jepa-latest.pth.tar duplicates the verified step-2,000
+        # state (same final save), so it is freed after verification to keep the
+        # six-run disk budget within the ~88 GB free on /data.  The step-2,000
+        # full checkpoint, encoder snapshot and all records are retained.
+        latest = run_dir / 'jepa-latest.pth.tar'
+        if latest.is_file():
+            freed_mib = latest.stat().st_size >> 20
+            latest.unlink()
+            print(f'{key}: freed jepa-latest.pth.tar ({freed_mib} MiB)', flush=True)
         v = load_yaml(run_dir / 'training_verification.yaml')
         records.append({
             'run_id': key, 'arm': key.split('_')[0], 'tag': key.split('_')[1],
