@@ -362,6 +362,16 @@ def run_scenario(scenario: str, device: int, cuda_index: int) -> Dict[str, objec
 
     ok = (trace_report['ok'] and ledger_report['ok']
           and checkpoint_report['ok'] and not count_problems)
+    # -- free the large test checkpoints as soon as they have been compared;
+    #    the deliverable is the report (trace/ledger/verification are kept).
+    #    These are test artefacts, not experiment weights.
+    del snap_a, snap_b
+    for pattern in ('*.pth.tar', '*.pth'):
+        for path in root.rglob(pattern):
+            try:
+                path.unlink()
+            except OSError:
+                pass
     return {
         'scenario': scenario,
         'ipe_expected': SCENARIOS[scenario]['ipe'],
