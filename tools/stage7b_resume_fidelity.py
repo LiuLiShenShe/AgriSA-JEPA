@@ -128,8 +128,16 @@ def run(config_path: Path, device: int, cuda_index: int, trace: Path) -> int:
     env = dict(os.environ)
     env['CUDA_VISIBLE_DEVICES'] = str(device)
     env['AGRISA_TRACE_BATCHES'] = str(trace)
+    # Unique rendezvous port per run: a lingering socket from a killed run can
+    # otherwise make init_process_group fail with EADDRINUSE and silently fall
+    # back to a non-initialised single process, crashing DistributedDataParallel.
+    env['AGRISA_MASTER_PORT'] = str(46000 + device)
+    # `process_main` derives CUDA_VISIBLE_DEVICES from `--devices`, so the
+    # value must be the *physical* GPU index (Stage 7A used cuda:1 -> GPU1),
+    # not a logical index.  A stale cuda:0 here silently selected physical
+    # GPU0, violating the "only GPU1" rule.
     command = [sys.executable, 'main.py', '--fname',
-               str(config_path.relative_to(ROOT)), '--devices', f'cuda:{cuda_index}']
+               str(config_path.relative_to(ROOT)), '--devices', f'cuda:{device}']
     print(f'--- fidelity run {config_path.name} on physical GPU{device} ---', flush=True)
     process = subprocess.run(command, cwd=ROOT, env=env, text=True)
     return process.returncode
