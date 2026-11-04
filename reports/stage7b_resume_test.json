@@ -1,0 +1,245 @@
+{
+  "schema_version": "stage7b_resume_fidelity/v1",
+  "generated_at": "2026-11-04T08:29:23+00:00",
+  "max_steps": 24,
+  "interrupt": 12,
+  "weight_rtol": 0.001,
+  "weight_atol": 1e-05,
+  "scenarios": {
+    "clean": {
+      "scenario": "clean",
+      "ipe_expected": 192,
+      "started_at": "2026-11-04T04:25:58+00:00",
+      "finished_at": "2026-11-04T06:09:38+00:00",
+      "ok": true,
+      "trace": {
+        "ok": true,
+        "problems": [],
+        "n_a": 192,
+        "n_b": 192,
+        "exact_mismatch": {
+          "epoch": 0,
+          "itr": 0,
+          "micro_step": 0,
+          "optimizer_step": 0,
+          "window_size": 0,
+          "imgs_sha": 0,
+          "mask_enc_sha": 0,
+          "mask_pred_sha": 0,
+          "sample_ids": 0
+        },
+        "float_mismatch": {
+          "lr": 0,
+          "wd": 0
+        },
+        "first_mismatch": []
+      },
+      "ledger": {
+        "ok": true,
+        "problems": [],
+        "n_a": 3072,
+        "n_b": 3072,
+        "row_mismatch": 0
+      },
+      "checkpoint": {
+        "encoder": {
+          "ok": true,
+          "problems": [],
+          "max_abs_diff": 0.0,
+          "worst_key": null,
+          "shape_mismatch_keys": [],
+          "rtol": 0.001,
+          "atol": 1e-05
+        },
+        "predictor": {
+          "ok": true,
+          "problems": [],
+          "max_abs_diff": 0.0,
+          "worst_key": null,
+          "shape_mismatch_keys": [],
+          "rtol": 0.001,
+          "atol": 1e-05
+        },
+        "target_encoder": {
+          "ok": true,
+          "problems": [],
+          "max_abs_diff": 0.0,
+          "worst_key": null,
+          "shape_mismatch_keys": [],
+          "rtol": 0.001,
+          "atol": 1e-05
+        },
+        "optimizer": {
+          "ok": true,
+          "problems": []
+        },
+        "schedule": {
+          "optimizer_steps": {
+            "a": 24,
+            "b": 24,
+            "equal": true
+          },
+          "micro_steps": {
+            "a": 192,
+            "b": 192,
+            "equal": true
+          },
+          "lr_at_snapshot": {
+            "a": 1e-06,
+            "b": 1e-06,
+            "equal": true
+          },
+          "weight_decay_at_snapshot": {
+            "a": 0.4,
+            "b": 0.4,
+            "equal": true
+          },
+          "ema_momentum_at_snapshot": {
+            "a": 0.9998333333333334,
+            "b": 0.9998333333333334,
+            "equal": true
+          }
+        },
+        "ok": true,
+        "problems": []
+      },
+      "counts": {
+        "optimizer_steps_total": {
+          "a": 24,
+          "b": 24
+        },
+        "micro_steps_total": {
+          "a": 192,
+          "b": 192
+        },
+        "partial_grad_accum_windows": {
+          "a": 0,
+          "b": 0
+        },
+        "partial_window_micro_steps": {
+          "a": 0,
+          "b": 0
+        }
+      },
+      "count_problems": []
+    },
+    "partial": {
+      "scenario": "partial",
+      "ipe_expected": 190,
+      "started_at": "2026-11-04T06:09:39+00:00",
+      "finished_at": "2026-11-04T08:29:23+00:00",
+      "ok": true,
+      "trace": {
+        "ok": true,
+        "problems": [],
+        "n_a": 190,
+        "n_b": 190,
+        "exact_mismatch": {
+          "epoch": 0,
+          "itr": 0,
+          "micro_step": 0,
+          "optimizer_step": 0,
+          "window_size": 0,
+          "imgs_sha": 0,
+          "mask_enc_sha": 0,
+          "mask_pred_sha": 0,
+          "sample_ids": 0
+        },
+        "float_mismatch": {
+          "lr": 0,
+          "wd": 0
+        },
+        "first_mismatch": []
+      },
+      "ledger": {
+        "ok": true,
+        "problems": [],
+        "n_a": 3040,
+        "n_b": 3040,
+        "row_mismatch": 0
+      },
+      "checkpoint": {
+        "encoder": {
+          "ok": true,
+          "problems": [],
+          "max_abs_diff": 0.0,
+          "worst_key": null,
+          "shape_mismatch_keys": [],
+          "rtol": 0.001,
+          "atol": 1e-05
+        },
+        "predictor": {
+          "ok": true,
+          "problems": [],
+          "max_abs_diff": 0.0,
+          "worst_key": null,
+          "shape_mismatch_keys": [],
+          "rtol": 0.001,
+          "atol": 1e-05
+        },
+        "target_encoder": {
+          "ok": true,
+          "problems": [],
+          "max_abs_diff": 0.0,
+          "worst_key": null,
+          "shape_mismatch_keys": [],
+          "rtol": 0.001,
+          "atol": 1e-05
+        },
+        "optimizer": {
+          "ok": true,
+          "problems": []
+        },
+        "schedule": {
+          "optimizer_steps": {
+            "a": 24,
+            "b": 24,
+            "equal": true
+          },
+          "micro_steps": {
+            "a": 190,
+            "b": 190,
+            "equal": true
+          },
+          "lr_at_snapshot": {
+            "a": 1e-06,
+            "b": 1e-06,
+            "equal": true
+          },
+          "weight_decay_at_snapshot": {
+            "a": 0.4,
+            "b": 0.4,
+            "equal": true
+          },
+          "ema_momentum_at_snapshot": {
+            "a": 0.9998333333333334,
+            "b": 0.9998333333333334,
+            "equal": true
+          }
+        },
+        "ok": true,
+        "problems": []
+      },
+      "counts": {
+        "optimizer_steps_total": {
+          "a": 24,
+          "b": 24
+        },
+        "micro_steps_total": {
+          "a": 190,
+          "b": 190
+        },
+        "partial_grad_accum_windows": {
+          "a": 1,
+          "b": 1
+        },
+        "partial_window_micro_steps": {
+          "a": 6,
+          "b": 6
+        }
+      },
+      "count_problems": []
+    }
+  },
+  "ok": true
+}

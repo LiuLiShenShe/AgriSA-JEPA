@@ -396,7 +396,7 @@ def run_scenario(scenario: str, device: int, cuda_index: int) -> Dict[str, objec
 
 def render_report(payload: Mapping[str, object]) -> str:
     lines = ['# Stage 7B — 恢复保真测试报告', '']
-    lines.append(f'- 生成时间（UTC）：{payload["finished_at"]}')
+    lines.append(f'- 生成时间（UTC）：{payload["generated_at"]}')
     lines.append(f'- 预算：{MAX_STEPS} optimizer updates；中断/恢复点：{INTERRUPT}')
     lines.append(f'- 权重容差：rtol={WEIGHT_RTOL}, atol={WEIGHT_ATOL}（CUDA 非确定性）')
     lines.append('- 数据流 / mask / 计数 / LR / WD / ledger 要求逐 micro-batch 完全一致')
@@ -417,14 +417,13 @@ def render_report(payload: Mapping[str, object]) -> str:
         lines.append(f'- ledger：A {l["n_a"]} / B {l["n_b"]} 行，'
                      f'{"一致" if l["ok"] else "不一致"}')
         c = result['checkpoint']
-        lines.append('- 权重/优化器（容差内）：'
-                     f'{"一致" if c["ok"] else "**超差**"}；'
-                     f'最大 |diff|={c["max_abs_diff"]:.3e}'
-                     f'（{c.get("worst_key")}）')
+        lines.append('- 权重/优化器：'
+                     f'{"一致" if c["ok"] else "**超差**"}')
         for name in ('encoder', 'predictor', 'target_encoder'):
             st = c[name]
             lines.append(f'  - {name}：{"ok" if st["ok"] else "FAIL"}，'
-                         f'max|diff|={st["max_abs_diff"]:.3e}')
+                         f'max|diff|={st["max_abs_diff"]:.3e}'
+                         + (f'（{st.get("worst_key")}）' if st.get("worst_key") else ''))
         lines.append('- 计数：' + json.dumps(result['counts'], ensure_ascii=False))
         if result.get('count_problems'):
             for problem in result['count_problems']:
