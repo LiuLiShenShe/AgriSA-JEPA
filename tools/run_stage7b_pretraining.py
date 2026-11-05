@@ -132,12 +132,66 @@ def verify_run(key: str) -> List[str]:
     return problems
 
 
+def build_record(key: str, started: Optional[str] = None,
+                 finished: Optional[str] = None,
+                 wall: Optional[float] = None) -> Dict[str, object]:
+    """Assemble one run record from its config + training_verification.yaml."""
+    run_dir = RUN_ROOT / f'stage7b_{key}'
+    v = load_yaml(run_dir / 'training_verification.yaml')
+    return {
+        'run_id': key, 'arm': key.split('_')[0], 'tag': key.split('_')[1],
+        'seed': int(cfg_seed(key)), 'started_at': started, 'finished_at': finished,
+        'wall_clock_minutes': round(wall, 1) if wall is not None else None,
+        'optimizer_steps_total': v.get('optimizer_steps_total'),
+        'max_optimizer_steps': v.get('max_optimizer_steps'),
+        'warmup_steps': int(load_yaml(ROOT / 'configs' / f'stage7b_{key}.yaml')
+                            ['optimization']['warmup_steps']),
+        'micro_steps_total': v.get('micro_steps_total'),
+        'loss_first': v.get('loss_first'), 'loss_last': v.get('loss_last'),
+        'loss_finite': v.get('loss_finite'),
+        'ema_formula_verified': v.get('ema_formula_verified'),
+        'peak_memory_mib': v.get('peak_memory_mib'),
+        'step_time_ms_mean': v.get('step_time_ms_mean'),
+        'git_commit': v.get('git_commit'),
+        'realised_source_exposure': v.get('realised_source_exposure'),
+    }
+
+
+def collect_records(keys: Sequence[str]) -> List[Dict[str, object]]:
+    """Rebuild the full ledger from verification records (resumable).
+
+    Runs that were ``SKIP``ped on a later launch (already verified) never enter
+    the in-memory ``records`` list, so a pure --execute pass can leave the ledger
+    short.  This merges any previously written records (to preserve their run
+    timestamps) with a fresh record for every key that now has a verification.
+    """
+    existing: Dict[str, Dict[str, object]] = {}
+    path = R / 'stage7b_pretraining_runs.json'
+    if path.is_file():
+        for row in json.loads(path.read_text(encoding='utf-8')).get('runs', []):
+            existing[row['run_id']] = row
+    out: List[Dict[str, object]] = []
+    for key in keys:
+        if not (RUN_ROOT / f'stage7b_{key}' / 'training_verification.yaml').is_file():
+            print(f'WARN {key}: no verification record; omitted from ledger',
+                  file=sys.stderr)
+            continue
+        prev = existing.get(key, {})
+        out.append(build_record(
+            key, prev.get('started_at'), prev.get('finished_at'),
+            prev.get('wall_clock_minutes')))
+    return out
+
+
 def main(argv: Optional[Sequence[str]] = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--execute', action='store_true')
     parser.add_argument('--dry-run', action='store_true')
     parser.add_argument('--device', type=int, default=1)
     parser.add_argument('--only', nargs='*', default=[])
+    parser.add_argument('--collect', action='store_true',
+                        help='rebuild the run ledger from existing verification '
+                             'records only (no training, no GPU needed)')
     args = parser.parse_args(argv)
 
     plan = build_plan()
@@ -145,6 +199,13 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     if not keys:
         print('no runs selected', file=sys.stderr)
         return 1
+
+    if args.collect:
+        records = collect_records(keys)
+        _write_ledger(records)
+        print(json.dumps({'mode': 'collect', 'n_records': len(records),
+                          'runs': [r['run_id'] for r in records]}, indent=2))
+        return 0
 
     if args.dry_run or not args.execute:
         print(json.dumps({
@@ -188,24 +249,14 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             latest.unlink()
             print(f'{key}: freed jepa-latest.pth.tar ({freed_mib} MiB)', flush=True)
         v = load_yaml(run_dir / 'training_verification.yaml')
-        records.append({
-            'run_id': key, 'arm': key.split('_')[0], 'tag': key.split('_')[1],
-            'seed': int(cfg_seed(key)), 'started_at': started, 'finished_at': now_utc(),
-            'wall_clock_minutes': round(wall, 1),
-            'optimizer_steps_total': v.get('optimizer_steps_total'),
-            'max_optimizer_steps': v.get('max_optimizer_steps'),
-            'warmup_steps': int(load_yaml(ROOT / 'configs' / f'stage7b_{key}.yaml')
-                                ['optimization']['warmup_steps']),
-            'micro_steps_total': v.get('micro_steps_total'),
-            'loss_first': v.get('loss_first'), 'loss_last': v.get('loss_last'),
-            'loss_finite': v.get('loss_finite'),
-            'ema_formula_verified': v.get('ema_formula_verified'),
-            'peak_memory_mib': v.get('peak_memory_mib'),
-            'step_time_ms_mean': v.get('step_time_ms_mean'),
-            'git_commit': v.get('git_commit'),
-            'realised_source_exposure': v.get('realised_source_exposure'),
-        })
+        records.append(build_record(key, started, now_utc(), wall))
 
+    _write_ledger(records)
+    print(json.dumps({'ok': True, 'n_records': len(records)}, indent=2))
+    return 0
+
+
+def _write_ledger(records: List[Dict[str, object]]) -> None:
     R.mkdir(exist_ok=True)
     (R / 'stage7b_pretraining_runs.json').write_text(
         json.dumps({'schema_version': 'stage7b_pretraining_runs/v1',
@@ -216,8 +267,6 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                                 else ['run_id'])
         writer.writeheader()
         writer.writerows(records)
-    print(json.dumps({'ok': True, 'n_records': len(records)}, indent=2))
-    return 0
 
 
 def cfg_seed(key: str) -> str:
