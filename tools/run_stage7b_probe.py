@@ -182,6 +182,17 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     for record in records:
         command, out_dir = command_for(record, 0)
         out_dir.mkdir(parents=True, exist_ok=True)
+        # Resume: a probe whose result already verifies is never re-run (which
+        # would be slow and would overwrite a published result).
+        existing = out_dir / 'result.json'
+        if existing.is_file():
+            prior = verify_probe_result(existing, str(record['checkpoint_sha256']))
+            if not prior:
+                print(f'SKIP {record["run_id"]}: verified result already present',
+                      flush=True)
+                continue
+            print(f'{record["run_id"]}: existing result failed verification, '
+                  f're-probing: {prior}', file=sys.stderr)
         (out_dir / 'stage7b_probe_binding.json').write_text(json.dumps({
             'schema_version': 'stage7b_probe_binding/v1',
             'run_id': record['run_id'], 'arm': record['arm'],
