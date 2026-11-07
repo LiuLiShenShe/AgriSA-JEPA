@@ -47,6 +47,25 @@ THRESHOLDS = {
 
 PRIMARY = ('OFFICIAL', 'A_p1', 'A_p2', 'B_p1', 'B_p2')
 
+STAGE7B_MANIFEST = R / 'stage7b_phenobench_per_checkpoint.json'
+
+
+def stage7b_seeds(backbone: str) -> Optional[List[Dict]]:
+    """PhenoBench A/B probe results live in the Stage 7B manifest (REUSE rows:
+    their stage8 run row never re-ran; the registry points here)."""
+    if not STAGE7B_MANIFEST.is_file():
+        return None
+    manifest = json.loads(STAGE7B_MANIFEST.read_text(encoding='utf-8'))
+    seeds = manifest.get('probe_seeds', [0, 1, 2])
+    for entry in manifest.get('checkpoints', []):
+        if entry.get('run_id') == backbone:
+            vals = entry.get('per_probe_seed', {}).get('mIoU')
+            if not vals:
+                return None
+            return [{'seed': seeds[i], 'primary': v}
+                    for i, v in enumerate(vals)]
+    return None
+
 
 def load_result(backbone: str, task: str) -> Optional[Dict]:
     p = RUN_ROOT / task / backbone / 'result.json'
@@ -55,26 +74,64 @@ def load_result(backbone: str, task: str) -> Optional[Dict]:
     return json.loads(p.read_text(encoding='utf-8'))
 
 
-def extract_per_seed(backbone: str, task: str) -> Optional[List[Dict]]:
-    """Return ``[{seed, primary}]`` sorted by head seed."""
-    result = load_result(backbone, task)
-    if result is None:
-        return None
+def _registry() -> List[Dict]:
+    return json.loads((R / 'stage8_experiment_registry.json')
+                      .read_text(encoding='utf-8')).get('rows', [])
+
+
+def _registry_rows(backbone: str, task: str) -> List[Dict]:
+    return [r for r in _registry() if r['task_id'] == task
+            and r['backbone'] == backbone]
+
+
+def _primary(task: str, seed_entry: Dict, result: Dict) -> Optional[float]:
+    """Seed-level primary metric for one completed run."""
+    if task in ('plantdoc_cls', 'deepweeds_cls'):
+        return (seed_entry.get('test_metrics') or {}).get('macro_f1')
+    if task == 'cropandweed_sem':
+        return (seed_entry.get('self_metrics') or {}).get('mIoU_percent')
     if task == 'gwhd_det':
-        seed = int(backbone.rsplit('seed', 1)[1])
-        v = (result.get('final_test') or {}).get('map')
-        return [{'seed': seed, 'primary': v}]
-    rows = []
-    for s in result.get('seeds') or []:
-        if task in ('plantdoc_cls', 'deepweeds_cls'):
-            primary = (s.get('test_metrics') or {}).get('macro_f1')
-        elif task == 'cropandweed_sem':
-            primary = ((s.get('self_metrics') or {}).get('mIoU_percent'))
-        else:  # phenobench
-            primary = (s.get('official_metrics') or {}).get('mIoU')
-        rows.append({'seed': s.get('seed'), 'primary': primary})
-    rows.sort(key=lambda r: r['seed'] if r['seed'] is not None else 0)
-    return rows
+        v = seed_entry.get('final_test') or result.get('final_test') or {}
+        return v.get('map')
+    return None
+
+
+def extract_per_seed(backbone: str, task: str) -> Optional[List[Dict]]:
+    """Return ``[{seed, primary}]`` for every completed registry row.
+
+    Runs are per-seed (one result.json per row with a single seed entry)
+    EXCEPT PhenoBench, whose command trains all three seeds in one run.
+    """
+    if task == 'phenobench_sem':
+        result = load_result(backbone, task)
+        if result is not None:
+            rows = []
+            for s in result.get('seeds') or []:
+                rows.append({'seed': s.get('seed'),
+                             'primary': (s.get('official_metrics') or {})
+                             .get('mIoU')})
+            rows.sort(key=lambda r: r['seed'] if r['seed'] is not None else 0)
+            return rows or None
+        return stage7b_seeds(backbone)
+
+    out = []
+    for row in _registry_rows(backbone, task):
+        p = Path(row['output_dir']) / 'result.json'
+        if not p.is_file():
+            continue
+        result = json.loads(p.read_text(encoding='utf-8'))
+        seed = row['downstream_seed']
+        # per-seed runs contain exactly one seed entry, but match by seed so a
+        # mislabeled run cannot silently pair the wrong numbers.
+        entry = next((s for s in result.get('seeds') or []
+                      if str(s.get('seed')) == str(seed)), None)
+        if entry is None:
+            entry = (result.get('seeds') or [None])[0]
+        primary = _primary(task, entry or {}, result)
+        if primary is not None:
+            out.append({'seed': int(seed), 'primary': primary})
+    out.sort(key=lambda r: r['seed'])
+    return out or None
 
 
 def mean(xs: List[float]) -> float:
@@ -172,6 +229,15 @@ def main() -> int:
     for task, c in contrasts.items():
         print(f'\n[{task}]')
         for k, v in c.items():
+            if k == 'A-B (per arm)':
+                for arm, res in v.items():
+                    if 'mean_delta' in res:
+                        print(f'  A-B/{arm}     mean={res["mean_delta"]:+.4f} '
+                              f'consistent={res["direction_consistent"]} '
+                              f'-> {res["decision"]}')
+                    else:
+                        print(f'  A-B/{arm}     {res["status"]}')
+                continue
             if 'mean_delta' in v:
                 print(f'  {k:14s} mean={v["mean_delta"]:+.4f} '
                       f'consistent={v["direction_consistent"]} '
