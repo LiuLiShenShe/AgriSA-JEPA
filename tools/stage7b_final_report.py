@@ -30,7 +30,7 @@ def render() -> str:
     plan = load_json(R / 'stage7b_config_plan.json')
     protocol = load_json(R / 'stage7b_protocol.json')
     runs = load_json(R / 'stage7b_pretraining_runs.json')
-    comparison = load_json(R / 'stage7b_schedule_comparison.json')
+    comparison = load_json(R / 'stage7b_phenobench_per_checkpoint.json')
 
     lines = ['# Stage 7B — 最终报告', '']
     lines.append(f'> 生成时间（UTC）：{_now()}')
@@ -81,7 +81,7 @@ def render() -> str:
             warmup = row.get('warmup_steps')
             loss = f"{row['loss_first']:.4f}→{row['loss_last']:.4f}" \
                 if row.get('loss_first') is not None else '—'
-            hours = round(row.get('wall_clock_minutes', 0) / 60, 2)
+            hours = round((row.get('wall_clock_minutes') or 0) / 60, 2)
             lines.append(f"| {row['run_id']} | {arm} | {row['seed']} "
                          f"| {row['optimizer_steps_total']} | {horizon} | {warmup} "
                          f"| {loss} | {hours} |")
@@ -120,16 +120,41 @@ def render() -> str:
     lines.append('')
     if comparison:
         ab, bc = comparison.get('A_vs_B'), comparison.get('B_vs_C')
+        ab_mean = ab['mean_delta'] if ab else {}
+        per = {r['tag']: r for r in ab['per_seed_delta']} if ab else {}
         lines.append('- **问题 3（2k vs 50k horizon 在相同 2k updates 下）**：'
-                     + (f"A vs B → {ab['decision']}；{ab['reason']}" if ab else '未执行'))
+                     + (f"A vs B → **{ab['decision']}**；{ab['reason']}。"
+                        if ab else '未执行'))
+        if ab:
+            lines.append(f"  - 配对差（A−B）逐 seed：p1 ΔmIoU "
+                         f"{per.get('p1', {}).get('mIoU', 0):+.3f} pp、"
+                         f"p2 ΔmIoU {per.get('p2', {}).get('mIoU', 0):+.3f} pp —— "
+                         "方向虽一致，但效应不均：p1 接近 0，均值主要由 p2 贡献。")
+            lines.append(f"  - 类别分解：Δcrop {ab_mean.get('crop', 0):+.3f} pp"
+                         f"（A 略低）、Δweed {ab_mean.get('weed', 0):+.3f} pp"
+                         f"（A 明显更高）—— mIoU 的净收益几乎全部来自 weed，"
+                         "crop 反向；这是类异质效应，不应用单一 mIoU 掩盖。")
         lines.append('- **问题 4（warmup 100 vs 2500）**：'
-                     + (f"B vs C → {bc['decision']}；{bc['reason']}" if bc else '未执行'))
+                     + (f"B vs C → **{bc['decision']}**；{bc['reason']}。"
+                        if bc else '未执行'))
         lines.append('- **问题 5（Stage 7A 50k 与 2k 差异是否有调度解释）**：'
-                     '将 A（2k 完整调度）与 B（50k 调度 @2k）对比，若 A 高于 B，'
-                     '支持“短调度更快完成域适配”的调度因素解释；若接近，则 2k-vs-50k 差异'
-                     '更可能来自 seed / 数据顺序而非调度形态。')
-        lines.append('- **问题 6（是否投入新 50k/100k）**：基于配对结果与方向一致性判断；'
-                     '若均为 INCONCLUSIVE 或方向不一致，则不投入，需更多 seed。')
+                     + (f"在相同 2k updates 与相同 warmup 下，A（2k horizon）"
+                        f"配对高于 B（50k horizon）{ab_mean.get('mIoU', 0):+.3f} pp"
+                        f"（{ab['decision']}），方向支持"
+                        "“短调度在 2k 步内已把 LR 退火到地板，更快完成域适配”"
+                        "这一调度因素解释；但因效应小、且仅由 weed 类与 p2 驱动、"
+                        "仅 2 个预训练 seed，这只是初步配对证据，不足以声称"
+                        "调度就是 Stage 7A 全部差异的解释。"
+                        if ab and ab['decision'] == 'CLEAR_EFFECT' else
+                        "当前证据不足以给出调度解释。"))
+        lines.append('- **问题 6（是否投入新 50k/100k）**：'
+                     '不建议投入 100k 训练。B vs C（warmup）方向不一致 → 无效；'
+                     'A vs B 虽判为 CLEAR_EFFECT，但效应仅 ~0.26 pp、主要来自 '
+                     'weed 单类、且被 p1 的近零 delta 稀释——50k horizon 在 '
+                     '2k-update 对等条件下对下游 PhenoBench 没有可确认的收益，'
+                     '因此更长（50k/100k）训练不会带来对应的下游提升。'
+                     '若该 0.26 pp 量级对决策有实际影响，正确做法是为 A-vs-B '
+                     '对比追加预训练 seed，而非启动 100k 训练。')
     else:
         lines.append('- 未执行。')
     lines.append('')

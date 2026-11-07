@@ -83,20 +83,20 @@ def read_all(only_manifest: Optional[Path] = None) -> Dict[str, Dict[str, object
     return out
 
 
-def pair_contrast(a_key: str, b_key: str, data: Mapping[str, Mapping[str, object]],
-                  sign_from: str) -> Dict[str, object]:
-    """`sign_from` is the arm expected to benefit; delta = sign_from - other."""
+def pair_contrast(arm_x: str, arm_y: str, data: Mapping[str, Mapping[str, object]],
+                  label: str) -> Dict[str, object]:
+    """Paired contrast between two arms, delta = arm_x - arm_y per seed.
+
+    Both arms are taken from the *same* pretraining seed (paired design); a
+    previous version pinned the first seed and compared it twice, collapsing the
+    two seed deltas into one.
+    """
     rows = []
     for tag in SEEDS:
-        ka, kb = f'A_{tag}', f'B_{tag}'
-        k1, k2 = (ka, kb) if sign_from == 'A' else (kb, 'C_' + tag)
-        if sign_from == 'A':
-            hi, lo = a_key, b_key
-        else:
-            hi, lo = b_key, 'C_' + tag
+        kx, ky = f'{arm_x}_{tag}', f'{arm_y}_{tag}'
         row = {'tag': tag}
         for metric in METRICS:
-            row[metric] = round(data[hi][metric] - data[lo][metric], 4)
+            row[metric] = round(data[kx][metric] - data[ky][metric], 4)
         rows.append(row)
     deltas = {metric: [row[metric] for row in rows] for metric in METRICS}
     mean = {metric: round(float(np.mean(deltas[metric])), 4) for metric in METRICS}
@@ -104,7 +104,7 @@ def pair_contrast(a_key: str, b_key: str, data: Mapping[str, Mapping[str, object
                   for metric in METRICS}
     consistent = {metric: len(set(directions[metric])) == 1 for metric in METRICS}
     detail = {
-        'sign_from': sign_from,
+        'contrast': f'{arm_x}_vs_{arm_y}', 'delta_of': f'{arm_x} - {arm_y}',
         'per_seed_delta': rows,
         'mean_delta': mean,
         'seed_direction_consistent': consistent,
@@ -112,7 +112,6 @@ def pair_contrast(a_key: str, b_key: str, data: Mapping[str, Mapping[str, object
     # decision on mIoU
     mean_miou = mean['mIoU']
     miou_consistent = consistent['mIoU']
-    miou_clear = abs(mean_miou) >= MIOU_THRESHOLD_PP and miou_consistent
     class_conflict = []
     for metric in ('crop', 'weed'):
         if (abs(mean[metric]) >= CLASS_THRESHOLD_PP
@@ -131,14 +130,9 @@ def pair_contrast(a_key: str, b_key: str, data: Mapping[str, Mapping[str, object
                   + ' move(s) the other way; explain separately')
     else:
         decision = 'CLEAR_EFFECT'
-        winner = sign_from if mean_miou > 0 else ('B' if sign_from == 'A' else 'B')
-        # sign_from is A -> comparing A vs B; else comparing B vs C
-        if sign_from == 'A':
-            winner = 'A' if mean_miou > 0 else 'B'
-        else:
-            winner = 'B' if mean_miou > 0 else 'C'
+        winner = arm_x if mean_miou > 0 else arm_y
         reason = (f'both seeds agree and mean mIoU delta = {mean_miou:+.3f} pp '
-                  f'(>= {MIOU_THRESHOLD_PP} pp); {winner} is higher')
+                  f'(>= {MIOU_THRESHOLD_PP} pp, {arm_x}-{arm_y}); {winner} is higher')
     detail.update({'decision': decision, 'reason': reason,
                    'class_conflict': class_conflict})
     return detail
@@ -158,9 +152,9 @@ def build_payload(data: Mapping[str, Mapping[str, object]]) -> Dict[str, object]
             **{m: round(row[m], 4) for m in METRICS},
             **{f'{m}_std': round(row[f'{m}_std'], 4) for m in METRICS},
         })
-    ab = pair_contrast('A_p1', 'B_p1', data, sign_from='A') if all(
+    ab = pair_contrast('A', 'B', data, 'A_vs_B') if all(
         f'A_{t}' in data and f'B_{t}' in data for t in SEEDS) else None
-    bc = pair_contrast('B_p1', 'C_p1', data, sign_from='C') if all(
+    bc = pair_contrast('B', 'C', data, 'B_vs_C') if all(
         f'B_{t}' in data and f'C_{t}' in data for t in SEEDS) else None
     return {
         'schema_version': 'stage7b_schedule_comparison/v1',
@@ -192,7 +186,7 @@ def write_csv(payload: Mapping[str, object], path: Path) -> None:
             if not contrast:
                 continue
             for row in contrast['per_seed_delta']:
-                writer.writerow([label, contrast['sign_from'], '', row['tag'], '',
+                writer.writerow([label, contrast['delta_of'], '', row['tag'], '',
                                  'delta', row['soil'], row['crop'],
                                  row['weed'], row['mIoU']])
 
@@ -234,6 +228,8 @@ def render_md(payload: Mapping[str, object]) -> str:
             lines.append('（缺少数据）')
             lines.append('')
             continue
+        lines.append(f"（Δ = {contrast['delta_of']}，逐预训练 seed 配对）")
+        lines.append('')
         lines.append('| seed | Δsoil | Δcrop | Δweed | ΔmIoU |')
         lines.append('|---|---|---|---|---|')
         for row in contrast['per_seed_delta']:
