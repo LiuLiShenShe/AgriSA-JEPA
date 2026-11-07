@@ -167,3 +167,17 @@ def write_split_csv(split: Dict[str, List[str]], path: Path) -> None:
         for part in ('train', 'eval'):
             for name in split[part]:
                 writer.writerow([part, name, session_key(name)])
+
+
+def read_split_csv(path: Path) -> Dict[str, List[str]]:
+    """Read back a split.csv into the same shape build_split produces."""
+    by_part: Dict[str, List[str]] = {'train': [], 'eval': []}
+    sessions: set = set()
+    with path.open('r', newline='', encoding='utf-8') as handle:
+        reader = csv.DictReader(handle)
+        for row in reader:
+            by_part[row['split']].append(row['image'])
+            sessions.add(row['session'])
+    return {'train': by_part['train'], 'eval': by_part['eval'],
+            'eval_pool_size': len(by_part['eval']),
+            'eval_sessions': len(sessions)}

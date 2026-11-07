@@ -118,7 +118,7 @@ TASKS = [
         'entry': f'{PY} -m src.downstream.phenobench_probe',
         'common_args': ('--root /data/datasets/PhenoBench/PhenoBench-v110 '
                         '--seed 0 1 2 --epochs 10 --no-official'),
-        'per_backbone_args': ('--checkpoint {checkpoint} --label {label}'),
+        'per_backbone_args': ('--checkpoint {checkpoint} --arm-label {label}'),
         'out_pattern': 'phenobench_sem/{backbone}',
         'primary_metric': 'mIoU (official semantics: soil/crop/weed)',
         'exploratory': False,   # C_p1/C_p2 already done in Stage 7B

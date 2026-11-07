@@ -42,7 +42,8 @@ import torch
 from src.downstream.cropandweed_data import (CLASS_NAMES, IGNORE_ID,
                                              NUM_CLASSES,
                                              build_split, load_image_and_mask,
-                                             split_counts, write_split_csv)
+                                             read_split_csv, split_counts,
+                                             write_split_csv)
 from src.downstream.features import (build_encoder, cache_key,
                                      checkpoint_config, extract_tile_features,
                                      sha256_file)
@@ -346,14 +347,28 @@ def main() -> int:
     out_dir = Path(args.out_dir)
 
     split_csv = out_dir / 'split.csv'
+    fresh = build_split(images_root, args.sampling_seed, args.per_session)
     if split_csv.is_file() and not args.overwrite_features:
-        raise SystemExit(f'{split_csv} already exists; refusing to overwrite.')
-    split = build_split(images_root, args.sampling_seed, args.per_session)
+        # Resume support: the split is deterministic in (sampling_seed,
+        # per_session), so an existing split.csv must contain exactly the
+        # same names.  Any mismatch is a protocol violation, not a restart
+        # decision.
+        existing = read_split_csv(split_csv)
+        if (existing['train'] != fresh['train']
+                or existing['eval'] != fresh['eval']):
+            raise SystemExit(
+                f'{split_csv} does not match a fresh seeded split; refusing.')
+        print(f'  reusing existing split.csv '
+              f'({len(fresh["train"])} train / {len(fresh["eval"])} eval)',
+              flush=True)
+        split = fresh
+    else:
+        split = fresh
+        write_split_csv(split, split_csv)
     if args.limit_images:
         split['train'] = split['train'][:args.limit_images]
         split['eval'] = split['eval'][:args.limit_images]
     split['_seed'] = args.sampling_seed
-    write_split_csv(split, split_csv)
 
     cfg = checkpoint_config(args.checkpoint, args.label,
                             continued_training=args.continued_training,
