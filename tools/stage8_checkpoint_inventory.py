@@ -61,6 +61,7 @@ def main() -> int:
             'size_bytes': path.stat().st_size,
             'recorded_sha256': expected,
             'live_sha256': actual,
+            'exists': True,
             'match': actual == expected,
         })
 
