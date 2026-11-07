@@ -119,23 +119,31 @@ def cache_split_features(
     cache_dir: Path,
     device: torch.device,
     batch_size: int,
+    encoder: Optional[torch.nn.Module] = None,
 ) -> Dict[str, object]:
-    """Extract and cache ``[n_tiles,256,1280]`` fp16 features for one split."""
+    """Extract and cache ``[n_tiles,256,1280]`` fp16 features for one split.
+
+    The encoder is expensive to build (a 2.5 GB checkpoint read from the slow
+    ``/data`` disk), so it is created lazily and returned in the report so the
+    caller can reuse it across splits.  When every split image is already
+    cached, no encoder is built at all.
+    """
     key = cache_key(cfg['label'], cfg['checkpoint_sha256'])
     out_dir = cache_dir / key / part
     out_dir.mkdir(parents=True, exist_ok=True)
     write_cache_manifest(cache_dir / key, cfg)
-    encoder = build_encoder(cfg['checkpoint'], device)
     names = split[part]
-    # probe expects feature arrays keyed by image name
-    written, skipped, t0 = 0, 0, time.time()
-    repo = {}
-    for i, name in enumerate(names):
+    missing = [n for n in names
+               if not _cache_path(cache_dir, key, part, n).is_file()]
+    if not missing:
+        return {'label': cfg['label'], 'split': part, 'images': len(names),
+                'written': 0, 'skipped_existing': len(names),
+                'seconds': 0.0, 'cache_key': key, 'encoder': encoder}
+    if encoder is None:
+        encoder = build_encoder(cfg['checkpoint'], device)
+    written, t0 = 0, time.time()
+    for i, name in enumerate(missing):
         out_path = _cache_path(cache_dir, key, part, name)
-        if out_path.is_file():
-            skipped += 1
-            repo[name] = out_path
-            continue
         image, label = load_image_and_mask(images_root, annotation_root, name)
         tiles = tile_image(image, tile_coords(image.shape[0], image.shape[1]))
         feats = extract_tile_features(encoder, tiles, device,
@@ -148,13 +156,13 @@ def cache_split_features(
                                     num_classes=NUM_CLASSES)
         np.save(_counts_cache_path(cache_dir, key, part, name), counts)
         written += 1
-        repo[name] = out_path
         if (i + 1) % 50 == 0:
-            print(f'  [{cfg["label"]}/{part}] {i + 1}/{len(names)} '
+            print(f'  [{cfg["label"]}/{part}] {i + 1}/{len(missing)} '
                   f'({time.time() - t0:.0f}s)', flush=True)
     return {'label': cfg['label'], 'split': part, 'images': len(names),
-            'written': written, 'skipped_existing': skipped,
-            'seconds': round(time.time() - t0, 1), 'cache_key': key}
+            'written': written, 'skipped_existing': len(names) - len(missing),
+            'seconds': round(time.time() - t0, 1), 'cache_key': key,
+            'encoder': encoder}
 
 
 # --------------------------------------------------------------------------- #
@@ -376,7 +384,7 @@ def train_and_evaluate(
         'label': cfg['label'],
         'cache_key': key,
         'backbone_checkpoint': cfg['checkpoint'],
-        'backbone_checkpoint_sha256': sha256_file(cfg['checkpoint']),
+        'backbone_checkpoint_sha256': cfg['checkpoint_sha256'],
         'continued_training': cfg['continued_training'],
         'pretraining_data_version': cfg['data_version'],
         'protocol': {
@@ -479,10 +487,14 @@ def main() -> int:
                             continued_training=args.continued_training,
                             data_version=args.pretraining_data_version)
     device = torch.device(args.device if torch.cuda.is_available() else 'cpu')
+    encoder = None  # built lazily; reused across splits, never when complete
     for part in ('train', 'eval'):
         report = cache_split_features(
             cfg, images_root, annotation_root, split, part, cache_dir,
-            device, args.feature_batch_size)
+            device, args.feature_batch_size, encoder=encoder)
+        encoder = report['encoder']
+        # the encoder handle is not JSON-serializable; drop it for printing
+        report.pop('encoder', None)
         print(json.dumps(report, indent=2), flush=True)
     train_and_evaluate(cfg, images_root, annotation_root, split, cache_dir,
                        out_dir, device, args.seed, args.epochs, args.lr,
