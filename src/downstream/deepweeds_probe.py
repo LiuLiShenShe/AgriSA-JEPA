@@ -238,11 +238,17 @@ def main() -> int:
 
     key = cache_key(cfg['label'], cfg['checkpoint_sha256'])
     verify_cache_manifest(cache_dir / key, cfg)
+    # Frozen DeepWeeds protocol: the probe trains on fold-0 train_subset0 +
+    # val_subset0 combined (10,501 + 3,501 = 14,002); test_subset0 (3,507) is
+    # evaluated once.  No hyperparameter selection happens on val, so merging
+    # it into training is the protocol, not a leak.
     train_tokens = load_cached_split(cache_dir, key, 'train', split['train'])
-    val_tokens = load_cached_split(cache_dir, key, 'val', split['val'])
-    test_tokens = load_cached_split(cache_dir, key, 'test', split['test'])
     train_labels = labels_vector(labels_root, split['train'])
+    val_tokens = load_cached_split(cache_dir, key, 'val', split['val'])
     val_labels = labels_vector(labels_root, split['val'])
+    train_tokens = torch.cat([train_tokens, val_tokens], dim=0)
+    train_labels = torch.cat([train_labels, val_labels], dim=0)
+    test_tokens = load_cached_split(cache_dir, key, 'test', split['test'])
     test_labels = labels_vector(labels_root, split['test'])
 
     per_seed = []

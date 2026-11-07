@@ -72,14 +72,16 @@ def build_split(root: Path) -> Dict[str, List[str]]:
     test = [n for n in names if n.startswith('test/')]
     if not train_all or not test:
         raise ValueError('no train/test images discovered')
-    # train and test must expose the same class set: the head sees exactly
-    # the classes it is scored on.
+    # test must be a subset of train: the head's class set is defined by
+    # training (C = len(train classes)) and test can only contain classes the
+    # head has seen.  The official split is not symmetric: e.g.
+    # 'Tomato two spotted spider mites leaf' appears only in train.
     train_classes = {class_of[n] for n in train_all}
     test_classes = {class_of[n] for n in test}
-    if train_classes != test_classes:
+    missing_from_train = test_classes - train_classes
+    if missing_from_train:
         raise ValueError(
-            f'train/test class mismatch: only-in-train {sorted(train_classes - test_classes)}, '
-            f'only-in-test {sorted(test_classes - train_classes)}')
+            f'test has classes absent from train: {sorted(missing_from_train)}')
     # stratified 15% val carve from train
     from collections import defaultdict
     by_class: Dict[str, List[str]] = defaultdict(list)
@@ -244,11 +246,18 @@ def main() -> int:
     train_labels = labels_vector(root, split['train'])
     val_labels = labels_vector(root, split['val'])
     test_labels = labels_vector(root, split['test'])
+    # The head covers all 28 class directories discovered at audit time
+    # (verified by build_split).  build_split already rejected a test class
+    # absent from train on the FULL split, so num_classes = 28 is consistent
+    # with both training and test labels on the full split.  (Smoke runs that
+    # truncate splits may see a subset of labels but still use head size 28.)
+    num_classes = 28
+    assert int(train_labels.max().item()) + 1 <= num_classes
 
     per_seed = []
     for seed in args.seed:
         print(f'[{cfg["label"]}] seed {seed}: training classifier', flush=True)
-        probe = LinearClassificationProbe(num_classes=28)
+        probe = LinearClassificationProbe(num_classes=num_classes)
         t0 = time.time()
         history = train_classifier(probe, train_tokens, train_labels,
                                    epochs=args.epochs, batch_size=args.batch_size,

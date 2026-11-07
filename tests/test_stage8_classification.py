@@ -113,5 +113,33 @@ def test_plantdoc_split_from_fixture(tmp_path: Path):
     assert not (set(split['train']) & set(split['test']))
 
 
+def test_plantdoc_split_test_subset_of_train(tmp_path: Path):
+    from src.downstream.plantdoc_probe import build_split
+    root = tmp_path
+    (root / 'train' / 'classA').mkdir(parents=True)
+    (root / 'train' / 'classB').mkdir(parents=True)   # B only in train
+    (root / 'test' / 'classA').mkdir(parents=True)
+    for d in (root / 'train' / 'classA', root / 'train' / 'classB',
+              root / 'test' / 'classA'):
+        for i in range(4):
+            (d / f'img{i}.jpg').write_bytes(b'x')
+    split = build_split(root)          # test covers only classA -> permitted
+    assert any('classA' in n for n in split['test'])
+
+
+def test_plantdoc_split_rejects_test_only_class(tmp_path: Path):
+    from src.downstream.plantdoc_probe import build_split
+    root = tmp_path
+    (root / 'train' / 'classA').mkdir(parents=True)
+    (root / 'test' / 'classA').mkdir(parents=True)
+    (root / 'test' / 'classZ').mkdir(parents=True)   # only in test -> error
+    for d in (root / 'train' / 'classA', root / 'test' / 'classA',
+              root / 'test' / 'classZ'):
+        for i in range(4):
+            (d / f'img{i}.jpg').write_bytes(b'x')
+    with pytest.raises(ValueError):
+        build_split(root)
+
+
 if __name__ == '__main__':
     raise SystemExit(pytest.main([__file__, '-v']))
