@@ -325,6 +325,8 @@ def main() -> int:
     parser.add_argument('--seed', type=int, nargs='+', default=[0])
     parser.add_argument('--sampling-seed', type=int, default=20261107)
     parser.add_argument('--per-session', type=int, default=1)
+    parser.add_argument('--limit-images', type=int, default=None,
+                        help='smoke-test only: truncate each split to N images')
     parser.add_argument('--epochs', type=int, default=10)
     parser.add_argument('--lr', type=float, default=1e-3)
     parser.add_argument('--batch-size', type=int, default=32)
@@ -347,6 +349,9 @@ def main() -> int:
     if split_csv.is_file() and not args.overwrite_features:
         raise SystemExit(f'{split_csv} already exists; refusing to overwrite.')
     split = build_split(images_root, args.sampling_seed, args.per_session)
+    if args.limit_images:
+        split['train'] = split['train'][:args.limit_images]
+        split['eval'] = split['eval'][:args.limit_images]
     split['_seed'] = args.sampling_seed
     write_split_csv(split, split_csv)
 

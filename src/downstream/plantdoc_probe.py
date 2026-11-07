@@ -215,12 +215,17 @@ def main() -> int:
     parser.add_argument('--batch-size', type=int, default=64)
     parser.add_argument('--weight-decay', type=float, default=0.0)
     parser.add_argument('--feature-batch-size', type=int, default=16)
+    parser.add_argument('--limit-images', type=int, default=None,
+                        help='smoke-test only: truncate each split to N images')
     args = parser.parse_args()
 
     root = Path(args.root)
     cache_dir = Path(args.cache_dir)
     out_dir = Path(args.out_dir)
     split = build_split(root)
+    if args.limit_images:
+        for part in split:
+            split[part] = split[part][:args.limit_images]
     cfg = checkpoint_config(args.checkpoint, args.label,
                             continued_training=args.continued_training,
                             data_version=args.pretraining_data_version)
