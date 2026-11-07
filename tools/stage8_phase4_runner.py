@@ -55,6 +55,23 @@ def has_result(row: dict) -> bool:
     return False
 
 
+def prune_feature_cache(row: dict) -> None:
+    """Free a fully-consumed feature cache once its last row completes.
+
+    CropAndWeed caches are ~102 GB per backbone on the same NVMe that must
+    hold the next backbone's extraction; without pruning the seven backbones
+    need ~720 GB.  The prune refuses to touch any backbone with a pending
+    row, so this only ever reclaims space that can no longer affect a result.
+    """
+    try:
+        from tools.stage8_prune_feature_cache import prune_for_backbone
+        prune_for_backbone(row['backbone'])
+    except SystemExit as exc:
+        print(f'!!! prune safety refusal for {row["backbone"]}: {exc}',
+              flush=True)
+        raise
+
+
 def run_row(row: dict, force: bool) -> int:
     out = Path(row['output_dir'])
     if has_result(row) and not force:
@@ -76,6 +93,8 @@ def run_row(row: dict, force: bool) -> int:
         w.writerow({**row, 'started_at': now, 'finished_at': now,
                     'wall_clock_minutes': elapsed, 'exit_code': proc.returncode})
     print(f'  exit={proc.returncode} wall={elapsed}min', flush=True)
+    if proc.returncode == 0 and row['task_id'] == 'cropandweed_sem':
+        prune_feature_cache(row)
     return proc.returncode
 
 

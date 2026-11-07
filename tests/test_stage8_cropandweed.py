@@ -107,5 +107,131 @@ def test_ave_vwg_sessions_disjoint_from_frozen_split():
     assert '-' in session_key('ave-0000-0000.jpg')
 
 
+# --------------------------------------------------------------------------- #
+# Streaming probe training / evaluation (the OOM fix)
+# --------------------------------------------------------------------------- #
+
+def _synthetic_chunk_cache(tmp_path, n_images=3, n_tiles=2, d=8, seed=0):
+    """One image cache: per-image tokens [n_tiles,256,d] fp16 + counts int32.
+
+    Uses the same ``<cache_root>/<key>/<split>/<stem>.npy`` layout as the
+    probe so the cache functions under test are exercised on real paths.
+    """
+    rng = np.random.default_rng(seed)
+    key = 'label_x__aaaa1111bbbb2222'
+    root = tmp_path / 'cache' / key / 'train'
+    root.mkdir(parents=True)
+    names = [f'ave-{i:04d}-0001.jpg' for i in range(n_images)]
+    for i, name in enumerate(names):
+        tokens = rng.standard_normal((n_tiles, 256, d)).astype(np.float16)
+        counts_i = rng.integers(0, 4, size=(n_tiles, 16, 16, 9)).astype(np.int32)
+        np.save(root / f'{Path(name).stem}.npy', tokens)
+        np.save(root / f'{Path(name).stem}.counts.npy', counts_i)
+    return {'root': tmp_path / 'cache', 'key': key, 'train_dir': root,
+            'names': names}
+
+
+def test_train_probe_lazy_decreases_loss_and_is_deterministic(tmp_path):
+    from src.downstream.cropandweed_probe import train_probe_lazy
+    from src.downstream.probe import LinearSegmentationProbe
+    torch = __import__('torch')
+    cache = _synthetic_chunk_cache(tmp_path, n_images=3, n_tiles=2)
+    # head init uses the global torch RNG (same as every other Stage 8 task);
+    # seed it so the determinism check below isolates the loader/optimizer,
+    # which carry the real per-run seed.
+    torch.manual_seed(1234)
+    probe_a = LinearSegmentationProbe(embed_dim=8, num_classes=9)
+    r1 = train_probe_lazy(
+        probe_a, cache['root'], cache['key'], cache['names'],
+        epochs=5, batch_size=4, lr=1e-2, seed=7,
+        device=torch.device('cpu'), images_per_step=2, verbose=False)
+    assert r1['updates'] > 0
+    assert r1['loss_history'][0] > r1['loss_history'][-1], \
+        f'loss should fall: {r1["loss_history"]}'
+
+    torch.manual_seed(1234)
+    probe_b = LinearSegmentationProbe(embed_dim=8, num_classes=9)
+    r2 = train_probe_lazy(
+        probe_b, cache['root'], cache['key'], cache['names'],
+        epochs=5, batch_size=4, lr=1e-2, seed=7,
+        device=torch.device('cpu'), images_per_step=2, verbose=False)
+    assert r2['loss_history'] == r1['loss_history']
+
+    # 1 image per step must exercise the images_per_step boundary: 2 epochs
+    # x 3 images x ceil(2 tiles / batch 4) = 6 updates
+    probe_c = LinearSegmentationProbe(embed_dim=8, num_classes=9)
+    r3 = train_probe_lazy(
+        probe_c, cache['root'], cache['key'], cache['names'],
+        epochs=2, batch_size=4, lr=1e-2, seed=7,
+        device=torch.device('cpu'), images_per_step=1, verbose=False)
+    assert r3['updates'] == 6
+
+
+def test_ensure_train_counts_backfills_and_skips(tmp_path, monkeypatch):
+    from src.downstream import cropandweed_probe as cwp
+    cache = _synthetic_chunk_cache(tmp_path, n_images=2, n_tiles=2)
+    for name in cache['names']:
+        (cache['train_dir'] / f'{Path(name).stem}.counts.npy').unlink()
+
+    def fake_load(images_root, annotation_root, name):
+        # 224x448 with a class-0 left half and class-1 right half -> 2 tiles
+        label = np.zeros((224, 448), dtype=np.int16)
+        label[:, 224:] = 1
+        return np.zeros((224, 448, 3), dtype=np.uint8), label
+
+    monkeypatch.setattr(cwp, 'load_image_and_mask', fake_load)
+    report = cwp.ensure_train_counts(cache['root'], cache['key'],
+                                     tmp_path / 'img', tmp_path / 'ann',
+                                     cache['names'])
+    assert report['written'] == 2 and report['skipped_existing'] == 0
+    counts = np.load(cache['train_dir'] / 'ave-0000-0001.counts.npy')
+    assert counts.shape == (2, 16, 16, 9)
+    assert counts[0].sum() == 224 * 224      # left tile fully class 0
+    assert counts[0, 0, 0, 0] == 14 * 14     # top-left patch all class 0
+    counts1 = np.load(cache['train_dir'] / 'ave-0001-0001.counts.npy')
+    assert counts1[1, 0, 0, 1] == 14 * 14    # right tile class 1
+
+    report2 = cwp.ensure_train_counts(cache['root'], cache['key'],
+                                      tmp_path / 'img', tmp_path / 'ann',
+                                      cache['names'])
+    assert report2['written'] == 0 and report2['skipped_existing'] == 2
+
+
+def test_evaluate_split_lazy_scores_ignore_correctly(tmp_path, monkeypatch):
+    from src.downstream import cropandweed_probe as cwp
+    from src.downstream.probe import LinearSegmentationProbe
+    torch = __import__('torch')
+    cache = _synthetic_chunk_cache(tmp_path, n_images=1, n_tiles=2, d=8)
+    eval_dir = cache['root'] / cache['key'] / 'eval'
+    eval_dir.mkdir()
+    np.save(eval_dir / 'ave-0000-0001.npy',
+            np.load(cache['train_dir'] / 'ave-0000-0001.npy'))
+
+    probe = LinearSegmentationProbe(embed_dim=8, num_classes=9)
+
+    def fake_predict_tile_logits(tokens):
+        # logits biased to class 0 => argmax 0 everywhere
+        b = tokens.shape[0]
+        logits = torch.zeros((b, 9, 224, 224))
+        logits[:, 0] = 10.0
+        return logits.numpy()
+
+    monkeypatch.setattr(probe, 'predict_tile_logits', fake_predict_tile_logits)
+
+    def fake_load(images_root, annotation_root, name):
+        label = np.zeros((224, 448), dtype=np.int16)   # all class 0 (Maize)
+        label[:50, :100] = -1                          # ignore patch
+        return np.zeros((224, 448, 3), dtype=np.uint8), label
+
+    monkeypatch.setattr(cwp, 'load_image_and_mask', fake_load)
+    metrics = cwp.evaluate_split_lazy(
+        probe, tmp_path / 'img', tmp_path / 'ann', cache['root'],
+        cache['key'], ['ave-0000-0001.jpg'], torch.device('cpu'))
+    # class 0 (Maize) predicted everywhere; the ignore patch is excluded from
+    # scoring, so Maize IoU is exactly 1 -> 100%
+    assert metrics['per_class_iou_percent']['Maize'] == 100.0
+    assert metrics['mIoU_percent'] == 100.0
+
+
 if __name__ == '__main__':
     raise SystemExit(pytest.main([__file__, '-v']))

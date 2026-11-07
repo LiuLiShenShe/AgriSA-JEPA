@@ -11,7 +11,9 @@ for task in phenobench_sem plantdoc_cls deepweeds_cls cropandweed_sem gwhd_det; 
   $PY tools/stage8_phase4_runner.py --tasks "$task" --roles frozen \
       || { echo "!!! TASK $task failed (see log)"; exit 1; }
   echo "########## TASK $task exploratory ##########"
-  $PY tools/stage8_phase4_runner.py --tasks "$task" --roles exploratory \
+  # registry C-arm rows carry status FROZEN_EXPLORATORY; the runner matches
+  # roles exactly, so both spellings are needed (bug fixed 2026-11-07)
+  $PY tools/stage8_phase4_runner.py --tasks "$task" --roles exploratory,frozen_exploratory \
       || { echo "!!! TASK $task exploratory failed"; exit 1; }
 done
 echo "ALL_PHASE4_DONE"
