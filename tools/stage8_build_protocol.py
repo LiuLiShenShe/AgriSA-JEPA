@@ -67,9 +67,10 @@ TASKS = [
                    'eval = vwg_ set, one image per recording session '
                    f'(seed {SAMPLING_SEED}), ~665 images'),
         'entry': f'{PY} -m src.downstream.cropandweed_probe',
-        'common_args': ('--data-root /data/datasets/cropandweed/images '
+        'common_args': ('--images-root /data/datasets/cropandweed/images '
                         f'--annotation-root '
                         f'{ROOT}/data/holdout_raw/cropandweed_annotations/labelIds/CropAndWeed '
+                        '--cache-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/cache '
                         '--seed {seed} --epochs 10'),
         'per_backbone_args': ('--checkpoint {checkpoint} --label {label}'),
         'out_pattern': 'cropandweed_sem/{backbone}_seed{seed}',
