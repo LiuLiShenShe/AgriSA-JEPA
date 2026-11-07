@@ -117,7 +117,8 @@ TASKS = [
         'splits': 'official train/val, test-server not used',
         'entry': f'{PY} -m src.downstream.phenobench_probe',
         'common_args': ('--root /data/datasets/PhenoBench/PhenoBench-v110 '
-                        '--seed 0 1 2 --epochs 10 --no-official'),
+                        '--cache-dir /data/agrisa_jepa_runs/stage8/phenobench_sem/cache '
+                        '--seed 0 1 2 --epochs 10'),
         'per_backbone_args': ('--checkpoint {checkpoint} --arm-label {label}'),
         'out_pattern': 'phenobench_sem/{backbone}',
         'primary_metric': 'mIoU (official semantics: soil/crop/weed)',
@@ -125,6 +126,10 @@ TASKS = [
         # Stage 7B already probed A/B (p1+p2) with probe seeds 0/1/2 and
         # recorded official metrics; only the OFFICIAL baseline is new here.
         'reuse_stage7b_for': ['A_p1', 'A_p2', 'B_p1', 'B_p2'],
+        # phenobench_probe takes --seed 0 1 2 in ONE invocation and trains all
+        # three probes on the shared feature cache; emit one row per backbone
+        # rather than three per-seed rows.
+        'all_seeds_in_one_command': True,
     },
 ]
 
@@ -144,76 +149,81 @@ def check_preconditions() -> None:
             assert leak == 'CLEAN_exact', f'{ds}: {leak}'
 
 
+def _emit_rows(task, reg, recorded, backbone, seed, role, status, out_dir, cmd):
+    spec = reg[backbone]
+    sha = recorded.get(backbone, spec.checkpoint)
+    return {
+        'task_id': task['task_id'],
+        'role': role,
+        'backbone': backbone,
+        'pretraining_seed': spec.pretraining_seed,
+        'backbone_checkpoint': spec.checkpoint,
+        'backbone_sha256_ref':
+            ('official IN1K-vit.h.14-300e release'
+             if backbone == 'OFFICIAL' else f'stage7b manifest: {sha[:12]}...'),
+        'downstream_seed': seed,
+        'status': status,
+        'output_dir': out_dir,
+        'command': cmd,
+    }
+
+
+def _build_command(task, spec, seed, out_dir) -> str:
+    """Registry command; always pins --out-dir so a row writes its own dir."""
+    return ' '.join([task['entry'],
+                     task['per_backbone_args'].format(
+                         checkpoint=spec.checkpoint,
+                         label=spec.label),
+                     task['common_args'].format(
+                         seed=seed, sampling_seed=SAMPLING_SEED),
+                     f'--out-dir {out_dir}'])
+
+
 def build_rows() -> list:
     reg = build_registry(include_exploratory=True)
     recorded = recorded_checkpoint_sha256()
     rows = []
     for task in TASKS:
         reuse = set(task.get('reuse_stage7b_for', []))
+        all_seeds_one_command = bool(task.get('all_seeds_in_one_command'))
+        seed_list = ['0,1,2'] if all_seeds_one_command else DOWNSTREAM_SEEDS
         for backbone in PRIMARY:
             spec = reg[backbone]
-            sha = recorded.get(backbone, spec.checkpoint)  # OFFICIAL: file path
-            for seed in DOWNSTREAM_SEEDS:
-                out_dir = str(RUN_ROOT / task['out_pattern'].format(
-                    backbone=backbone, seed=seed))
-                cmd = ' '.join([task['entry'],
-                                task['per_backbone_args'].format(
-                                    checkpoint=spec.checkpoint,
-                                    label=spec.label),
-                                task['common_args'].format(
-                                    seed=seed,
-                                    sampling_seed=SAMPLING_SEED)])
-                # Phenobench A/B rows reuse Stage 7B results verbatim; the
-                # command is kept for provenance only, status blocks a rerun.
-                if backbone in reuse:
-                    status = 'REUSE_STAGE7B'
-                    cmd = ('(not re-run; result in '
-                           'reports/stage7b_phenobench_per_checkpoint.json '
-                           f'entry {backbone}, probe seed {seed})')
+            for seed in seed_list:
+                if all_seeds_one_command:
+                    out_dir = str(RUN_ROOT / task['out_pattern'].format(
+                        backbone=backbone))
                 else:
-                    status = 'FROZEN'
-                rows.append({
-                    'task_id': task['task_id'],
-                    'role': 'primary',
-                    'backbone': backbone,
-                    'pretraining_seed': spec.pretraining_seed,
-                    'backbone_checkpoint': spec.checkpoint,
-                    'backbone_sha256_ref':
-                        ('official IN1K-vit.h.14-300e release'
-                         if backbone == 'OFFICIAL'
-                         else f'stage7b manifest: {sha[:12]}...'),
-                    'downstream_seed': seed,
-                    'status': status,
-                    'output_dir': out_dir,
-                    'command': cmd,
-                })
+                    out_dir = str(RUN_ROOT / task['out_pattern'].format(
+                        backbone=backbone, seed=seed))
+                if backbone in reuse:
+                    # Phenobench A/B rows reuse Stage 7B results verbatim; the
+                    # command is kept for provenance only, status blocks rerun.
+                    rows.append(_emit_rows(
+                        task, reg, recorded, backbone, seed, 'primary',
+                        'REUSE_STAGE7B', out_dir,
+                        ('(not re-run; result in '
+                         'reports/stage7b_phenobench_per_checkpoint.json '
+                         f'entry {backbone}, probe seeds 0/1/2)')))
+                else:
+                    cmd = _build_command(task, spec, seed, out_dir)
+                    rows.append(_emit_rows(
+                        task, reg, recorded, backbone, seed, 'primary',
+                        'FROZEN', out_dir, cmd))
         if task['exploratory']:
             for backbone in EXPLORATORY:
                 spec = reg[backbone]
-                sha = recorded.get(backbone)
-                for seed in DOWNSTREAM_SEEDS:
-                    out_dir = str(RUN_ROOT / task['out_pattern'].format(
-                        backbone=backbone, seed=seed))
-                    cmd = ' '.join([task['entry'],
-                                    task['per_backbone_args'].format(
-                                        checkpoint=spec.checkpoint,
-                                        label=spec.label),
-                                    task['common_args'].format(
-                                        seed=seed,
-                                        sampling_seed=SAMPLING_SEED)])
-                    rows.append({
-                        'task_id': task['task_id'],
-                        'role': 'exploratory',
-                        'backbone': backbone,
-                        'pretraining_seed': spec.pretraining_seed,
-                        'backbone_checkpoint': spec.checkpoint,
-                        'backbone_sha256_ref':
-                            f'stage7b manifest: {sha[:12]}...',
-                        'downstream_seed': seed,
-                        'status': 'FROZEN_EXPLORATORY',
-                        'output_dir': out_dir,
-                        'command': cmd,
-                    })
+                for seed in seed_list:
+                    if all_seeds_one_command:
+                        out_dir = str(RUN_ROOT / task['out_pattern'].format(
+                            backbone=backbone))
+                    else:
+                        out_dir = str(RUN_ROOT / task['out_pattern'].format(
+                            backbone=backbone, seed=seed))
+                    cmd = _build_command(task, spec, seed, out_dir)
+                    rows.append(_emit_rows(
+                        task, reg, recorded, backbone, seed, 'exploratory',
+                        'FROZEN_EXPLORATORY', out_dir, cmd))
     return rows
 
 

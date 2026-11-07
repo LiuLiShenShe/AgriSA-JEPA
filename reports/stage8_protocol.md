@@ -1,6 +1,6 @@
 # Stage 8 — 冻结协议与实验注册表
 
-> 冻结时间（UTC）：2026-11-07T09:36:30+00:00
+> 冻结时间（UTC）：2026-11-07T09:44:01+00:00
 
 ## 0. 研究问题
 
@@ -143,21 +143,11 @@
 | plantdoc_cls | B_p2 | 0 | primary | `plantdoc_cls/B_p2_seed0` |
 | plantdoc_cls | B_p2 | 1 | primary | `plantdoc_cls/B_p2_seed1` |
 | plantdoc_cls | B_p2 | 2 | primary | `plantdoc_cls/B_p2_seed2` |
-| phenobench_sem | OFFICIAL | 0 | primary | `phenobench_sem/OFFICIAL` |
-| phenobench_sem | OFFICIAL | 1 | primary | `phenobench_sem/OFFICIAL` |
-| phenobench_sem | OFFICIAL | 2 | primary | `phenobench_sem/OFFICIAL` |
-| phenobench_sem | A_p1 | 0 | primary | `phenobench_sem/A_p1` |
-| phenobench_sem | A_p1 | 1 | primary | `phenobench_sem/A_p1` |
-| phenobench_sem | A_p1 | 2 | primary | `phenobench_sem/A_p1` |
-| phenobench_sem | A_p2 | 0 | primary | `phenobench_sem/A_p2` |
-| phenobench_sem | A_p2 | 1 | primary | `phenobench_sem/A_p2` |
-| phenobench_sem | A_p2 | 2 | primary | `phenobench_sem/A_p2` |
-| phenobench_sem | B_p1 | 0 | primary | `phenobench_sem/B_p1` |
-| phenobench_sem | B_p1 | 1 | primary | `phenobench_sem/B_p1` |
-| phenobench_sem | B_p1 | 2 | primary | `phenobench_sem/B_p1` |
-| phenobench_sem | B_p2 | 0 | primary | `phenobench_sem/B_p2` |
-| phenobench_sem | B_p2 | 1 | primary | `phenobench_sem/B_p2` |
-| phenobench_sem | B_p2 | 2 | primary | `phenobench_sem/B_p2` |
+| phenobench_sem | OFFICIAL | 0,1,2 | primary | `phenobench_sem/OFFICIAL` |
+| phenobench_sem | A_p1 | 0,1,2 | primary | `phenobench_sem/A_p1` |
+| phenobench_sem | A_p2 | 0,1,2 | primary | `phenobench_sem/A_p2` |
+| phenobench_sem | B_p1 | 0,1,2 | primary | `phenobench_sem/B_p1` |
+| phenobench_sem | B_p2 | 0,1,2 | primary | `phenobench_sem/B_p2` |
 
 ## 4. 冻结规则
 
