@@ -1,5 +1,5 @@
 {
-  "frozen_at": "2026-11-07T09:46:26.660743+00:00",
+  "frozen_at": "2026-11-07T09:51:28.518992+00:00",
   "sampling_seed": 20261107,
   "downstream_seeds": [
     0,
@@ -269,7 +269,7 @@
       "downstream_seed": 0,
       "status": "FROZEN",
       "output_dir": "/data/agrisa_jepa_runs/stage8/cropandweed_sem/OFFICIAL_seed0",
-      "command": "./.venv-uv/bin/python -m src.downstream.cropandweed_probe --checkpoint /data/checkpoints/ijepa/IN1K-vit.h.14-300e.pth.tar --label official_i-jepa_vith14_300e --images-root /data/datasets/cropandweed/images --annotation-root /fj/jepa-二维图像任务/data/holdout_raw/cropandweed_annotations/labelIds/CropAndWeed --cache-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/cache --seed 0 --epochs 10 --out-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/OFFICIAL_seed0"
+      "command": "./.venv-uv/bin/python -m src.downstream.cropandweed_probe --checkpoint /data/checkpoints/ijepa/IN1K-vit.h.14-300e.pth.tar --label official_i-jepa_vith14_300e --images-root /data/datasets/cropandweed/images --annotation-root /fj/jepa-二维图像任务/data/holdout_raw/cropandweed_annotations/labelIds/CropAndWeed --cache-dir runs/stage8_cropandweed/cache --seed 0 --epochs 10 --out-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/OFFICIAL_seed0"
     },
     {
       "task_id": "cropandweed_sem",
@@ -281,7 +281,7 @@
       "downstream_seed": 1,
       "status": "FROZEN",
       "output_dir": "/data/agrisa_jepa_runs/stage8/cropandweed_sem/OFFICIAL_seed1",
-      "command": "./.venv-uv/bin/python -m src.downstream.cropandweed_probe --checkpoint /data/checkpoints/ijepa/IN1K-vit.h.14-300e.pth.tar --label official_i-jepa_vith14_300e --images-root /data/datasets/cropandweed/images --annotation-root /fj/jepa-二维图像任务/data/holdout_raw/cropandweed_annotations/labelIds/CropAndWeed --cache-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/cache --seed 1 --epochs 10 --out-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/OFFICIAL_seed1"
+      "command": "./.venv-uv/bin/python -m src.downstream.cropandweed_probe --checkpoint /data/checkpoints/ijepa/IN1K-vit.h.14-300e.pth.tar --label official_i-jepa_vith14_300e --images-root /data/datasets/cropandweed/images --annotation-root /fj/jepa-二维图像任务/data/holdout_raw/cropandweed_annotations/labelIds/CropAndWeed --cache-dir runs/stage8_cropandweed/cache --seed 1 --epochs 10 --out-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/OFFICIAL_seed1"
     },
     {
       "task_id": "cropandweed_sem",
@@ -293,7 +293,7 @@
       "downstream_seed": 2,
       "status": "FROZEN",
       "output_dir": "/data/agrisa_jepa_runs/stage8/cropandweed_sem/OFFICIAL_seed2",
-      "command": "./.venv-uv/bin/python -m src.downstream.cropandweed_probe --checkpoint /data/checkpoints/ijepa/IN1K-vit.h.14-300e.pth.tar --label official_i-jepa_vith14_300e --images-root /data/datasets/cropandweed/images --annotation-root /fj/jepa-二维图像任务/data/holdout_raw/cropandweed_annotations/labelIds/CropAndWeed --cache-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/cache --seed 2 --epochs 10 --out-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/OFFICIAL_seed2"
+      "command": "./.venv-uv/bin/python -m src.downstream.cropandweed_probe --checkpoint /data/checkpoints/ijepa/IN1K-vit.h.14-300e.pth.tar --label official_i-jepa_vith14_300e --images-root /data/datasets/cropandweed/images --annotation-root /fj/jepa-二维图像任务/data/holdout_raw/cropandweed_annotations/labelIds/CropAndWeed --cache-dir runs/stage8_cropandweed/cache --seed 2 --epochs 10 --out-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/OFFICIAL_seed2"
     },
     {
       "task_id": "cropandweed_sem",
@@ -305,7 +305,7 @@
       "downstream_seed": 0,
       "status": "FROZEN",
       "output_dir": "/data/agrisa_jepa_runs/stage8/cropandweed_sem/A_p1_seed0",
-      "command": "./.venv-uv/bin/python -m src.downstream.cropandweed_probe --checkpoint /data/agrisa_jepa_runs/stage7b/stage7b_A_p1/jepa-encoder-step2000.pth --label stage7b_A_p1__armA_h2000_w100_pseed20261104 --images-root /data/datasets/cropandweed/images --annotation-root /fj/jepa-二维图像任务/data/holdout_raw/cropandweed_annotations/labelIds/CropAndWeed --cache-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/cache --seed 0 --epochs 10 --out-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/A_p1_seed0"
+      "command": "./.venv-uv/bin/python -m src.downstream.cropandweed_probe --checkpoint /data/agrisa_jepa_runs/stage7b/stage7b_A_p1/jepa-encoder-step2000.pth --label stage7b_A_p1__armA_h2000_w100_pseed20261104 --images-root /data/datasets/cropandweed/images --annotation-root /fj/jepa-二维图像任务/data/holdout_raw/cropandweed_annotations/labelIds/CropAndWeed --cache-dir runs/stage8_cropandweed/cache --seed 0 --epochs 10 --out-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/A_p1_seed0"
     },
     {
       "task_id": "cropandweed_sem",
@@ -317,7 +317,7 @@
       "downstream_seed": 1,
       "status": "FROZEN",
       "output_dir": "/data/agrisa_jepa_runs/stage8/cropandweed_sem/A_p1_seed1",
-      "command": "./.venv-uv/bin/python -m src.downstream.cropandweed_probe --checkpoint /data/agrisa_jepa_runs/stage7b/stage7b_A_p1/jepa-encoder-step2000.pth --label stage7b_A_p1__armA_h2000_w100_pseed20261104 --images-root /data/datasets/cropandweed/images --annotation-root /fj/jepa-二维图像任务/data/holdout_raw/cropandweed_annotations/labelIds/CropAndWeed --cache-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/cache --seed 1 --epochs 10 --out-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/A_p1_seed1"
+      "command": "./.venv-uv/bin/python -m src.downstream.cropandweed_probe --checkpoint /data/agrisa_jepa_runs/stage7b/stage7b_A_p1/jepa-encoder-step2000.pth --label stage7b_A_p1__armA_h2000_w100_pseed20261104 --images-root /data/datasets/cropandweed/images --annotation-root /fj/jepa-二维图像任务/data/holdout_raw/cropandweed_annotations/labelIds/CropAndWeed --cache-dir runs/stage8_cropandweed/cache --seed 1 --epochs 10 --out-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/A_p1_seed1"
     },
     {
       "task_id": "cropandweed_sem",
@@ -329,7 +329,7 @@
       "downstream_seed": 2,
       "status": "FROZEN",
       "output_dir": "/data/agrisa_jepa_runs/stage8/cropandweed_sem/A_p1_seed2",
-      "command": "./.venv-uv/bin/python -m src.downstream.cropandweed_probe --checkpoint /data/agrisa_jepa_runs/stage7b/stage7b_A_p1/jepa-encoder-step2000.pth --label stage7b_A_p1__armA_h2000_w100_pseed20261104 --images-root /data/datasets/cropandweed/images --annotation-root /fj/jepa-二维图像任务/data/holdout_raw/cropandweed_annotations/labelIds/CropAndWeed --cache-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/cache --seed 2 --epochs 10 --out-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/A_p1_seed2"
+      "command": "./.venv-uv/bin/python -m src.downstream.cropandweed_probe --checkpoint /data/agrisa_jepa_runs/stage7b/stage7b_A_p1/jepa-encoder-step2000.pth --label stage7b_A_p1__armA_h2000_w100_pseed20261104 --images-root /data/datasets/cropandweed/images --annotation-root /fj/jepa-二维图像任务/data/holdout_raw/cropandweed_annotations/labelIds/CropAndWeed --cache-dir runs/stage8_cropandweed/cache --seed 2 --epochs 10 --out-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/A_p1_seed2"
     },
     {
       "task_id": "cropandweed_sem",
@@ -341,7 +341,7 @@
       "downstream_seed": 0,
       "status": "FROZEN",
       "output_dir": "/data/agrisa_jepa_runs/stage8/cropandweed_sem/A_p2_seed0",
-      "command": "./.venv-uv/bin/python -m src.downstream.cropandweed_probe --checkpoint /data/agrisa_jepa_runs/stage7b/stage7b_A_p2/jepa-encoder-step2000.pth --label stage7b_A_p2__armA_h2000_w100_pseed20261105 --images-root /data/datasets/cropandweed/images --annotation-root /fj/jepa-二维图像任务/data/holdout_raw/cropandweed_annotations/labelIds/CropAndWeed --cache-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/cache --seed 0 --epochs 10 --out-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/A_p2_seed0"
+      "command": "./.venv-uv/bin/python -m src.downstream.cropandweed_probe --checkpoint /data/agrisa_jepa_runs/stage7b/stage7b_A_p2/jepa-encoder-step2000.pth --label stage7b_A_p2__armA_h2000_w100_pseed20261105 --images-root /data/datasets/cropandweed/images --annotation-root /fj/jepa-二维图像任务/data/holdout_raw/cropandweed_annotations/labelIds/CropAndWeed --cache-dir runs/stage8_cropandweed/cache --seed 0 --epochs 10 --out-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/A_p2_seed0"
     },
     {
       "task_id": "cropandweed_sem",
@@ -353,7 +353,7 @@
       "downstream_seed": 1,
       "status": "FROZEN",
       "output_dir": "/data/agrisa_jepa_runs/stage8/cropandweed_sem/A_p2_seed1",
-      "command": "./.venv-uv/bin/python -m src.downstream.cropandweed_probe --checkpoint /data/agrisa_jepa_runs/stage7b/stage7b_A_p2/jepa-encoder-step2000.pth --label stage7b_A_p2__armA_h2000_w100_pseed20261105 --images-root /data/datasets/cropandweed/images --annotation-root /fj/jepa-二维图像任务/data/holdout_raw/cropandweed_annotations/labelIds/CropAndWeed --cache-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/cache --seed 1 --epochs 10 --out-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/A_p2_seed1"
+      "command": "./.venv-uv/bin/python -m src.downstream.cropandweed_probe --checkpoint /data/agrisa_jepa_runs/stage7b/stage7b_A_p2/jepa-encoder-step2000.pth --label stage7b_A_p2__armA_h2000_w100_pseed20261105 --images-root /data/datasets/cropandweed/images --annotation-root /fj/jepa-二维图像任务/data/holdout_raw/cropandweed_annotations/labelIds/CropAndWeed --cache-dir runs/stage8_cropandweed/cache --seed 1 --epochs 10 --out-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/A_p2_seed1"
     },
     {
       "task_id": "cropandweed_sem",
@@ -365,7 +365,7 @@
       "downstream_seed": 2,
       "status": "FROZEN",
       "output_dir": "/data/agrisa_jepa_runs/stage8/cropandweed_sem/A_p2_seed2",
-      "command": "./.venv-uv/bin/python -m src.downstream.cropandweed_probe --checkpoint /data/agrisa_jepa_runs/stage7b/stage7b_A_p2/jepa-encoder-step2000.pth --label stage7b_A_p2__armA_h2000_w100_pseed20261105 --images-root /data/datasets/cropandweed/images --annotation-root /fj/jepa-二维图像任务/data/holdout_raw/cropandweed_annotations/labelIds/CropAndWeed --cache-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/cache --seed 2 --epochs 10 --out-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/A_p2_seed2"
+      "command": "./.venv-uv/bin/python -m src.downstream.cropandweed_probe --checkpoint /data/agrisa_jepa_runs/stage7b/stage7b_A_p2/jepa-encoder-step2000.pth --label stage7b_A_p2__armA_h2000_w100_pseed20261105 --images-root /data/datasets/cropandweed/images --annotation-root /fj/jepa-二维图像任务/data/holdout_raw/cropandweed_annotations/labelIds/CropAndWeed --cache-dir runs/stage8_cropandweed/cache --seed 2 --epochs 10 --out-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/A_p2_seed2"
     },
     {
       "task_id": "cropandweed_sem",
@@ -377,7 +377,7 @@
       "downstream_seed": 0,
       "status": "FROZEN",
       "output_dir": "/data/agrisa_jepa_runs/stage8/cropandweed_sem/B_p1_seed0",
-      "command": "./.venv-uv/bin/python -m src.downstream.cropandweed_probe --checkpoint /data/agrisa_jepa_runs/stage7b/stage7b_B_p1/jepa-encoder-step2000.pth --label stage7b_B_p1__armB_h50000_w100_pseed20261104 --images-root /data/datasets/cropandweed/images --annotation-root /fj/jepa-二维图像任务/data/holdout_raw/cropandweed_annotations/labelIds/CropAndWeed --cache-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/cache --seed 0 --epochs 10 --out-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/B_p1_seed0"
+      "command": "./.venv-uv/bin/python -m src.downstream.cropandweed_probe --checkpoint /data/agrisa_jepa_runs/stage7b/stage7b_B_p1/jepa-encoder-step2000.pth --label stage7b_B_p1__armB_h50000_w100_pseed20261104 --images-root /data/datasets/cropandweed/images --annotation-root /fj/jepa-二维图像任务/data/holdout_raw/cropandweed_annotations/labelIds/CropAndWeed --cache-dir runs/stage8_cropandweed/cache --seed 0 --epochs 10 --out-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/B_p1_seed0"
     },
     {
       "task_id": "cropandweed_sem",
@@ -389,7 +389,7 @@
       "downstream_seed": 1,
       "status": "FROZEN",
       "output_dir": "/data/agrisa_jepa_runs/stage8/cropandweed_sem/B_p1_seed1",
-      "command": "./.venv-uv/bin/python -m src.downstream.cropandweed_probe --checkpoint /data/agrisa_jepa_runs/stage7b/stage7b_B_p1/jepa-encoder-step2000.pth --label stage7b_B_p1__armB_h50000_w100_pseed20261104 --images-root /data/datasets/cropandweed/images --annotation-root /fj/jepa-二维图像任务/data/holdout_raw/cropandweed_annotations/labelIds/CropAndWeed --cache-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/cache --seed 1 --epochs 10 --out-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/B_p1_seed1"
+      "command": "./.venv-uv/bin/python -m src.downstream.cropandweed_probe --checkpoint /data/agrisa_jepa_runs/stage7b/stage7b_B_p1/jepa-encoder-step2000.pth --label stage7b_B_p1__armB_h50000_w100_pseed20261104 --images-root /data/datasets/cropandweed/images --annotation-root /fj/jepa-二维图像任务/data/holdout_raw/cropandweed_annotations/labelIds/CropAndWeed --cache-dir runs/stage8_cropandweed/cache --seed 1 --epochs 10 --out-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/B_p1_seed1"
     },
     {
       "task_id": "cropandweed_sem",
@@ -401,7 +401,7 @@
       "downstream_seed": 2,
       "status": "FROZEN",
       "output_dir": "/data/agrisa_jepa_runs/stage8/cropandweed_sem/B_p1_seed2",
-      "command": "./.venv-uv/bin/python -m src.downstream.cropandweed_probe --checkpoint /data/agrisa_jepa_runs/stage7b/stage7b_B_p1/jepa-encoder-step2000.pth --label stage7b_B_p1__armB_h50000_w100_pseed20261104 --images-root /data/datasets/cropandweed/images --annotation-root /fj/jepa-二维图像任务/data/holdout_raw/cropandweed_annotations/labelIds/CropAndWeed --cache-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/cache --seed 2 --epochs 10 --out-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/B_p1_seed2"
+      "command": "./.venv-uv/bin/python -m src.downstream.cropandweed_probe --checkpoint /data/agrisa_jepa_runs/stage7b/stage7b_B_p1/jepa-encoder-step2000.pth --label stage7b_B_p1__armB_h50000_w100_pseed20261104 --images-root /data/datasets/cropandweed/images --annotation-root /fj/jepa-二维图像任务/data/holdout_raw/cropandweed_annotations/labelIds/CropAndWeed --cache-dir runs/stage8_cropandweed/cache --seed 2 --epochs 10 --out-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/B_p1_seed2"
     },
     {
       "task_id": "cropandweed_sem",
@@ -413,7 +413,7 @@
       "downstream_seed": 0,
       "status": "FROZEN",
       "output_dir": "/data/agrisa_jepa_runs/stage8/cropandweed_sem/B_p2_seed0",
-      "command": "./.venv-uv/bin/python -m src.downstream.cropandweed_probe --checkpoint /data/agrisa_jepa_runs/stage7b/stage7b_B_p2/jepa-encoder-step2000.pth --label stage7b_B_p2__armB_h50000_w100_pseed20261105 --images-root /data/datasets/cropandweed/images --annotation-root /fj/jepa-二维图像任务/data/holdout_raw/cropandweed_annotations/labelIds/CropAndWeed --cache-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/cache --seed 0 --epochs 10 --out-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/B_p2_seed0"
+      "command": "./.venv-uv/bin/python -m src.downstream.cropandweed_probe --checkpoint /data/agrisa_jepa_runs/stage7b/stage7b_B_p2/jepa-encoder-step2000.pth --label stage7b_B_p2__armB_h50000_w100_pseed20261105 --images-root /data/datasets/cropandweed/images --annotation-root /fj/jepa-二维图像任务/data/holdout_raw/cropandweed_annotations/labelIds/CropAndWeed --cache-dir runs/stage8_cropandweed/cache --seed 0 --epochs 10 --out-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/B_p2_seed0"
     },
     {
       "task_id": "cropandweed_sem",
@@ -425,7 +425,7 @@
       "downstream_seed": 1,
       "status": "FROZEN",
       "output_dir": "/data/agrisa_jepa_runs/stage8/cropandweed_sem/B_p2_seed1",
-      "command": "./.venv-uv/bin/python -m src.downstream.cropandweed_probe --checkpoint /data/agrisa_jepa_runs/stage7b/stage7b_B_p2/jepa-encoder-step2000.pth --label stage7b_B_p2__armB_h50000_w100_pseed20261105 --images-root /data/datasets/cropandweed/images --annotation-root /fj/jepa-二维图像任务/data/holdout_raw/cropandweed_annotations/labelIds/CropAndWeed --cache-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/cache --seed 1 --epochs 10 --out-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/B_p2_seed1"
+      "command": "./.venv-uv/bin/python -m src.downstream.cropandweed_probe --checkpoint /data/agrisa_jepa_runs/stage7b/stage7b_B_p2/jepa-encoder-step2000.pth --label stage7b_B_p2__armB_h50000_w100_pseed20261105 --images-root /data/datasets/cropandweed/images --annotation-root /fj/jepa-二维图像任务/data/holdout_raw/cropandweed_annotations/labelIds/CropAndWeed --cache-dir runs/stage8_cropandweed/cache --seed 1 --epochs 10 --out-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/B_p2_seed1"
     },
     {
       "task_id": "cropandweed_sem",
@@ -437,7 +437,7 @@
       "downstream_seed": 2,
       "status": "FROZEN",
       "output_dir": "/data/agrisa_jepa_runs/stage8/cropandweed_sem/B_p2_seed2",
-      "command": "./.venv-uv/bin/python -m src.downstream.cropandweed_probe --checkpoint /data/agrisa_jepa_runs/stage7b/stage7b_B_p2/jepa-encoder-step2000.pth --label stage7b_B_p2__armB_h50000_w100_pseed20261105 --images-root /data/datasets/cropandweed/images --annotation-root /fj/jepa-二维图像任务/data/holdout_raw/cropandweed_annotations/labelIds/CropAndWeed --cache-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/cache --seed 2 --epochs 10 --out-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/B_p2_seed2"
+      "command": "./.venv-uv/bin/python -m src.downstream.cropandweed_probe --checkpoint /data/agrisa_jepa_runs/stage7b/stage7b_B_p2/jepa-encoder-step2000.pth --label stage7b_B_p2__armB_h50000_w100_pseed20261105 --images-root /data/datasets/cropandweed/images --annotation-root /fj/jepa-二维图像任务/data/holdout_raw/cropandweed_annotations/labelIds/CropAndWeed --cache-dir runs/stage8_cropandweed/cache --seed 2 --epochs 10 --out-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/B_p2_seed2"
     },
     {
       "task_id": "cropandweed_sem",
@@ -449,7 +449,7 @@
       "downstream_seed": 0,
       "status": "FROZEN_EXPLORATORY",
       "output_dir": "/data/agrisa_jepa_runs/stage8/cropandweed_sem/C_p1_seed0",
-      "command": "./.venv-uv/bin/python -m src.downstream.cropandweed_probe --checkpoint /data/agrisa_jepa_runs/stage7b/stage7b_C_p1/jepa-encoder-step2000.pth --label stage7b_C_p1__armC_h50000_w2500_pseed20261104 --images-root /data/datasets/cropandweed/images --annotation-root /fj/jepa-二维图像任务/data/holdout_raw/cropandweed_annotations/labelIds/CropAndWeed --cache-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/cache --seed 0 --epochs 10 --out-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/C_p1_seed0"
+      "command": "./.venv-uv/bin/python -m src.downstream.cropandweed_probe --checkpoint /data/agrisa_jepa_runs/stage7b/stage7b_C_p1/jepa-encoder-step2000.pth --label stage7b_C_p1__armC_h50000_w2500_pseed20261104 --images-root /data/datasets/cropandweed/images --annotation-root /fj/jepa-二维图像任务/data/holdout_raw/cropandweed_annotations/labelIds/CropAndWeed --cache-dir runs/stage8_cropandweed/cache --seed 0 --epochs 10 --out-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/C_p1_seed0"
     },
     {
       "task_id": "cropandweed_sem",
@@ -461,7 +461,7 @@
       "downstream_seed": 1,
       "status": "FROZEN_EXPLORATORY",
       "output_dir": "/data/agrisa_jepa_runs/stage8/cropandweed_sem/C_p1_seed1",
-      "command": "./.venv-uv/bin/python -m src.downstream.cropandweed_probe --checkpoint /data/agrisa_jepa_runs/stage7b/stage7b_C_p1/jepa-encoder-step2000.pth --label stage7b_C_p1__armC_h50000_w2500_pseed20261104 --images-root /data/datasets/cropandweed/images --annotation-root /fj/jepa-二维图像任务/data/holdout_raw/cropandweed_annotations/labelIds/CropAndWeed --cache-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/cache --seed 1 --epochs 10 --out-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/C_p1_seed1"
+      "command": "./.venv-uv/bin/python -m src.downstream.cropandweed_probe --checkpoint /data/agrisa_jepa_runs/stage7b/stage7b_C_p1/jepa-encoder-step2000.pth --label stage7b_C_p1__armC_h50000_w2500_pseed20261104 --images-root /data/datasets/cropandweed/images --annotation-root /fj/jepa-二维图像任务/data/holdout_raw/cropandweed_annotations/labelIds/CropAndWeed --cache-dir runs/stage8_cropandweed/cache --seed 1 --epochs 10 --out-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/C_p1_seed1"
     },
     {
       "task_id": "cropandweed_sem",
@@ -473,7 +473,7 @@
       "downstream_seed": 2,
       "status": "FROZEN_EXPLORATORY",
       "output_dir": "/data/agrisa_jepa_runs/stage8/cropandweed_sem/C_p1_seed2",
-      "command": "./.venv-uv/bin/python -m src.downstream.cropandweed_probe --checkpoint /data/agrisa_jepa_runs/stage7b/stage7b_C_p1/jepa-encoder-step2000.pth --label stage7b_C_p1__armC_h50000_w2500_pseed20261104 --images-root /data/datasets/cropandweed/images --annotation-root /fj/jepa-二维图像任务/data/holdout_raw/cropandweed_annotations/labelIds/CropAndWeed --cache-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/cache --seed 2 --epochs 10 --out-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/C_p1_seed2"
+      "command": "./.venv-uv/bin/python -m src.downstream.cropandweed_probe --checkpoint /data/agrisa_jepa_runs/stage7b/stage7b_C_p1/jepa-encoder-step2000.pth --label stage7b_C_p1__armC_h50000_w2500_pseed20261104 --images-root /data/datasets/cropandweed/images --annotation-root /fj/jepa-二维图像任务/data/holdout_raw/cropandweed_annotations/labelIds/CropAndWeed --cache-dir runs/stage8_cropandweed/cache --seed 2 --epochs 10 --out-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/C_p1_seed2"
     },
     {
       "task_id": "cropandweed_sem",
@@ -485,7 +485,7 @@
       "downstream_seed": 0,
       "status": "FROZEN_EXPLORATORY",
       "output_dir": "/data/agrisa_jepa_runs/stage8/cropandweed_sem/C_p2_seed0",
-      "command": "./.venv-uv/bin/python -m src.downstream.cropandweed_probe --checkpoint /data/agrisa_jepa_runs/stage7b/stage7b_C_p2/jepa-encoder-step2000.pth --label stage7b_C_p2__armC_h50000_w2500_pseed20261105 --images-root /data/datasets/cropandweed/images --annotation-root /fj/jepa-二维图像任务/data/holdout_raw/cropandweed_annotations/labelIds/CropAndWeed --cache-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/cache --seed 0 --epochs 10 --out-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/C_p2_seed0"
+      "command": "./.venv-uv/bin/python -m src.downstream.cropandweed_probe --checkpoint /data/agrisa_jepa_runs/stage7b/stage7b_C_p2/jepa-encoder-step2000.pth --label stage7b_C_p2__armC_h50000_w2500_pseed20261105 --images-root /data/datasets/cropandweed/images --annotation-root /fj/jepa-二维图像任务/data/holdout_raw/cropandweed_annotations/labelIds/CropAndWeed --cache-dir runs/stage8_cropandweed/cache --seed 0 --epochs 10 --out-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/C_p2_seed0"
     },
     {
       "task_id": "cropandweed_sem",
@@ -497,7 +497,7 @@
       "downstream_seed": 1,
       "status": "FROZEN_EXPLORATORY",
       "output_dir": "/data/agrisa_jepa_runs/stage8/cropandweed_sem/C_p2_seed1",
-      "command": "./.venv-uv/bin/python -m src.downstream.cropandweed_probe --checkpoint /data/agrisa_jepa_runs/stage7b/stage7b_C_p2/jepa-encoder-step2000.pth --label stage7b_C_p2__armC_h50000_w2500_pseed20261105 --images-root /data/datasets/cropandweed/images --annotation-root /fj/jepa-二维图像任务/data/holdout_raw/cropandweed_annotations/labelIds/CropAndWeed --cache-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/cache --seed 1 --epochs 10 --out-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/C_p2_seed1"
+      "command": "./.venv-uv/bin/python -m src.downstream.cropandweed_probe --checkpoint /data/agrisa_jepa_runs/stage7b/stage7b_C_p2/jepa-encoder-step2000.pth --label stage7b_C_p2__armC_h50000_w2500_pseed20261105 --images-root /data/datasets/cropandweed/images --annotation-root /fj/jepa-二维图像任务/data/holdout_raw/cropandweed_annotations/labelIds/CropAndWeed --cache-dir runs/stage8_cropandweed/cache --seed 1 --epochs 10 --out-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/C_p2_seed1"
     },
     {
       "task_id": "cropandweed_sem",
@@ -509,7 +509,7 @@
       "downstream_seed": 2,
       "status": "FROZEN_EXPLORATORY",
       "output_dir": "/data/agrisa_jepa_runs/stage8/cropandweed_sem/C_p2_seed2",
-      "command": "./.venv-uv/bin/python -m src.downstream.cropandweed_probe --checkpoint /data/agrisa_jepa_runs/stage7b/stage7b_C_p2/jepa-encoder-step2000.pth --label stage7b_C_p2__armC_h50000_w2500_pseed20261105 --images-root /data/datasets/cropandweed/images --annotation-root /fj/jepa-二维图像任务/data/holdout_raw/cropandweed_annotations/labelIds/CropAndWeed --cache-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/cache --seed 2 --epochs 10 --out-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/C_p2_seed2"
+      "command": "./.venv-uv/bin/python -m src.downstream.cropandweed_probe --checkpoint /data/agrisa_jepa_runs/stage7b/stage7b_C_p2/jepa-encoder-step2000.pth --label stage7b_C_p2__armC_h50000_w2500_pseed20261105 --images-root /data/datasets/cropandweed/images --annotation-root /fj/jepa-二维图像任务/data/holdout_raw/cropandweed_annotations/labelIds/CropAndWeed --cache-dir runs/stage8_cropandweed/cache --seed 2 --epochs 10 --out-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/C_p2_seed2"
     },
     {
       "task_id": "deepweeds_cls",

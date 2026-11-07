@@ -70,7 +70,7 @@ TASKS = [
         'common_args': ('--images-root /data/datasets/cropandweed/images '
                         f'--annotation-root '
                         f'{ROOT}/data/holdout_raw/cropandweed_annotations/labelIds/CropAndWeed '
-                        '--cache-dir /data/agrisa_jepa_runs/stage8/cropandweed_sem/cache '
+                        '--cache-dir runs/stage8_cropandweed/cache '
                         '--seed {seed} --epochs 10'),
         'per_backbone_args': ('--checkpoint {checkpoint} --label {label}'),
         'out_pattern': 'cropandweed_sem/{backbone}_seed{seed}',
