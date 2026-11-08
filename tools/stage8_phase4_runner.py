@@ -64,6 +64,10 @@ def prune_feature_cache(row: dict) -> None:
     row, so this only ever reclaims space that can no longer affect a result.
     """
     try:
+        # script mode puts tools/ on sys.path, not the repo root; make ROOT
+        # importable so the prune tool's own ROOT-relative imports resolve
+        if str(ROOT) not in sys.path:
+            sys.path.insert(0, str(ROOT))
         from tools.stage8_prune_feature_cache import prune_for_backbone
         prune_for_backbone(row['backbone'])
     except SystemExit as exc:
