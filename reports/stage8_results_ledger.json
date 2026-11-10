@@ -1,0 +1,638 @@
+{
+  "schema_version": "stage8_results_ledger/v1",
+  "primary_metrics": {
+    "gwhd_det": [
+      "final_test",
+      "map"
+    ],
+    "cropandweed_sem": [
+      "self_metrics",
+      "mIoU_percent"
+    ],
+    "deepweeds_cls": [
+      "test_metrics",
+      "macro_f1"
+    ],
+    "plantdoc_cls": [
+      "test_metrics",
+      "macro_f1"
+    ],
+    "phenobench_sem": [
+      "official_metrics",
+      "mIoU"
+    ]
+  },
+  "runs": [
+    {
+      "task_id": "gwhd_det",
+      "backbone": "OFFICIAL",
+      "status": "FROZEN",
+      "output_dir": "/data/agrisa_jepa_runs/stage8/gwhd_det/OFFICIAL_seed0",
+      "backbone_sha256": "0382013c481743e9ccea89f970bc6c6aa126aa19a62127500d6e672a641aae22",
+      "continued_training": null,
+      "n_seeds": 1,
+      "seeds": [
+        {
+          "seed": "0",
+          "primary_metric": 0.016455894336104393,
+          "AP50": 0.05686561018228531,
+          "final_val_map": 0.07887203246355057
+        }
+      ],
+      "mean": 0.0165,
+      "std": 0.0,
+      "min": 0.0165,
+      "max": 0.0165
+    },
+    {
+      "task_id": "gwhd_det",
+      "backbone": "A_p1",
+      "status": "FROZEN",
+      "output_dir": "/data/agrisa_jepa_runs/stage8/gwhd_det/A_p1_seed0",
+      "backbone_sha256": "94c292ce6c55ba1b7d2932322697f8ee1ffee40c85cc6282e7234200184d250b",
+      "continued_training": null,
+      "n_seeds": 1,
+      "seeds": [
+        {
+          "seed": "0",
+          "primary_metric": 0.01550422701984644,
+          "AP50": 0.0663362666964531,
+          "final_val_map": 0.08009866625070572
+        }
+      ],
+      "mean": 0.0155,
+      "std": 0.0,
+      "min": 0.0155,
+      "max": 0.0155
+    },
+    {
+      "task_id": "gwhd_det",
+      "backbone": "A_p2",
+      "status": "FROZEN",
+      "output_dir": "/data/agrisa_jepa_runs/stage8/gwhd_det/A_p2_seed0",
+      "backbone_sha256": "b3d080a6d94765779101d9d19e89727afb9a0cd852583015ab251fbd8f428389",
+      "continued_training": null,
+      "n_seeds": 1,
+      "seeds": [
+        {
+          "seed": "0",
+          "primary_metric": 0.01794818788766861,
+          "AP50": 0.07001952081918716,
+          "final_val_map": 0.0804024338722229
+        }
+      ],
+      "mean": 0.0179,
+      "std": 0.0,
+      "min": 0.0179,
+      "max": 0.0179
+    },
+    {
+      "task_id": "gwhd_det",
+      "backbone": "B_p1",
+      "status": "FROZEN",
+      "output_dir": "/data/agrisa_jepa_runs/stage8/gwhd_det/B_p1_seed0",
+      "backbone_sha256": "828ec7c020a4e13dafec5455fd6fb7a2638d17e01022a37560098649912b62a5",
+      "continued_training": null,
+      "n_seeds": 1,
+      "seeds": [
+        {
+          "seed": "0",
+          "primary_metric": 0.01627560704946518,
+          "AP50": 0.066180020570755,
+          "final_val_map": 0.07582546025514603
+        }
+      ],
+      "mean": 0.0163,
+      "std": 0.0,
+      "min": 0.0163,
+      "max": 0.0163
+    },
+    {
+      "task_id": "gwhd_det",
+      "backbone": "B_p2",
+      "status": "FROZEN",
+      "output_dir": "/data/agrisa_jepa_runs/stage8/gwhd_det/B_p2_seed0",
+      "backbone_sha256": "86839e24026a08f3a9db137e3c6a06495e697f85e134a3a37df9590d99768448",
+      "continued_training": null,
+      "n_seeds": 1,
+      "seeds": [
+        {
+          "seed": "0",
+          "primary_metric": 0.018809400498867035,
+          "AP50": 0.06224426254630089,
+          "final_val_map": 0.06806069612503052
+        }
+      ],
+      "mean": 0.0188,
+      "std": 0.0,
+      "min": 0.0188,
+      "max": 0.0188
+    },
+    {
+      "task_id": "gwhd_det",
+      "backbone": "C_p1",
+      "status": "FROZEN_EXPLORATORY",
+      "output_dir": "/data/agrisa_jepa_runs/stage8/gwhd_det/C_p1_seed0",
+      "backbone_sha256": "2b46f6adbc1a67bd36be6839e82b259b336e8c57e1c38d708e349486dcc4acf7",
+      "continued_training": null,
+      "n_seeds": 1,
+      "seeds": [
+        {
+          "seed": "0",
+          "primary_metric": 0.017115093767642975,
+          "AP50": 0.07178166508674622,
+          "final_val_map": 0.0808643326163292
+        }
+      ],
+      "mean": 0.0171,
+      "std": 0.0,
+      "min": 0.0171,
+      "max": 0.0171
+    },
+    {
+      "task_id": "gwhd_det",
+      "backbone": "C_p2",
+      "status": "FROZEN_EXPLORATORY",
+      "output_dir": "/data/agrisa_jepa_runs/stage8/gwhd_det/C_p2_seed0",
+      "backbone_sha256": "794e34581f6dd4c8b95a749099f17eb15691231026049f033221d77dccc71084",
+      "continued_training": null,
+      "n_seeds": 1,
+      "seeds": [
+        {
+          "seed": "0",
+          "primary_metric": 0.017420532181859016,
+          "AP50": 0.06671618670225143,
+          "final_val_map": 0.07756747305393219
+        }
+      ],
+      "mean": 0.0174,
+      "std": 0.0,
+      "min": 0.0174,
+      "max": 0.0174
+    },
+    {
+      "task_id": "cropandweed_sem",
+      "backbone": "OFFICIAL",
+      "status": "FROZEN",
+      "output_dir": "/data/agrisa_jepa_runs/stage8/cropandweed_sem/OFFICIAL_seed0",
+      "backbone_sha256": "0382013c481743e9ccea89f970bc6c6aa126aa19a62127500d6e672a641aae22",
+      "continued_training": "Stage 7B continued pretraining (unknown)",
+      "n_seeds": 1,
+      "seeds": [
+        {
+          "seed": 0,
+          "primary": 20.6201,
+          "source": "self_metrics"
+        }
+      ],
+      "mean": 20.6201,
+      "std": 0.0,
+      "min": 20.6201,
+      "max": 20.6201
+    },
+    {
+      "task_id": "cropandweed_sem",
+      "backbone": "A_p1",
+      "status": "FROZEN",
+      "output_dir": "/data/agrisa_jepa_runs/stage8/cropandweed_sem/A_p1_seed0",
+      "backbone_sha256": "94c292ce6c55ba1b7d2932322697f8ee1ffee40c85cc6282e7234200184d250b",
+      "continued_training": "Stage 7B continued pretraining (unknown)",
+      "n_seeds": 1,
+      "seeds": [
+        {
+          "seed": 0,
+          "primary": 19.4241,
+          "source": "self_metrics"
+        }
+      ],
+      "mean": 19.4241,
+      "std": 0.0,
+      "min": 19.4241,
+      "max": 19.4241
+    },
+    {
+      "task_id": "cropandweed_sem",
+      "backbone": "A_p2",
+      "status": "FROZEN",
+      "output_dir": "/data/agrisa_jepa_runs/stage8/cropandweed_sem/A_p2_seed0",
+      "backbone_sha256": "b3d080a6d94765779101d9d19e89727afb9a0cd852583015ab251fbd8f428389",
+      "continued_training": "Stage 7B continued pretraining (unknown)",
+      "n_seeds": 1,
+      "seeds": [
+        {
+          "seed": 0,
+          "primary": 20.2732,
+          "source": "self_metrics"
+        }
+      ],
+      "mean": 20.2732,
+      "std": 0.0,
+      "min": 20.2732,
+      "max": 20.2732
+    },
+    {
+      "task_id": "cropandweed_sem",
+      "backbone": "B_p1",
+      "status": "FROZEN",
+      "output_dir": "/data/agrisa_jepa_runs/stage8/cropandweed_sem/B_p1_seed0",
+      "backbone_sha256": "828ec7c020a4e13dafec5455fd6fb7a2638d17e01022a37560098649912b62a5",
+      "continued_training": "Stage 7B continued pretraining (unknown)",
+      "n_seeds": 1,
+      "seeds": [
+        {
+          "seed": 0,
+          "primary": 18.9225,
+          "source": "self_metrics"
+        }
+      ],
+      "mean": 18.9225,
+      "std": 0.0,
+      "min": 18.9225,
+      "max": 18.9225
+    },
+    {
+      "task_id": "cropandweed_sem",
+      "backbone": "B_p2",
+      "status": "FROZEN",
+      "output_dir": "/data/agrisa_jepa_runs/stage8/cropandweed_sem/B_p2_seed0",
+      "backbone_sha256": "86839e24026a08f3a9db137e3c6a06495e697f85e134a3a37df9590d99768448",
+      "continued_training": "Stage 7B continued pretraining (unknown)",
+      "n_seeds": 1,
+      "seeds": [
+        {
+          "seed": 0,
+          "primary": 19.1902,
+          "source": "self_metrics"
+        }
+      ],
+      "mean": 19.1902,
+      "std": 0.0,
+      "min": 19.1902,
+      "max": 19.1902
+    },
+    {
+      "task_id": "cropandweed_sem",
+      "backbone": "C_p1",
+      "status": "FROZEN_EXPLORATORY",
+      "output_dir": "/data/agrisa_jepa_runs/stage8/cropandweed_sem/C_p1_seed0",
+      "backbone_sha256": "2b46f6adbc1a67bd36be6839e82b259b336e8c57e1c38d708e349486dcc4acf7",
+      "continued_training": "Stage 7B continued pretraining (unknown)",
+      "n_seeds": 1,
+      "seeds": [
+        {
+          "seed": 0,
+          "primary": 19.0697,
+          "source": "self_metrics"
+        }
+      ],
+      "mean": 19.0697,
+      "std": 0.0,
+      "min": 19.0697,
+      "max": 19.0697
+    },
+    {
+      "task_id": "cropandweed_sem",
+      "backbone": "C_p2",
+      "status": "FROZEN_EXPLORATORY",
+      "output_dir": "/data/agrisa_jepa_runs/stage8/cropandweed_sem/C_p2_seed0",
+      "backbone_sha256": "794e34581f6dd4c8b95a749099f17eb15691231026049f033221d77dccc71084",
+      "continued_training": "Stage 7B continued pretraining (unknown)",
+      "n_seeds": 1,
+      "seeds": [
+        {
+          "seed": 0,
+          "primary": 18.6706,
+          "source": "self_metrics"
+        }
+      ],
+      "mean": 18.6706,
+      "std": 0.0,
+      "min": 18.6706,
+      "max": 18.6706
+    },
+    {
+      "task_id": "deepweeds_cls",
+      "backbone": "OFFICIAL",
+      "status": "FROZEN",
+      "output_dir": "/data/agrisa_jepa_runs/stage8/deepweeds_cls/OFFICIAL_seed0",
+      "backbone_sha256": "0382013c481743e9ccea89f970bc6c6aa126aa19a62127500d6e672a641aae22",
+      "continued_training": "Stage 7B continued pretraining (unknown)",
+      "n_seeds": 1,
+      "seeds": [
+        {
+          "seed": 0,
+          "primary": 0.8353460818028351,
+          "accuracy": 0.8753920729968634,
+          "n_test": 3507
+        }
+      ],
+      "mean": 0.8353,
+      "std": 0.0,
+      "min": 0.8353,
+      "max": 0.8353
+    },
+    {
+      "task_id": "deepweeds_cls",
+      "backbone": "A_p1",
+      "status": "FROZEN",
+      "output_dir": "/data/agrisa_jepa_runs/stage8/deepweeds_cls/A_p1_seed0",
+      "backbone_sha256": "94c292ce6c55ba1b7d2932322697f8ee1ffee40c85cc6282e7234200184d250b",
+      "continued_training": "Stage 7B continued pretraining (unknown)",
+      "n_seeds": 1,
+      "seeds": [
+        {
+          "seed": 0,
+          "primary": 0.8198770331891096,
+          "accuracy": 0.8634160250926718,
+          "n_test": 3507
+        }
+      ],
+      "mean": 0.8199,
+      "std": 0.0,
+      "min": 0.8199,
+      "max": 0.8199
+    },
+    {
+      "task_id": "deepweeds_cls",
+      "backbone": "A_p2",
+      "status": "FROZEN",
+      "output_dir": "/data/agrisa_jepa_runs/stage8/deepweeds_cls/A_p2_seed0",
+      "backbone_sha256": "b3d080a6d94765779101d9d19e89727afb9a0cd852583015ab251fbd8f428389",
+      "continued_training": "Stage 7B continued pretraining (unknown)",
+      "n_seeds": 1,
+      "seeds": [
+        {
+          "seed": 0,
+          "primary": 0.8239792664394868,
+          "accuracy": 0.8656971770744226,
+          "n_test": 3507
+        }
+      ],
+      "mean": 0.824,
+      "std": 0.0,
+      "min": 0.824,
+      "max": 0.824
+    },
+    {
+      "task_id": "deepweeds_cls",
+      "backbone": "B_p1",
+      "status": "FROZEN",
+      "output_dir": "/data/agrisa_jepa_runs/stage8/deepweeds_cls/B_p1_seed0",
+      "backbone_sha256": "828ec7c020a4e13dafec5455fd6fb7a2638d17e01022a37560098649912b62a5",
+      "continued_training": "Stage 7B continued pretraining (unknown)",
+      "n_seeds": 1,
+      "seeds": [
+        {
+          "seed": 0,
+          "primary": 0.7600209550688787,
+          "accuracy": 0.8246364414029085,
+          "n_test": 3507
+        }
+      ],
+      "mean": 0.76,
+      "std": 0.0,
+      "min": 0.76,
+      "max": 0.76
+    },
+    {
+      "task_id": "deepweeds_cls",
+      "backbone": "B_p2",
+      "status": "FROZEN",
+      "output_dir": "/data/agrisa_jepa_runs/stage8/deepweeds_cls/B_p2_seed0",
+      "backbone_sha256": "86839e24026a08f3a9db137e3c6a06495e697f85e134a3a37df9590d99768448",
+      "continued_training": "Stage 7B continued pretraining (unknown)",
+      "n_seeds": 1,
+      "seeds": [
+        {
+          "seed": 0,
+          "primary": 0.7849638256964603,
+          "accuracy": 0.8394639292842886,
+          "n_test": 3507
+        }
+      ],
+      "mean": 0.785,
+      "std": 0.0,
+      "min": 0.785,
+      "max": 0.785
+    },
+    {
+      "task_id": "deepweeds_cls",
+      "backbone": "C_p1",
+      "status": "FROZEN_EXPLORATORY",
+      "output_dir": "/data/agrisa_jepa_runs/stage8/deepweeds_cls/C_p1_seed0",
+      "backbone_sha256": "2b46f6adbc1a67bd36be6839e82b259b336e8c57e1c38d708e349486dcc4acf7",
+      "continued_training": "Stage 7B continued pretraining (unknown)",
+      "n_seeds": 1,
+      "seeds": [
+        {
+          "seed": 0,
+          "primary": 0.8074995960656648,
+          "accuracy": 0.8554319931565441,
+          "n_test": 3507
+        }
+      ],
+      "mean": 0.8075,
+      "std": 0.0,
+      "min": 0.8075,
+      "max": 0.8075
+    },
+    {
+      "task_id": "deepweeds_cls",
+      "backbone": "C_p2",
+      "status": "FROZEN_EXPLORATORY",
+      "output_dir": "/data/agrisa_jepa_runs/stage8/deepweeds_cls/C_p2_seed0",
+      "backbone_sha256": "794e34581f6dd4c8b95a749099f17eb15691231026049f033221d77dccc71084",
+      "continued_training": "Stage 7B continued pretraining (unknown)",
+      "n_seeds": 1,
+      "seeds": [
+        {
+          "seed": 0,
+          "primary": 0.794669980064528,
+          "accuracy": 0.8457370972341032,
+          "n_test": 3507
+        }
+      ],
+      "mean": 0.7947,
+      "std": 0.0,
+      "min": 0.7947,
+      "max": 0.7947
+    },
+    {
+      "task_id": "plantdoc_cls",
+      "backbone": "OFFICIAL",
+      "status": "FROZEN",
+      "output_dir": "/data/agrisa_jepa_runs/stage8/plantdoc_cls/OFFICIAL_seed0",
+      "backbone_sha256": "0382013c481743e9ccea89f970bc6c6aa126aa19a62127500d6e672a641aae22",
+      "continued_training": "Stage 7B continued pretraining (unknown)",
+      "n_seeds": 1,
+      "seeds": [
+        {
+          "seed": 0,
+          "primary": 0.439330561960266,
+          "accuracy": 0.4533898305084746,
+          "n_test": 236
+        }
+      ],
+      "mean": 0.4393,
+      "std": 0.0,
+      "min": 0.4393,
+      "max": 0.4393
+    },
+    {
+      "task_id": "plantdoc_cls",
+      "backbone": "A_p1",
+      "status": "FROZEN",
+      "output_dir": "/data/agrisa_jepa_runs/stage8/plantdoc_cls/A_p1_seed0",
+      "backbone_sha256": "94c292ce6c55ba1b7d2932322697f8ee1ffee40c85cc6282e7234200184d250b",
+      "continued_training": "Stage 7B continued pretraining (unknown)",
+      "n_seeds": 1,
+      "seeds": [
+        {
+          "seed": 0,
+          "primary": 0.3823887636695854,
+          "accuracy": 0.4110169491525424,
+          "n_test": 236
+        }
+      ],
+      "mean": 0.3824,
+      "std": 0.0,
+      "min": 0.3824,
+      "max": 0.3824
+    },
+    {
+      "task_id": "plantdoc_cls",
+      "backbone": "A_p2",
+      "status": "FROZEN",
+      "output_dir": "/data/agrisa_jepa_runs/stage8/plantdoc_cls/A_p2_seed0",
+      "backbone_sha256": "b3d080a6d94765779101d9d19e89727afb9a0cd852583015ab251fbd8f428389",
+      "continued_training": "Stage 7B continued pretraining (unknown)",
+      "n_seeds": 1,
+      "seeds": [
+        {
+          "seed": 0,
+          "primary": 0.40621126993307444,
+          "accuracy": 0.423728813559322,
+          "n_test": 236
+        }
+      ],
+      "mean": 0.4062,
+      "std": 0.0,
+      "min": 0.4062,
+      "max": 0.4062
+    },
+    {
+      "task_id": "plantdoc_cls",
+      "backbone": "B_p1",
+      "status": "FROZEN",
+      "output_dir": "/data/agrisa_jepa_runs/stage8/plantdoc_cls/B_p1_seed0",
+      "backbone_sha256": "828ec7c020a4e13dafec5455fd6fb7a2638d17e01022a37560098649912b62a5",
+      "continued_training": "Stage 7B continued pretraining (unknown)",
+      "n_seeds": 1,
+      "seeds": [
+        {
+          "seed": 0,
+          "primary": 0.3341992083550836,
+          "accuracy": 0.3644067796610169,
+          "n_test": 236
+        }
+      ],
+      "mean": 0.3342,
+      "std": 0.0,
+      "min": 0.3342,
+      "max": 0.3342
+    },
+    {
+      "task_id": "plantdoc_cls",
+      "backbone": "B_p2",
+      "status": "FROZEN",
+      "output_dir": "/data/agrisa_jepa_runs/stage8/plantdoc_cls/B_p2_seed0",
+      "backbone_sha256": "86839e24026a08f3a9db137e3c6a06495e697f85e134a3a37df9590d99768448",
+      "continued_training": "Stage 7B continued pretraining (unknown)",
+      "n_seeds": 1,
+      "seeds": [
+        {
+          "seed": 0,
+          "primary": 0.3892943082386092,
+          "accuracy": 0.4067796610169492,
+          "n_test": 236
+        }
+      ],
+      "mean": 0.3893,
+      "std": 0.0,
+      "min": 0.3893,
+      "max": 0.3893
+    },
+    {
+      "task_id": "phenobench_sem",
+      "backbone": "OFFICIAL",
+      "status": "FROZEN",
+      "output_dir": "/data/agrisa_jepa_runs/stage8/phenobench_sem/OFFICIAL",
+      "backbone_sha256": "0382013c481743e9ccea89f970bc6c6aa126aa19a62127500d6e672a641aae22",
+      "continued_training": "unknown",
+      "n_seeds": 3,
+      "seeds": [
+        {
+          "seed": 0,
+          "primary": 72.66,
+          "crop": 81.66,
+          "weed": 38.71,
+          "soil": null,
+          "source": "official_metrics"
+        },
+        {
+          "seed": 1,
+          "primary": 72.6,
+          "crop": 81.46,
+          "weed": 38.74,
+          "soil": null,
+          "source": "official_metrics"
+        },
+        {
+          "seed": 2,
+          "primary": 69.78,
+          "crop": 81.25,
+          "weed": 30.48,
+          "soil": null,
+          "source": "official_metrics"
+        }
+      ],
+      "mean": 71.68,
+      "std": 1.3437,
+      "min": 69.78,
+      "max": 72.66
+    },
+    {
+      "task_id": "phenobench_sem",
+      "backbone": "A_p1",
+      "status": "REUSE_STAGE7B",
+      "output_dir": "/data/agrisa_jepa_runs/stage8/phenobench_sem/A_p1",
+      "source": "stage7b_phenobench_per_checkpoint.json",
+      "stage7b_ref": "/data/agrisa_jepa_runs/stage8/phenobench_sem/A_p1"
+    },
+    {
+      "task_id": "phenobench_sem",
+      "backbone": "A_p2",
+      "status": "REUSE_STAGE7B",
+      "output_dir": "/data/agrisa_jepa_runs/stage8/phenobench_sem/A_p2",
+      "source": "stage7b_phenobench_per_checkpoint.json",
+      "stage7b_ref": "/data/agrisa_jepa_runs/stage8/phenobench_sem/A_p2"
+    },
+    {
+      "task_id": "phenobench_sem",
+      "backbone": "B_p1",
+      "status": "REUSE_STAGE7B",
+      "output_dir": "/data/agrisa_jepa_runs/stage8/phenobench_sem/B_p1",
+      "source": "stage7b_phenobench_per_checkpoint.json",
+      "stage7b_ref": "/data/agrisa_jepa_runs/stage8/phenobench_sem/B_p1"
+    },
+    {
+      "task_id": "phenobench_sem",
+      "backbone": "B_p2",
+      "status": "REUSE_STAGE7B",
+      "output_dir": "/data/agrisa_jepa_runs/stage8/phenobench_sem/B_p2",
+      "source": "stage7b_phenobench_per_checkpoint.json",
+      "stage7b_ref": "/data/agrisa_jepa_runs/stage8/phenobench_sem/B_p2"
+    }
+  ],
+  "missing": []
+}

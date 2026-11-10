@@ -1,0 +1,79 @@
+{
+  "schema_version": "stage7b_phenobench_manifest/v1",
+  "phenobench_manifest_sha256": "13fa2810d9fe87c2d65b2dc5b7c7e8ac55e31812aee44af21aea98da8e98bd5d",
+  "protocol_version": "stage7b-phenobench-linear-probe-v1",
+  "probe_seeds": [
+    0,
+    1,
+    2
+  ],
+  "note": "3 schedule arms x 2 pretraining seeds, each exactly 2,000 optimizer updates; arms are NOT independent seeds.",
+  "entries": [
+    {
+      "arm": "A",
+      "run_id": "A_p1",
+      "pair_id": "P1",
+      "seed": 20261104,
+      "phase": "arm_A",
+      "traceable": true,
+      "checkpoint": "/data/agrisa_jepa_runs/stage7b/stage7b_A_p1/jepa-encoder-step2000.pth",
+      "checkpoint_sha256": "94c292ce6c55ba1b7d2932322697f8ee1ffee40c85cc6282e7234200184d250b",
+      "result": "/data/agrisa_jepa_runs/stage7b/phenobench/A_p1/result.json"
+    },
+    {
+      "arm": "A",
+      "run_id": "A_p2",
+      "pair_id": "P2",
+      "seed": 20261105,
+      "phase": "arm_A",
+      "traceable": true,
+      "checkpoint": "/data/agrisa_jepa_runs/stage7b/stage7b_A_p2/jepa-encoder-step2000.pth",
+      "checkpoint_sha256": "b3d080a6d94765779101d9d19e89727afb9a0cd852583015ab251fbd8f428389",
+      "result": "/data/agrisa_jepa_runs/stage7b/phenobench/A_p2/result.json"
+    },
+    {
+      "arm": "B",
+      "run_id": "B_p1",
+      "pair_id": "P1",
+      "seed": 20261104,
+      "phase": "arm_B",
+      "traceable": true,
+      "checkpoint": "/data/agrisa_jepa_runs/stage7b/stage7b_B_p1/jepa-encoder-step2000.pth",
+      "checkpoint_sha256": "828ec7c020a4e13dafec5455fd6fb7a2638d17e01022a37560098649912b62a5",
+      "result": "/data/agrisa_jepa_runs/stage7b/phenobench/B_p1/result.json"
+    },
+    {
+      "arm": "B",
+      "run_id": "B_p2",
+      "pair_id": "P2",
+      "seed": 20261105,
+      "phase": "arm_B",
+      "traceable": true,
+      "checkpoint": "/data/agrisa_jepa_runs/stage7b/stage7b_B_p2/jepa-encoder-step2000.pth",
+      "checkpoint_sha256": "86839e24026a08f3a9db137e3c6a06495e697f85e134a3a37df9590d99768448",
+      "result": "/data/agrisa_jepa_runs/stage7b/phenobench/B_p2/result.json"
+    },
+    {
+      "arm": "C",
+      "run_id": "C_p1",
+      "pair_id": "P1",
+      "seed": 20261104,
+      "phase": "arm_C",
+      "traceable": true,
+      "checkpoint": "/data/agrisa_jepa_runs/stage7b/stage7b_C_p1/jepa-encoder-step2000.pth",
+      "checkpoint_sha256": "2b46f6adbc1a67bd36be6839e82b259b336e8c57e1c38d708e349486dcc4acf7",
+      "result": "/data/agrisa_jepa_runs/stage7b/phenobench/C_p1/result.json"
+    },
+    {
+      "arm": "C",
+      "run_id": "C_p2",
+      "pair_id": "P2",
+      "seed": 20261105,
+      "phase": "arm_C",
+      "traceable": true,
+      "checkpoint": "/data/agrisa_jepa_runs/stage7b/stage7b_C_p2/jepa-encoder-step2000.pth",
+      "checkpoint_sha256": "794e34581f6dd4c8b95a749099f17eb15691231026049f033221d77dccc71084",
+      "result": "/data/agrisa_jepa_runs/stage7b/phenobench/C_p2/result.json"
+    }
+  ]
+}

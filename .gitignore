@@ -48,3 +48,4 @@ data/holdout_raw/
 # the per-run source-exposure ledgers are all derived and recorded by SHA-256
 # in reports/.  The frozen R3v3 CSVs remain ignored above.
 data/stage6/
+data/stage8_audit_cache/

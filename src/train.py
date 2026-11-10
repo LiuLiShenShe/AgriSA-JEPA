@@ -126,6 +126,23 @@ def accumulation_window(itr, ipe, grad_accum):
     return window_start, window_size, do_update
 
 
+def accumulation_divisor(window_size, grad_accum):
+    """Gradient normalization for one accumulation window.
+
+    A full window is normalized by ``grad_accum``; a partial window at epoch
+    end (``ipe % grad_accum != 0``) must be normalized by its ACTUAL size,
+    otherwise its gradient is scaled by ``grad_accum / window_size`` and the
+    optimizer update is wrong.  Kept as a pure function so the rule is unit
+    testable without running a model.
+    """
+    if grad_accum < 1:
+        raise ValueError(f'grad_accum must be >= 1, got {grad_accum}')
+    if not 1 <= window_size <= grad_accum:
+        raise ValueError(
+            f'window_size must be within 1..{grad_accum}, got {window_size}')
+    return window_size
+
+
 def capture_rng_state():
     """Snapshot every RNG the training loop consumes."""
     return {
@@ -563,11 +580,18 @@ def main(args, resume_preempt=False):
     #    feeds the PROGRESS log line so a run can be watched in real time.
     _run_start_time = time.time()
     _last_update_time = None
+    # -- optional resume-fidelity trace file (see AGRISA_TRACE_BATCHES above)
+    _batch_trace = os.environ.get('AGRISA_TRACE_BATCHES')
     # -- a resumed run must not re-take a snapshot it already took
     save_at_steps = [s for s in save_at_steps if s > optimizer_steps_at_start]
     ema_formula_verified = False
     _current_momentum = float(ema[0])   # updated once per optimizer step
     saved_snapshots = []
+    # -- partial gradient-accumulation window diagnostics (3.3).  A partial
+    #    window arises at epoch end when ipe % grad_accum != 0; its gradient
+    #    is normalized by window_size, and we record how often that happens.
+    partial_windows = 0
+    partial_window_micro_steps = 0
     first_loss = None
     last_loss = None
     if stop_after_epoch is not None and not (0 < stop_after_epoch <= num_epochs):
@@ -657,7 +681,13 @@ def main(args, resume_preempt=False):
             'opt': optimizer.state_dict(),
             'scaler': None if scaler is None else scaler.state_dict(),
             'epoch': epoch,
-            'epoch_itr': itr,
+            # `itr` is the zero-based index of the micro-batch JUST completed
+            # (save runs after the update/EMA/logging for itr).  The snapshot
+            # therefore stores itr+1 = micro-batches already consumed, so a
+            # resume skips exactly the consumed batches and does NOT re-run
+            # the last one (which would double a micro-step and re-fire an
+            # optimizer update, drifting LR/WD/EMA by one step).
+            'epoch_itr': int(itr) + 1,
             # a step snapshot is a full training state; keeping the epoch-start
             # state makes it genuinely resumable, like `jepa-latest.pth.tar`
             'epoch_start_state': epoch_start_state,
@@ -700,9 +730,20 @@ def main(args, resume_preempt=False):
     if load_model:
         epoch_itr_to_skip = int(checkpoint.get('epoch_itr', 0))
         if epoch_itr_to_skip >= ipe:
-            raise ValueError(
-                f'Resume checkpoint claims {epoch_itr_to_skip} consumed micro-steps but an '
-                f'epoch only has {ipe}: refusing to replay')
+            # A checkpoint can record `epoch_itr == ipe` only if its epoch is
+            # fully consumed (e.g. a step snapshot taken on the last micro-batch
+            # of an epoch).  That is an epoch boundary, not a mid-epoch stop:
+            # advance to the next epoch with no replay.
+            logger.info('Checkpoint epoch_itr=%d >= ipe=%d; epoch complete, '
+                        'advancing to epoch %d' % (epoch_itr_to_skip, ipe,
+                                                   start_epoch + 1))
+            epoch_itr_to_skip = 0
+            if start_epoch + 1 > epoch_limit:
+                raise ValueError(
+                    f'Checkpoint epoch {start_epoch} is the final epoch and is '
+                    f'fully consumed (epoch_itr={int(checkpoint.get("epoch_itr", 0))} >= '
+                    f'ipe={ipe}); no epoch remains to train')
+            start_epoch += 1
 
     # -- TRAINING LOOP
     for epoch in range(start_epoch, epoch_limit):
@@ -734,6 +775,14 @@ def main(args, resume_preempt=False):
             logger.info('Replaying %d already-consumed micro-steps of epoch %d'
                         % (skip_until, epoch + 1))
 
+        # -- true position inside this epoch.  Replayed (pre-resume) batches
+        #    count as consumed, so a checkpoint saved later in the same epoch
+        #    records the FULL epoch position instead of only the micro-steps
+        #    this process executed.  Without this, a resumed run always looks
+        #    "mid-epoch" and would replay already-trained batches on the next
+        #    resume.
+        epoch_consumed = skip_until
+
         # -- gradient-accumulation state for this epoch.  Read LR/WD from a group
         #    that is NOT weight-decay-excluded, so the reported WD is real.
         _last_lr = optimizer.param_groups[0]['lr']
@@ -762,6 +811,10 @@ def main(args, resume_preempt=False):
             # -- deterministic accumulation window: derived only from (itr, ipe)
             #    so a resumed run reconstructs exactly the same windows.
             window_start, window_size, do_update = accumulation_window(itr, ipe, grad_accum)
+            if window_size < grad_accum:
+                partial_window_micro_steps += 1
+                if do_update:
+                    partial_windows += 1
 
             def load_imgs():
                 # -- unsupervised imgs
@@ -816,10 +869,15 @@ def main(args, resume_preempt=False):
                 #    unscale before step).  With gradient accumulation the scaling
                 #    factor cancels, so a single scaler window spans the
                 #    accumulation window and the unscale happens at the update.
+                #    The normalization is by the ACTUAL window size: a partial
+                #    window at epoch end (ipe % grad_accum != 0) must divide by
+                #    its own size, not by grad_accum, or its gradient is scaled
+                #    by grad_accum/window_size and the optimizer step is wrong.
+                _norm = accumulation_divisor(window_size, grad_accum)
                 if use_bfloat16:
-                    scaler.scale(loss / grad_accum).backward()
+                    scaler.scale(loss / _norm).backward()
                 else:
-                    (loss / grad_accum).backward()
+                    (loss / _norm).backward()
 
                 if not ema_formula_verified:
                     def first_gradient_probe(module, label):
@@ -869,6 +927,7 @@ def main(args, resume_preempt=False):
             time_meter.update(etime)
             step_times_ms.append(etime)
             micro_steps += 1
+            epoch_consumed += 1
             first_loss = loss if first_loss is None else first_loss
             last_loss = loss
 
@@ -890,6 +949,32 @@ def main(args, resume_preempt=False):
                         _new_lr, _new_wd,
                         torch.cuda.max_memory_allocated() / 1024.**3,
                         _ms, (_now - _run_start_time) / 60.0, _eta / 60.0)
+
+            # -- optional per-micro-batch trace for the resume-fidelity test
+            #    (3.4).  Off unless AGRISA_TRACE_BATCHES is set; appends one
+            #    JSON line per TRAINED micro-batch so a continuous run and a
+            #    resumed run can be diffed on data stream, masks, counts and
+            #    schedule position.  Never touches the schedule or the RNG.
+            if _batch_trace and rank == 0:
+                def _tensor_sha(t):
+                    return hashlib.sha256(
+                        t.detach().cpu().numpy().tobytes()).hexdigest()[:16]
+                with open(_batch_trace, 'a', encoding='utf-8') as _tf:
+                    _tf.write(json.dumps({
+                        'epoch': epoch, 'itr': itr,
+                        'micro_step': micro_steps,
+                        'optimizer_step': optimizer_steps,
+                        'window_size': window_size,
+                        'lr': float(_last_lr), 'wd': float(_last_wd),
+                        'imgs_sha': _tensor_sha(imgs),
+                        'mask_enc_sha': hashlib.sha256(
+                            b''.join(_tensor_sha(m).encode() for m in masks_enc)
+                        ).hexdigest()[:16],
+                        'mask_pred_sha': hashlib.sha256(
+                            b''.join(_tensor_sha(m).encode() for m in masks_pred)
+                        ).hexdigest()[:16],
+                        'sample_ids': [str(x) for x in udata[1]],
+                    }) + '\n')
 
             # -- realised source exposure for this consumed micro-batch
             if source_ledger is not None:
@@ -966,11 +1051,13 @@ def main(args, resume_preempt=False):
             logger.info('no optimizer updates occurred this run; skipping checkpoint')
         else:
             logger.info('avg. loss %.3f' % loss_meter.avg)
-            how_many = len(step_times_ms)  # micro-steps actually trained this epoch
-            resume_in_epoch = how_many < ipe
+            # `epoch_consumed` is the true position inside this epoch (replayed
+            # pre-resume batches included); `step_times_ms` only counts this
+            # process's executions and would under-report a resumed epoch.
+            resume_in_epoch = epoch_consumed < ipe
             save_checkpoint(
                 epoch if resume_in_epoch else min(epoch + 1, epoch_limit),
-                epoch_itr=how_many if resume_in_epoch else 0,
+                epoch_itr=epoch_consumed if resume_in_epoch else 0,
                 epoch_start_state=epoch_start_state if resume_in_epoch else None)
         if source_ledger is not None:
             source_ledger.flush()
@@ -1006,6 +1093,9 @@ def main(args, resume_preempt=False):
             'optimizer_steps_total': optimizer_steps,
             'micro_steps_this_run': micro_steps - micro_steps_at_start,
             'micro_steps_total': micro_steps,
+            'micro_batches_trained': micro_steps - micro_steps_at_start,
+            'partial_grad_accum_windows': partial_windows,
+            'partial_window_micro_steps': partial_window_micro_steps,
             'optimizer_steps_per_epoch': optimizer_steps_per_epoch,
             'loss_first': first_loss,
             'loss_last': last_loss,

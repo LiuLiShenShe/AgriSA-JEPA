@@ -1,0 +1,56 @@
+{
+  "schema_version": "stage7b_config_plan/v1",
+  "base_config": "configs/stage6_b1_natural_2000.yaml",
+  "base_config_sha256": "52e4478c5b6c375f89476007954a2cbe72ac227ffb91c6e6d184f23bc77657db",
+  "run_root": "/data/agrisa_jepa_runs/stage7b",
+  "arms": {
+    "A": {
+      "max_optimizer_steps": 2000,
+      "interrupt_after_optimizer_steps": null,
+      "warmup_steps": 100,
+      "save_at_optimizer_steps": [
+        2000
+      ]
+    },
+    "B": {
+      "max_optimizer_steps": 50000,
+      "interrupt_after_optimizer_steps": 2000,
+      "warmup_steps": 100,
+      "save_at_optimizer_steps": [
+        2000
+      ]
+    },
+    "C": {
+      "max_optimizer_steps": 50000,
+      "interrupt_after_optimizer_steps": 2000,
+      "warmup_steps": 2500,
+      "save_at_optimizer_steps": [
+        2000
+      ]
+    }
+  },
+  "seeds": {
+    "p1": 20261104,
+    "p2": 20261105
+  },
+  "epochs": 50,
+  "epochs_minimum": 44,
+  "expected_optimizer_steps_per_epoch": 1151,
+  "runs": [
+    "A_p1",
+    "A_p2",
+    "B_p1",
+    "B_p2",
+    "C_p1",
+    "C_p2"
+  ],
+  "problems": [],
+  "config_paths": {
+    "A_p1": "configs/stage7b_A_p1.yaml",
+    "A_p2": "configs/stage7b_A_p2.yaml",
+    "B_p1": "configs/stage7b_B_p1.yaml",
+    "B_p2": "configs/stage7b_B_p2.yaml",
+    "C_p1": "configs/stage7b_C_p1.yaml",
+    "C_p2": "configs/stage7b_C_p2.yaml"
+  }
+}

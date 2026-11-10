@@ -1,0 +1,301 @@
+{
+  "schema_version": "stage7b_schedule_comparison/v1",
+  "thresholds_pp": {
+    "miou": 0.2,
+    "class": 0.5
+  },
+  "checkpoints": [
+    {
+      "run_id": "A_p1",
+      "arm": "A",
+      "tag": "p1",
+      "pretraining_seed": 20261104,
+      "checkpoint_sha256": "94c292ce6c55ba1b7d2932322697f8ee1ffee40c85cc6282e7234200184d250b",
+      "per_probe_seed": {
+        "crop": [
+          82.35,
+          82.08,
+          81.94
+        ],
+        "weed": [
+          41.33,
+          39.28,
+          33.7
+        ],
+        "mIoU": [
+          73.79,
+          73.02,
+          71.11
+        ],
+        "soil": [
+          97.6886,
+          97.6878,
+          97.672
+        ]
+      },
+      "soil": 97.6828,
+      "crop": 82.1233,
+      "weed": 38.1033,
+      "mIoU": 72.64,
+      "soil_std": 0.0076,
+      "crop_std": 0.1702,
+      "weed_std": 3.2241,
+      "mIoU_std": 1.1266
+    },
+    {
+      "run_id": "A_p2",
+      "arm": "A",
+      "tag": "p2",
+      "pretraining_seed": 20261105,
+      "checkpoint_sha256": "b3d080a6d94765779101d9d19e89727afb9a0cd852583015ab251fbd8f428389",
+      "per_probe_seed": {
+        "crop": [
+          82.25,
+          82.17,
+          82.01
+        ],
+        "weed": [
+          40.08,
+          39.32,
+          36.14
+        ],
+        "mIoU": [
+          73.34,
+          73.06,
+          71.94
+        ],
+        "soil": [
+          97.6854,
+          97.6896,
+          97.6736
+        ]
+      },
+      "soil": 97.6829,
+      "crop": 82.1433,
+      "weed": 38.5133,
+      "mIoU": 72.78,
+      "soil_std": 0.0068,
+      "crop_std": 0.0998,
+      "weed_std": 1.7066,
+      "mIoU_std": 0.6049
+    },
+    {
+      "run_id": "B_p1",
+      "arm": "B",
+      "tag": "p1",
+      "pretraining_seed": 20261104,
+      "checkpoint_sha256": "828ec7c020a4e13dafec5455fd6fb7a2638d17e01022a37560098649912b62a5",
+      "per_probe_seed": {
+        "crop": [
+          82.47,
+          82.4,
+          82.02
+        ],
+        "weed": [
+          41.46,
+          37.59,
+          34.4
+        ],
+        "mIoU": [
+          73.89,
+          72.58,
+          71.38
+        ],
+        "soil": [
+          97.7347,
+          97.7293,
+          97.7045
+        ]
+      },
+      "soil": 97.7228,
+      "crop": 82.2967,
+      "weed": 37.8167,
+      "mIoU": 72.6167,
+      "soil_std": 0.0131,
+      "crop_std": 0.1977,
+      "weed_std": 2.8867,
+      "mIoU_std": 1.025
+    },
+    {
+      "run_id": "B_p2",
+      "arm": "B",
+      "tag": "p2",
+      "pretraining_seed": 20261105,
+      "checkpoint_sha256": "86839e24026a08f3a9db137e3c6a06495e697f85e134a3a37df9590d99768448",
+      "per_probe_seed": {
+        "crop": [
+          82.54,
+          82.05,
+          82.16
+        ],
+        "weed": [
+          40.19,
+          37.13,
+          33.4
+        ],
+        "mIoU": [
+          73.49,
+          72.3,
+          71.09
+        ],
+        "soil": [
+          97.7285,
+          97.7115,
+          97.7197
+        ]
+      },
+      "soil": 97.7199,
+      "crop": 82.25,
+      "weed": 36.9067,
+      "mIoU": 72.2933,
+      "soil_std": 0.0069,
+      "crop_std": 0.2099,
+      "weed_std": 2.7765,
+      "mIoU_std": 0.9798
+    },
+    {
+      "run_id": "C_p1",
+      "arm": "C",
+      "tag": "p1",
+      "pretraining_seed": 20261104,
+      "checkpoint_sha256": "2b46f6adbc1a67bd36be6839e82b259b336e8c57e1c38d708e349486dcc4acf7",
+      "per_probe_seed": {
+        "crop": [
+          82.34,
+          82.37,
+          82.32
+        ],
+        "weed": [
+          39.66,
+          39.7,
+          33.05
+        ],
+        "mIoU": [
+          73.24,
+          73.26,
+          71.02
+        ],
+        "soil": [
+          97.7156,
+          97.7235,
+          97.7043
+        ]
+      },
+      "soil": 97.7145,
+      "crop": 82.3433,
+      "weed": 37.47,
+      "mIoU": 72.5067,
+      "soil_std": 0.0079,
+      "crop_std": 0.0205,
+      "weed_std": 3.1255,
+      "mIoU_std": 1.0513
+    },
+    {
+      "run_id": "C_p2",
+      "arm": "C",
+      "tag": "p2",
+      "pretraining_seed": 20261105,
+      "checkpoint_sha256": "794e34581f6dd4c8b95a749099f17eb15691231026049f033221d77dccc71084",
+      "per_probe_seed": {
+        "crop": [
+          82.54,
+          82.28,
+          81.82
+        ],
+        "weed": [
+          40.06,
+          40.37,
+          31.97
+        ],
+        "mIoU": [
+          73.44,
+          73.46,
+          70.49
+        ],
+        "soil": [
+          97.723,
+          97.7201,
+          97.6769
+        ]
+      },
+      "soil": 97.7067,
+      "crop": 82.2133,
+      "weed": 37.4667,
+      "mIoU": 72.4633,
+      "soil_std": 0.0211,
+      "crop_std": 0.2977,
+      "weed_std": 3.8888,
+      "mIoU_std": 1.3954
+    }
+  ],
+  "A_vs_B": {
+    "contrast": "A_vs_B",
+    "delta_of": "A - B",
+    "per_seed_delta": [
+      {
+        "tag": "p1",
+        "soil": -0.04,
+        "crop": -0.1733,
+        "weed": 0.2867,
+        "mIoU": 0.0233
+      },
+      {
+        "tag": "p2",
+        "soil": -0.037,
+        "crop": -0.1067,
+        "weed": 1.6067,
+        "mIoU": 0.4867
+      }
+    ],
+    "mean_delta": {
+      "soil": -0.0385,
+      "crop": -0.14,
+      "weed": 0.9467,
+      "mIoU": 0.255
+    },
+    "seed_direction_consistent": {
+      "soil": true,
+      "crop": true,
+      "weed": true,
+      "mIoU": true
+    },
+    "decision": "CLEAR_EFFECT",
+    "reason": "both seeds agree and mean mIoU delta = +0.255 pp (>= 0.2 pp, A-B); A is higher",
+    "class_conflict": []
+  },
+  "B_vs_C": {
+    "contrast": "B_vs_C",
+    "delta_of": "B - C",
+    "per_seed_delta": [
+      {
+        "tag": "p1",
+        "soil": 0.0084,
+        "crop": -0.0467,
+        "weed": 0.3467,
+        "mIoU": 0.11
+      },
+      {
+        "tag": "p2",
+        "soil": 0.0132,
+        "crop": 0.0367,
+        "weed": -0.56,
+        "mIoU": -0.17
+      }
+    ],
+    "mean_delta": {
+      "soil": 0.0108,
+      "crop": -0.005,
+      "weed": -0.1067,
+      "mIoU": -0.03
+    },
+    "seed_direction_consistent": {
+      "soil": true,
+      "crop": false,
+      "weed": false,
+      "mIoU": false
+    },
+    "decision": "INCONCLUSIVE",
+    "reason": "two pretraining seeds move in opposite directions on mIoU",
+    "class_conflict": []
+  }
+}

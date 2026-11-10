@@ -1,0 +1,97 @@
+{
+  "schema_version": "stage8_checkpoint_inventory/v1",
+  "generated_at": "2026-11-07T08:26:25+00:00",
+  "sha256_algorithm": "sha256 (full file)",
+  "official_sha_source": "official I-JEPA ViT-H/14 300e release",
+  "stage7b_manifest": "reports/stage7b_phenobench_manifest.json",
+  "checkpoints": [
+    {
+      "key": "OFFICIAL",
+      "arm": "OFFICIAL",
+      "pretraining_seed": null,
+      "role": "baseline",
+      "checkpoint": "/data/checkpoints/ijepa/IN1K-vit.h.14-300e.pth.tar",
+      "size_bytes": 10358004345,
+      "recorded_sha256": "0382013c481743e9ccea89f970bc6c6aa126aa19a62127500d6e672a641aae22",
+      "live_sha256": "0382013c481743e9ccea89f970bc6c6aa126aa19a62127500d6e672a641aae22",
+      "exists": true,
+      "match": true
+    },
+    {
+      "key": "A_p1",
+      "arm": "A",
+      "pretraining_seed": 20261104,
+      "role": "primary",
+      "checkpoint": "/data/agrisa_jepa_runs/stage7b/stage7b_A_p1/jepa-encoder-step2000.pth",
+      "size_bytes": 2523203727,
+      "recorded_sha256": "94c292ce6c55ba1b7d2932322697f8ee1ffee40c85cc6282e7234200184d250b",
+      "live_sha256": "94c292ce6c55ba1b7d2932322697f8ee1ffee40c85cc6282e7234200184d250b",
+      "exists": true,
+      "match": true
+    },
+    {
+      "key": "A_p2",
+      "arm": "A",
+      "pretraining_seed": 20261105,
+      "role": "primary",
+      "checkpoint": "/data/agrisa_jepa_runs/stage7b/stage7b_A_p2/jepa-encoder-step2000.pth",
+      "size_bytes": 2523203727,
+      "recorded_sha256": "b3d080a6d94765779101d9d19e89727afb9a0cd852583015ab251fbd8f428389",
+      "live_sha256": "b3d080a6d94765779101d9d19e89727afb9a0cd852583015ab251fbd8f428389",
+      "exists": true,
+      "match": true
+    },
+    {
+      "key": "B_p1",
+      "arm": "B",
+      "pretraining_seed": 20261104,
+      "role": "primary",
+      "checkpoint": "/data/agrisa_jepa_runs/stage7b/stage7b_B_p1/jepa-encoder-step2000.pth",
+      "size_bytes": 2523203727,
+      "recorded_sha256": "828ec7c020a4e13dafec5455fd6fb7a2638d17e01022a37560098649912b62a5",
+      "live_sha256": "828ec7c020a4e13dafec5455fd6fb7a2638d17e01022a37560098649912b62a5",
+      "exists": true,
+      "match": true
+    },
+    {
+      "key": "B_p2",
+      "arm": "B",
+      "pretraining_seed": 20261105,
+      "role": "primary",
+      "checkpoint": "/data/agrisa_jepa_runs/stage7b/stage7b_B_p2/jepa-encoder-step2000.pth",
+      "size_bytes": 2523203727,
+      "recorded_sha256": "86839e24026a08f3a9db137e3c6a06495e697f85e134a3a37df9590d99768448",
+      "live_sha256": "86839e24026a08f3a9db137e3c6a06495e697f85e134a3a37df9590d99768448",
+      "exists": true,
+      "match": true
+    },
+    {
+      "key": "C_p1",
+      "arm": "C",
+      "pretraining_seed": 20261104,
+      "role": "exploratory",
+      "checkpoint": "/data/agrisa_jepa_runs/stage7b/stage7b_C_p1/jepa-encoder-step2000.pth",
+      "size_bytes": 2523203727,
+      "recorded_sha256": "2b46f6adbc1a67bd36be6839e82b259b336e8c57e1c38d708e349486dcc4acf7",
+      "live_sha256": "2b46f6adbc1a67bd36be6839e82b259b336e8c57e1c38d708e349486dcc4acf7",
+      "exists": true,
+      "match": true
+    },
+    {
+      "key": "C_p2",
+      "arm": "C",
+      "pretraining_seed": 20261105,
+      "role": "exploratory",
+      "checkpoint": "/data/agrisa_jepa_runs/stage7b/stage7b_C_p2/jepa-encoder-step2000.pth",
+      "size_bytes": 2523203727,
+      "recorded_sha256": "794e34581f6dd4c8b95a749099f17eb15691231026049f033221d77dccc71084",
+      "live_sha256": "794e34581f6dd4c8b95a749099f17eb15691231026049f033221d77dccc71084",
+      "exists": true,
+      "match": true
+    }
+  ],
+  "summary": {
+    "n_checkpoints": 7,
+    "n_present_and_matching": 7
+  }
+}
