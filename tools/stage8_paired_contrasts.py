@@ -84,6 +84,15 @@ def _registry_rows(backbone: str, task: str) -> List[Dict]:
             and r['backbone'] == backbone]
 
 
+def _run_result(row: Dict) -> Optional[Dict]:
+    """Load the run's final result: gwhd writes results.json, others result.json."""
+    for marker in ('result.json', 'results.json'):
+        p = Path(row['output_dir']) / marker
+        if p.is_file():
+            return json.loads(p.read_text(encoding='utf-8'))
+    return None
+
+
 def _primary(task: str, seed_entry: Dict, result: Dict) -> Optional[float]:
     """Seed-level primary metric for one completed run."""
     if task in ('plantdoc_cls', 'deepweeds_cls'):
@@ -116,10 +125,9 @@ def extract_per_seed(backbone: str, task: str) -> Optional[List[Dict]]:
 
     out = []
     for row in _registry_rows(backbone, task):
-        p = Path(row['output_dir']) / 'result.json'
-        if not p.is_file():
+        result = _run_result(row)
+        if result is None:
             continue
-        result = json.loads(p.read_text(encoding='utf-8'))
         seed = row['downstream_seed']
         # per-seed runs contain exactly one seed entry, but match by seed so a
         # mislabeled run cannot silently pair the wrong numbers.
